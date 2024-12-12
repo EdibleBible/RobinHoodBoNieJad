@@ -1,9 +1,16 @@
 using UnityEngine;
+[RequireComponent(typeof(CharacterController))]
 
 public class InputPlayerWalk : MonoBehaviour
 {
     public float moveSpeed = 5f; // Speed of the player's movement
+    private CharacterController characterController; // Reference to the CharacterController component
     private Vector3 movement; // Stores movement input
+
+    void Start()
+    {
+        characterController = GetComponent<CharacterController>();
+    }
 
     void Update()
     {
@@ -19,11 +26,7 @@ public class InputPlayerWalk : MonoBehaviour
             movement += Vector3.right;
 
         // Normalize the vector to ensure consistent speed in diagonal directions
-        movement = movement.normalized;
-    }
-
-    void FixedUpdate()
-    {
-        transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
+        movement = movement.normalized * moveSpeed;
+        characterController.Move(movement * Time.deltaTime);
     }
 }
