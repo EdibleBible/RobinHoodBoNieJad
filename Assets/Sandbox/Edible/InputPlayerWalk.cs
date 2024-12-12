@@ -4,6 +4,7 @@ using UnityEngine;
 public class InputPlayerWalk : MonoBehaviour
 {
     public float moveSpeed = 5f; // Speed of the player's movement
+    public float rotationSpeed = 10f; // Speed of rotation
     private CharacterController characterController; // Reference to the CharacterController component
     private Vector3 movement; // Stores movement input
 
@@ -17,16 +18,23 @@ public class InputPlayerWalk : MonoBehaviour
         movement = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W)) // North
-            movement += Vector3.forward;
+            movement += new Vector3(-1,0,1);
         if (Input.GetKey(KeyCode.S)) // South
-            movement += Vector3.back;
+            movement += new Vector3(1, 0, -1);
         if (Input.GetKey(KeyCode.A)) // West
-            movement += Vector3.left;
+            movement += new Vector3(-1, 0, -1);
         if (Input.GetKey(KeyCode.D)) // East
-            movement += Vector3.right;
+            movement += new Vector3(1, 0, 1);
 
         // Normalize the vector to ensure consistent speed in diagonal directions
         movement = movement.normalized * moveSpeed;
-        characterController.Move(movement * Time.deltaTime);
+
+        if (movement.magnitude > 0)
+        {
+            characterController.Move(movement * moveSpeed * Time.deltaTime);
+            // Rotate the player towards the movement direction
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 }
