@@ -4,6 +4,7 @@ public class ObjectReachHighlight : MonoBehaviour
 {
     public Material materialHighlightOn;
     public Material materialHighlightOff;
+    public bool highlightActive = false;
 
     public void ActivateHighlight(bool toActivate)
     {
@@ -14,5 +15,6 @@ public class ObjectReachHighlight : MonoBehaviour
         {
             gameObject.GetComponent<Renderer>().material = materialHighlightOff;
         }
+        highlightActive = toActivate;
     }
 }

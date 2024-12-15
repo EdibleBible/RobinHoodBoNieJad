@@ -27,11 +27,11 @@ public class InputPlayerWalk : MonoBehaviour
             movement += new Vector3(1, 0, 1);
 
         // Normalize the vector to ensure consistent speed in diagonal directions
-        movement = movement.normalized * moveSpeed;
+        movement = movement.normalized * moveSpeed * Time.deltaTime;
 
         if (movement.magnitude > 0)
         {
-            characterController.Move(movement * moveSpeed * Time.deltaTime);
+            characterController.Move(movement * moveSpeed * Time.deltaTime * 100);
             // Rotate the player towards the movement direction
             Quaternion targetRotation = Quaternion.LookRotation(movement);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);

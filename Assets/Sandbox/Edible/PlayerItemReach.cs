@@ -9,11 +9,11 @@ public class PlayerItemReach : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.GetComponent<ObjectReachHighlight>().ActivateHighlight(true);
+        other.gameObject.GetComponent<IPlayerReach>().IsReachable(true);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        other.gameObject.GetComponent<ObjectReachHighlight>().ActivateHighlight(false);
+        other.gameObject.GetComponent<IPlayerReach>().IsReachable(false);
     }
 }
