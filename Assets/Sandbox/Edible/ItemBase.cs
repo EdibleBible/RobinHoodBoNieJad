@@ -8,6 +8,7 @@ public class ItemBase : MonoBehaviour
     public static event System.Action<ItemBase> OnItemAdded;
     public ItemType itemType;
     public int itemSize;
+    public Sprite itemIcon;
 
     public void PickUp()
     {

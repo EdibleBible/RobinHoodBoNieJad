@@ -9,6 +9,7 @@ public class PlayerInventory : MonoBehaviour
     public int inventorySize = 3;
     public SOStats stats;
     public int finalPrize;
+    public MenuInventory inventoryUI;
 
     private void OnEnable()
     {
@@ -31,6 +32,7 @@ public class PlayerInventory : MonoBehaviour
             for (int i = 0; i < itemData.itemSize; i++)
             {
                 slotList.Add(itemData);
+                inventoryUI.UpdateItemIcon(slotList.Count - 1, itemData.itemIcon);
             }
             itemList.Add(itemData);
         }
@@ -38,7 +40,7 @@ public class PlayerInventory : MonoBehaviour
 
     private bool SizeCheck(int itemSize)
     {
-        if (slotList.Count() + itemSize < inventorySize)
+        if (slotList.Count() - 1 + itemSize < inventorySize)
         {
             return true;
         }
@@ -54,12 +56,16 @@ public class PlayerInventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
+            int localPrize;
             foreach (ItemBase item in itemList)
             {
-                finalPrize += RandomizePrize(item.itemTypeValues[((int)item.itemType)]);
+                localPrize = RandomizePrize(item.itemTypeValues[((int)item.itemType)]);
+                finalPrize += localPrize;
+                stats.scoreLevel += localPrize;
             }
             itemList.Clear();
             slotList.Clear();
+            inventoryUI.ClearInventoryIcons();
         }
     }
 

@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputKeybinds : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class InputKeybinds : MonoBehaviour
     {
         if (Input.GetKeyDown(testKey))
         {
-            Debug.Log("dupa");
+            this.gameObject.GetComponent<InputPlayerWalk>().stats.levelSuccess = true;
+            SceneManager.LoadScene(0);
         }
     }
 }
