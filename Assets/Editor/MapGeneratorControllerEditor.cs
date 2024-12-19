@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.TerrainTools;
 using UnityEngine;
 
 [CustomEditor(typeof(MapGeneratorController))]
@@ -15,7 +16,6 @@ public class MapGeneratorControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-
         MapGeneratorController generatorController = (MapGeneratorController)target;
 
         if (GUILayout.Button("Generate Random Grid"))
@@ -30,25 +30,11 @@ public class MapGeneratorControllerEditor : Editor
             ShowGridSizeWindow(generatorController);
         }
 
-        if (GUILayout.Button("Create Edge MST"))
+        if (GUILayout.Button("Pathfind Debug"))
         {
-            if (generatorController.AllEdges == null || generatorController.AllPoints == null)
-            {
-                Debug.LogError($"Edges or points are null");
-                return;
-            }
-            generatorController.SelectedEdges = generatorController.GetUsedEgdes(generatorController.AllEdges, generatorController.AllPoints);
+            generatorController.Pathfind();
         }
 
-        if (GUILayout.Button("Debug Room on Point"))
-        {
-            foreach(var point in generatorController.AllPoints)
-            {
-                Debug.Log($"{point.PointRoom.cetroid} in room id: {point.PointRoom.RoomID}" );
-            }
-        }
-
-        // Twój przycisk Toggle
         showTriangulation = GUILayout.Toggle(showTriangulation, "Show Triangulation");
         showUnusedEdges = GUILayout.Toggle(showUnusedEdges, "show Unused Edges");
 
@@ -77,23 +63,21 @@ public class MapGeneratorControllerEditor : Editor
             previousShowTriangulation = showTriangulation;
         }
     }
-
     private void ShowGridSizeWindow(MapGeneratorController generatorController)
     {
         GridSizeWindow.Open(generatorController);
     }
-
     private void GenerateGrid(MapGeneratorController generatorController, bool randomSize)
     {
         ClearGeneratedGrid(generatorController);
 
         if (randomSize)
         {
-            generatorController.MainGridData.GenerateEmptyGrid();
-            generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainGridData);
+            generatorController.GenerateGrid();
+            generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid);
         }
 
-        generatorController.GenerateDebugMesh();
+        generatorController.DebugGridMesh();
     }
 
     private void ClearGeneratedGrid(MapGeneratorController generatorController)
@@ -104,7 +88,7 @@ public class MapGeneratorControllerEditor : Editor
             DestroyImmediate(child.gameObject);
         }
 
-        generatorController.MainGridData.AllGridCell.Clear();
+        generatorController.MainInfoGrid = null;
     }
 
     private void OnSceneGUI(SceneView sceneView)
@@ -129,7 +113,7 @@ public class MapGeneratorControllerEditor : Editor
             Handles.DrawLine(v1, v2);
         }
 
-        if(showUnusedEdges)
+        if (showUnusedEdges)
         {
             Handles.color = Color.red;
 
@@ -145,66 +129,5 @@ public class MapGeneratorControllerEditor : Editor
         }
 
         generatorController.SetupPassDebugMesh();
-
-        /*        foreach (var triangle in generatorController.GenerateTriangulation())
-                {
-                    Vector3 v1 = new Vector3((float)triangle.Vertices[0].X, 1, (float)triangle.Vertices[0].Y);
-                    Vector3 v2 = new Vector3((float)triangle.Vertices[1].X, 1, (float)triangle.Vertices[1].Y);
-                    Vector3 v3 = new Vector3((float)triangle.Vertices[2].X, 1, (float)triangle.Vertices[2].Y);
-
-                    // Rysowanie krawędzi trójkątów
-                    Handles.DrawLine(v1, v2);
-                    Handles.DrawLine(v2, v3);
-                    Handles.DrawLine(v3, v1);
-
-                    // Rysowanie wierzchołków
-                    Handles.color = Color.yellow;  // Ustaw kolor na żółty dla wierzchołków
-                    Handles.SphereHandleCap(0, v1, Quaternion.identity, 0.2f, EventType.Repaint);
-                    Handles.SphereHandleCap(0, v2, Quaternion.identity, 0.2f, EventType.Repaint);
-                    Handles.SphereHandleCap(0, v3, Quaternion.identity, 0.2f, EventType.Repaint);
-                }
-
-                // Rysowanie krawędzi w MST (Minimal Spanning Tree), jeśli SelectedEdges są ustawione
-                if (generatorController.SelectedEdges != null && generatorController.SelectedEdges.Count > 0)
-                {
-                    foreach (var edge in generatorController.SelectedEdges)
-                    {
-                        Vector3 v1 = new Vector3((float)edge.Point1.X, 1, (float)edge.Point1.Y);
-                        Vector3 v2 = new Vector3((float)edge.Point2.X, 1, (float)edge.Point2.Y);
-
-                        Handles.color = Color.red;  // Kolor czerwony dla krawędzi w MST
-                        Handles.DrawLine(v1, v2);
-                    }
-                }
-
-                // Rysowanie niewykorzystanych krawędzi, jeśli showUnusedEdges jest true
-                if (showUnusedEdges)
-                {
-                    foreach (var edge in generatorController.AllEdges)
-                    {
-                        // Sprawdzamy, czy krawędź nie jest częścią MST
-                        if (!generatorController.SelectedEdges.Contains(edge))
-                        {
-                            Vector3 v1 = new Vector3((float)edge.Point1.X, 1, (float)edge.Point1.Y);
-                            Vector3 v2 = new Vector3((float)edge.Point2.X, 1, (float)edge.Point2.Y);
-
-                            Handles.color = Color.gray;  // Kolor szary dla niewykorzystanych krawędzi
-                            Handles.DrawLine(v1, v2);
-                        }
-                    }
-                }*/
-
-        SceneView.RepaintAll();
-    }
-    public class EdgeDrawingInfo
-    {
-        public Edge Edge { get; }
-        public Color Color { get; }
-
-        public EdgeDrawingInfo(Edge edge, Color color)
-        {
-            Edge = edge;
-            Color = color;
-        }
     }
 }

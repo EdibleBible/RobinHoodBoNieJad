@@ -32,14 +32,16 @@ public class GridSizeWindow : EditorWindow
                 ClearGeneratedGrid(generatorController);
 
                 // Ustawienie rozmiaru siatki na podstawie wprowadzonych wartości
-                generatorController.MainGridData.AllGridCell.Clear();
-                generatorController.MainGridData.GenerateEmptyGrid(new Vector2Int(width,height));
-                generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainGridData);
+                generatorController.GenerateGrid(width, height);
+
+                // Dodanie pokoi na siatkę
+                generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid);
 
                 // Zamknięcie okna po wygenerowaniu siatki
                 Close();
+
                 // Generowanie obiektów na scenie
-                generatorController.GenerateDebugMesh();
+                generatorController.DebugGridMesh();
             }
         }
 
@@ -49,6 +51,7 @@ public class GridSizeWindow : EditorWindow
             Close();
         }
     }
+
     private void ClearGeneratedGrid(MapGeneratorController generatorController)
     {
         // Usuń wszystkie istniejące obiekty dzieci w GameObject
@@ -59,6 +62,6 @@ public class GridSizeWindow : EditorWindow
         }
 
         // Wyczyszczenie danych w GridData
-        generatorController.MainGridData.AllGridCell.Clear();
+        generatorController.MainInfoGrid = null;
     }
 }

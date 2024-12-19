@@ -1,51 +1,84 @@
-﻿using System.Collections.Generic;
+﻿using CustomGrid;
+using NUnit.Framework.Internal;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
+using CodeMonkey.Utils;
 using Random = UnityEngine.Random;
 
+[ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
 {
-    public GridData MainGridData;
+    public GridOptions MainGridData;
     public RoomGanerateSetting RoomGanerateSetting;
+
+
     public DelaunayTriangulator Triangulator;
     public List<Point> AllPoints;
     public List<Edge> AllEdges;
     public List<Edge> SelectedEdges;
 
+    //GridCellDataGrid (mainInfoGrid)
+    public CustomGrid.Grid<GridCellData> MainInfoGrid;
+
     //Debug 
-    private Dictionary<GameObject,GridCellData> allObject = new Dictionary<GameObject, GridCellData>();
-
-    public void GenerateDebugMesh()
+    private Dictionary<GameObject, GridCellData> allObject = new Dictionary<GameObject, GridCellData>();
+    public void GenerateGrid()
     {
-        allObject.Clear();
-        foreach (var cell in MainGridData.AllGridCell)
-        {
-            var createdCell = new GameObject($"cell nr x:{cell.Coordinate.x} y:{cell.Coordinate.y}");
-            createdCell.transform.parent = transform;
-            createdCell.transform.position = cell.Position;
-
-            MeshFilter meshFilter = createdCell.AddComponent<MeshFilter>();
-            meshFilter.mesh = Resources.GetBuiltinResource<Mesh>("Cube.fbx");
-
-            MeshRenderer meshRenderer = createdCell.AddComponent<MeshRenderer>();
-            if (cell.GridCellType == E_GridCellType.Room)
-            {
-                meshRenderer.material = MainGridData.RoomCellMaterial;
-            }
-            else
-            {
-                meshRenderer.material = MainGridData.EmptyCellMaterial;
-            }
-
-            // Zastosowanie skali dla komórki
-            createdCell.transform.localScale = MainGridData.CellScale;
-
-            allObject.Add(createdCell, cell);
-        }
-
+        var randomSize = MainGridData.RandomizeGridSize();
+        GenerateGrid(randomSize.x, randomSize.y);
     }
+    public void GenerateGrid(int gridX, int gridY)
+    {
+        // Tworzenie głównej siatki
+        MainInfoGrid = new CustomGrid.Grid<GridCellData>(gridX, gridY, MainGridData.cellScale, transform.position, (CustomGrid.Grid<GridCellData> g, int x, int y) =>
+        {
+            GridCellData cellData = new GridCellData();
+            cellData.SetCoordinate(x, y);
 
+            // Obliczanie pozycji (start od 0, 0)
+            Vector3 position = new Vector3(x * MainGridData.cellScale, 0, y * MainGridData.cellScale);
+            cellData.SetPosition(position);
+            return cellData;
+        });
+    }
+    public void DebugGridMesh()
+    {
+        Vector2Int gridSize = MainInfoGrid.GeneratedGridSize();
+        allObject.Clear();
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                var cell = MainInfoGrid.GetValue(x, y);
+                if (cell == null) continue;
+
+                // Tworzenie komórki
+                var createdCell = new GameObject($"cell nr x:{cell.Coordinate.x} y:{cell.Coordinate.y}");
+                createdCell.transform.parent = transform;
+
+                // Przypisanie pozycji
+                createdCell.transform.position = cell.Position;
+
+                // Dodanie komponentów wizualnych
+                MeshFilter meshFilter = createdCell.AddComponent<MeshFilter>();
+                meshFilter.mesh = Resources.GetBuiltinResource<Mesh>("Cube.fbx");
+
+                MeshRenderer meshRenderer = createdCell.AddComponent<MeshRenderer>();
+                meshRenderer.material = cell.GridCellType == E_GridCellType.Room
+                    ? MainGridData.RoomCellMaterial
+                    : MainGridData.EmptyCellMaterial;
+
+                // Skalowanie
+                createdCell.transform.localScale = Vector3.one * MainGridData.cellScale;
+
+                // Dodanie do słownika dla debugowania
+                allObject.Add(createdCell, cell);
+            }
+        }
+    }
     public void SetupPassDebugMesh()
     {
         foreach (var cell in allObject)
@@ -57,7 +90,68 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
     }
+    public (GridCellData entryPoint, GridCellData exitPoint) FindConnectionPosition(Room room1, Room room2)
+    {
+        // Oblicz centroidy pokojów jako punkty odniesienia
+        Vector2 room1Center = new Vector2(room1.cetroid.x, room1.cetroid.z);
+        Vector2 room2Center = new Vector2(room2.cetroid.x, room2.cetroid.z);
 
+        // Oblicz różnicę współrzędnych
+        float dx = room2Center.x - room1Center.x;
+        float dy = room2Center.y - room1Center.y;
+        float distance = Mathf.Sqrt(dx * dx + dy * dy);
+
+        // Znormalizowany kierunek
+        float nx = dx / distance;
+        float ny = dy / distance;
+
+        // Wyznacz punkty docelowe na podstawie kierunku
+        Vector2 entryPointCandidate = room1Center + new Vector2(nx, ny) * 0.5f; // Punkt w kierunku wyjścia
+        Vector2 exitPointCandidate = room2Center - new Vector2(nx, ny) * 0.5f;  // Punkt w kierunku wejścia
+
+        // Znajdź najbliższe komórki na krawędziach pokojów
+        GridCellData entryPoint = FindClosestEdgeCellToDirection(entryPointCandidate, room1);
+        GridCellData exitPoint = FindClosestEdgeCellToDirection(exitPointCandidate, room2);
+
+        return (entryPoint, exitPoint);
+    }
+    private GridCellData FindClosestEdgeCellToDirection(Vector2 candidatePoint, Room room)
+    {
+        GridCellData closestCell = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var cell in room.CellInRoom)
+        {
+            // Sprawdź, czy komórka jest na krawędzi pokoju
+            if (IsEdgeCell(cell, room))
+            {
+                float cellX = cell.Coordinate.x;
+                float cellY = cell.Coordinate.y;
+
+                // Oblicz odległość od punktu kandydata do komórki
+                float distance = Vector2.Distance(candidatePoint, new Vector2(cellX, cellY));
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestCell = cell;
+                }
+            }
+        }
+
+        return closestCell;
+    }
+    private bool IsEdgeCell(GridCellData cell, Room room)
+    {
+        // Krawędź pokoju - znajdź minimalne i maksymalne wartości x i y
+        int minX = room.CellInRoom.Min(c => c.Coordinate.x);
+        int maxX = room.CellInRoom.Max(c => c.Coordinate.x);
+        int minY = room.CellInRoom.Min(c => c.Coordinate.y);
+        int maxY = room.CellInRoom.Max(c => c.Coordinate.y);
+
+        // Komórka jest na krawędzi, jeśli jej współrzędne są równe minimalnym lub maksymalnym
+        return cell.Coordinate.x == minX || cell.Coordinate.x == maxX ||
+               cell.Coordinate.y == minY || cell.Coordinate.y == maxY;
+    }
     public List<Triangle> GenerateTriangulation()
     {
         Triangulator = new DelaunayTriangulator();
@@ -79,7 +173,6 @@ public class MapGeneratorController : MonoBehaviour
         AllPoints = GetPointsFromTriangles(allTriangle);
         return allTriangle;
     }
-
     public List<Edge> GetEdgesFromTriangles(List<Triangle> triangles)
     {
         List<Edge> edges = new List<Edge>();
@@ -94,7 +187,6 @@ public class MapGeneratorController : MonoBehaviour
 
         return edges;
     }
-
     private void AddEdgeIfNotExist(List<Edge> edges, Edge edge)
     {
         // Dodaj krawędź do listy, jeśli jeszcze jej tam nie ma (uwzględniając odwrotne kierunki)
@@ -103,7 +195,6 @@ public class MapGeneratorController : MonoBehaviour
             edges.Add(edge);
         }
     }
-
     public List<Point> GetPointsFromTriangles(List<Triangle> triangles)
     {
         List<Point> points = new List<Point>();
@@ -118,7 +209,6 @@ public class MapGeneratorController : MonoBehaviour
 
         return points;
     }
-
     private void AddPointIfNotExist(List<Point> points, Point point)
     {
         // Dodaj punkt do listy, jeśli jeszcze go tam nie ma
@@ -127,13 +217,12 @@ public class MapGeneratorController : MonoBehaviour
             points.Add(point);
         }
     }
-
     public List<Edge> GetUsedEgdes(List<Edge> allEdge, List<Point> allPoints)
     {
         List<Edge> usedEdge = PrimAlgorithm.FindMST(allEdge, allPoints);
         int additionalEdges = 0;
 
-        if(!RoomGanerateSetting.UseAdditionalEdges)
+        if (!RoomGanerateSetting.UseAdditionalEdges)
         {
             foreach (Edge edge in usedEdge)
             {
@@ -168,7 +257,7 @@ public class MapGeneratorController : MonoBehaviour
             additionalEdges++;
         }
 
-        foreach(Edge edge in usedEdge)
+        foreach (Edge edge in usedEdge)
         {
             var edgePoint1Vecotr2 = new Vector2((float)edge.Point1.X, (float)edge.Point1.Y);
             var edgePoint2Vecotr2 = new Vector2((float)edge.Point2.X, (float)edge.Point2.Y);
@@ -176,76 +265,68 @@ public class MapGeneratorController : MonoBehaviour
 
             var room1 = RoomGanerateSetting.CreatedRoom.Where(x => x.cetroid.x == edgePoint1Vecotr2.x && x.cetroid.z == edgePoint1Vecotr2.y).FirstOrDefault();
             var room2 = RoomGanerateSetting.CreatedRoom.Where(x => x.cetroid.x == edgePoint2Vecotr2.x && x.cetroid.z == edgePoint2Vecotr2.y).FirstOrDefault();
-            var point = FindConnectionPosition(room1,room2);
-            edge.SetEnterExitRoom(point.entryPoint,point.exitPoint);
+            var point = FindConnectionPosition(room1, room2);
+            edge.SetEnterExitRoom(point.entryPoint, point.exitPoint);
         }
 
         return usedEdge;
     }
 
-    public (GridCellData entryPoint, GridCellData exitPoint) FindConnectionPosition(Room room1, Room room2)
+    public void Pathfind()
     {
-        // Oblicz centroidy pokojów jako punkty odniesienia
-        Vector2 room1Center = new Vector2(room1.cetroid.x, room1.cetroid.z);
-        Vector2 room2Center = new Vector2(room2.cetroid.x, room2.cetroid.z);
-
-        // Oblicz różnicę współrzędnych
-        float dx = room2Center.x - room1Center.x;
-        float dy = room2Center.y - room1Center.y;
-        float distance = Mathf.Sqrt(dx * dx + dy * dy);
-
-        // Znormalizowany kierunek
-        float nx = dx / distance;
-        float ny = dy / distance;
-
-        // Wyznacz punkty docelowe na podstawie kierunku
-        Vector2 entryPointCandidate = room1Center + new Vector2(nx, ny) * 0.5f; // Punkt w kierunku wyjścia
-        Vector2 exitPointCandidate = room2Center - new Vector2(nx, ny) * 0.5f;  // Punkt w kierunku wejścia
-
-        // Znajdź najbliższe komórki na krawędziach pokojów
-        GridCellData entryPoint = FindClosestEdgeCellToDirection(entryPointCandidate, room1);
-        GridCellData exitPoint = FindClosestEdgeCellToDirection(exitPointCandidate, room2);
-
-        return (entryPoint, exitPoint);
+        if (MainInfoGrid == null)
+            return;
+        var size = MainInfoGrid.GeneratedGridSize();
+        Pathfinding pathfinding = new Pathfinding(size.x, size.y, MainGridData.cellScale, transform.position);
+        pathfinding.DrawDebugGrid();
     }
 
-    private GridCellData FindClosestEdgeCellToDirection(Vector2 candidatePoint, Room room)
+
+}
+
+
+public class Pathfinding
+{
+    private CustomGrid.Grid<PathNode> grid;
+    public Pathfinding(int width, int height, float cellSize, Vector3 originalPosition)
     {
-        GridCellData closestCell = null;
-        float minDistance = float.MaxValue;
-
-        foreach (var cell in room.CellInRoom)
-        {
-            // Sprawdź, czy komórka jest na krawędzi pokoju
-            if (IsEdgeCell(cell, room))
-            {
-                float cellX = cell.Coordinate.x;
-                float cellY = cell.Coordinate.y;
-
-                // Oblicz odległość od punktu kandydata do komórki
-                float distance = Vector2.Distance(candidatePoint, new Vector2(cellX, cellY));
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestCell = cell;
-                }
-            }
-        }
-
-        return closestCell;
+        grid = new CustomGrid.Grid<PathNode>(width, height, cellSize, originalPosition,
+            (CustomGrid.Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
     }
 
-    private bool IsEdgeCell(GridCellData cell, Room room)
+    internal void DrawDebugGrid()
     {
-        // Krawędź pokoju - znajdź minimalne i maksymalne wartości x i y
-        int minX = room.CellInRoom.Min(c => c.Coordinate.x);
-        int maxX = room.CellInRoom.Max(c => c.Coordinate.x);
-        int minY = room.CellInRoom.Min(c => c.Coordinate.y);
-        int maxY = room.CellInRoom.Max(c => c.Coordinate.y);
+        if (grid == null)
+            return;
+        grid.DebugGrid();
+    }
+}
 
-        // Komórka jest na krawędzi, jeśli jej współrzędne są równe minimalnym lub maksymalnym
-        return cell.Coordinate.x == minX || cell.Coordinate.x == maxX ||
-               cell.Coordinate.y == minY || cell.Coordinate.y == maxY;
+public class PathNode
+{
+    private CustomGrid.Grid<PathNode> grid;
+    private int x;
+    private int y;
+
+    public int gCost;
+    public int hCost;
+    public int fCost;
+
+    public PathNode cameFromNode;
+
+    public PathNode(CustomGrid.Grid<PathNode> grid, int x, int y)
+    {
+        this.grid = grid;
+        this.x = x;
+        this.y = y;
+    }
+
+    public override string ToString()
+    {
+        return x + "," + y;
     }
 
 }
+
+
+
