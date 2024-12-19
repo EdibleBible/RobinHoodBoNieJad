@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-[RequireComponent (typeof(InputMouseClick))]
-[RequireComponent(typeof(ObjectReachHighlight))]
+[RequireComponent(typeof(InputMouseClick))]
+[RequireComponent(typeof(ItemBase))]
 
 public class ObjectItemPickup : MonoBehaviour, IMouseLMB, IPlayerReach, IPointerEnterHandler, IPointerExitHandler
 {
@@ -14,7 +14,7 @@ public class ObjectItemPickup : MonoBehaviour, IMouseLMB, IPlayerReach, IPointer
     {
         if (isReachable)
         {
-            Debug.Log("dupa2");
+            gameObject.GetComponent<ItemBase>().PickUp();
         }
     }
 

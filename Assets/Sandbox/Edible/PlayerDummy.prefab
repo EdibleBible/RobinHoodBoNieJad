@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 3508134920328891712}
   - component: {fileID: 2893370685103435052}
   - component: {fileID: 4236324357912697434}
-  m_Layer: 0
+  - component: {fileID: 2623460363400244888}
+  m_Layer: 2
   m_Name: ReachCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,6 +124,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2477def16316315429de08e09c077245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &2623460363400244888
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435310063852529398}
+  m_Enabled: 0
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &3570760385224109893
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,6 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 10
+  stats: {fileID: 11400000, guid: cfbb569872faaa3449f3d7ca2b8442af, type: 2}
 --- !u!1 &4322142298305993003
 GameObject:
   m_ObjectHideFlags: 0

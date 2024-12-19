@@ -3,14 +3,17 @@ using UnityEngine;
 
 public class InputPlayerWalk : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Speed of the player's movement
-    public float rotationSpeed = 10f; // Speed of rotation
+    private float moveSpeed; // Speed of the player's movement
+    private float rotationSpeed; // Speed of rotation
     private CharacterController characterController; // Reference to the CharacterController component
     private Vector3 movement; // Stores movement input
+    public SOStats stats;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        moveSpeed = stats.playerSpeed;
+        rotationSpeed = stats.playerRotationSpeed;
     }
 
     void Update()
