@@ -9,8 +9,8 @@ public class Edge
     public Room Point1Room { get; private set; }
     public Room Point2Room { get; private set; }
 
-    public GridCellData entryGridCell;
-    public GridCellData exitGridCell;
+    public GridCellData EntryGridCell;
+    public GridCellData ExitGridCell;
 
     public Edge(Point point1, Point point2)
     {
@@ -26,11 +26,11 @@ public class Edge
 
     public void SetEnterExitRoom(GridCellData enterPoint, GridCellData exitPoint)
     {
-        entryGridCell = enterPoint;
-        exitGridCell = exitPoint;
+        EntryGridCell = enterPoint;
+        ExitGridCell = exitPoint;
 
-        entryGridCell.GridCellType = E_GridCellType.Pass;
-        exitGridCell.GridCellType = E_GridCellType.Pass;
+        EntryGridCell.GridCellType = E_GridCellType.Pass;
+        ExitGridCell.GridCellType = E_GridCellType.Pass;
     }
 
     public override bool Equals(object obj)

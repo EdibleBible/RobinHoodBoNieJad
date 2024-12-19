@@ -32,7 +32,9 @@ public class MapGeneratorControllerEditor : Editor
 
         if (GUILayout.Button("Pathfind Debug"))
         {
-            generatorController.Pathfind();
+            var selectedEdge = generatorController.SelectedEdges[0];
+            generatorController.RoomPathFind();
+            generatorController.SetupHallwayDebugMesh();
         }
 
         showTriangulation = GUILayout.Toggle(showTriangulation, "Show Triangulation");

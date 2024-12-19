@@ -7,6 +7,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using CodeMonkey.Utils;
 using Random = UnityEngine.Random;
+using System.Drawing;
+using NUnit.Framework;
 
 [ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
@@ -90,6 +92,18 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
     }
+    public void SetupHallwayDebugMesh()
+    {
+        foreach (var cell in allObject)
+        {
+            if (cell.Value.GridCellType == E_GridCellType.Hallway)
+            {
+                MeshRenderer meshRenderer = cell.Key.GetComponent<MeshRenderer>();
+                meshRenderer.material = MainGridData.HallwayMaterial;
+            }
+        }
+    }
+
     public (GridCellData entryPoint, GridCellData exitPoint) FindConnectionPosition(Room room1, Room room2)
     {
         // Oblicz centroidy pokojów jako punkty odniesienia
@@ -272,58 +286,77 @@ public class MapGeneratorController : MonoBehaviour
         return usedEdge;
     }
 
-    public void Pathfind()
+    public void RoomPathFind()
     {
         if (MainInfoGrid == null)
             return;
-        var size = MainInfoGrid.GeneratedGridSize();
-        Pathfinding pathfinding = new Pathfinding(size.x, size.y, MainGridData.cellScale, transform.position);
-        pathfinding.DrawDebugGrid();
+
+        List<GridCellData> roomCell = new List<GridCellData>();
+
+        foreach (var room in RoomGanerateSetting.CreatedRoom)
+        {
+            foreach (var cell in room.CellInRoom)
+            {
+                if (cell.GridCellType == E_GridCellType.Pass)
+                    continue;
+
+                roomCell.Add(cell);
+            }
+        }
+
+        Pathfinding pathfinding = new Pathfinding(MainInfoGrid.GetWidth(), MainInfoGrid.GetHeight(), MainGridData.cellScale, transform.position, roomCell);
+
+        foreach (Edge edge in AllEdges)
+        {
+
+            List<PathNode> pathNodeCell = pathfinding.FindPath(edge.EntryGridCell.Coordinate.x, edge.EntryGridCell.Coordinate.y, edge.ExitGridCell.Coordinate.x, edge.ExitGridCell.Coordinate.y);
+
+            foreach (var element in pathNodeCell)
+            {
+                if ((element.X == edge.EntryGridCell.Coordinate.x && element.Y == edge.EntryGridCell.Coordinate.y) || (element.X == edge.ExitGridCell.Coordinate.x && element.Y == edge.ExitGridCell.Coordinate.y))
+                    continue;
+
+                GridCellData toAdd = MainInfoGrid.GetValue(element.X, element.Y);
+                toAdd.GridCellType = E_GridCellType.Hallway;
+            }
+        }
     }
 
 
-}
-
-
-public class Pathfinding
-{
-    private CustomGrid.Grid<PathNode> grid;
-    public Pathfinding(int width, int height, float cellSize, Vector3 originalPosition)
+    public void _testPathFind(GridCellData startCell, GridCellData endCell)
     {
-        grid = new CustomGrid.Grid<PathNode>(width, height, cellSize, originalPosition,
-            (CustomGrid.Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
-    }
-
-    internal void DrawDebugGrid()
-    {
-        if (grid == null)
+        if (MainInfoGrid == null)
             return;
-        grid.DebugGrid();
-    }
-}
 
-public class PathNode
-{
-    private CustomGrid.Grid<PathNode> grid;
-    private int x;
-    private int y;
+        List<GridCellData> roomCell = new List<GridCellData>();
 
-    public int gCost;
-    public int hCost;
-    public int fCost;
+        foreach (var room in RoomGanerateSetting.CreatedRoom)
+        {
+            foreach (var cell in room.CellInRoom)
+            {
+                if (cell.GridCellType == E_GridCellType.Pass)
+                    continue;
 
-    public PathNode cameFromNode;
+                roomCell.Add(cell);
+            }
+        }
 
-    public PathNode(CustomGrid.Grid<PathNode> grid, int x, int y)
-    {
-        this.grid = grid;
-        this.x = x;
-        this.y = y;
-    }
+        var size = MainInfoGrid.GeneratedGridSize();
+        Pathfinding pathfinding = new Pathfinding(size.x, size.y, MainGridData.cellScale, transform.position, roomCell);
+        var list = pathfinding.FindPath(startCell.Coordinate.x, startCell.Coordinate.y, endCell.Coordinate.x, endCell.Coordinate.y);
 
-    public override string ToString()
-    {
-        return x + "," + y;
+        List<GridCellData> hallwaygridcell = new List<GridCellData>();
+
+        foreach (var element in list)
+        {
+            if ((element.X == startCell.Coordinate.x && element.Y == startCell.Coordinate.y) || (element.X == endCell.Coordinate.x && element.Y == endCell.Coordinate.y))
+                continue;
+
+            GridCellData toAdd = MainInfoGrid.GetValue(element.X, element.Y);
+            toAdd.GridCellType = E_GridCellType.Hallway;
+            hallwaygridcell.Add(toAdd);
+        }
+
     }
 
 }

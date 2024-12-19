@@ -55,7 +55,7 @@ namespace CustomGrid
         }
         public Vector3 GetWorldPosition(int x, int y)
         {
-            return new Vector3(x,0, y) * cellSize + originPosition;
+            return new Vector3(x, 0, y) * cellSize + originPosition;
         }
         public TGridObj GetValue(int x, int y)
         {
@@ -78,21 +78,29 @@ namespace CustomGrid
         {
             return new Vector2Int(width, height);
         }
-
         public void DebugGrid()
         {
-            for(int x = 0; x < gridArray.GetLength(0); x++)
+            for (int x = 0; x < gridArray.GetLength(0); x++)
             {
                 for (int y = 0; y < gridArray.GetLength(1); y++)
                 {
-                    UtilsClass.CreateWorldText(gridArray[x,y].ToString(), null,GetWorldPosition(x,y) + new Vector3(cellSize,1,cellSize) * .5f,5,Color.white,TextAnchor.MiddleCenter);
+                    var obj = UtilsClass.CreateWorldText(gridArray[x, y].ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, 1, cellSize) * .5f, 5, Color.white, TextAnchor.MiddleCenter);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
                 }
             }
 
             Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
-            Debug.DrawLine(GetWorldPosition(width,height), GetWorldPosition(width, height), Color.white, 100f);
+            Debug.DrawLine(GetWorldPosition(width, height), GetWorldPosition(width, height), Color.white, 100f);
+        }
+        public int GetWidth()
+        {
+            return width;
+        }
+
+        public int GetHeight()
+        {
+            return height;
         }
     }
 }

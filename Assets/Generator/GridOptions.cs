@@ -10,6 +10,7 @@ public struct GridOptions
     public Material EmptyCellMaterial;
     public Material RoomCellMaterial;
     public Material PassCellMaterial;
+    public Material HallwayMaterial;
 
     [Header("Grid Parameters")]
     public Vector2Int MaxAxisSize;
