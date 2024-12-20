@@ -5,6 +5,7 @@ public class GridSizeWindow : EditorWindow
 {
     private int width = 10;  // Domyślna szerokość siatki
     private int height = 10; // Domyślna wysokość siatki
+    
 
     private MapGeneratorController generatorController;
 

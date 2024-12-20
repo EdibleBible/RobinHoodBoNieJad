@@ -21,7 +21,14 @@ public class Pathfinding
             var node = grid.GetValue(gridCell.Coordinate.x,gridCell.Coordinate.y);
             node.IsWalkable = false;
             grid.SetValue(gridCell.Coordinate.x, gridCell.Coordinate.y, node);
+
+            Debug.Log($" X:{node.X} Y:{node.Y} is room, Node is {node.IsWalkable}");
         }
+    }
+
+    public CustomGrid.Grid<PathNode> GetGrid()
+    {
+        return grid;
     }
 
     public List<PathNode> FindPath(int startX, int startY, int endX, int endY)

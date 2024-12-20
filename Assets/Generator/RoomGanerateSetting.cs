@@ -67,8 +67,11 @@ public struct RoomGanerateSetting
             return null;
         }
 
-        int width = UnityEngine.Random.Range(MinRoomSize.x, MaxRoomSize.x);
-        int height = UnityEngine.Random.Range(MinRoomSize.y, MaxRoomSize.y);
+        // Tworzymy instancję randoma z seedem
+        System.Random random = new System.Random();
+
+        int width = random.Next(MinRoomSize.x, MaxRoomSize.x);
+        int height = random.Next(MinRoomSize.y, MaxRoomSize.y);
 
         Room room = new Room();
         room.XAxisSize = width;
@@ -78,8 +81,8 @@ public struct RoomGanerateSetting
         bool roomIsGenerated = false;
         while (!roomIsGenerated)
         {
-            int x = UnityEngine.Random.Range(0, gridData.GeneratedGridSize().x - width);
-            int y = UnityEngine.Random.Range(0, gridData.GeneratedGridSize().y - height);
+            int x = random.Next(0, gridData.GeneratedGridSize().x - width);
+            int y = random.Next(0, gridData.GeneratedGridSize().y - height);
 
             if (CanPlaceRoom(gridData, new Vector2Int(x, y), width, height))
             {
@@ -87,9 +90,9 @@ public struct RoomGanerateSetting
                 {
                     for (int j = y; j < y + height; j++)
                     {
-                        GridCellData selcetedCell = gridData.GetValue(i, j);
-                        selcetedCell.GridCellType = E_GridCellType.Room;
-                        room.CellInRoom.Add(selcetedCell);
+                        GridCellData selectedCell = gridData.GetValue(i, j);
+                        selectedCell.GridCellType = E_GridCellType.Room;
+                        room.CellInRoom.Add(selectedCell);
                         room.RoomType = E_RoomType.StandardRoom;
                     }
                 }

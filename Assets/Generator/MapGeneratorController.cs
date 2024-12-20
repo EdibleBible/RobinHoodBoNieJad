@@ -14,6 +14,7 @@ using System.Collections;
 using UnityEditor.TerrainTools;
 using UnityEditor;
 using UnityEngine.WSA;
+using TMPro;
 
 [ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
@@ -28,10 +29,15 @@ public class MapGeneratorController : MonoBehaviour
 
     //GridCellDataGrid (mainInfoGrid)
     public CustomGrid.Grid<GridCellData> MainInfoGrid;
+    public Pathfinding currPathfinding;
+    public CustomGrid.Grid<PathNode> pathfindingGrid;
 
-    //Debug 
+    [Header("Debug")]
     private Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
+    [SerializeField] private TextMeshProUGUI ActionTextMesh;
+    [SerializeField] private TextMeshProUGUI InstructionTextMesh;
 
+    //Playmode Method
     private void Start()
     {
         StartGeneration();
@@ -39,6 +45,9 @@ public class MapGeneratorController : MonoBehaviour
 
     public void StartGeneration()
     {
+
+        ClearGeneratedGrid();
+        UpdateActionText("Clearing grid...");
         StartCoroutine(Generate());
     }
 
@@ -55,70 +64,72 @@ public class MapGeneratorController : MonoBehaviour
 
     private IEnumerator Generate()
     {
-        // Clear generated grid
-        ClearGeneratedGrid();
-        DebugGridMesh();
-        yield return new WaitForSeconds(1f);
-
         // Generate grid
+        UpdateActionText("Generating grid and rooms...");
+        UpdateInstructionText("Press SPACE to continue.");
         GenerateGrid();
-        DebugGridMesh();
-        yield return new WaitForSeconds(1f);
+
 
         // Create rooms on grid
         RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid);
         DebugGridMesh();
-
-        yield return new WaitForSeconds(1f);
+        yield return WaitForSpaceBar();
 
         // Generate triangulation
+        UpdateActionText("Generating triangulation...");
+        UpdateInstructionText("Press SPACE to continue.");
         GenerateTriangulation();
         DebugGridMesh();
-        yield return new WaitForSeconds(1f);
+        yield return WaitForSpaceBar();
 
         // Set selected edges
+        UpdateActionText("Setting selected edges...");
+        UpdateInstructionText("Press SPACE to continue.");
         SelectedEdges = GetUsedEdges(AllEdges, AllPoints);
         DebugGridMesh();
-
-        yield return new WaitForSeconds(1f);
+        yield return WaitForSpaceBar();
 
         // Run pathfinding for rooms
-        RoomPathFind();
-        DebugGridMesh();
-
-        yield return new WaitForSeconds(1f);
+        UpdateActionText("Running pathfinding for rooms...");
+        UpdateInstructionText("Press SPACE to continue.");
+        yield return StartCoroutine(RoomPathFindWithDebugging());
+        yield return WaitForSpaceBar();
 
         // Define spawn points
+        UpdateActionText("Defining spawn points...");
+        UpdateInstructionText("Press SPACE to continue.");
         DefiniedSpawn();
         DebugGridMesh();
-
-        yield return new WaitForSeconds(1f);
+        yield return WaitForSpaceBar();
 
         // Debug the grid mesh
-        DebugGridMesh();
-        yield return new WaitForSeconds(1f);
+        UpdateActionText("Rese room");
+        UpdateInstructionText("Press SPACE to finish.");
 
+        yield return WaitForSpaceBar();
+        StartGeneration();
     }
 
-    public void GenerateGrid()
+    private void UpdateActionText(string actionText)
     {
-        var randomSize = MainGridData.RandomizeGridSize();
-        GenerateGrid(randomSize.x, randomSize.y);
+        // Update the action text (assign this to your action TextMesh object)
+        ActionTextMesh.text = actionText;
     }
-    public void GenerateGrid(int gridX, int gridY)
+
+    private void UpdateInstructionText(string instructionText)
     {
-        // Tworzenie głównej siatki
-        MainInfoGrid = new CustomGrid.Grid<GridCellData>(gridX, gridY, MainGridData.cellScale, transform.position, (CustomGrid.Grid<GridCellData> g, int x, int y) =>
+        // Update the instruction text (assign this to your instruction TextMesh object)
+        InstructionTextMesh.text = instructionText;
+    }
+    private IEnumerator WaitForSpaceBar()
+    {
+        while (!Input.GetKeyDown(KeyCode.Space))
         {
-            GridCellData cellData = new GridCellData();
-            cellData.SetCoordinate(x, y);
-
-            // Obliczanie pozycji (start od 0, 0)
-            Vector3 position = new Vector3(x * MainGridData.cellScale, 0, y * MainGridData.cellScale);
-            cellData.SetPosition(position);
-            return cellData;
-        });
+            yield return null;
+        }
     }
+
+    //Grid Debuging
     public void DebugGridMesh()
     {
         if (MainInfoGrid == null)
@@ -260,6 +271,141 @@ public class MapGeneratorController : MonoBehaviour
             allObject.Add(cell, createdCell);
         }
     }
+    public IEnumerator RoomPathFindWithDebugging()
+    {
+        if (MainInfoGrid == null)
+            yield break;
+
+        List<GridCellData> roomCell = new List<GridCellData>();
+
+        // Zbieramy komórki, które nie są przejściowe.
+        foreach (var room in RoomGanerateSetting.CreatedRoom)
+        {
+            foreach (var cell in room.CellInRoom)
+            {
+                if (cell.GridCellType != E_GridCellType.Pass)
+                    roomCell.Add(cell);
+            }
+        }
+
+        // Inicjalizacja pathfinding
+        currPathfinding = new Pathfinding(
+            MainInfoGrid.GetWidth(),
+            MainInfoGrid.GetHeight(),
+            MainGridData.cellScale,
+            transform.position,
+            roomCell
+        );
+
+        foreach (Edge edge in SelectedEdges)
+        {
+            // Walidacja krawędzi i jej danych
+            if (edge == null || edge.EntryGridCell == null || edge.ExitGridCell == null ||
+                edge.EntryGridCell.Coordinate == null || edge.ExitGridCell.Coordinate == null)
+            {
+                yield break;
+            }
+
+            // Znajdowanie ścieżki
+            List<PathNode> pathNodeCell = currPathfinding.FindPath(
+                edge.EntryGridCell.Coordinate.x,
+                edge.EntryGridCell.Coordinate.y,
+                edge.ExitGridCell.Coordinate.x,
+                edge.ExitGridCell.Coordinate.y
+            );
+
+            if (pathNodeCell == null)
+                continue;
+
+            var obj1Mesh = allObject[edge.EntryGridCell].GetComponent<MeshRenderer>();
+            var obj2Mesh = allObject[edge.ExitGridCell].GetComponent<MeshRenderer>();
+
+            obj1Mesh.material = MainGridData.SecretHallwayMaterial;
+            obj2Mesh.material = MainGridData.SecretPassMaterial;
+
+            // Zaktualizowanie komórek jako 'Hallway'
+            foreach (var node in pathNodeCell)
+            {
+                if ((node.X == edge.EntryGridCell.Coordinate.x && node.Y == edge.EntryGridCell.Coordinate.y) ||
+                    (node.X == edge.ExitGridCell.Coordinate.x && node.Y == edge.ExitGridCell.Coordinate.y))
+                    continue;
+
+                GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
+                Debug.LogWarning($"You move to grid cords X: {toAdd.Coordinate.x} Y: {toAdd.Coordinate.y} Node is: {currPathfinding.GetGrid().GetValue(toAdd.Coordinate.x, toAdd.Coordinate.y).IsWalkable} And Type: {toAdd.GridCellType}");
+                toAdd.GridCellType = E_GridCellType.Hallway;
+
+                // Debugowanie pojedynczej kratki
+                DebugSingleCellMesh(toAdd);
+
+                // Pauza między kratkami
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            obj1Mesh.material = MainGridData.PassCellMaterial;
+            obj2Mesh.material = MainGridData.PassCellMaterial;
+
+            // Jeśli ścieżka nie może być dotknięta, sprawdzamy sąsiadów
+            if (!currPathfinding.CAN_PATH_TOUCHED)
+            {
+                foreach (var currentNode in pathNodeCell)
+                {
+                    var neighbors = currPathfinding.GetNeighbourList(currentNode, false);
+
+                    foreach (var neighbor in neighbors)
+                    {
+                        // Pomijamy sąsiadów na skos
+                        if (Mathf.Abs(neighbor.X - currentNode.X) == 1 && Mathf.Abs(neighbor.Y - currentNode.Y) == 1)
+                            continue;
+
+                        var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
+                        var neighborNeighbors = currPathfinding.GetNeighbourList(neighbor, true);
+
+                        bool isNextToPassableCell = false;
+                        foreach (var neighborOfNeighbor in neighborNeighbors)
+                        {
+                            var neighborOfNeighborCell = MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
+                            if (neighborOfNeighborCell.GridCellType == E_GridCellType.Pass)
+                            {
+                                isNextToPassableCell = true;
+                                break;
+                            }
+                        }
+
+                        // Jeśli sąsiad sąsiada jest przejściowy, pomijamy go
+                        if (isNextToPassableCell)
+                            continue;
+
+                        // Jeśli sąsiad jest pustą komórką, oznaczamy jako nieprzechodni
+                        if (neighborCell.GridCellType == E_GridCellType.Empty)
+                        {
+                            neighbor.IsWalkable = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void GenerateGrid()
+    {
+        var randomSize = MainGridData.RandomizeGridSize();
+        GenerateGrid(randomSize.x, randomSize.y);
+    }
+    public void GenerateGrid(int gridX, int gridY)
+    {
+        // Tworzenie głównej siatki
+        MainInfoGrid = new CustomGrid.Grid<GridCellData>(gridX, gridY, MainGridData.cellScale, transform.position, (CustomGrid.Grid<GridCellData> g, int x, int y) =>
+        {
+            GridCellData cellData = new GridCellData();
+            cellData.SetCoordinate(x, y);
+
+            // Obliczanie pozycji (start od 0, 0)
+            Vector3 position = new Vector3(x * MainGridData.cellScale, 0, y * MainGridData.cellScale);
+            cellData.SetPosition(position);
+            return cellData;
+        });
+    }
+
 
     public (GridCellData entryPoint, GridCellData exitPoint) FindConnectionPosition(Room room1, Room room2)
     {
@@ -547,7 +693,7 @@ public class MapGeneratorController : MonoBehaviour
         }
 
         // Inicjalizacja pathfinding
-        Pathfinding pathfinding = new Pathfinding(
+        currPathfinding = new Pathfinding(
             MainInfoGrid.GetWidth(),
             MainInfoGrid.GetHeight(),
             MainGridData.cellScale,
@@ -565,7 +711,7 @@ public class MapGeneratorController : MonoBehaviour
             }
 
             // Znajdowanie ścieżki
-            List<PathNode> pathNodeCell = pathfinding.FindPath(
+            List<PathNode> pathNodeCell = currPathfinding.FindPath(
                 edge.EntryGridCell.Coordinate.x,
                 edge.EntryGridCell.Coordinate.y,
                 edge.ExitGridCell.Coordinate.x,
@@ -584,15 +730,14 @@ public class MapGeneratorController : MonoBehaviour
 
                 GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
                 toAdd.GridCellType = E_GridCellType.Hallway;
-                DebugSingleCellMesh(toAdd);
             }
 
             // Jeśli ścieżka nie może być dotknięta, sprawdzamy sąsiadów
-            if (!pathfinding.CAN_PATH_TOUCHED)
+            if (!currPathfinding.CAN_PATH_TOUCHED)
             {
                 foreach (var currentNode in pathNodeCell)
                 {
-                    var neighbors = pathfinding.GetNeighbourList(currentNode, false);
+                    var neighbors = currPathfinding.GetNeighbourList(currentNode, false);
 
                     foreach (var neighbor in neighbors)
                     {
@@ -601,7 +746,7 @@ public class MapGeneratorController : MonoBehaviour
                             continue;
 
                         var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
-                        var neighborNeighbors = pathfinding.GetNeighbourList(neighbor, true);
+                        var neighborNeighbors = currPathfinding.GetNeighbourList(neighbor, true);
 
                         bool isNextToPassableCell = false;
                         foreach (var neighborOfNeighbor in neighborNeighbors)
@@ -629,114 +774,6 @@ public class MapGeneratorController : MonoBehaviour
         }
         return;
     }
-
-    public IEnumerator RoomPathFindTimed()
-    {
-        if (MainInfoGrid == null)
-            yield return null;
-
-        List<GridCellData> roomCell = new List<GridCellData>();
-
-        // Zbieramy komórki, które nie są przejściowe.
-        foreach (var room in RoomGanerateSetting.CreatedRoom)
-        {
-            foreach (var cell in room.CellInRoom)
-            {
-                if (cell.GridCellType != E_GridCellType.Pass)
-                    roomCell.Add(cell);
-            }
-        }
-
-        // Inicjalizacja pathfinding
-        Pathfinding pathfinding = new Pathfinding(
-            MainInfoGrid.GetWidth(),
-            MainInfoGrid.GetHeight(),
-            MainGridData.cellScale,
-            transform.position,
-            roomCell
-        );
-
-        foreach (Edge edge in SelectedEdges)
-        {
-            // Walidacja krawędzi i jej danych
-            if (edge == null || edge.EntryGridCell == null || edge.ExitGridCell == null ||
-                edge.EntryGridCell.Coordinate == null || edge.ExitGridCell.Coordinate == null)
-            {
-                yield return null;
-            }
-
-            // Znajdowanie ścieżki
-            List<PathNode> pathNodeCell = pathfinding.FindPath(
-                edge.EntryGridCell.Coordinate.x,
-                edge.EntryGridCell.Coordinate.y,
-                edge.ExitGridCell.Coordinate.x,
-                edge.ExitGridCell.Coordinate.y
-            );
-
-            if (pathNodeCell == null)
-                continue;
-
-            // Zaktualizowanie komórek jako 'Hallway'
-            foreach (var node in pathNodeCell)
-            {
-                // Sprawdzenie, czy należy pominąć węzeł
-                if ((node.X == edge.EntryGridCell.Coordinate.x && node.Y == edge.EntryGridCell.Coordinate.y) ||
-                    (node.X == edge.ExitGridCell.Coordinate.x && node.Y == edge.ExitGridCell.Coordinate.y))
-                    continue;
-
-                GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
-                toAdd.GridCellType = E_GridCellType.Hallway;
-
-                // Wywołanie metody debugującej
-                DebugSingleCellMesh(toAdd);
-
-                // Opóźnienie przed kolejną iteracją
-                yield return new WaitForSeconds(0.2f);
-            }
-
-            // Jeśli ścieżka nie może być dotknięta, sprawdzamy sąsiadów
-            if (!pathfinding.CAN_PATH_TOUCHED)
-            {
-                foreach (var currentNode in pathNodeCell)
-                {
-                    var neighbors = pathfinding.GetNeighbourList(currentNode, false);
-
-                    foreach (var neighbor in neighbors)
-                    {
-                        // Pomijamy sąsiadów na skos
-                        if (Mathf.Abs(neighbor.X - currentNode.X) == 1 && Mathf.Abs(neighbor.Y - currentNode.Y) == 1)
-                            continue;
-
-                        var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
-                        var neighborNeighbors = pathfinding.GetNeighbourList(neighbor, true);
-
-                        bool isNextToPassableCell = false;
-                        foreach (var neighborOfNeighbor in neighborNeighbors)
-                        {
-                            var neighborOfNeighborCell = MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
-                            if (neighborOfNeighborCell.GridCellType == E_GridCellType.Pass)
-                            {
-                                isNextToPassableCell = true;
-                                break;
-                            }
-                        }
-
-                        // Jeśli sąsiad sąsiada jest przejściowy, pomijamy go
-                        if (isNextToPassableCell)
-                            continue;
-
-                        // Jeśli sąsiad jest pustą komórką, oznaczamy jako nieprzechodni
-                        if (neighborCell.GridCellType == E_GridCellType.Empty)
-                        {
-                            neighbor.IsWalkable = false;
-                        }
-                    }
-                }
-            }
-        }
-        yield return null;
-    }
-
     public void DefiniedSpawn()
     {
         int biggestRoomGridCount = 0;
@@ -792,13 +829,11 @@ public class MapGeneratorController : MonoBehaviour
             if (cell.GridCellType == E_GridCellType.Pass)
             {
                 cell.GridCellType = E_GridCellType.SpawnPass;
-                DebugSingleCellMesh(cell);
 
             }
             else if (cell.GridCellType == E_GridCellType.Room)
             {
                 cell.GridCellType = E_GridCellType.SpawnRoom;
-                DebugSingleCellMesh(cell);
             }
         }
 
