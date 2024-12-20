@@ -11,6 +11,10 @@ public struct GridOptions
     public Material RoomCellMaterial;
     public Material PassCellMaterial;
     public Material HallwayMaterial;
+    public Material SpawnRoomMaterial;
+    public Material SpawnPassMaterial;
+    public Material SecretHallwayMaterial;
+    public Material SecretPassMaterial;
 
     [Header("Grid Parameters")]
     public Vector2Int MaxAxisSize;

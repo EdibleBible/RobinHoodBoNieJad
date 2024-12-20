@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Room
 {
+    public E_RoomType RoomType;
     public int RoomID;
     public List<GridCellData> CellInRoom;
     public int XAxisSize;

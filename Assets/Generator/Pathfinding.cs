@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class Pathfinding
 {
-    private int MOVE_DIAGONAL_COST = 25;
-    private int MOVE_STRAIGHT_COST = 10;
+    public bool CAN_PATH_TOUCHED = false;
+
+    private int MOVE_DIAGONAL_COST = 50;
+    private int MOVE_STRAIGHT_COST = 1;
 
     private CustomGrid.Grid<PathNode> grid;
     private List<PathNode> openList;
@@ -62,7 +64,7 @@ public class Pathfinding
             openList.Remove(currentNode);
             closedList.Add(currentNode);
 
-            foreach (PathNode neighbourNode in GetNeighbourList(currentNode))
+            foreach (PathNode neighbourNode in GetNeighbourList(currentNode, false))
             {
                 if (closedList.Contains(neighbourNode)) continue;
                 if (!neighbourNode.IsWalkable)
@@ -91,7 +93,7 @@ public class Pathfinding
         return null;
     }
 
-    private List<PathNode> GetNeighbourList(PathNode currentNode)
+    public List<PathNode> GetNeighbourList(PathNode currentNode, bool allowDiagonals)
     {
         List<PathNode> neighbourList = new List<PathNode>();
 
@@ -99,19 +101,27 @@ public class Pathfinding
         {
             // Left
             neighbourList.Add(GetNode(currentNode.X - 1, currentNode.Y));
-            // Left Down
-            if (currentNode.Y - 1 >= 0) neighbourList.Add(GetNode(currentNode.X - 1, currentNode.Y - 1));
-            // Left Up
-            if (currentNode.Y + 1 < grid.GetHeight()) neighbourList.Add(GetNode(currentNode.X - 1, currentNode.Y + 1));
+
+            if (allowDiagonals)
+            {
+                // Left Down
+                if (currentNode.Y - 1 >= 0) neighbourList.Add(GetNode(currentNode.X - 1, currentNode.Y - 1));
+                // Left Up
+                if (currentNode.Y + 1 < grid.GetHeight()) neighbourList.Add(GetNode(currentNode.X - 1, currentNode.Y + 1));
+            }
         }
         if (currentNode.X + 1 < grid.GetWidth())
         {
             // Right
             neighbourList.Add(GetNode(currentNode.X + 1, currentNode.Y));
-            // Right Down
-            if (currentNode.Y - 1 >= 0) neighbourList.Add(GetNode(currentNode.X + 1, currentNode.Y - 1));
-            // Right Up
-            if (currentNode.Y + 1 < grid.GetHeight()) neighbourList.Add(GetNode(currentNode.X + 1, currentNode.Y + 1));
+
+            if (allowDiagonals)
+            {
+                // Right Down
+                if (currentNode.Y - 1 >= 0) neighbourList.Add(GetNode(currentNode.X + 1, currentNode.Y - 1));
+                // Right Up
+                if (currentNode.Y + 1 < grid.GetHeight()) neighbourList.Add(GetNode(currentNode.X + 1, currentNode.Y + 1));
+            }
         }
         // Down
         if (currentNode.Y - 1 >= 0) neighbourList.Add(GetNode(currentNode.X, currentNode.Y - 1));

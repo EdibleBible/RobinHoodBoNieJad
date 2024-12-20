@@ -8,15 +8,26 @@ using UnityEngine;
 [Serializable]
 public struct RoomGanerateSetting
 {
+    [Header("BaseInfo")]
     public Vector2Int MaxRoomSize;
     public Vector2Int MinRoomSize;
     public int RoomCount;
     public int MinRoomDistance;
     public int MaxAttempts;
-    public List<Room> CreatedRoom;
+
+    [Header("Additional way")]
     public bool UseAdditionalEdges;
     [Range(0, 25)] public int AdditionSelectedEdges;
     [Range(0, 100)] public int ChanceToSelectEdge;
+
+    [Header("Secret way")]
+
+    public bool CreateSecretWay;
+    [Range(0, 5)] public int SecretWayMaxCount;
+
+    [Header("Rooms")]
+    public List<Room> CreatedRoom;
+
 
     public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid)
     {
@@ -24,15 +35,16 @@ public struct RoomGanerateSetting
         CreatedRoom = new List<Room>();
         int attempt = 0;
 
-        for (int i = 0; i < RoomCount; i++)
+        for (int i = 0; i < RoomCount;)
         {
             // Próba wygenerowania pokoju
             Room room = GenerateRoom(generatedGrid, ref attempt);
             // Jeśli po kilku próbach nie udało się stworzyć pokoju, przerywamy
+
             if (room == null)
             {
                 Debug.LogWarning("Unable to generate room after maximum attempts.");
-                break; // Jeśli nie udało się wygenerować pokoju, przerwij
+                continue; // Jeśli nie udało się wygenerować pokoju, przerwij
             }
 
             if (room.CellInRoom.Count > 0)
@@ -41,6 +53,7 @@ public struct RoomGanerateSetting
                 room.cetroid = room.RoomCentroid();
                 CreatedRoom.Add(room);
             }
+            i++;
         }
     }
 
@@ -77,6 +90,7 @@ public struct RoomGanerateSetting
                         GridCellData selcetedCell = gridData.GetValue(i, j);
                         selcetedCell.GridCellType = E_GridCellType.Room;
                         room.CellInRoom.Add(selcetedCell);
+                        room.RoomType = E_RoomType.StandardRoom;
                     }
                 }
             }

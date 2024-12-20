@@ -9,13 +9,17 @@ using CodeMonkey.Utils;
 using Random = UnityEngine.Random;
 using System.Drawing;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
+using System.Collections;
+using UnityEditor.TerrainTools;
+using UnityEditor;
+using UnityEngine.WSA;
 
 [ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
 {
     public GridOptions MainGridData;
     public RoomGanerateSetting RoomGanerateSetting;
-
 
     public DelaunayTriangulator Triangulator;
     public List<Point> AllPoints;
@@ -26,7 +30,76 @@ public class MapGeneratorController : MonoBehaviour
     public CustomGrid.Grid<GridCellData> MainInfoGrid;
 
     //Debug 
-    private Dictionary<GameObject, GridCellData> allObject = new Dictionary<GameObject, GridCellData>();
+    private Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
+
+    private void Start()
+    {
+        StartGeneration();
+    }
+
+    public void StartGeneration()
+    {
+        StartCoroutine(Generate());
+    }
+
+    private void ClearGeneratedGrid()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            DestroyImmediate(child.gameObject);
+        }
+
+        MainInfoGrid = null;
+    }
+
+    private IEnumerator Generate()
+    {
+        // Clear generated grid
+        ClearGeneratedGrid();
+        DebugGridMesh();
+        yield return new WaitForSeconds(1f);
+
+        // Generate grid
+        GenerateGrid();
+        DebugGridMesh();
+        yield return new WaitForSeconds(1f);
+
+        // Create rooms on grid
+        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid);
+        DebugGridMesh();
+
+        yield return new WaitForSeconds(1f);
+
+        // Generate triangulation
+        GenerateTriangulation();
+        DebugGridMesh();
+        yield return new WaitForSeconds(1f);
+
+        // Set selected edges
+        SelectedEdges = GetUsedEdges(AllEdges, AllPoints);
+        DebugGridMesh();
+
+        yield return new WaitForSeconds(1f);
+
+        // Run pathfinding for rooms
+        RoomPathFind();
+        DebugGridMesh();
+
+        yield return new WaitForSeconds(1f);
+
+        // Define spawn points
+        DefiniedSpawn();
+        DebugGridMesh();
+
+        yield return new WaitForSeconds(1f);
+
+        // Debug the grid mesh
+        DebugGridMesh();
+        yield return new WaitForSeconds(1f);
+
+    }
+
     public void GenerateGrid()
     {
         var randomSize = MainGridData.RandomizeGridSize();
@@ -48,7 +121,17 @@ public class MapGeneratorController : MonoBehaviour
     }
     public void DebugGridMesh()
     {
+        if (MainInfoGrid == null)
+            return;
+
         Vector2Int gridSize = MainInfoGrid.GeneratedGridSize();
+        var coppy = allObject;
+
+        foreach (var cellData in coppy)
+        {
+            Destroy(allObject.Where(x => x.Key == cellData.Key).FirstOrDefault().Value);
+        }
+
         allObject.Clear();
         for (int x = 0; x < gridSize.x; x++)
         {
@@ -69,38 +152,112 @@ public class MapGeneratorController : MonoBehaviour
                 meshFilter.mesh = Resources.GetBuiltinResource<Mesh>("Cube.fbx");
 
                 MeshRenderer meshRenderer = createdCell.AddComponent<MeshRenderer>();
-                meshRenderer.material = cell.GridCellType == E_GridCellType.Room
-                    ? MainGridData.RoomCellMaterial
-                    : MainGridData.EmptyCellMaterial;
+                switch (cell.GridCellType)
+                {
+                    case E_GridCellType.Empty:
+                        meshRenderer.material = MainGridData.EmptyCellMaterial;
+                        break;
+
+                    case E_GridCellType.Room:
+                        meshRenderer.material = MainGridData.RoomCellMaterial;
+                        break;
+
+                    case E_GridCellType.Hallway:
+                        meshRenderer.material = MainGridData.HallwayMaterial;
+                        break;
+
+                    case E_GridCellType.Pass:
+                        meshRenderer.material = MainGridData.PassCellMaterial;
+                        break;
+
+                    case E_GridCellType.SpawnRoom:
+                        meshRenderer.material = MainGridData.SpawnRoomMaterial;
+                        break;
+
+                    case E_GridCellType.SpawnPass:
+                        meshRenderer.material = MainGridData.SpawnPassMaterial;
+                        break;
+
+                    default:
+                        Debug.LogWarning($"Unknown GridCellType: {cell.GridCellType}");
+                        meshRenderer.material = null; // Możesz ustawić materiał domyślny
+                        break;
+                }
 
                 // Skalowanie
                 createdCell.transform.localScale = Vector3.one * MainGridData.cellScale;
 
                 // Dodanie do słownika dla debugowania
-                allObject.Add(createdCell, cell);
+                allObject.Add(cell, createdCell);
             }
         }
     }
-    public void SetupPassDebugMesh()
+    public void DebugSingleCellMesh(GridCellData cell)
     {
-        foreach (var cell in allObject)
+        if (cell == null)
+            return;
+
+        if (allObject.ContainsKey(cell) && allObject[cell] != null)
         {
-            if (cell.Value.GridCellType == E_GridCellType.Pass)
-            {
-                MeshRenderer meshRenderer = cell.Key.GetComponent<MeshRenderer>();
-                meshRenderer.material = MainGridData.PassCellMaterial;
-            }
+            Destroy(allObject[cell].gameObject);
         }
-    }
-    public void SetupHallwayDebugMesh()
-    {
-        foreach (var cell in allObject)
+
+
+        // Tworzenie komórki
+        var createdCell = new GameObject($"cell nr x:{cell.Coordinate.x} y:{cell.Coordinate.y}");
+        createdCell.transform.parent = transform;
+
+        // Przypisanie pozycji
+        createdCell.transform.position = cell.Position;
+
+        // Dodanie komponentów wizualnych
+        MeshFilter meshFilter = createdCell.AddComponent<MeshFilter>();
+        meshFilter.mesh = Resources.GetBuiltinResource<Mesh>("Cube.fbx");
+
+        MeshRenderer meshRenderer = createdCell.AddComponent<MeshRenderer>();
+        switch (cell.GridCellType)
         {
-            if (cell.Value.GridCellType == E_GridCellType.Hallway)
-            {
-                MeshRenderer meshRenderer = cell.Key.GetComponent<MeshRenderer>();
+            case E_GridCellType.Empty:
+                meshRenderer.material = MainGridData.EmptyCellMaterial;
+                break;
+
+            case E_GridCellType.Room:
+                meshRenderer.material = MainGridData.RoomCellMaterial;
+                break;
+
+            case E_GridCellType.Hallway:
                 meshRenderer.material = MainGridData.HallwayMaterial;
-            }
+                break;
+
+            case E_GridCellType.Pass:
+                meshRenderer.material = MainGridData.PassCellMaterial;
+                break;
+
+            case E_GridCellType.SpawnRoom:
+                meshRenderer.material = MainGridData.SpawnRoomMaterial;
+                break;
+
+            case E_GridCellType.SpawnPass:
+                meshRenderer.material = MainGridData.SpawnPassMaterial;
+                break;
+
+            default:
+                Debug.LogWarning($"Unknown GridCellType: {cell.GridCellType}");
+                meshRenderer.material = null; // Możesz ustawić materiał domyślny
+                break;
+        }
+
+        // Skalowanie
+        createdCell.transform.localScale = Vector3.one * MainGridData.cellScale;
+
+        // Dodanie do słownika dla debugowania
+        if (allObject.ContainsKey(cell))
+        {
+            allObject[cell] = createdCell;
+        }
+        else
+        {
+            allObject.Add(cell, createdCell);
         }
     }
 
@@ -231,24 +388,54 @@ public class MapGeneratorController : MonoBehaviour
             points.Add(point);
         }
     }
-    public List<Edge> GetUsedEgdes(List<Edge> allEdge, List<Point> allPoints)
+    public List<Edge> GetUsedEdges(List<Edge> allEdge, List<Point> allPoints)
     {
         List<Edge> usedEdge = PrimAlgorithm.FindMST(allEdge, allPoints);
         int additionalEdges = 0;
-
+        HashSet<Vector2Int> mergedPoints = new HashSet<Vector2Int>();
         if (!RoomGanerateSetting.UseAdditionalEdges)
         {
+
             foreach (Edge edge in usedEdge)
             {
-                var edgePoint1Vecotr2 = new Vector2((float)edge.Point1.X, (float)edge.Point1.Y);
-                var edgePoint2Vecotr2 = new Vector2((float)edge.Point2.X, (float)edge.Point2.Y);
+                var edgePoint1Vector2 = new Vector2((float)edge.Point1.X, (float)edge.Point1.Y);
+                var edgePoint2Vector2 = new Vector2((float)edge.Point2.X, (float)edge.Point2.Y);
 
+                var room1 = RoomGanerateSetting.CreatedRoom
+                    .FirstOrDefault(x => x.cetroid.x == edgePoint1Vector2.x && x.cetroid.z == edgePoint1Vector2.y);
+                var room2 = RoomGanerateSetting.CreatedRoom
+                    .FirstOrDefault(x => x.cetroid.x == edgePoint2Vector2.x && x.cetroid.z == edgePoint2Vector2.y);
 
-                var room1 = RoomGanerateSetting.CreatedRoom.Where(x => x.cetroid.x == edgePoint1Vecotr2.x && x.cetroid.z == edgePoint1Vecotr2.y).FirstOrDefault();
-                var room2 = RoomGanerateSetting.CreatedRoom.Where(x => x.cetroid.x == edgePoint2Vecotr2.x && x.cetroid.z == edgePoint2Vecotr2.y).FirstOrDefault();
+                var connectionPoints = FindConnectionPosition(room1, room2);
+
+                // Sprawdzanie i scalanie punktów wejścia/wyjścia
+                Vector2Int entryPointCoordinate = connectionPoints.entryPoint.Coordinate;
+                Vector2Int exitPointCoordinate = connectionPoints.exitPoint.Coordinate;
+
+                if (IsPointMerged(entryPointCoordinate, mergedPoints))
+                {
+                    entryPointCoordinate = GetClosestMergedPoint(entryPointCoordinate, mergedPoints);
+                }
+                else
+                {
+                    mergedPoints.Add(entryPointCoordinate);
+                }
+
+                if (IsPointMerged(exitPointCoordinate, mergedPoints))
+                {
+                    exitPointCoordinate = GetClosestMergedPoint(exitPointCoordinate, mergedPoints);
+                }
+                else
+                {
+                    mergedPoints.Add(exitPointCoordinate);
+                }
+
                 edge.SetEdgeRoom(room1, room2);
-                var point = FindConnectionPosition(room1, room2);
-                edge.SetEnterExitRoom(point.entryPoint, point.exitPoint);
+
+                GridCellData enterCellData = MainInfoGrid.GetValue(entryPointCoordinate.x, entryPointCoordinate.y);
+                GridCellData exitCellData = MainInfoGrid.GetValue(exitPointCoordinate.x, exitPointCoordinate.y);
+
+                edge.SetEnterExitRoom(enterCellData, exitCellData);
             }
 
             return usedEdge;
@@ -270,22 +457,78 @@ public class MapGeneratorController : MonoBehaviour
             usedEdge.Add(edge);
             additionalEdges++;
         }
-
         foreach (Edge edge in usedEdge)
         {
-            var edgePoint1Vecotr2 = new Vector2((float)edge.Point1.X, (float)edge.Point1.Y);
-            var edgePoint2Vecotr2 = new Vector2((float)edge.Point2.X, (float)edge.Point2.Y);
+            var edgePoint1Vector2 = new Vector2((float)edge.Point1.X, (float)edge.Point1.Y);
+            var edgePoint2Vector2 = new Vector2((float)edge.Point2.X, (float)edge.Point2.Y);
 
+            var room1 = RoomGanerateSetting.CreatedRoom
+                .FirstOrDefault(x => x.cetroid.x == edgePoint1Vector2.x && x.cetroid.z == edgePoint1Vector2.y);
+            var room2 = RoomGanerateSetting.CreatedRoom
+                .FirstOrDefault(x => x.cetroid.x == edgePoint2Vector2.x && x.cetroid.z == edgePoint2Vector2.y);
 
-            var room1 = RoomGanerateSetting.CreatedRoom.Where(x => x.cetroid.x == edgePoint1Vecotr2.x && x.cetroid.z == edgePoint1Vecotr2.y).FirstOrDefault();
-            var room2 = RoomGanerateSetting.CreatedRoom.Where(x => x.cetroid.x == edgePoint2Vecotr2.x && x.cetroid.z == edgePoint2Vecotr2.y).FirstOrDefault();
-            var point = FindConnectionPosition(room1, room2);
-            edge.SetEnterExitRoom(point.entryPoint, point.exitPoint);
+            var connectionPoints = FindConnectionPosition(room1, room2);
+
+            // Sprawdzanie i scalanie punktów wejścia/wyjścia
+            Vector2Int entryPointCoordinate = connectionPoints.entryPoint.Coordinate;
+            Vector2Int exitPointCoordinate = connectionPoints.exitPoint.Coordinate;
+
+            if (IsPointMerged(entryPointCoordinate, mergedPoints))
+            {
+                entryPointCoordinate = GetClosestMergedPoint(entryPointCoordinate, mergedPoints);
+            }
+            else
+            {
+                mergedPoints.Add(entryPointCoordinate);
+            }
+
+            if (IsPointMerged(exitPointCoordinate, mergedPoints))
+            {
+                exitPointCoordinate = GetClosestMergedPoint(exitPointCoordinate, mergedPoints);
+            }
+            else
+            {
+                mergedPoints.Add(exitPointCoordinate);
+            }
+
+            edge.SetEdgeRoom(room1, room2);
+
+            GridCellData enterCellData = MainInfoGrid.GetValue(entryPointCoordinate.x, entryPointCoordinate.y);
+            GridCellData exitCellData = MainInfoGrid.GetValue(exitPointCoordinate.x, exitPointCoordinate.y);
+
+            edge.SetEnterExitRoom(enterCellData, exitCellData);
         }
 
         return usedEdge;
     }
+    private bool IsPointMerged(Vector2Int point, HashSet<Vector2Int> mergedPoints)
+    {
+        foreach (var p in mergedPoints)
+        {
+            if (Vector2Int.Distance(point, p) <= 1) // Tolerancja <= 1 jednostki (dla grida)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private Vector2Int GetClosestMergedPoint(Vector2Int point, HashSet<Vector2Int> mergedPoints)
+    {
+        Vector2Int closestPoint = point;
+        float minDistance = float.MaxValue;
 
+        foreach (var p in mergedPoints)
+        {
+            float distance = Vector2Int.Distance(point, p); // Obliczenie odległości
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestPoint = p;
+            }
+        }
+
+        return closestPoint;
+    }
     public void RoomPathFind()
     {
         if (MainInfoGrid == null)
@@ -293,72 +536,273 @@ public class MapGeneratorController : MonoBehaviour
 
         List<GridCellData> roomCell = new List<GridCellData>();
 
+        // Zbieramy komórki, które nie są przejściowe.
         foreach (var room in RoomGanerateSetting.CreatedRoom)
         {
             foreach (var cell in room.CellInRoom)
             {
-                if (cell.GridCellType == E_GridCellType.Pass)
-                    continue;
-
-                roomCell.Add(cell);
+                if (cell.GridCellType != E_GridCellType.Pass)
+                    roomCell.Add(cell);
             }
         }
 
-        Pathfinding pathfinding = new Pathfinding(MainInfoGrid.GetWidth(), MainInfoGrid.GetHeight(), MainGridData.cellScale, transform.position, roomCell);
+        // Inicjalizacja pathfinding
+        Pathfinding pathfinding = new Pathfinding(
+            MainInfoGrid.GetWidth(),
+            MainInfoGrid.GetHeight(),
+            MainGridData.cellScale,
+            transform.position,
+            roomCell
+        );
 
-        foreach (Edge edge in AllEdges)
+        foreach (Edge edge in SelectedEdges)
         {
-
-            List<PathNode> pathNodeCell = pathfinding.FindPath(edge.EntryGridCell.Coordinate.x, edge.EntryGridCell.Coordinate.y, edge.ExitGridCell.Coordinate.x, edge.ExitGridCell.Coordinate.y);
-
-            foreach (var element in pathNodeCell)
+            // Walidacja krawędzi i jej danych
+            if (edge == null || edge.EntryGridCell == null || edge.ExitGridCell == null ||
+                edge.EntryGridCell.Coordinate == null || edge.ExitGridCell.Coordinate == null)
             {
-                if ((element.X == edge.EntryGridCell.Coordinate.x && element.Y == edge.EntryGridCell.Coordinate.y) || (element.X == edge.ExitGridCell.Coordinate.x && element.Y == edge.ExitGridCell.Coordinate.y))
+                return;
+            }
+
+            // Znajdowanie ścieżki
+            List<PathNode> pathNodeCell = pathfinding.FindPath(
+                edge.EntryGridCell.Coordinate.x,
+                edge.EntryGridCell.Coordinate.y,
+                edge.ExitGridCell.Coordinate.x,
+                edge.ExitGridCell.Coordinate.y
+            );
+
+            if (pathNodeCell == null)
+                continue;
+
+            // Zaktualizowanie komórek jako 'Hallway'
+            foreach (var node in pathNodeCell)
+            {
+                if ((node.X == edge.EntryGridCell.Coordinate.x && node.Y == edge.EntryGridCell.Coordinate.y) ||
+                    (node.X == edge.ExitGridCell.Coordinate.x && node.Y == edge.ExitGridCell.Coordinate.y))
                     continue;
 
-                GridCellData toAdd = MainInfoGrid.GetValue(element.X, element.Y);
+                GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
                 toAdd.GridCellType = E_GridCellType.Hallway;
+                DebugSingleCellMesh(toAdd);
+            }
+
+            // Jeśli ścieżka nie może być dotknięta, sprawdzamy sąsiadów
+            if (!pathfinding.CAN_PATH_TOUCHED)
+            {
+                foreach (var currentNode in pathNodeCell)
+                {
+                    var neighbors = pathfinding.GetNeighbourList(currentNode, false);
+
+                    foreach (var neighbor in neighbors)
+                    {
+                        // Pomijamy sąsiadów na skos
+                        if (Mathf.Abs(neighbor.X - currentNode.X) == 1 && Mathf.Abs(neighbor.Y - currentNode.Y) == 1)
+                            continue;
+
+                        var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
+                        var neighborNeighbors = pathfinding.GetNeighbourList(neighbor, true);
+
+                        bool isNextToPassableCell = false;
+                        foreach (var neighborOfNeighbor in neighborNeighbors)
+                        {
+                            var neighborOfNeighborCell = MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
+                            if (neighborOfNeighborCell.GridCellType == E_GridCellType.Pass)
+                            {
+                                isNextToPassableCell = true;
+                                break;
+                            }
+                        }
+
+                        // Jeśli sąsiad sąsiada jest przejściowy, pomijamy go
+                        if (isNextToPassableCell)
+                            continue;
+
+                        // Jeśli sąsiad jest pustą komórką, oznaczamy jako nieprzechodni
+                        if (neighborCell.GridCellType == E_GridCellType.Empty)
+                        {
+                            neighbor.IsWalkable = false;
+                        }
+                    }
+                }
             }
         }
+        return;
     }
 
-
-    public void _testPathFind(GridCellData startCell, GridCellData endCell)
+    public IEnumerator RoomPathFindTimed()
     {
         if (MainInfoGrid == null)
-            return;
+            yield return null;
 
         List<GridCellData> roomCell = new List<GridCellData>();
 
+        // Zbieramy komórki, które nie są przejściowe.
         foreach (var room in RoomGanerateSetting.CreatedRoom)
         {
             foreach (var cell in room.CellInRoom)
             {
-                if (cell.GridCellType == E_GridCellType.Pass)
-                    continue;
-
-                roomCell.Add(cell);
+                if (cell.GridCellType != E_GridCellType.Pass)
+                    roomCell.Add(cell);
             }
         }
 
-        var size = MainInfoGrid.GeneratedGridSize();
-        Pathfinding pathfinding = new Pathfinding(size.x, size.y, MainGridData.cellScale, transform.position, roomCell);
-        var list = pathfinding.FindPath(startCell.Coordinate.x, startCell.Coordinate.y, endCell.Coordinate.x, endCell.Coordinate.y);
+        // Inicjalizacja pathfinding
+        Pathfinding pathfinding = new Pathfinding(
+            MainInfoGrid.GetWidth(),
+            MainInfoGrid.GetHeight(),
+            MainGridData.cellScale,
+            transform.position,
+            roomCell
+        );
 
-        List<GridCellData> hallwaygridcell = new List<GridCellData>();
-
-        foreach (var element in list)
+        foreach (Edge edge in SelectedEdges)
         {
-            if ((element.X == startCell.Coordinate.x && element.Y == startCell.Coordinate.y) || (element.X == endCell.Coordinate.x && element.Y == endCell.Coordinate.y))
+            // Walidacja krawędzi i jej danych
+            if (edge == null || edge.EntryGridCell == null || edge.ExitGridCell == null ||
+                edge.EntryGridCell.Coordinate == null || edge.ExitGridCell.Coordinate == null)
+            {
+                yield return null;
+            }
+
+            // Znajdowanie ścieżki
+            List<PathNode> pathNodeCell = pathfinding.FindPath(
+                edge.EntryGridCell.Coordinate.x,
+                edge.EntryGridCell.Coordinate.y,
+                edge.ExitGridCell.Coordinate.x,
+                edge.ExitGridCell.Coordinate.y
+            );
+
+            if (pathNodeCell == null)
                 continue;
 
-            GridCellData toAdd = MainInfoGrid.GetValue(element.X, element.Y);
-            toAdd.GridCellType = E_GridCellType.Hallway;
-            hallwaygridcell.Add(toAdd);
+            // Zaktualizowanie komórek jako 'Hallway'
+            foreach (var node in pathNodeCell)
+            {
+                // Sprawdzenie, czy należy pominąć węzeł
+                if ((node.X == edge.EntryGridCell.Coordinate.x && node.Y == edge.EntryGridCell.Coordinate.y) ||
+                    (node.X == edge.ExitGridCell.Coordinate.x && node.Y == edge.ExitGridCell.Coordinate.y))
+                    continue;
+
+                GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
+                toAdd.GridCellType = E_GridCellType.Hallway;
+
+                // Wywołanie metody debugującej
+                DebugSingleCellMesh(toAdd);
+
+                // Opóźnienie przed kolejną iteracją
+                yield return new WaitForSeconds(0.2f);
+            }
+
+            // Jeśli ścieżka nie może być dotknięta, sprawdzamy sąsiadów
+            if (!pathfinding.CAN_PATH_TOUCHED)
+            {
+                foreach (var currentNode in pathNodeCell)
+                {
+                    var neighbors = pathfinding.GetNeighbourList(currentNode, false);
+
+                    foreach (var neighbor in neighbors)
+                    {
+                        // Pomijamy sąsiadów na skos
+                        if (Mathf.Abs(neighbor.X - currentNode.X) == 1 && Mathf.Abs(neighbor.Y - currentNode.Y) == 1)
+                            continue;
+
+                        var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
+                        var neighborNeighbors = pathfinding.GetNeighbourList(neighbor, true);
+
+                        bool isNextToPassableCell = false;
+                        foreach (var neighborOfNeighbor in neighborNeighbors)
+                        {
+                            var neighborOfNeighborCell = MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
+                            if (neighborOfNeighborCell.GridCellType == E_GridCellType.Pass)
+                            {
+                                isNextToPassableCell = true;
+                                break;
+                            }
+                        }
+
+                        // Jeśli sąsiad sąsiada jest przejściowy, pomijamy go
+                        if (isNextToPassableCell)
+                            continue;
+
+                        // Jeśli sąsiad jest pustą komórką, oznaczamy jako nieprzechodni
+                        if (neighborCell.GridCellType == E_GridCellType.Empty)
+                        {
+                            neighbor.IsWalkable = false;
+                        }
+                    }
+                }
+            }
+        }
+        yield return null;
+    }
+
+    public void DefiniedSpawn()
+    {
+        int biggestRoomGridCount = 0;
+        foreach (var room in RoomGanerateSetting.CreatedRoom)
+        {
+            if (room.CellInRoom.Count() > biggestRoomGridCount)
+                biggestRoomGridCount = room.CellInRoom.Count();
+        }
+
+        List<Room> biggestRooms = new List<Room>();
+
+        foreach (var room in RoomGanerateSetting.CreatedRoom)
+        {
+            if (room.CellInRoom.Count() == biggestRoomGridCount)
+                biggestRooms.Add(room);
+        }
+
+        int passAmount = 0;
+
+        foreach (var room in biggestRooms)
+        {
+            int passCount = 0;
+            foreach (var grid in room.CellInRoom)
+            {
+                if (grid.GridCellType == E_GridCellType.Pass)
+                    passCount++;
+            }
+
+            if (passCount > passAmount)
+                passAmount = passCount;
+        }
+
+        List<Room> biggestRoomsWithMostPass = new List<Room>();
+
+        foreach (var room in biggestRooms)
+        {
+            int passCount = 0;
+            foreach (var grid in room.CellInRoom)
+            {
+                if (grid.GridCellType == E_GridCellType.Pass)
+                    passCount++;
+            }
+
+            if (passCount == passAmount)
+                biggestRoomsWithMostPass.Add(room);
+        }
+
+        Room randomRoom = biggestRoomsWithMostPass[UnityEngine.Random.RandomRange(0, biggestRoomsWithMostPass.Count - 1)];
+        randomRoom.RoomType = E_RoomType.SpawnRoom;
+
+        foreach (var cell in randomRoom.CellInRoom)
+        {
+            if (cell.GridCellType == E_GridCellType.Pass)
+            {
+                cell.GridCellType = E_GridCellType.SpawnPass;
+                DebugSingleCellMesh(cell);
+
+            }
+            else if (cell.GridCellType == E_GridCellType.Room)
+            {
+                cell.GridCellType = E_GridCellType.SpawnRoom;
+                DebugSingleCellMesh(cell);
+            }
         }
 
     }
-
 }
 
 
