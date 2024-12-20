@@ -10,6 +10,7 @@ public class PlayerInventory : MonoBehaviour
     public SOStats stats;
     public int finalPrize;
     public MenuInventory inventoryUI;
+    public bool playerCollides;
 
     private void OnEnable()
     {
@@ -49,12 +50,23 @@ public class PlayerInventory : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.CompareTag("Player"))
+        {
+            playerCollides = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            playerCollides = false;
+        }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && playerCollides)
         {
             int localPrize;
             foreach (ItemBase item in itemList)
