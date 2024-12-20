@@ -14,6 +14,7 @@ public class MapGeneratorControllerEditor : Editor
     private float timeElapsed = 0f;
     private int currentStep = 0;
     private bool isGenerating = false;  // Flaga kontrolująca, czy proces generowania jest w trakcie
+    private int seed; // Flaga kontrolująca, czy proces generowania jest w trakcie
 
 
     public override void OnInspectorGUI()
@@ -33,13 +34,16 @@ public class MapGeneratorControllerEditor : Editor
         {
             TimedGeneration(generatorController);
         }
+
+        seed = EditorGUILayout.IntField("Seed", seed);
+
     }
 
     private void Generate(MapGeneratorController generatorController)
     {
         ClearGeneratedGrid(generatorController);
 
-        generatorController.GenerateGrid();
+        generatorController.GenerateGrid(seed);
 
         generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid);
 
@@ -89,7 +93,7 @@ public class MapGeneratorControllerEditor : Editor
             switch (currentStep)
             {
                 case 1:
-                    generatorController.GenerateGrid();
+                    generatorController.GenerateGrid(seed);
                     generatorController.DebugGridMesh();
                     break;
 

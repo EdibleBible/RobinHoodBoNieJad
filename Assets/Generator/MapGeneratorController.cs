@@ -1,19 +1,8 @@
-﻿using CustomGrid;
-using NUnit.Framework.Internal;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using CodeMonkey.Utils;
 using Random = UnityEngine.Random;
-using System.Drawing;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using System.Collections;
-using UnityEditor.TerrainTools;
-using UnityEditor;
-using UnityEngine.WSA;
 using TMPro;
 
 [ExecuteAlways]
@@ -37,6 +26,13 @@ public class MapGeneratorController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ActionTextMesh;
     [SerializeField] private TextMeshProUGUI InstructionTextMesh;
 
+    private int seed;
+
+    private void SetSeed(int setValue)
+    {
+        seed = setValue;
+    }
+
     //Playmode Method
     private void Start()
     {
@@ -45,8 +41,11 @@ public class MapGeneratorController : MonoBehaviour
 
     public void StartGeneration()
     {
-
         ClearGeneratedGrid();
+
+        int randomSeed = new System.Random().Next(100, 999);
+        SetSeed(randomSeed);
+
         UpdateActionText("Clearing grid...");
         StartCoroutine(Generate());
     }
@@ -67,7 +66,7 @@ public class MapGeneratorController : MonoBehaviour
         // Generate grid
         UpdateActionText("Generating grid and rooms...");
         UpdateInstructionText("Press SPACE to continue.");
-        GenerateGrid();
+        GenerateGrid(seed);
 
 
         // Create rooms on grid
@@ -386,9 +385,9 @@ public class MapGeneratorController : MonoBehaviour
         }
     }
 
-    public void GenerateGrid()
+    public void GenerateGrid(int seed)
     {
-        var randomSize = MainGridData.RandomizeGridSize();
+        var randomSize = MainGridData.RandomizeGridSize(seed);
         GenerateGrid(randomSize.x, randomSize.y);
     }
     public void GenerateGrid(int gridX, int gridY)

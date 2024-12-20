@@ -21,10 +21,12 @@ public struct GridOptions
     public Vector2Int MinAxisSize;
     public float cellScale;
 
-    public Vector2Int RandomizeGridSize()
+    public Vector2Int RandomizeGridSize(int seed)
     {
-        int randomX = UnityEngine.Random.RandomRange(MinAxisSize.x,MaxAxisSize.x);
-        int randomY = UnityEngine.Random.RandomRange(MinAxisSize.y,MaxAxisSize.y);
+        System.Random random = new System.Random(seed);
+
+        int randomX = random.Next(MinAxisSize.x,MaxAxisSize.x);
+        int randomY = random.Next(MinAxisSize.y,MaxAxisSize.y);
         return new Vector2Int(randomX, randomY);
     }
 
