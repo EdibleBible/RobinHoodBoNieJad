@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class GridSizeWindow : EditorWindow
 {
-    private int width = 10;  // Domyślna szerokość siatki
+/*    private int width = 10;  // Domyślna szerokość siatki
     private int height = 10; // Domyślna wysokość siatki
+    private int seed = 100;
     
 
     private MapGeneratorController generatorController;
@@ -24,6 +25,7 @@ public class GridSizeWindow : EditorWindow
         // Pole do ustawienia szerokości i wysokości siatki
         width = EditorGUILayout.IntField("Width", width);
         height = EditorGUILayout.IntField("Height", height);
+        seed = EditorGUILayout.IntField("Seed", seed);
 
         // Przyciski do generowania siatki
         if (GUILayout.Button("Generate Grid"))
@@ -36,7 +38,7 @@ public class GridSizeWindow : EditorWindow
                 generatorController.GenerateGrid(width, height);
 
                 // Dodanie pokoi na siatkę
-                generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid);
+                generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid,random);
 
                 // Zamknięcie okna po wygenerowaniu siatki
                 Close();
@@ -64,5 +66,5 @@ public class GridSizeWindow : EditorWindow
 
         // Wyczyszczenie danych w GridData
         generatorController.MainInfoGrid = null;
-    }
+    }*/
 }

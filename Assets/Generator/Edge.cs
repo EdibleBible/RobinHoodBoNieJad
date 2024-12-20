@@ -12,6 +12,8 @@ public class Edge
     public GridCellData EntryGridCell;
     public GridCellData ExitGridCell;
 
+    public GridCellData StartPathFindCell;
+    public GridCellData EndPathFindCell;
     public Edge(Point point1, Point point2)
     {
         Point1 = point1;
@@ -32,6 +34,16 @@ public class Edge
         EntryGridCell.GridCellType = E_GridCellType.Pass;
         ExitGridCell.GridCellType = E_GridCellType.Pass;
     }
+
+    public void SetStartEndPathfind(GridCellData start, GridCellData end)
+    {
+        StartPathFindCell = start;
+        EndPathFindCell = end;
+
+        EntryGridCell.GridCellType = E_GridCellType.Pass;
+        ExitGridCell.GridCellType = E_GridCellType.Pass;
+    }
+
 
     public override bool Equals(object obj)
     {

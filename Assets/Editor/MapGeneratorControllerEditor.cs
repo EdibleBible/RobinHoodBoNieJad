@@ -41,11 +41,13 @@ public class MapGeneratorControllerEditor : Editor
 
     private void Generate(MapGeneratorController generatorController)
     {
+        generatorController.SetSeed(seed);
+
         ClearGeneratedGrid(generatorController);
 
         generatorController.GenerateGrid(seed);
 
-        generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid);
+        generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, generatorController.rand);
 
         generatorController.GenerateTriangulation();
 
@@ -98,7 +100,7 @@ public class MapGeneratorControllerEditor : Editor
                     break;
 
                 case 2:
-                    generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid);
+                    generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, generatorController.rand);
                     generatorController.DebugGridMesh();
                     break;
 

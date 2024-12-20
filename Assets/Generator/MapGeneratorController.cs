@@ -25,12 +25,15 @@ public class MapGeneratorController : MonoBehaviour
     private Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
     [SerializeField] private TextMeshProUGUI ActionTextMesh;
     [SerializeField] private TextMeshProUGUI InstructionTextMesh;
+    [SerializeField] private TextMeshProUGUI SeedTextMesh;
 
-    private int seed;
+    [HideInInspector] public int seed;
+    [HideInInspector] public System.Random rand;
 
-    private void SetSeed(int setValue)
+    public void SetSeed(int setValue)
     {
         seed = setValue;
+        rand = new System.Random(seed);
     }
 
     //Playmode Method
@@ -45,6 +48,7 @@ public class MapGeneratorController : MonoBehaviour
 
         int randomSeed = new System.Random().Next(100, 999);
         SetSeed(randomSeed);
+        UpdateSeedText(randomSeed.ToString());
 
         UpdateActionText("Clearing grid...");
         StartCoroutine(Generate());
@@ -70,7 +74,7 @@ public class MapGeneratorController : MonoBehaviour
 
 
         // Create rooms on grid
-        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid);
+        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, rand);
         DebugGridMesh();
         yield return WaitForSpaceBar();
 
@@ -107,6 +111,13 @@ public class MapGeneratorController : MonoBehaviour
 
         yield return WaitForSpaceBar();
         StartGeneration();
+    }
+
+
+    private void UpdateSeedText(string seedText)
+    {
+        // Update the action text (assign this to your action TextMesh object)
+        SeedTextMesh.text = "SEED: " + seedText;
     }
 
     private void UpdateActionText(string actionText)
@@ -282,8 +293,9 @@ public class MapGeneratorController : MonoBehaviour
         {
             foreach (var cell in room.CellInRoom)
             {
-                if (cell.GridCellType != E_GridCellType.Pass)
-                    roomCell.Add(cell);
+                /*                if (cell.GridCellType != E_GridCellType.Pass)
+                */
+                roomCell.Add(cell);
             }
         }
 
@@ -306,11 +318,17 @@ public class MapGeneratorController : MonoBehaviour
             }
 
             // Znajdowanie ścieżki
+            var startPointCord = GetStartCoordinate(edge.EntryGridCell);
+            var endPointCord = GetStartCoordinate(edge.ExitGridCell);
+
+            edge.SetStartEndPathfind(MainInfoGrid.GetValue(startPointCord.x, startPointCord.y), MainInfoGrid.GetValue(endPointCord.x, endPointCord.y));
+
+            // Znajdowanie ścieżki
             List<PathNode> pathNodeCell = currPathfinding.FindPath(
-                edge.EntryGridCell.Coordinate.x,
-                edge.EntryGridCell.Coordinate.y,
-                edge.ExitGridCell.Coordinate.x,
-                edge.ExitGridCell.Coordinate.y
+                startPointCord.x,
+                startPointCord.y,
+                endPointCord.x,
+                endPointCord.y
             );
 
             if (pathNodeCell == null)
@@ -387,7 +405,7 @@ public class MapGeneratorController : MonoBehaviour
 
     public void GenerateGrid(int seed)
     {
-        var randomSize = MainGridData.RandomizeGridSize(seed);
+        var randomSize = MainGridData.RandomizeGridSize(rand);
         GenerateGrid(randomSize.x, randomSize.y);
     }
     public void GenerateGrid(int gridX, int gridY)
@@ -594,7 +612,7 @@ public class MapGeneratorController : MonoBehaviour
             if (usedEdge.Contains(edge))
                 continue;
 
-            var randomNumber = Random.Range(0, 100);
+            var randomNumber = rand.Next(0, 101);
 
             if (randomNumber > RoomGanerateSetting.ChanceToSelectEdge)
                 continue;
@@ -686,8 +704,9 @@ public class MapGeneratorController : MonoBehaviour
         {
             foreach (var cell in room.CellInRoom)
             {
-                if (cell.GridCellType != E_GridCellType.Pass)
-                    roomCell.Add(cell);
+                /*                if (cell.GridCellType != E_GridCellType.Pass)
+                */
+                roomCell.Add(cell);
             }
         }
 
@@ -709,12 +728,17 @@ public class MapGeneratorController : MonoBehaviour
                 return;
             }
 
+            var startPointCord = GetStartCoordinate(edge.EntryGridCell);
+            var endPointCord = GetStartCoordinate(edge.ExitGridCell);
+
+            edge.SetStartEndPathfind(MainInfoGrid.GetValue(startPointCord.x, startPointCord.y), MainInfoGrid.GetValue(endPointCord.x, endPointCord.y));
+
             // Znajdowanie ścieżki
             List<PathNode> pathNodeCell = currPathfinding.FindPath(
-                edge.EntryGridCell.Coordinate.x,
-                edge.EntryGridCell.Coordinate.y,
-                edge.ExitGridCell.Coordinate.x,
-                edge.ExitGridCell.Coordinate.y
+                startPointCord.x,
+                startPointCord.y,
+                endPointCord.x,
+                endPointCord.y
             );
 
             if (pathNodeCell == null)
@@ -773,6 +797,23 @@ public class MapGeneratorController : MonoBehaviour
         }
         return;
     }
+
+    private Vector2Int GetStartCoordinate(GridCellData selectedGridCellData)
+    {
+        GridCellData baseStartPoint = selectedGridCellData;
+        List<PathNode> allNeighbourStart = currPathfinding.GetNeighbourList(currPathfinding.GetGrid().GetValue(baseStartPoint.Coordinate.x, baseStartPoint.Coordinate.y), false);
+        List<GridCellData> selectedNeighbourStart = new List<GridCellData>();
+        foreach (var element in allNeighbourStart)
+        {
+            GridCellData cell = MainInfoGrid.GetValue(element.X, element.Y);
+            if (cell.GridCellType != E_GridCellType.Room && cell.GridCellType != E_GridCellType.Pass)
+                selectedNeighbourStart.Add(cell);
+        }
+        int randomIndex = rand.Next(0, selectedNeighbourStart.Count);
+        GridCellData selectedCell = selectedNeighbourStart[randomIndex];
+        return selectedCell.Coordinate;
+    }
+
     public void DefiniedSpawn()
     {
         int biggestRoomGridCount = 0;

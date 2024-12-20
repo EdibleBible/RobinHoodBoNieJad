@@ -29,16 +29,15 @@ public struct RoomGanerateSetting
     public List<Room> CreatedRoom;
 
 
-    public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid)
+    public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid, System.Random random)
     {
-
         CreatedRoom = new List<Room>();
         int attempt = 0;
 
         for (int i = 0; i < RoomCount;)
         {
             // Próba wygenerowania pokoju
-            Room room = GenerateRoom(generatedGrid, ref attempt);
+            Room room = GenerateRoom(generatedGrid, random, ref attempt);
             // Jeśli po kilku próbach nie udało się stworzyć pokoju, przerywamy
 
             if (room == null)
@@ -52,12 +51,14 @@ public struct RoomGanerateSetting
                 room.RoomID = i;
                 room.cetroid = room.RoomCentroid();
                 CreatedRoom.Add(room);
+                Debug.Log($"Room: {room.RoomID} have {room.CellInRoom.Count}");
+
             }
             i++;
         }
     }
 
-    private Room GenerateRoom(CustomGrid.Grid<GridCellData> gridData, ref int attempt)
+    private Room GenerateRoom(CustomGrid.Grid<GridCellData> gridData, System.Random random, ref int attempt)
     {
         attempt++;
 
@@ -68,7 +69,6 @@ public struct RoomGanerateSetting
         }
 
         // Tworzymy instancję randoma z seedem
-        System.Random random = new System.Random();
 
         int width = random.Next(MinRoomSize.x, MaxRoomSize.x);
         int height = random.Next(MinRoomSize.y, MaxRoomSize.y);
