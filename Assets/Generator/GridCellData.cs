@@ -27,4 +27,5 @@ public class GridCellData
     {
         SetPosition(new Vector3(x, y, z));
     }
-}
+} 
+

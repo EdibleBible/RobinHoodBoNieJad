@@ -4,6 +4,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Collections;
 using TMPro;
+using System.Xml.Linq;
+using System;
 
 [ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
@@ -299,13 +301,21 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
 
+        var array = MainInfoGrid.GetGridArray();
+        List<GridCellData> list = new List<GridCellData>();
+        foreach (var item in array)
+        {
+            list.Add(item);
+        }
+
         // Inicjalizacja pathfinding
         currPathfinding = new Pathfinding(
             MainInfoGrid.GetWidth(),
             MainInfoGrid.GetHeight(),
             MainGridData.cellScale,
             transform.position,
-            roomCell
+            roomCell,
+            list
         );
 
         foreach (Edge edge in SelectedEdges)
@@ -710,13 +720,21 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
 
+        var array = MainInfoGrid.GetGridArray();
+        List<GridCellData> list = new List<GridCellData>();
+        foreach (var item in array)
+        {
+            list.Add(item);
+        }
+
         // Inicjalizacja pathfinding
         currPathfinding = new Pathfinding(
             MainInfoGrid.GetWidth(),
             MainInfoGrid.GetHeight(),
             MainGridData.cellScale,
             transform.position,
-            roomCell
+            roomCell,
+            list
         );
 
         foreach (Edge edge in SelectedEdges)

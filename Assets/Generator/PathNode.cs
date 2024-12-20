@@ -9,14 +9,16 @@
     public int FCost;
 
     public bool IsWalkable = true;
+    public GridCellData cellData;
 
     public PathNode CameFromNode;
 
-    public PathNode(CustomGrid.Grid<PathNode> grid, int x, int y)
+    public PathNode(CustomGrid.Grid<PathNode> grid, int x, int y, GridCellData cellData)
     {
         this.grid = grid;
         this.X = x;
         this.Y = y;
+        this.cellData = cellData;
     }
 
     public override string ToString()

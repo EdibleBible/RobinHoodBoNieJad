@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Pathfinding
@@ -8,13 +9,16 @@ public class Pathfinding
     private int MOVE_DIAGONAL_COST = 50;
     private int MOVE_STRAIGHT_COST = 1;
 
+    private int MOVE_EMPTY_CELL_COST = 10;
+    private int MOVE_HALLWAY_CELL_COST = 5;
+
     private CustomGrid.Grid<PathNode> grid;
     private List<PathNode> openList;
     private List<PathNode> closedList;
-    public Pathfinding(int width, int height, float cellSize, Vector3 originalPosition, List<GridCellData> roomGridCell)
+    public Pathfinding(int width, int height, float cellSize, Vector3 originalPosition, List<GridCellData> roomGridCell, List<GridCellData> allGridCell)
     {
         grid = new CustomGrid.Grid<PathNode>(width, height, cellSize, originalPosition,
-            (CustomGrid.Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+            (CustomGrid.Grid<PathNode> g, int x, int y) => new PathNode(g, x, y, allGridCell.Where(cell => cell.Coordinate.x == x && cell.Coordinate.y == y) .FirstOrDefault()));
 
         foreach(var gridCell in roomGridCell)
         {
@@ -163,7 +167,22 @@ public class Pathfinding
         int xDistance = Mathf.Abs(a.X - b.X);
         int yDistance = Mathf.Abs(a.Y - b.Y);
         int remaining = Mathf.Abs(xDistance - yDistance);
-        return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+
+        int baseCost = MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+
+        int usedCostPenalty = 0;
+
+        if(b.cellData.GridCellType == E_GridCellType.Empty)
+        {
+            usedCostPenalty = MOVE_EMPTY_CELL_COST;
+        }
+        else if(b.cellData.GridCellType == E_GridCellType.Hallway)
+        {
+            usedCostPenalty = MOVE_HALLWAY_CELL_COST;
+
+        }
+
+        return baseCost + usedCostPenalty;
     }
 
     private PathNode GetLowestFCostNode(List<PathNode> pathNodeList)

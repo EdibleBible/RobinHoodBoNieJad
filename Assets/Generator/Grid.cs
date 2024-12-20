@@ -78,6 +78,10 @@ namespace CustomGrid
         {
             return new Vector2Int(width, height);
         }
+        public TGridObj[,] GetGridArray()
+        {
+            return gridArray;
+        }
         public void DebugGrid()
         {
             for (int x = 0; x < gridArray.GetLength(0); x++)
@@ -97,7 +101,6 @@ namespace CustomGrid
         {
             return width;
         }
-
         public int GetHeight()
         {
             return height;
