@@ -1,5 +1,6 @@
 ﻿using CodeMonkey.Utils;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CustomGrid
@@ -81,6 +82,66 @@ namespace CustomGrid
         public TGridObj[,] GetGridArray()
         {
             return gridArray;
+        }
+        public Vector2Int GetCoordinate(TGridObj selectedNode)
+        {
+            var xPos = 0;
+            var yPos = 0;
+
+
+            for (int x = 0; x < gridArray.GetLength(0); x++) // Iteruj po wymiarze X
+            {
+                for (int y = 0; y < gridArray.GetLength(1); y++) // Iteruj po wymiarze Y
+                {
+                    if (EqualityComparer<TGridObj>.Default.Equals(gridArray[x, y], selectedNode))
+                    {
+                        xPos = x;
+                        yPos = y;
+                        return new Vector2Int(xPos, yPos);
+                    }
+                }
+            }
+
+            return default(Vector2Int);
+
+        }
+        public List<TGridObj> GetNeighbourList(TGridObj selectedNode, bool allowDiagonals)
+        {
+            List<TGridObj> neighbourList = new List<TGridObj>();
+            Vector2Int currentNode = GetCoordinate(selectedNode);
+
+            if (currentNode.x - 1 >= 0)
+            {
+                // Left
+                neighbourList.Add(GetValue(currentNode.x - 1, currentNode.y));
+
+                if (allowDiagonals)
+                {
+                    // Left Down
+                    if (currentNode.y - 1 >= 0) neighbourList.Add(GetValue(currentNode.x - 1, currentNode.y - 1));
+                    // Left Up
+                    if (currentNode.y + 1 < GetHeight()) neighbourList.Add(GetValue(currentNode.x - 1, currentNode.y + 1));
+                }
+            }
+            if (currentNode.x + 1 < GetWidth())
+            {
+                // Right
+                neighbourList.Add(GetValue(currentNode.x + 1, currentNode.y));
+
+                if (allowDiagonals)
+                {
+                    // Right Down
+                    if (currentNode.y - 1 >= 0) neighbourList.Add(GetValue(currentNode.x + 1, currentNode.y - 1));
+                    // Right Up
+                    if (currentNode.y + 1 < GetHeight()) neighbourList.Add(GetValue(currentNode.x + 1, currentNode.y + 1));
+                }
+            }
+            // Down
+            if (currentNode.y - 1 >= 0) neighbourList.Add(GetValue(currentNode.x, currentNode.y - 1));
+            // Up
+            if (currentNode.y + 1 < GetHeight()) neighbourList.Add(GetValue(currentNode.x, currentNode.y + 1));
+
+            return neighbourList;
         }
         public void DebugGrid()
         {

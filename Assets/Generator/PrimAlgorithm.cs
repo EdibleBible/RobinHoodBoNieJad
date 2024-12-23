@@ -10,7 +10,7 @@ public static class PrimAlgorithm
         bool[] visited = new bool[allPoints.Count];
         var priorityQueue = new PriorityQueue<Edge>();
 
-        visited[0] = true;
+        visited[0] = true;  
 
         foreach (Edge edge in allEdges)
         {

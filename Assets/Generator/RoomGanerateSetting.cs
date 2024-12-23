@@ -28,14 +28,15 @@ public struct RoomGanerateSetting
     [Header("Rooms")]
     public List<Room> CreatedRoom;
 
-
-    public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid, System.Random random)
+    public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid, uint seed)
     {
+        Unity.Mathematics.Random random = new Unity.Mathematics.Random(seed);
         CreatedRoom = new List<Room>();
         int attempt = 0;
 
         for (int i = 0; i < RoomCount;)
         {
+            i++;
             // Próba wygenerowania pokoju
             Room room = GenerateRoom(generatedGrid, random, ref attempt);
             // Jeśli po kilku próbach nie udało się stworzyć pokoju, przerywamy
@@ -51,41 +52,35 @@ public struct RoomGanerateSetting
                 room.RoomID = i;
                 room.cetroid = room.RoomCentroid();
                 CreatedRoom.Add(room);
-                Debug.Log($"Room: {room.RoomID} have {room.CellInRoom.Count}");
-
             }
-            i++;
         }
     }
 
-    private Room GenerateRoom(CustomGrid.Grid<GridCellData> gridData, System.Random random, ref int attempt)
+    private Room GenerateRoom(CustomGrid.Grid<GridCellData> gridData, Unity.Mathematics.Random random, ref int attempt)
     {
-        attempt++;
-
-        if (attempt > MaxAttempts)
-        {
-            // Jeśli osiągnięto limit prób, zwróć null
-            return null;
-        }
-
-        // Tworzymy instancję randoma z seedem
-
-        int width = random.Next(MinRoomSize.x, MaxRoomSize.x);
-        int height = random.Next(MinRoomSize.y, MaxRoomSize.y);
-
         Room room = new Room();
-        room.XAxisSize = width;
-        room.YAxisSize = height;
         room.CellInRoom = new List<GridCellData>();
 
+        int localAttempts = 0;
         bool roomIsGenerated = false;
-        while (!roomIsGenerated)
-        {
-            int x = random.Next(0, gridData.GeneratedGridSize().x - width);
-            int y = random.Next(0, gridData.GeneratedGridSize().y - height);
 
+        while (!roomIsGenerated && localAttempts < MaxAttempts)
+        {
+            localAttempts++;
+            attempt++;
+
+            // Losuj rozmiar pokoju
+            int width = random.NextInt(MinRoomSize.x, MaxRoomSize.x + 1);
+            int height = random.NextInt(MinRoomSize.y, MaxRoomSize.y) + 1;
+
+            // Losuj pozycję startową
+            int x = random.NextInt(0, gridData.GeneratedGridSize().x - width);
+            int y = random.NextInt(0, gridData.GeneratedGridSize().y - height);
+
+            // Sprawdź, czy pokój można umieścić
             if (CanPlaceRoom(gridData, new Vector2Int(x, y), width, height))
             {
+                // Dodaj komórki pokoju do siatki
                 for (int i = x; i < x + width; i++)
                 {
                     for (int j = y; j < y + height; j++)
@@ -93,18 +88,18 @@ public struct RoomGanerateSetting
                         GridCellData selectedCell = gridData.GetValue(i, j);
                         selectedCell.GridCellType = E_GridCellType.Room;
                         room.CellInRoom.Add(selectedCell);
-                        room.RoomType = E_RoomType.StandardRoom;
                     }
                 }
-            }
-            else if (attempt > MaxAttempts)
-            {
-                return null; // Jeśli próba przekroczyła maksymalną liczbę, zakończ generowanie
-            }
 
-            roomIsGenerated = true;
+                room.XAxisSize = width;
+                room.YAxisSize = height;
+                room.RoomType = E_RoomType.StandardRoom;
+
+                roomIsGenerated = true; // Pokój został poprawnie wygenerowany
+            }
         }
-        return room;
+
+        return roomIsGenerated ? room : null; // Zwróć pokój, jeśli został wygenerowany, w przeciwnym razie null
     }
 
     // Funkcja walidująca, czy pokój zmieści się w siatce
@@ -120,7 +115,7 @@ public struct RoomGanerateSetting
                 GridCellData cell = gridData.GetValue(x, y);
 
                 // Jeśli komórka jest już zajęta przez pomieszczenie, nie można tu utworzyć pokoju
-                if (cell != null && cell.GridCellType == E_GridCellType.Room)
+                if (cell != null && cell.GridCellType == E_GridCellType.Room || (x == 0 || y == 0 || x == gridData.GetGridArray().GetLength(0) - 1 || y == gridData.GetGridArray().GetLength(1) - 1))
                     return false;
             }
         }

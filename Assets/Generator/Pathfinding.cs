@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Pathfinding
 {
-    public bool CAN_PATH_TOUCHED = false;
+    public bool CAN_PATH_TOUCHED = true;
 
-    private int MOVE_DIAGONAL_COST = 50;
-    private int MOVE_STRAIGHT_COST = 1;
+    private int MOVE_DIAGONAL_COST = 10;
+    private int MOVE_STRAIGHT_COST = 5;
 
-    private int MOVE_EMPTY_CELL_COST = 10;
-    private int MOVE_HALLWAY_CELL_COST = 5;
+    private int MOVE_EMPTY_CELL_COST = 2;
+    private int MOVE_HALLWAY_CELL_COST = 1;
 
     private CustomGrid.Grid<PathNode> grid;
     private List<PathNode> openList;
@@ -25,8 +25,6 @@ public class Pathfinding
             var node = grid.GetValue(gridCell.Coordinate.x,gridCell.Coordinate.y);
             node.IsWalkable = false;
             grid.SetValue(gridCell.Coordinate.x, gridCell.Coordinate.y, node);
-
-            Debug.Log($" X:{node.X} Y:{node.Y} is room, Node is {node.IsWalkable}");
         }
     }
 
@@ -75,7 +73,7 @@ public class Pathfinding
             openList.Remove(currentNode);
             closedList.Add(currentNode);
 
-            foreach (PathNode neighbourNode in GetNeighbourList(currentNode, false))
+            foreach (PathNode neighbourNode in grid.GetNeighbourList(currentNode, false))
             {
                 if (closedList.Contains(neighbourNode)) continue;
                 if (!neighbourNode.IsWalkable)
@@ -104,7 +102,7 @@ public class Pathfinding
         return null;
     }
 
-    public List<PathNode> GetNeighbourList(PathNode currentNode, bool allowDiagonals)
+    /*public List<PathNode> GetNeighbourList(PathNode currentNode, bool allowDiagonals)
     {
         List<PathNode> neighbourList = new List<PathNode>();
 
@@ -140,7 +138,7 @@ public class Pathfinding
         if (currentNode.Y + 1 < grid.GetHeight()) neighbourList.Add(GetNode(currentNode.X, currentNode.Y + 1));
 
         return neighbourList;
-    }
+    }*/
 
     public PathNode GetNode(int x, int y)
     {

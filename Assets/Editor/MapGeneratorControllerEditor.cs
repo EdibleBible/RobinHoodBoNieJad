@@ -14,8 +14,6 @@ public class MapGeneratorControllerEditor : Editor
     private float timeElapsed = 0f;
     private int currentStep = 0;
     private bool isGenerating = false;  // Flaga kontrolująca, czy proces generowania jest w trakcie
-    private int seed; // Flaga kontrolująca, czy proces generowania jest w trakcie
-
 
     public override void OnInspectorGUI()
     {
@@ -25,29 +23,33 @@ public class MapGeneratorControllerEditor : Editor
         // Dodaj checkbox, aby użytkownik mógł włączyć/wyłączyć pokazanie triangulacji
         showTriangulation = EditorGUILayout.Toggle("Show Triangulation", showTriangulation);
 
-        if (GUILayout.Button("Generate"))
+        if (GUILayout.Button("Generate With Random"))
         {
             Generate(generatorController);
         }
 
-        if (GUILayout.Button("Timed Generation"))
+        if (GUILayout.Button("Generate"))
         {
-            TimedGeneration(generatorController);
+            Generate(generatorController, generatorController.wallSeed);
         }
-
-        seed = EditorGUILayout.IntField("Seed", seed);
-
     }
 
-    private void Generate(MapGeneratorController generatorController)
+    private void Generate(MapGeneratorController generatorController, uint senedSeed = 0)
     {
-        generatorController.SetSeed(seed);
+        uint seed = 0;
+        if (senedSeed != 0)
+            seed = generatorController.SetSeed(generatorController.wallSeed);
+        else
+        {
+            seed = generatorController.RandimizeSeed();
+        }
+
 
         ClearGeneratedGrid(generatorController);
 
         generatorController.GenerateGrid(seed);
 
-        generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, generatorController.rand);
+        generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, seed);
 
         generatorController.GenerateTriangulation();
 
@@ -71,120 +73,122 @@ public class MapGeneratorControllerEditor : Editor
 
         generatorController.DebugGridMesh();
 
+        generatorController.GenerateTexture();
+
         // Wymuś odświeżenie widoku, aby linie się pojawiły
         SceneView.RepaintAll();
     }
 
 
 
-    private void UpdateGeneration()
-    {
-        // Jeśli generowanie nie jest aktywne, zakończ metodę
-        if (!isGenerating)
-            return;
-
-        // Aktualizacja czasu
-        timeElapsed += Time.deltaTime;
-
-        MapGeneratorController generatorController = (MapGeneratorController)target;
-
-        // Sprawdzenie, czy czas opóźnienia został osiągnięty
-        if (timeElapsed >= delay)
+    /*    private void UpdateGeneration()
         {
-            // Obsługa poszczególnych kroków
-            switch (currentStep)
+            // Jeśli generowanie nie jest aktywne, zakończ metodę
+            if (!isGenerating)
+                return;
+
+            // Aktualizacja czasu
+            timeElapsed += Time.deltaTime;
+
+            MapGeneratorController generatorController = (MapGeneratorController)target;
+
+            // Sprawdzenie, czy czas opóźnienia został osiągnięty
+            if (timeElapsed >= delay)
             {
-                case 1:
-                    generatorController.GenerateGrid(seed);
-                    generatorController.DebugGridMesh();
-                    break;
+                // Obsługa poszczególnych kroków
+                switch (currentStep)
+                {
+                    case 1:
+                        generatorController.GenerateGrid(seed);
+                        generatorController.DebugGridMesh();
+                        break;
 
-                case 2:
-                    generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, generatorController.rand);
-                    generatorController.DebugGridMesh();
-                    break;
+                    case 2:
+                        generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, seed);
+                        generatorController.DebugGridMesh();
+                        break;
 
-                case 3:
-                    generatorController.GenerateTriangulation();
-                    generatorController.DebugGridMesh();
-                    break;
+                    case 3:
+                        generatorController.GenerateTriangulation();
+                        generatorController.DebugGridMesh();
+                        break;
 
-                case 4:
-                    generatorController.SelectedEdges = generatorController.GetUsedEdges(generatorController.AllEdges, generatorController.AllPoints);
-                    generatorController.DebugGridMesh();
-                    break;
+                    case 4:
+                        generatorController.SelectedEdges = generatorController.GetUsedEdges(generatorController.AllEdges, generatorController.AllPoints);
+                        generatorController.DebugGridMesh();
+                        break;
 
-                case 5:
-                    if (showTriangulation)
-                    {
-                        SceneView.duringSceneGui += OnSceneGUI;
-                    }
-                    else
-                    {
-                        SceneView.duringSceneGui -= OnSceneGUI;
-                    }
-                    break;
+                    case 5:
+                        if (showTriangulation)
+                        {
+                            SceneView.duringSceneGui += OnSceneGUI;
+                        }
+                        else
+                        {
+                            SceneView.duringSceneGui -= OnSceneGUI;
+                        }
+                        break;
 
-                case 6:
-                    generatorController.RoomPathFindWithDebugging();
-                    break;
+                    case 6:
+                        generatorController.RoomPathFindWithDebugging();
+                        break;
 
-                case 7:
-                    generatorController.DefiniedSpawn();
-                    generatorController.DebugGridMesh();
-                    break;
+                    case 7:
+                        generatorController.DefiniedSpawn();
+                        generatorController.DebugGridMesh();
+                        break;
 
-                case 8:
-                    Debug.Log("Generation completed!");
-                    break;
+                    case 8:
+                        Debug.Log("Generation completed!");
+                        break;
 
-                case 9:
-                    // Odświeżenie widoku edytora
-                    SceneView.RepaintAll();
-                    // Zatrzymanie generowania
-                    isGenerating = false;
-                    EditorApplication.update -= UpdateGeneration;
-                    break;
+                    case 9:
+                        // Odświeżenie widoku edytora
+                        SceneView.RepaintAll();
+                        // Zatrzymanie generowania
+                        isGenerating = false;
+                        EditorApplication.update -= UpdateGeneration;
+                        break;
 
-                default:
-                    Debug.LogWarning($"Unhandled generation step: {currentStep}");
-                    isGenerating = false;
-                    EditorApplication.update -= UpdateGeneration;
-                    break;
+                    default:
+                        Debug.LogWarning($"Unhandled generation step: {currentStep}");
+                        isGenerating = false;
+                        EditorApplication.update -= UpdateGeneration;
+                        break;
+                }
+
+                // Zwiększ krok
+                currentStep++;
+                timeElapsed = 0f;  // Resetuj licznik czasu
             }
-
-            // Zwiększ krok
-            currentStep++;
-            timeElapsed = 0f;  // Resetuj licznik czasu
         }
-    }
-    public void TimedGeneration(MapGeneratorController generatorController)
-    {
-        // Sprawdź, czy proces generowania już trwa
-        if (isGenerating)
-            return;
+        public void TimedGeneration(MapGeneratorController generatorController)
+        {
+            // Sprawdź, czy proces generowania już trwa
+            if (isGenerating)
+                return;
 
-        // Rozpocznij proces generowania z opóźnieniem
-        isGenerating = true;
-        currentStep = 1;  // Zaczynaj od pierwszego kroku
-        timeElapsed = 0f;  // Resetuj licznik czasu
+            // Rozpocznij proces generowania z opóźnieniem
+            isGenerating = true;
+            currentStep = 1;  // Zaczynaj od pierwszego kroku
+            timeElapsed = 0f;  // Resetuj licznik czasu
 
-        // Wywołaj generowanie z opóźnieniem
-        GenerateWithDelay(generatorController);  // <--- Tutaj wywołujemy metodę GenerateWithDelay
+            // Wywołaj generowanie z opóźnieniem
+            GenerateWithDelay(generatorController);  // <--- Tutaj wywołujemy metodę GenerateWithDelay
 
-        // Zarejestruj metodę update, która będzie wywoływana w każdej klatce edytora
-        EditorApplication.update += UpdateGeneration;
-    }
-    private void GenerateWithDelay(MapGeneratorController generatorController)
-    {
-        // Wyczyść poprzednie dane (jeśli jakieś istnieją)
-        ClearGeneratedGrid(generatorController);
+            // Zarejestruj metodę update, która będzie wywoływana w każdej klatce edytora
+            EditorApplication.update += UpdateGeneration;
+        }
+        private void GenerateWithDelay(MapGeneratorController generatorController)
+        {
+            // Wyczyść poprzednie dane (jeśli jakieś istnieją)
+            ClearGeneratedGrid(generatorController);
 
-        // Możesz dodać dodatkowe logowanie lub inne działania w tej metodzie
-        Debug.Log("Starting delayed generation...");
+            // Możesz dodać dodatkowe logowanie lub inne działania w tej metodzie
+            Debug.Log("Starting delayed generation...");
 
-        // Można dodać dodatkową inicjalizację, jeżeli jest potrzeba
-    }
+            // Można dodać dodatkową inicjalizację, jeżeli jest potrzeba
+        }*/
     private void ClearGeneratedGrid(MapGeneratorController generatorController)
     {
         for (int i = generatorController.transform.childCount - 1; i >= 0; i--)

@@ -6,8 +6,8 @@ using System.Collections;
 using TMPro;
 using System.Xml.Linq;
 using System;
+using Unity.Mathematics;
 
-[ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
 {
     public GridOptions MainGridData;
@@ -23,19 +23,37 @@ public class MapGeneratorController : MonoBehaviour
     public Pathfinding currPathfinding;
     public CustomGrid.Grid<PathNode> pathfindingGrid;
 
+    [Header("Textures")]
+    [SerializeField] private Vector2 segmentSize;
+    [SerializeField] private List<Mesh> wallMeshes;
+    [SerializeField] private List<Mesh> passesMeshes;
+    [SerializeField] private List<Mesh> hallwayMeshes;
+    [SerializeField] private Material wallMaterial;
+
+    Dictionary<Mesh, List<Matrix4x4>> WallsMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
+
+    [Header("Seed")]
+    public uint wallSeed;
+    private Unity.Mathematics.Random random;
+
     [Header("Debug")]
     private Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
     [SerializeField] private TextMeshProUGUI ActionTextMesh;
     [SerializeField] private TextMeshProUGUI InstructionTextMesh;
     [SerializeField] private TextMeshProUGUI SeedTextMesh;
 
-    [HideInInspector] public int seed;
-    [HideInInspector] public System.Random rand;
-
-    public void SetSeed(int setValue)
+    public uint SetSeed(uint setValue)
     {
-        seed = setValue;
-        rand = new System.Random(seed);
+        wallSeed = setValue;
+        random = new Unity.Mathematics.Random(wallSeed);
+        return wallSeed;
+    }
+    public uint RandimizeSeed()
+    {
+        var randimInt = new System.Random().Next(1000, 9999);
+        wallSeed = (uint)randimInt;
+        random = new Unity.Mathematics.Random(wallSeed);
+        return wallSeed;
     }
 
     //Playmode Method
@@ -44,13 +62,19 @@ public class MapGeneratorController : MonoBehaviour
         StartGeneration();
     }
 
+    private bool isDrawing = false;
+
+    void Update()
+    {
+        DrawWalls();
+    }
+
     public void StartGeneration()
     {
         ClearGeneratedGrid();
 
-        int randomSeed = new System.Random().Next(100, 999);
-        SetSeed(randomSeed);
-        UpdateSeedText(randomSeed.ToString());
+        RandimizeSeed();
+        UpdateSeedText(wallSeed.ToString());
 
         UpdateActionText("Clearing grid...");
         StartCoroutine(Generate());
@@ -72,11 +96,11 @@ public class MapGeneratorController : MonoBehaviour
         // Generate grid
         UpdateActionText("Generating grid and rooms...");
         UpdateInstructionText("Press SPACE to continue.");
-        GenerateGrid(seed);
+        GenerateGrid(wallSeed);
 
 
         // Create rooms on grid
-        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, rand);
+        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, wallSeed);
         DebugGridMesh();
         yield return WaitForSpaceBar();
 
@@ -105,6 +129,7 @@ public class MapGeneratorController : MonoBehaviour
         UpdateInstructionText("Press SPACE to continue.");
         DefiniedSpawn();
         DebugGridMesh();
+        GenerateTexture();
         yield return WaitForSpaceBar();
 
         // Debug the grid mesh
@@ -178,7 +203,13 @@ public class MapGeneratorController : MonoBehaviour
                 switch (cell.GridCellType)
                 {
                     case E_GridCellType.Empty:
-                        meshRenderer.material = MainGridData.EmptyCellMaterial;
+                        DestroyImmediate(createdCell.gameObject);
+                        if (createdCell != null)
+                        {
+                            Destroy(createdCell.gameObject);
+                            createdCell = null;
+
+                        }
                         break;
 
                     case E_GridCellType.Room:
@@ -207,6 +238,8 @@ public class MapGeneratorController : MonoBehaviour
                         break;
                 }
 
+                if (createdCell == null)
+                    continue;
                 // Skalowanie
                 createdCell.transform.localScale = Vector3.one * MainGridData.cellScale;
 
@@ -241,7 +274,13 @@ public class MapGeneratorController : MonoBehaviour
         switch (cell.GridCellType)
         {
             case E_GridCellType.Empty:
-                meshRenderer.material = MainGridData.EmptyCellMaterial;
+                DestroyImmediate(createdCell.gameObject);
+                if (createdCell != null)
+                {
+                    Destroy(createdCell.gameObject);
+                    createdCell = null;
+
+                }
                 break;
 
             case E_GridCellType.Room:
@@ -269,6 +308,9 @@ public class MapGeneratorController : MonoBehaviour
                 meshRenderer.material = null; // Możesz ustawić materiał domyślny
                 break;
         }
+
+        if (createdCell == null)
+            return;
 
         // Skalowanie
         createdCell.transform.localScale = Vector3.one * MainGridData.cellScale;
@@ -317,6 +359,8 @@ public class MapGeneratorController : MonoBehaviour
             roomCell,
             list
         );
+
+        pathfindingGrid = currPathfinding.GetGrid();
 
         foreach (Edge edge in SelectedEdges)
         {
@@ -376,7 +420,7 @@ public class MapGeneratorController : MonoBehaviour
             {
                 foreach (var currentNode in pathNodeCell)
                 {
-                    var neighbors = currPathfinding.GetNeighbourList(currentNode, false);
+                    var neighbors = pathfindingGrid.GetNeighbourList(currentNode, false);
 
                     foreach (var neighbor in neighbors)
                     {
@@ -385,7 +429,7 @@ public class MapGeneratorController : MonoBehaviour
                             continue;
 
                         var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
-                        var neighborNeighbors = currPathfinding.GetNeighbourList(neighbor, true);
+                        var neighborNeighbors = pathfindingGrid.GetNeighbourList(neighbor, true);
 
                         bool isNextToPassableCell = false;
                         foreach (var neighborOfNeighbor in neighborNeighbors)
@@ -413,9 +457,9 @@ public class MapGeneratorController : MonoBehaviour
         }
     }
 
-    public void GenerateGrid(int seed)
+    public void GenerateGrid(uint seed)
     {
-        var randomSize = MainGridData.RandomizeGridSize(rand);
+        var randomSize = MainGridData.RandomizeGridSize(seed);
         GenerateGrid(randomSize.x, randomSize.y);
     }
     public void GenerateGrid(int gridX, int gridY)
@@ -431,8 +475,12 @@ public class MapGeneratorController : MonoBehaviour
             cellData.SetPosition(position);
             return cellData;
         });
-    }
 
+        foreach (var gridElement in MainInfoGrid.GetGridArray())
+        {
+            gridElement.SetGridParent(MainInfoGrid);
+        }
+    }
 
     public (GridCellData entryPoint, GridCellData exitPoint) FindConnectionPosition(Room room1, Room room2)
     {
@@ -622,7 +670,7 @@ public class MapGeneratorController : MonoBehaviour
             if (usedEdge.Contains(edge))
                 continue;
 
-            var randomNumber = rand.Next(0, 101);
+            var randomNumber = random.NextInt(0, 101);
 
             if (randomNumber > RoomGanerateSetting.ChanceToSelectEdge)
                 continue;
@@ -737,6 +785,9 @@ public class MapGeneratorController : MonoBehaviour
             list
         );
 
+
+        pathfindingGrid = currPathfinding.GetGrid();
+
         foreach (Edge edge in SelectedEdges)
         {
             // Walidacja krawędzi i jej danych
@@ -778,7 +829,7 @@ public class MapGeneratorController : MonoBehaviour
             {
                 foreach (var currentNode in pathNodeCell)
                 {
-                    var neighbors = currPathfinding.GetNeighbourList(currentNode, false);
+                    var neighbors = pathfindingGrid.GetNeighbourList(currentNode, false);
 
                     foreach (var neighbor in neighbors)
                     {
@@ -787,7 +838,7 @@ public class MapGeneratorController : MonoBehaviour
                             continue;
 
                         var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
-                        var neighborNeighbors = currPathfinding.GetNeighbourList(neighbor, true);
+                        var neighborNeighbors = pathfindingGrid.GetNeighbourList(neighbor, true);
 
                         bool isNextToPassableCell = false;
                         foreach (var neighborOfNeighbor in neighborNeighbors)
@@ -815,11 +866,10 @@ public class MapGeneratorController : MonoBehaviour
         }
         return;
     }
-
     private Vector2Int GetStartCoordinate(GridCellData selectedGridCellData)
     {
         GridCellData baseStartPoint = selectedGridCellData;
-        List<PathNode> allNeighbourStart = currPathfinding.GetNeighbourList(currPathfinding.GetGrid().GetValue(baseStartPoint.Coordinate.x, baseStartPoint.Coordinate.y), false);
+        List<PathNode> allNeighbourStart = pathfindingGrid.GetNeighbourList(pathfindingGrid.GetValue(baseStartPoint.Coordinate.x, baseStartPoint.Coordinate.y), false);
         List<GridCellData> selectedNeighbourStart = new List<GridCellData>();
         foreach (var element in allNeighbourStart)
         {
@@ -827,11 +877,15 @@ public class MapGeneratorController : MonoBehaviour
             if (cell.GridCellType != E_GridCellType.Room && cell.GridCellType != E_GridCellType.Pass)
                 selectedNeighbourStart.Add(cell);
         }
-        int randomIndex = rand.Next(0, selectedNeighbourStart.Count);
-        GridCellData selectedCell = selectedNeighbourStart[randomIndex];
-        return selectedCell.Coordinate;
-    }
+        if (selectedNeighbourStart.Count > 0)
+        {
 
+            int randomIndex = random.NextInt(0, selectedNeighbourStart.Count);
+            GridCellData selectedCell = selectedNeighbourStart[randomIndex];
+            return selectedCell.Coordinate;
+        }
+        return default;
+    }
     public void DefiniedSpawn()
     {
         int biggestRoomGridCount = 0;
@@ -895,6 +949,108 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
 
+    }
+
+
+    public void GenerateTexture()
+    {
+        WallsMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
+
+        foreach (Room room in RoomGanerateSetting.CreatedRoom)
+        {
+            //x
+            int wallCount = Mathf.Max(0, (int)(room.XAxisSize / segmentSize.x));
+            float scale = room.XAxisSize / wallCount / segmentSize.x;
+
+            for (int i = 0; i < wallCount; i++)
+            {
+                Vector3 t = room.cetroid + new Vector3((-room.XAxisSize / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, room.YAxisSize / 2f);
+                Quaternion r = Quaternion.Euler(0f, 90f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
+
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+
+                int randomNumber = random.NextInt(0, wallMeshes.Count);
+
+                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
+                {
+                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
+                }
+                else
+                {
+                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
+                }
+            }
+
+            for (int i = 0; i < wallCount; i++)
+            {
+                Vector3 t = room.cetroid + new Vector3((-room.XAxisSize / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -room.YAxisSize / 2f);
+                Quaternion r = Quaternion.Euler(0f, 90f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
+
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                int randomNumber = random.NextInt(0, wallMeshes.Count);
+
+                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
+                {
+                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
+                }
+                else
+                {
+                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
+                }
+            }
+
+            //y
+
+            wallCount = Mathf.Max(0, (int)(room.YAxisSize / segmentSize.y));
+            scale = room.YAxisSize / wallCount / segmentSize.y;
+            for (int i = 0; i < wallCount; i++)
+            {
+                Vector3 t = room.cetroid + new Vector3(room.XAxisSize / 2f, 0, (-room.YAxisSize / 2f) + (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                Quaternion r = Quaternion.Euler(0f, 0f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
+
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                int randomNumber = random.NextInt(0, wallMeshes.Count);
+
+                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
+                {
+                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
+                }
+                else
+                {
+                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
+                }
+            }
+
+            for (int i = 0; i < wallCount; i++)
+            {
+                Vector3 t = room.cetroid + new Vector3(-room.XAxisSize / 2f, 0, (-room.YAxisSize / 2f) + (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                Quaternion r = Quaternion.Euler(0f, 0f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
+
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                int randomNumber = random.NextInt(0, wallMeshes.Count);
+
+                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
+                {
+                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
+                }
+                else
+                {
+                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
+                }
+            }
+        }
+    }
+
+    public void DrawWalls()
+    {
+        foreach (var element in WallsMatrix)
+        {
+            Graphics.DrawMeshInstanced(element.Key, 0, wallMaterial, element.Value.ToArray());
+        }
     }
 }
 
