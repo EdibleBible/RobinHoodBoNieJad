@@ -51,6 +51,7 @@ public struct RoomGanerateSetting
             {
                 room.RoomID = i;
                 room.cetroid = room.RoomCentroid();
+                room.MarkCorners();
                 CreatedRoom.Add(room);
             }
         }
@@ -71,7 +72,7 @@ public struct RoomGanerateSetting
 
             // Losuj rozmiar pokoju
             int width = random.NextInt(MinRoomSize.x, MaxRoomSize.x + 1);
-            int height = random.NextInt(MinRoomSize.y, MaxRoomSize.y) + 1;
+            int height = random.NextInt(MinRoomSize.y, MaxRoomSize.y + 1);
 
             // Losuj pozycję startową
             int x = random.NextInt(0, gridData.GeneratedGridSize().x - width);

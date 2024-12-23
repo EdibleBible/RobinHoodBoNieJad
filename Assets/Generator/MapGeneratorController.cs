@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System;
 using Unity.Mathematics;
 
+[ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
 {
     public GridOptions MainGridData;
@@ -375,7 +376,8 @@ public class MapGeneratorController : MonoBehaviour
             var startPointCord = GetStartCoordinate(edge.EntryGridCell);
             var endPointCord = GetStartCoordinate(edge.ExitGridCell);
 
-            edge.SetStartEndPathfind(MainInfoGrid.GetValue(startPointCord.x, startPointCord.y), MainInfoGrid.GetValue(endPointCord.x, endPointCord.y));
+            edge.SetStartPathFind(MainInfoGrid.GetValue(startPointCord.x, startPointCord.y));
+            edge.SetEndPathFind(MainInfoGrid.GetValue(endPointCord.x, endPointCord.y));
 
             // Znajdowanie ścieżki
             List<PathNode> pathNodeCell = currPathfinding.FindPath(
@@ -409,7 +411,7 @@ public class MapGeneratorController : MonoBehaviour
                 DebugSingleCellMesh(toAdd);
 
                 // Pauza między kratkami
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForEndOfFrame();
             }
 
             obj1Mesh.material = MainGridData.PassCellMaterial;
@@ -469,6 +471,7 @@ public class MapGeneratorController : MonoBehaviour
         {
             GridCellData cellData = new GridCellData();
             cellData.SetCoordinate(x, y);
+            cellData.SetCellSize(MainGridData.cellScale);
 
             // Obliczanie pozycji (start od 0, 0)
             Vector3 position = new Vector3(x * MainGridData.cellScale, 0, y * MainGridData.cellScale);
@@ -800,7 +803,8 @@ public class MapGeneratorController : MonoBehaviour
             var startPointCord = GetStartCoordinate(edge.EntryGridCell);
             var endPointCord = GetStartCoordinate(edge.ExitGridCell);
 
-            edge.SetStartEndPathfind(MainInfoGrid.GetValue(startPointCord.x, startPointCord.y), MainInfoGrid.GetValue(endPointCord.x, endPointCord.y));
+            edge.SetStartPathFind(MainInfoGrid.GetValue(startPointCord.x, startPointCord.y));
+            edge.SetEndPathFind(MainInfoGrid.GetValue(endPointCord.x, endPointCord.y));
 
             // Znajdowanie ścieżki
             List<PathNode> pathNodeCell = currPathfinding.FindPath(
@@ -951,96 +955,31 @@ public class MapGeneratorController : MonoBehaviour
 
     }
 
-
     public void GenerateTexture()
     {
         WallsMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
 
         foreach (Room room in RoomGanerateSetting.CreatedRoom)
         {
-            //x
-            int wallCount = Mathf.Max(0, (int)(room.XAxisSize / segmentSize.x));
-            float scale = room.XAxisSize / wallCount / segmentSize.x;
-
-            for (int i = 0; i < wallCount; i++)
+            List<Matrix4x4> cellMatrix = new List<Matrix4x4>();
+            foreach (var roomCell in room.CellInRoom)
             {
-                Vector3 t = room.cetroid + new Vector3((-room.XAxisSize / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, room.YAxisSize / 2f);
-                Quaternion r = Quaternion.Euler(0f, 90f, 0f);
-                Vector3 s = new Vector3(1f, 1f, scale);
-
-                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-
-                int randomNumber = random.NextInt(0, wallMeshes.Count);
-
-                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
-                {
-                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
-                }
-                else
-                {
-                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
-                }
+                cellMatrix.AddRange(roomCell.AllCellMatrix4x4(segmentSize));
             }
 
-            for (int i = 0; i < wallCount; i++)
+            foreach (var element in cellMatrix)
             {
-                Vector3 t = room.cetroid + new Vector3((-room.XAxisSize / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -room.YAxisSize / 2f);
-                Quaternion r = Quaternion.Euler(0f, 90f, 0f);
-                Vector3 s = new Vector3(1f, 1f, scale);
+                int randomMeshIndex = random.NextInt(0, wallMeshes.Count);
 
-                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                int randomNumber = random.NextInt(0, wallMeshes.Count);
-
-                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
+                if (WallsMatrix.ContainsKey(wallMeshes[randomMeshIndex]))
                 {
-                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
+                    WallsMatrix[wallMeshes[randomMeshIndex]].Add(element);
                 }
                 else
                 {
-                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
+                    WallsMatrix.Add(wallMeshes[randomMeshIndex], new List<Matrix4x4>() { element });
                 }
-            }
 
-            //y
-
-            wallCount = Mathf.Max(0, (int)(room.YAxisSize / segmentSize.y));
-            scale = room.YAxisSize / wallCount / segmentSize.y;
-            for (int i = 0; i < wallCount; i++)
-            {
-                Vector3 t = room.cetroid + new Vector3(room.XAxisSize / 2f, 0, (-room.YAxisSize / 2f) + (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                Vector3 s = new Vector3(1f, 1f, scale);
-
-                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                int randomNumber = random.NextInt(0, wallMeshes.Count);
-
-                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
-                {
-                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
-                }
-                else
-                {
-                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
-                }
-            }
-
-            for (int i = 0; i < wallCount; i++)
-            {
-                Vector3 t = room.cetroid + new Vector3(-room.XAxisSize / 2f, 0, (-room.YAxisSize / 2f) + (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                Vector3 s = new Vector3(1f, 1f, scale);
-
-                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                int randomNumber = random.NextInt(0, wallMeshes.Count);
-
-                if (WallsMatrix.ContainsKey(wallMeshes[randomNumber]))
-                {
-                    WallsMatrix[wallMeshes[randomNumber]].Add(newMatrix);
-                }
-                else
-                {
-                    WallsMatrix.Add(wallMeshes[randomNumber], new List<Matrix4x4>() { newMatrix });
-                }
             }
         }
     }

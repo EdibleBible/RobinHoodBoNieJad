@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 
 [Serializable]
 public class Edge
@@ -9,11 +10,11 @@ public class Edge
     public Room Point1Room { get; private set; }
     public Room Point2Room { get; private set; }
 
-    public GridCellData EntryGridCell;
-    public GridCellData ExitGridCell;
+    public GridCellData EntryGridCell; // cell in room
+    public GridCellData ExitGridCell; // cell in room
 
-    public GridCellData StartPathFindCell;
-    public GridCellData EndPathFindCell;
+    public GridCellData StartPathFindCell; // pass place axis
+    public GridCellData EndPathFindCell; // pass place axis
     public Edge(Point point1, Point point2)
     {
         Point1 = point1;
@@ -34,16 +35,32 @@ public class Edge
         EntryGridCell.GridCellType = E_GridCellType.Pass;
         ExitGridCell.GridCellType = E_GridCellType.Pass;
     }
-
-    public void SetStartEndPathfind(GridCellData start, GridCellData end)
+    public void SetStartPathFind(GridCellData start)
     {
-        StartPathFindCell = start;
-        EndPathFindCell = end;
+        if (EntryGridCell.AxisCell == null)
+        {
+            StartPathFindCell = start;
+            EntryGridCell.SetAxisCell(start);
 
-        EntryGridCell.GridCellType = E_GridCellType.Pass;
-        ExitGridCell.GridCellType = E_GridCellType.Pass;
+        }
+        else
+        {
+            StartPathFindCell = EntryGridCell.AxisCell;
+        }
     }
 
+    public void SetEndPathFind(GridCellData end)
+    {
+        if (ExitGridCell.AxisCell == null)
+        {
+            EndPathFindCell = end;
+            ExitGridCell.SetAxisCell(end);
+        }
+        else
+        {
+            EndPathFindCell = ExitGridCell.AxisCell;
+        }
+    }
 
     public override bool Equals(object obj)
     {

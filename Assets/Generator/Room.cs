@@ -35,4 +35,30 @@ public class Room
 
         return new Vector3(centroidX,1, centroidY);
     }
+
+    public void MarkCorners()
+    {
+        if (CellInRoom == null || CellInRoom.Count == 0)
+        {
+            throw new System.Exception("Room has no cells to mark corners.");
+        }
+
+        // Znajdź minimalne i maksymalne współrzędne
+        float minX = CellInRoom.Min(cell => cell.Coordinate.x);
+        float maxX = CellInRoom.Max(cell => cell.Coordinate.x);
+        float minY = CellInRoom.Min(cell => cell.Coordinate.y);
+        float maxY = CellInRoom.Max(cell => cell.Coordinate.y);
+
+        // Iteruj przez każdą komórkę i ustaw jako róg, jeśli spełnia kryteria
+        foreach (var cell in CellInRoom)
+        {
+            if ((cell.Coordinate.x == minX && cell.Coordinate.y == minY) || // Lewy dolny róg
+                (cell.Coordinate.x == minX && cell.Coordinate.y == maxY) || // Lewy górny róg
+                (cell.Coordinate.x == maxX && cell.Coordinate.y == minY) || // Prawy dolny róg
+                (cell.Coordinate.x == maxX && cell.Coordinate.y == maxY))   // Prawy górny róg
+            {
+                cell.SetIsRoomCorner(); // Wywołaj metodę w GridCellData
+            }
+        }
+    }
 }
