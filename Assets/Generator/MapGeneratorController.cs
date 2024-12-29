@@ -18,6 +18,7 @@ public class MapGeneratorController : MonoBehaviour
     public List<Point> AllPoints;
     public List<Edge> AllEdges;
     public List<Edge> SelectedEdges;
+    public List<GridCellData> Hallwaycell = new List<GridCellData>();
 
     //GridCellDataGrid (mainInfoGrid)
     public CustomGrid.Grid<GridCellData> MainInfoGrid;
@@ -29,16 +30,17 @@ public class MapGeneratorController : MonoBehaviour
     [SerializeField] private List<Mesh> wallMeshes;
     [SerializeField] private List<Mesh> passesMeshes;
     [SerializeField] private List<Mesh> hallwayMeshes;
-    [SerializeField] private Material wallMaterial;
+    [SerializeField] private List<Mesh> floorMashes;
+    [SerializeField] private Material meshesMaterial;
 
-    Dictionary<Mesh, List<Matrix4x4>> WallsMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
+    Dictionary<Mesh, List<Matrix4x4>> AllMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
 
     [Header("Seed")]
     public uint wallSeed;
     private Unity.Mathematics.Random random;
 
     [Header("Debug")]
-    private Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
+    public Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
     [SerializeField] private TextMeshProUGUI ActionTextMesh;
     [SerializeField] private TextMeshProUGUI InstructionTextMesh;
     [SerializeField] private TextMeshProUGUI SeedTextMesh;
@@ -63,13 +65,6 @@ public class MapGeneratorController : MonoBehaviour
         StartGeneration();
     }
 
-    private bool isDrawing = false;
-
-    void Update()
-    {
-        DrawWalls();
-    }
-
     public void StartGeneration()
     {
         ClearGeneratedGrid();
@@ -83,6 +78,7 @@ public class MapGeneratorController : MonoBehaviour
 
     private void ClearGeneratedGrid()
     {
+        AllMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
             Transform child = transform.GetChild(i);
@@ -122,6 +118,7 @@ public class MapGeneratorController : MonoBehaviour
         // Run pathfinding for rooms
         UpdateActionText("Running pathfinding for rooms...");
         UpdateInstructionText("Press SPACE to continue.");
+        Hallwaycell = new List<GridCellData>();
         yield return StartCoroutine(RoomPathFindWithDebugging());
         yield return WaitForSpaceBar();
 
@@ -130,8 +127,28 @@ public class MapGeneratorController : MonoBehaviour
         UpdateInstructionText("Press SPACE to continue.");
         DefiniedSpawn();
         DebugGridMesh();
+        foreach (var element in allObject)
+        {
+            element.Value.SetActive(false);
+        }
         GenerateTexture();
         yield return WaitForSpaceBar();
+
+        Mesh combinedMesh = CombineMeshesFromDictionary(AllMatrix);
+
+        // Tworzenie obiektu z MeshCollider
+        GameObject colliderObject = new GameObject("CombinedCollider");
+        colliderObject.transform.position = Vector3.zero;
+
+        MeshCollider meshCollider = colliderObject.AddComponent<MeshCollider>();
+        meshCollider.sharedMesh = combinedMesh;
+
+        // Opcjonalne: Dodanie renderera do wizualizacji
+        MeshFilter meshFilter = colliderObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = combinedMesh;
+
+        MeshRenderer renderer = colliderObject.AddComponent<MeshRenderer>();
+        renderer.material = meshesMaterial;
 
         // Debug the grid mesh
         UpdateActionText("Rese room");
@@ -406,7 +423,7 @@ public class MapGeneratorController : MonoBehaviour
                 GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
                 Debug.LogWarning($"You move to grid cords X: {toAdd.Coordinate.x} Y: {toAdd.Coordinate.y} Node is: {currPathfinding.GetGrid().GetValue(toAdd.Coordinate.x, toAdd.Coordinate.y).IsWalkable} And Type: {toAdd.GridCellType}");
                 toAdd.GridCellType = E_GridCellType.Hallway;
-
+                Hallwaycell.Add(toAdd);
                 // Debugowanie pojedynczej kratki
                 DebugSingleCellMesh(toAdd);
 
@@ -826,6 +843,7 @@ public class MapGeneratorController : MonoBehaviour
 
                 GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
                 toAdd.GridCellType = E_GridCellType.Hallway;
+                Hallwaycell.Add(toAdd);
             }
 
             // Jeśli ścieżka nie może być dotknięta, sprawdzamy sąsiadów
@@ -957,41 +975,216 @@ public class MapGeneratorController : MonoBehaviour
 
     public void GenerateTexture()
     {
-        WallsMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
+        AllMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
 
         foreach (Room room in RoomGanerateSetting.CreatedRoom)
         {
-            List<Matrix4x4> cellMatrix = new List<Matrix4x4>();
+            List<Matrix4x4> normalWallCell = new List<Matrix4x4>();
+            List<Matrix4x4> passWallCell = new List<Matrix4x4>();
+            List<Matrix4x4> floorCell = new List<Matrix4x4>();
+
+
             foreach (var roomCell in room.CellInRoom)
             {
-                cellMatrix.AddRange(roomCell.AllCellMatrix4x4(segmentSize));
+                normalWallCell.AddRange(roomCell.RoomWallMatrix4s4(segmentSize));
+                floorCell.AddRange(roomCell.FlorMatrix4x4(segmentSize));
             }
 
-            foreach (var element in cellMatrix)
+            foreach (var roomCell in room.CellInRoom)
             {
-                int randomMeshIndex = random.NextInt(0, wallMeshes.Count);
+                passWallCell.AddRange(roomCell.RoomPassWallMatrix4x4(segmentSize));
+            }
 
-                if (WallsMatrix.ContainsKey(wallMeshes[randomMeshIndex]))
+            foreach (var element in passWallCell)
+            {
+                int randomMeshIndex = random.NextInt(0, passesMeshes.Count);
+
+                if (AllMatrix.ContainsKey(passesMeshes[randomMeshIndex]))
                 {
-                    WallsMatrix[wallMeshes[randomMeshIndex]].Add(element);
+                    AllMatrix[passesMeshes[randomMeshIndex]].Add(element);
                 }
                 else
                 {
-                    WallsMatrix.Add(wallMeshes[randomMeshIndex], new List<Matrix4x4>() { element });
+                    AllMatrix.Add(passesMeshes[randomMeshIndex], new List<Matrix4x4>() { element });
                 }
+            }
 
+            foreach (var element in normalWallCell)
+            {
+                int randomMeshIndex = random.NextInt(0, wallMeshes.Count);
+
+                if (AllMatrix.ContainsKey(wallMeshes[randomMeshIndex]))
+                {
+                    AllMatrix[wallMeshes[randomMeshIndex]].Add(element);
+                }
+                else
+                {
+                    AllMatrix.Add(wallMeshes[randomMeshIndex], new List<Matrix4x4>() { element });
+                }
+            }
+
+            foreach (var element in floorCell)
+            {
+                int randomMeshIndex = random.NextInt(0, floorMashes.Count);
+
+                if (AllMatrix.ContainsKey(floorMashes[randomMeshIndex]))
+                {
+                    AllMatrix[floorMashes[randomMeshIndex]].Add(element);
+                }
+                else
+                {
+                    AllMatrix.Add(floorMashes[randomMeshIndex], new List<Matrix4x4>() { element });
+                }
             }
         }
+
+        foreach (var hallwayCell in Hallwaycell)
+        {
+            List<Matrix4x4> cellMatrix = new List<Matrix4x4>();
+            List<Matrix4x4> cellFloorMatrix = new List<Matrix4x4>();
+
+            cellMatrix.AddRange(hallwayCell.HallwayWallMatrix4x4(segmentSize));
+            cellFloorMatrix.AddRange(hallwayCell.FlorMatrix4x4(segmentSize));
+            foreach (var element in cellMatrix)
+            {
+                int randomMeshIndex = random.NextInt(0, hallwayMeshes.Count);
+
+
+                if (AllMatrix.ContainsKey(hallwayMeshes[randomMeshIndex]))
+                {
+                    AllMatrix[hallwayMeshes[randomMeshIndex]].Add(element);
+                }
+                else
+                {
+                    AllMatrix.Add(hallwayMeshes[randomMeshIndex], new List<Matrix4x4>() { element });
+                }
+            }
+
+            foreach (var element in cellFloorMatrix)
+            {
+                int randomMeshIndex = random.NextInt(0, floorMashes.Count);
+
+
+                if (AllMatrix.ContainsKey(floorMashes[randomMeshIndex]))
+                {
+                    AllMatrix[floorMashes[randomMeshIndex]].Add(element);
+                }
+                else
+                {
+                    AllMatrix.Add(floorMashes[randomMeshIndex], new List<Matrix4x4>() { element });
+                }
+            }
+        }
+
     }
 
     public void DrawWalls()
     {
-        foreach (var element in WallsMatrix)
+        foreach (var element in AllMatrix)
         {
-            Graphics.DrawMeshInstanced(element.Key, 0, wallMaterial, element.Value.ToArray());
+            Graphics.DrawMeshInstanced(element.Key, 0, meshesMaterial, element.Value.ToArray());
+        }
+
+    }
+
+    Mesh CombineMeshesFromDictionary(Dictionary<Mesh, List<Matrix4x4>> meshDictionary)
+    {
+        List<CombineInstance> combineInstances = new List<CombineInstance>();
+
+        foreach (var kvp in meshDictionary)
+        {
+            Mesh mesh = kvp.Key;
+            List<Matrix4x4> matrices = kvp.Value;
+
+            Debug.Log($"Processing Mesh: {mesh.name}, Matrices Count={matrices.Count}");
+
+            // Sprawdzanie, czy mesh zawiera dane wierzchołków i trójkątów
+            Debug.Log($"Mesh {mesh.name} Vertices: {mesh.vertexCount}, Triangles: {mesh.triangles.Length / 3}");
+
+            // Przechodzimy przez każdą macierz transformacji
+            foreach (Matrix4x4 matrix in matrices)
+            {
+                // Sprawdzanie, czy mesh jest pusty
+                if (mesh.vertexCount == 0 || mesh.triangles.Length == 0)
+                {
+                    Debug.LogWarning($"Mesh {mesh.name} is empty or invalid. Skipping this mesh.");
+                    continue;  // Pomijamy pusty mesh
+                }
+
+                CombineInstance instance = new CombineInstance
+                {
+                    mesh = mesh,
+                    transform = matrix
+                };
+
+                Debug.Log($"Adding CombineInstance: Mesh={mesh.name}, Vertices={mesh.vertexCount}, Transform={matrix}");
+
+                combineInstances.Add(instance);
+            }
+        }
+
+        if (combineInstances.Count == 0)
+        {
+            Debug.LogError("No CombineInstances were added!");
+        }
+
+        // Tworzenie zbiorczej siatki
+        Mesh combinedMesh = new Mesh
+        {
+            indexFormat = UnityEngine.Rendering.IndexFormat.UInt32 // Obsługa dużych siatek
+        };
+
+        // Łączenie siatek
+        combinedMesh.CombineMeshes(combineInstances.ToArray(), true, true);
+
+        // Debugowanie liczby wierzchołków i trójkątów po połączeniu
+        Debug.Log($"Combined Mesh: Vertices={combinedMesh.vertexCount}, Triangles={combinedMesh.triangles.Length / 3}");
+
+        return combinedMesh;
+    }
+
+    void CreateIndividualMeshesFromDictionary(Dictionary<Mesh, List<Matrix4x4>> meshDictionary)
+    {
+        foreach (var kvp in meshDictionary)
+        {
+            Mesh mesh = kvp.Key;
+            List<Matrix4x4> matrices = kvp.Value;
+
+            Debug.Log($"Processing Mesh: {mesh.name}, Matrices Count={matrices.Count}");
+
+            // Sprawdzanie, czy mesh zawiera dane wierzchołków i trójkątów
+            Debug.Log($"Mesh {mesh.name} Vertices: {mesh.vertexCount}, Triangles: {mesh.triangles.Length / 3}");
+
+            // Przechodzimy przez każdą macierz transformacji
+            foreach (Matrix4x4 matrix in matrices)
+            {
+                // Sprawdzanie, czy mesh jest pusty
+                if (mesh.vertexCount == 0 || mesh.triangles.Length == 0)
+                {
+                    Debug.LogWarning($"Mesh {mesh.name} is empty or invalid. Skipping this mesh.");
+                    continue;  // Pomijamy pusty mesh
+                }
+
+                // Tworzymy nowy GameObject dla każdej kombinacji
+                GameObject meshObject = new GameObject($"{mesh.name}_Instance");
+                MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
+                MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
+
+                // Ustawiamy mesh w MeshFilterze
+                meshFilter.mesh = mesh;
+
+                // Ustawiamy macierz transformacji na obiekt
+                meshObject.transform.localPosition = matrix.GetColumn(3); // Translacja (pozycja)
+                meshObject.transform.localRotation = matrix.rotation; // Rotacja
+                meshObject.transform.localScale = matrix.lossyScale; // Skalowanie
+
+                // Można dodać material, jeśli jest potrzebny
+                // meshRenderer.material = yourMaterial;
+
+                Debug.Log($"Created Mesh Object: {meshObject.name}, Transform={matrix}");
+            }
         }
     }
 }
-
 
 

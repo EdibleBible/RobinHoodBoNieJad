@@ -1,7 +1,6 @@
 ﻿using CustomGrid;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ public class GridCellData
     public E_GridCellType GridCellType;
     public Vector2Int Coordinate;
     public Vector3 Position;
-    public GridCellData BottomN;
+    public GridCellData DownN;
     public GridCellData UpN;
     public GridCellData LeftN;
     public GridCellData RightN;
@@ -58,7 +57,7 @@ public class GridCellData
         GridHolder = grid;
         var neigbourCell = grid.GetNeighbourList(this, false);
 
-        BottomN = null;
+        DownN = null;
         UpN = null;
         LeftN = null;
         RightN = null;
@@ -73,7 +72,7 @@ public class GridCellData
             }
             else if (delta == new Vector2Int(0, -1))
             {
-                BottomN = neighbor;
+                DownN = neighbor;
             }
             else if (delta == new Vector2Int(-1, 0))
             {
@@ -85,247 +84,246 @@ public class GridCellData
             }
         }
     }
-
-    public List<Matrix4x4> AllCellMatrix4x4(Vector2 segmentSize)
+    public List<Matrix4x4> RoomWallMatrix4s4(Vector2 segmentSize)
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
-        int wallCount = 0;
-        float scale = 0f;
 
-        //x
-        wallCount = math.max(0, (int)(CellSize.x / segmentSize.x));
-        scale = CellSize.x / wallCount / segmentSize.x;
-
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_up, UpN, Quaternion.Euler(0f, 90f, 0f), segmentSize));
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_down, DownN, Quaternion.Euler(0f, 90f, 0f), segmentSize));
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_left, LeftN, Quaternion.identity, segmentSize));
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_right, RightN, Quaternion.identity, segmentSize));
 
 
-        //x up
-        if (IsRoomCorner)
+        return matrix4X4s;
+    }
+    private IEnumerable<Matrix4x4> GeneratePassRoomSide(Vector2 segmentSize)
+    {
+        List<Matrix4x4> result = new List<Matrix4x4>();
+
+        if (GridCellType == E_GridCellType.Pass || GridCellType == E_GridCellType.SecretPass || GridCellType == E_GridCellType.SpawnPass)
         {
-            if (GridCellType == E_GridCellType.Pass || GridCellType == E_GridCellType.SecretPass || GridCellType == E_GridCellType.SpawnPass)
+            var wallCount = 0f;
+            var scale = 0f;
+            if (AxisCell == UpN)
             {
-                if(UpN != AxisCell && (UpN.GridCellType == E_GridCellType.Empty || UpN.GridCellType == E_GridCellType.Hallway))
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(/*(-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)*/(i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, CellSize.y / 2f);
-                        Quaternion r = Quaternion.Euler(0f, 90f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
+                wallCount = math.max(0, (int)(CellSize.x / segmentSize.x));
+                scale = CellSize.x / wallCount / segmentSize.x;
 
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-                    }
-                }
-            }
-            else
-            {
-                if ((UpN.GridCellType == E_GridCellType.Empty || UpN.GridCellType == E_GridCellType.Hallway) && GridCellType != E_GridCellType.Pass && GridCellType != E_GridCellType.SecretPass && GridCellType != E_GridCellType.SpawnPass)
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(/*(-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)*/(i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, CellSize.y / 2f);
-                        Quaternion r = Quaternion.Euler(0f, 90f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
-
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-                    }
-                }
-            }
-        }
-        else
-        {
-            if ((UpN.GridCellType == E_GridCellType.Empty || UpN.GridCellType == E_GridCellType.Hallway) && GridCellType != E_GridCellType.Pass && GridCellType != E_GridCellType.SecretPass && GridCellType != E_GridCellType.SpawnPass)
-            {
                 for (int i = 0; i < wallCount; i++)
                 {
-                    Vector3 t = Position + new Vector3(/*(-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)*/(i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, CellSize.y / 2f);
+                    Vector3 t = Position + new Vector3(-((i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)), 0, CellSize.y / 2f);
                     Quaternion r = Quaternion.Euler(0f, 90f, 0f);
                     Vector3 s = new Vector3(1f, 1f, scale);
 
                     Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                    matrix4X4s.Add(newMatrix);
+                    result.Add(newMatrix);
                 }
             }
+            else if (AxisCell == DownN)
+            {
+                wallCount = math.max(0, (int)(CellSize.x / segmentSize.x));
+                scale = CellSize.x / wallCount / segmentSize.x;
+
+                for (int i = 0; i < wallCount; i++)
+                {
+                    Vector3 t = Position + new Vector3(-((i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)), 0, -CellSize.y / 2f);
+                    Quaternion r = Quaternion.Euler(0f, 90f, 0f);
+                    Vector3 s = new Vector3(1f, 1f, scale);
+
+                    Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                    result.Add(newMatrix);
+                }
+            }
+            else if (AxisCell == LeftN)
+            {
+                wallCount = Mathf.Max(0, (int)(CellSize.y / segmentSize.y));
+                scale = CellSize.y / wallCount / segmentSize.y;
+
+                for (int i = 0; i < wallCount; i++)
+                {
+                    Vector3 t = Position + new Vector3(-CellSize.x / 2f, 0, -((i * segmentSize.y * scale) + (segmentSize.y / 2 * scale)));
+                    Quaternion r = Quaternion.Euler(0f, 0f, 0f);
+                    Vector3 s = new Vector3(1f, 1f, scale);
+
+                    Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                    result.Add(newMatrix);
+                }
+            }
+            else if (AxisCell == RightN)
+            {
+                wallCount = Mathf.Max(0, (int)(CellSize.y / segmentSize.y));
+                scale = CellSize.y / wallCount / segmentSize.y;
+
+                for (int i = 0; i < wallCount; i++)
+                {
+                    Vector3 t = Position + new Vector3(CellSize.x / 2f, 0, -((i * segmentSize.y * scale) + (segmentSize.y / 2 * scale)));
+                    Quaternion r = Quaternion.Euler(0f, 0f, 0f);
+                    Vector3 s = new Vector3(1f, 1f, scale);
+
+                    Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                    result.Add(newMatrix);
+                }
+            }
+
         }
 
+        return result;
+    }
+    private List<Matrix4x4> GenerateSelectedRoomSide(E_GridCellReferenceType referenceType, GridCellData selectedReferenceGrid, Quaternion rotation, Vector2 segmentSize)
+    {
+        List<Matrix4x4> result = new List<Matrix4x4>();
 
+        if (!ShouldGenerateWalls(selectedReferenceGrid))
+            return result;
+
+        int wallCount = Mathf.Max(0, (int)(CellSize.y / segmentSize.y));
+        float scale = CellSize.y / wallCount / segmentSize.y;
+
+        for (int i = 0; i < wallCount; i++)
+        {
+            Vector3 position = CalculatePosition(referenceType, i, segmentSize, scale);
+            Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, new Vector3(1f, 1f, scale));
+            result.Add(matrix);
+        }
+
+        return result;
+    }
+    private bool ShouldGenerateWalls(GridCellData selectedReferenceGrid)
+    {
+        bool isCornerCase = IsRoomCorner && (GridCellType == E_GridCellType.Pass || GridCellType == E_GridCellType.SecretPass || GridCellType == E_GridCellType.SpawnPass);
+
+        if (isCornerCase)
+        {
+            return selectedReferenceGrid != AxisCell && (selectedReferenceGrid.GridCellType == E_GridCellType.Empty || selectedReferenceGrid.GridCellType == E_GridCellType.Hallway);
+        }
+
+        return (selectedReferenceGrid.GridCellType == E_GridCellType.Empty || selectedReferenceGrid.GridCellType == E_GridCellType.Hallway) &&
+               GridCellType != E_GridCellType.Pass && GridCellType != E_GridCellType.SecretPass && GridCellType != E_GridCellType.SpawnPass;
+    }
+    private Vector3 CalculatePosition(E_GridCellReferenceType referenceType, int index, Vector2 segmentSize, float scale)
+    {
+        Vector3 offset = Vector3.zero;
+
+        switch (referenceType)
+        {
+            case E_GridCellReferenceType.E_up:
+                offset = new Vector3((index * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, CellSize.y / 2f);
+                break;
+            case E_GridCellReferenceType.E_down:
+                offset = new Vector3((index * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -CellSize.y / 2f);
+                break;
+            case E_GridCellReferenceType.E_left:
+                offset = new Vector3(-CellSize.x / 2f, 0, (index * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                break;
+            case E_GridCellReferenceType.E_right:
+                offset = new Vector3(CellSize.x / 2f, 0, (index * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                break;
+        }
+
+        return Position + offset;
+    }
+    public List<Matrix4x4> HallwayWallMatrix4x4(Vector2 segmentSize)
+    {
+        List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
+
+
+        // x up
+        var wallCount = math.max(0, (int)(CellSize.x / segmentSize.x));
+        var scale = CellSize.x / wallCount / segmentSize.x;
+
+        if (UpN.GridCellType == E_GridCellType.Empty)
+        {
+            for (int i = 0; i < wallCount; i++)
+            {
+                Vector3 t = Position + new Vector3((-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, CellSize.y / 2f);
+                Quaternion r = Quaternion.Euler(0f, 90f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
+
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                matrix4X4s.Add(newMatrix);
+            }
+        }
 
         //x down
-        if (IsRoomCorner)
+
+        if (DownN.GridCellType == E_GridCellType.Empty)
         {
-            if (GridCellType == E_GridCellType.Pass || GridCellType == E_GridCellType.SecretPass || GridCellType == E_GridCellType.SpawnPass)
+            for (int i = 0; i < wallCount; i++)
             {
-                if (BottomN != AxisCell && (BottomN.GridCellType == E_GridCellType.Empty || BottomN.GridCellType == E_GridCellType.Hallway))
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(/*(-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)*/(i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -CellSize.y / 2f);
-                        Quaternion r = Quaternion.Euler(0f, 90f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
+                Vector3 t = Position + new Vector3((-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -CellSize.y / 2f);
+                Quaternion r = Quaternion.Euler(0f, 90f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
 
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-                    }
-                }
-            }
-            else
-            {
-                if ((BottomN.GridCellType == E_GridCellType.Empty || BottomN.GridCellType == E_GridCellType.Hallway) && GridCellType != E_GridCellType.Pass && GridCellType != E_GridCellType.SecretPass && GridCellType != E_GridCellType.SpawnPass)
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(/*(-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)*/(i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -CellSize.y / 2f);
-                        Quaternion r = Quaternion.Euler(0f, 90f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
-
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-                    }
-                }
-            }
-        }
-        else
-        {
-            if ((BottomN.GridCellType == E_GridCellType.Empty || BottomN.GridCellType == E_GridCellType.Hallway) && GridCellType != E_GridCellType.Pass && GridCellType != E_GridCellType.SecretPass && GridCellType != E_GridCellType.SpawnPass)
-            {
-                for (int i = 0; i < wallCount; i++)
-                {
-                    Vector3 t = Position + new Vector3(/*(-CellSize.x / 2f) + (i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)*/(i * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -CellSize.y / 2f);
-                    Quaternion r = Quaternion.Euler(0f, 90f, 0f);
-                    Vector3 s = new Vector3(1f, 1f, scale);
-
-                    Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                    matrix4X4s.Add(newMatrix);
-                }
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                matrix4X4s.Add(newMatrix);
             }
         }
 
 
-
-        // y
+        // y Left
         wallCount = Mathf.Max(0, (int)(CellSize.y / segmentSize.y));
         scale = CellSize.y / wallCount / segmentSize.y;
 
-
-
-        //y right
-        if (IsRoomCorner)
+        if (LeftN.GridCellType == E_GridCellType.Empty)
         {
-            if (GridCellType == E_GridCellType.Pass || GridCellType == E_GridCellType.SecretPass || GridCellType == E_GridCellType.SpawnPass)
+            for (int i = 0; i < wallCount; i++)
             {
-                if (RightN != AxisCell && (RightN.GridCellType == E_GridCellType.Empty || RightN.GridCellType == E_GridCellType.Hallway))
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(CellSize.x / 2f, 0, (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                        Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
+                Vector3 t = Position + new Vector3(-CellSize.x / 2f, 0, (-CellSize.y / 2f) + (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                Quaternion r = Quaternion.Euler(0f, 0f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
 
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-                    }
-                }
-            }
-            else
-            {
-                if ((RightN.GridCellType == E_GridCellType.Empty || RightN.GridCellType == E_GridCellType.Hallway)
-                    && GridCellType != E_GridCellType.Pass
-                    && GridCellType != E_GridCellType.SecretPass
-                    && GridCellType != E_GridCellType.SpawnPass)
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(CellSize.x / 2f, 0, (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                        Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
-
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-                    }
-                }
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                matrix4X4s.Add(newMatrix);
             }
         }
-        else
+
+        // y Right
+
+        if (RightN.GridCellType == E_GridCellType.Empty)
         {
-            if ((RightN.GridCellType == E_GridCellType.Empty || RightN.GridCellType == E_GridCellType.Hallway)
-                && GridCellType != E_GridCellType.Pass
-                && GridCellType != E_GridCellType.SecretPass
-                && GridCellType != E_GridCellType.SpawnPass)
+            for (int i = 0; i < wallCount; i++)
             {
-                for (int i = 0; i < wallCount; i++)
-                {
-                    Vector3 t = Position + new Vector3(CellSize.x / 2f, 0, (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                    Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                    Vector3 s = new Vector3(1f, 1f, scale);
+                Vector3 t = Position + new Vector3(CellSize.x / 2f, 0, (-CellSize.y / 2f) + (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                Quaternion r = Quaternion.Euler(0f, 0f, 0f);
+                Vector3 s = new Vector3(1f, 1f, scale);
 
-                    Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                    matrix4X4s.Add(newMatrix);
-                }
+                Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+                matrix4X4s.Add(newMatrix);
             }
-
         }
 
-
-
-        //y left
-        if (IsRoomCorner)
-        {
-            if (GridCellType == E_GridCellType.Pass || GridCellType == E_GridCellType.SecretPass || GridCellType == E_GridCellType.SpawnPass)
-            {
-                if (LeftN != AxisCell && (LeftN.GridCellType == E_GridCellType.Empty || LeftN.GridCellType == E_GridCellType.Hallway))
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(-CellSize.x / 2f, 0, (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                        Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
-
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-
-                    }
-                }
-            }
-            else
-            {
-                if ((LeftN.GridCellType == E_GridCellType.Empty || LeftN.GridCellType == E_GridCellType.Hallway)
-                    && GridCellType != E_GridCellType.Pass
-                    && GridCellType != E_GridCellType.SecretPass
-                    && GridCellType != E_GridCellType.SpawnPass)
-                {
-                    for (int i = 0; i < wallCount; i++)
-                    {
-                        Vector3 t = Position + new Vector3(-CellSize.x / 2f, 0, (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                        Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                        Vector3 s = new Vector3(1f, 1f, scale);
-
-                        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                        matrix4X4s.Add(newMatrix);
-
-                    }
-                }
-            }
-        }
-        else
-        {
-            if ((LeftN.GridCellType == E_GridCellType.Empty || LeftN.GridCellType == E_GridCellType.Hallway)
-                && GridCellType != E_GridCellType.Pass
-                && GridCellType != E_GridCellType.SecretPass
-                && GridCellType != E_GridCellType.SpawnPass)
-            {
-                for (int i = 0; i < wallCount; i++)
-                {
-                    Vector3 t = Position + new Vector3(-CellSize.x / 2f, 0, (i * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
-                    Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-                    Vector3 s = new Vector3(1f, 1f, scale);
-
-                    Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-                    matrix4X4s.Add(newMatrix);
-
-                }
-            }
-        }
         return matrix4X4s;
+    }
+    internal IEnumerable<Matrix4x4> RoomPassWallMatrix4x4(Vector2 segmentSize)
+    {
+        List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
+        matrix4X4s.AddRange(GeneratePassRoomSide(segmentSize));
+        return matrix4X4s;
+    }
+
+    public IEnumerable<Matrix4x4> FlorMatrix4x4(Vector2 segmentSize)
+    {
+        List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
+
+        var wallCount = math.max(0, (int)(CellSize.x / segmentSize.x));
+        var scale = CellSize.x / wallCount / segmentSize.x;
+
+        Vector3 t = Position;
+        Quaternion r = Quaternion.Euler(0f, 0f, 0f);
+        Vector3 s = new Vector3(1f, 1f, scale);
+
+        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
+        matrix4X4s.Add(newMatrix);
+
+        return matrix4X4s;
+    }
+
+    public enum E_GridCellReferenceType
+    {
+        E_up,
+        E_down,
+        E_left,
+        E_right
     }
 
 
