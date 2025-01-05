@@ -6,7 +6,9 @@ using System.Collections;
 using TMPro;
 using System.Xml.Linq;
 using System;
+using Unity.AI.Navigation;
 using Unity.Mathematics;
+using UnityEngine.AI;
 
 [ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
@@ -26,6 +28,14 @@ public class MapGeneratorController : MonoBehaviour
     public CustomGrid.Grid<GridCellData> MainInfoGrid;
     public Pathfinding currPathfinding;
     public CustomGrid.Grid<PathNode> pathfindingGrid;
+
+    [Header("NavMesh Settings")] [SerializeField]
+    private NavMeshSurface navMeshSurface;
+
+    [SerializeField] private LayerMask wallLayerMask;
+    [SerializeField] private LayerMask floorLayerMask;
+    [SerializeField] private LayerMask passableLayerMask;
+
 
     [Header("Textures")] [SerializeField] private Vector2 segmentSize;
     [SerializeField] private List<Mesh> wallMeshes;
@@ -128,12 +138,24 @@ public class MapGeneratorController : MonoBehaviour
         UpdateActionText("Defining spawn points...");
         UpdateInstructionText("Press SPACE to continue.");
         DefiniedSpawn();
-        
+
         DebugGridMesh();
         GenerateMeshes();
-        /*
-        GenerateTexture();
-        */
+
+        yield return WaitForSpaceBar();
+
+        UpdateActionText("Generateing map navmesh");
+        UpdateInstructionText("Press SPACE to continue.");
+        yield return WaitForSpaceBar();
+
+        BakeNavigation();
+
+        UpdateActionText("YOU END");
+        UpdateInstructionText("Press SPACE to end.");
+
+        yield return WaitForSpaceBar();
+
+
         foreach (var element in allObject)
         {
             element.Value.SetActive(false);
@@ -141,9 +163,9 @@ public class MapGeneratorController : MonoBehaviour
 
         yield return WaitForSpaceBar();
 
-        
+
         /*GenerateTexture();
-        
+
         Mesh combinedMesh = CombineMeshesFromDictionary(AllMatrix);
 
         // Tworzenie obiektu z MeshCollider
@@ -1244,9 +1266,9 @@ public class MapGeneratorController : MonoBehaviour
             }
 
             // Spawnujemy pojedyncze meshe dla ścian
-            SpawnMeshesFromMatrix(passWallCell, passesMeshes, holder);
-            SpawnMeshesFromMatrix(normalWallCell, wallMeshes, holder);
-            SpawnMeshesFromMatrix(floorCell, floorMashes, holder);
+            SpawnMeshesFromMatrix(passWallCell, passesMeshes, holder, passableLayerMask);
+            SpawnMeshesFromMatrix(normalWallCell, wallMeshes, holder, wallLayerMask, true);
+            SpawnMeshesFromMatrix(floorCell, floorMashes, holder, floorLayerMask);
         }
 
         foreach (var hallwayCell in Hallwaycell)
@@ -1258,12 +1280,13 @@ public class MapGeneratorController : MonoBehaviour
             cellFloorMatrix.AddRange(hallwayCell.FlorMatrix4x4(segmentSize));
 
             // Spawnujemy pojedyncze meshe dla korytarzy
-            SpawnMeshesFromMatrix(cellMatrix, hallwayMeshes, holder);
-            SpawnMeshesFromMatrix(cellFloorMatrix, floorMashes, holder);
+            SpawnMeshesFromMatrix(cellMatrix, hallwayMeshes, holder, wallLayerMask, true);
+            SpawnMeshesFromMatrix(cellFloorMatrix, floorMashes, holder, floorLayerMask);
         }
     }
 
-    private void SpawnMeshesFromMatrix(List<Matrix4x4> matrices, List<Mesh> meshPool, Transform parent)
+    private void SpawnMeshesFromMatrix(List<Matrix4x4> matrices, List<Mesh> meshPool, Transform parent,
+        LayerMask layerToSet, bool isObstacle = false)
     {
         foreach (var matrix in matrices)
         {
@@ -1273,13 +1296,14 @@ public class MapGeneratorController : MonoBehaviour
 
             // Tworzymy nowy obiekt
             GameObject meshObject = new GameObject(randomMesh.name);
+            meshObject.layer = Mathf.RoundToInt(Mathf.Log(layerToSet.value, 2));
 
             // Ustawiamy transformację na podstawie macierzy
             meshObject.transform.SetParent(parent);
             meshObject.transform.position = matrix.GetColumn(3); // Pozycja
             meshObject.transform.rotation =
                 Quaternion.LookRotation(matrix.GetColumn(2), matrix.GetColumn(1)); // Rotacja
-            meshObject.transform.localScale = new Vector3(1,1,1); // Skalowanie
+            meshObject.transform.localScale = Vector3.one; // Skalowanie
 
             // Dodajemy komponenty MeshFilter i MeshRenderer
             MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
@@ -1287,6 +1311,64 @@ public class MapGeneratorController : MonoBehaviour
 
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshRenderer.material = meshesMaterial; // Funkcja wybierająca losowy materiał
+
+            // Dodanie uproszczonego kolizera (BoxCollider)
+            var boxCollider = meshObject.AddComponent<BoxCollider>();
+            boxCollider.center = randomMesh.bounds.center;
+            boxCollider.size = randomMesh.bounds.size;
+
+            // Jeśli obiekt jest przeszkodą
+            if (isObstacle)
+            {
+                var obstacle = meshObject.AddComponent<NavMeshObstacle>();
+                obstacle.carving = true; // Opcjonalne: Włącz wycinanie w NavMesh
+
+                // Dopasowanie NavMeshObstacle do BoxCollider
+                obstacle.shape = NavMeshObstacleShape.Box;
+                obstacle.size = boxCollider.size;
+                obstacle.center = boxCollider.center;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Wypiekanie NavMesh.
+    /// </summary>
+    public void BakeNavigation()
+    {
+        if (navMeshSurface == null)
+        {
+            Debug.LogError("NavMeshSurface nie jest przypisany! Upewnij się, że został dodany do obiektu.");
+            return;
+        }
+
+        try
+        {
+            Debug.Log("Rozpoczynanie generowania NavMesh...");
+            BakeNavMesh();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Błąd podczas generowania NavMesh: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Metoda pomocnicza do generowania NavMesh.
+    /// </summary>
+    private void BakeNavMesh()
+    {
+        if (navMeshSurface != null)
+        {
+            navMeshSurface.collectObjects = CollectObjects.Children;
+            navMeshSurface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+            navMeshSurface.BuildNavMesh();
+            Debug.Log("NavMesh został pomyślnie wygenerowany!");
+        }
+        else
+        {
+            Debug.LogWarning("NavMeshSurface jest pusty, nie można wygenerować NavMesh.");
         }
     }
 }
