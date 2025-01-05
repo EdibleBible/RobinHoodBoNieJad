@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 
 public class InputPlayerWalk : MonoBehaviour
 {
+    public static event Action<GameObject> PlayerSendEvent;
     private float moveSpeed; // Speed of the player's movement
     private float rotationSpeed; // Speed of rotation
     private CharacterController characterController; // Reference to the CharacterController component
@@ -14,6 +16,8 @@ public class InputPlayerWalk : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         moveSpeed = stats.playerSpeed;
         rotationSpeed = stats.playerRotationSpeed;
+
+        PlayerSendEvent?.Invoke(gameObject);
     }
 
     void Update()
