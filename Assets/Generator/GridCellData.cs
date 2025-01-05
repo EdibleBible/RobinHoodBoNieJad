@@ -88,10 +88,14 @@ public class GridCellData
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
 
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_up, UpN, Quaternion.Euler(0f, 90f, 0f), segmentSize));
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_down, DownN, Quaternion.Euler(0f, 90f, 0f), segmentSize));
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_left, LeftN, Quaternion.identity, segmentSize));
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_right, RightN, Quaternion.identity, segmentSize));
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_up, UpN, Quaternion.Euler(0, 270f, 0f), segmentSize));
+        Debug.Log("Added Up" + matrix4X4s.Count);
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_down, DownN, Quaternion.Euler(0, 90f, 0f), segmentSize));
+        Debug.Log("Added Down" + matrix4X4s.Count);
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_left, LeftN, Quaternion.Euler(0, 180, 0), segmentSize));
+        Debug.Log("Added Left" + matrix4X4s.Count);
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_right, RightN, Quaternion.Euler(0, 0, 0), segmentSize));
+        Debug.Log("Added Right" + matrix4X4s.Count);
 
 
         return matrix4X4s;
@@ -111,7 +115,7 @@ public class GridCellData
 
                 for (int i = 0; i < wallCount; i++)
                 {
-                    Vector3 t = Position + new Vector3(-((i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)), 0, CellSize.y / 2f);
+                    Vector3 t = CalculatePosition(E_GridCellReferenceType.E_up, i, segmentSize, scale);
                     Quaternion r = Quaternion.Euler(0f, 90f, 0f);
                     Vector3 s = new Vector3(1f, 1f, scale);
 
@@ -126,7 +130,7 @@ public class GridCellData
 
                 for (int i = 0; i < wallCount; i++)
                 {
-                    Vector3 t = Position + new Vector3(-((i * segmentSize.x * scale) + (segmentSize.x / 2 * scale)), 0, -CellSize.y / 2f);
+                    Vector3 t = CalculatePosition(E_GridCellReferenceType.E_down, i, segmentSize, scale);
                     Quaternion r = Quaternion.Euler(0f, 90f, 0f);
                     Vector3 s = new Vector3(1f, 1f, scale);
 
@@ -141,7 +145,7 @@ public class GridCellData
 
                 for (int i = 0; i < wallCount; i++)
                 {
-                    Vector3 t = Position + new Vector3(-CellSize.x / 2f, 0, -((i * segmentSize.y * scale) + (segmentSize.y / 2 * scale)));
+                    Vector3 t = CalculatePosition(E_GridCellReferenceType.E_left, i, segmentSize, scale);
                     Quaternion r = Quaternion.Euler(0f, 0f, 0f);
                     Vector3 s = new Vector3(1f, 1f, scale);
 
@@ -156,7 +160,7 @@ public class GridCellData
 
                 for (int i = 0; i < wallCount; i++)
                 {
-                    Vector3 t = Position + new Vector3(CellSize.x / 2f, 0, -((i * segmentSize.y * scale) + (segmentSize.y / 2 * scale)));
+                    Vector3 t = CalculatePosition(E_GridCellReferenceType.E_right, i, segmentSize, scale);
                     Quaternion r = Quaternion.Euler(0f, 0f, 0f);
                     Vector3 s = new Vector3(1f, 1f, scale);
 
@@ -207,16 +211,16 @@ public class GridCellData
         switch (referenceType)
         {
             case E_GridCellReferenceType.E_up:
-                offset = new Vector3((index * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, CellSize.y / 2f);
+                offset = new Vector3((index * segmentSize.x * scale) - (0.5f * (CellSize.x -1)), 0, CellSize.x / 2f);
                 break;
             case E_GridCellReferenceType.E_down:
-                offset = new Vector3((index * segmentSize.x * scale) + (segmentSize.x / 2 * scale), 0, -CellSize.y / 2f);
+                offset = new Vector3((index * segmentSize.x * scale) - (0.5f * (CellSize.x -1)), 0, -CellSize.x / 2f);
                 break;
             case E_GridCellReferenceType.E_left:
-                offset = new Vector3(-CellSize.x / 2f, 0, (index * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                offset = new Vector3(-CellSize.x / 2f, 0, (index * segmentSize.y * scale) + (segmentSize.y / 2 * scale) - (0.5f * CellSize.y));
                 break;
             case E_GridCellReferenceType.E_right:
-                offset = new Vector3(CellSize.x / 2f, 0, (index * segmentSize.y * scale) + (segmentSize.y / 2 * scale));
+                offset = new Vector3(CellSize.x / 2f, 0, (index * segmentSize.y * scale) + (segmentSize.y / 2  * scale) - (0.5f * CellSize.y) );
                 break;
         }
 
@@ -305,15 +309,30 @@ public class GridCellData
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
 
-        var wallCount = math.max(0, (int)(CellSize.x / segmentSize.x));
-        var scale = CellSize.x / wallCount / segmentSize.x;
+        // Obliczamy liczbę segmentów wzdłuż osi X i Z
+        int segmentCountX = Mathf.CeilToInt(CellSize.x / segmentSize.x);
+        int segmentCountZ = Mathf.CeilToInt(CellSize.y / segmentSize.y);
 
-        Vector3 t = Position;
-        Quaternion r = Quaternion.Euler(0f, 0f, 0f);
-        Vector3 s = new Vector3(1f, 1f, scale);
+        // Obliczamy skalę pojedynczego segmentu
+        Vector3 segmentScale = new Vector3(segmentSize.x, 1f, segmentSize.y);
 
-        Matrix4x4 newMatrix = Matrix4x4.TRS(t, r, s);
-        matrix4X4s.Add(newMatrix);
+        for (int x = 0; x < segmentCountX; x++)
+        {
+            for (int z = 0; z < segmentCountZ; z++)
+            {
+                // Obliczamy pozycję każdego segmentu
+                Vector3 segmentPosition = Position + new Vector3(
+                    x * segmentSize.x - CellSize.x / 2 + segmentSize.x / 2,
+                    0f,
+                    z * segmentSize.y - CellSize.y / 2 + segmentSize.y / 2
+                );
+
+                Quaternion rotation = Quaternion.identity; // Brak rotacji dla podłogi
+                Matrix4x4 newMatrix = Matrix4x4.TRS(segmentPosition, rotation, segmentScale);
+
+                matrix4X4s.Add(newMatrix);
+            }
+        }
 
         return matrix4X4s;
     }

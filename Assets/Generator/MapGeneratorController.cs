@@ -11,6 +11,8 @@ using Unity.Mathematics;
 [ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
 {
+    [SerializeField] private Transform generatedRoomTransform;
+
     public GridOptions MainGridData;
     public RoomGanerateSetting RoomGanerateSetting;
 
@@ -25,8 +27,7 @@ public class MapGeneratorController : MonoBehaviour
     public Pathfinding currPathfinding;
     public CustomGrid.Grid<PathNode> pathfindingGrid;
 
-    [Header("Textures")]
-    [SerializeField] private Vector2 segmentSize;
+    [Header("Textures")] [SerializeField] private Vector2 segmentSize;
     [SerializeField] private List<Mesh> wallMeshes;
     [SerializeField] private List<Mesh> passesMeshes;
     [SerializeField] private List<Mesh> hallwayMeshes;
@@ -35,12 +36,12 @@ public class MapGeneratorController : MonoBehaviour
 
     Dictionary<Mesh, List<Matrix4x4>> AllMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
 
-    [Header("Seed")]
-    public uint wallSeed;
+    [Header("Seed")] public uint wallSeed;
     private Unity.Mathematics.Random random;
 
     [Header("Debug")]
     public Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
+
     [SerializeField] private TextMeshProUGUI ActionTextMesh;
     [SerializeField] private TextMeshProUGUI InstructionTextMesh;
     [SerializeField] private TextMeshProUGUI SeedTextMesh;
@@ -51,6 +52,7 @@ public class MapGeneratorController : MonoBehaviour
         random = new Unity.Mathematics.Random(wallSeed);
         return wallSeed;
     }
+
     public uint RandimizeSeed()
     {
         var randimInt = new System.Random().Next(1000, 9999);
@@ -126,14 +128,22 @@ public class MapGeneratorController : MonoBehaviour
         UpdateActionText("Defining spawn points...");
         UpdateInstructionText("Press SPACE to continue.");
         DefiniedSpawn();
+        
         DebugGridMesh();
+        GenerateMeshes();
+        /*
+        GenerateTexture();
+        */
         foreach (var element in allObject)
         {
             element.Value.SetActive(false);
         }
-        GenerateTexture();
+
         yield return WaitForSpaceBar();
 
+        
+        /*GenerateTexture();
+        
         Mesh combinedMesh = CombineMeshesFromDictionary(AllMatrix);
 
         // Tworzenie obiektu z MeshCollider
@@ -148,7 +158,7 @@ public class MapGeneratorController : MonoBehaviour
         meshFilter.mesh = combinedMesh;
 
         MeshRenderer renderer = colliderObject.AddComponent<MeshRenderer>();
-        renderer.material = meshesMaterial;
+        renderer.material = meshesMaterial;*/
 
         // Debug the grid mesh
         UpdateActionText("Rese room");
@@ -176,6 +186,7 @@ public class MapGeneratorController : MonoBehaviour
         // Update the instruction text (assign this to your instruction TextMesh object)
         InstructionTextMesh.text = instructionText;
     }
+
     private IEnumerator WaitForSpaceBar()
     {
         while (!Input.GetKeyDown(KeyCode.Space))
@@ -226,8 +237,8 @@ public class MapGeneratorController : MonoBehaviour
                         {
                             Destroy(createdCell.gameObject);
                             createdCell = null;
-
                         }
+
                         break;
 
                     case E_GridCellType.Room:
@@ -266,6 +277,7 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
     }
+
     public void DebugSingleCellMesh(GridCellData cell)
     {
         if (cell == null)
@@ -297,8 +309,8 @@ public class MapGeneratorController : MonoBehaviour
                 {
                     Destroy(createdCell.gameObject);
                     createdCell = null;
-
                 }
+
                 break;
 
             case E_GridCellType.Room:
@@ -343,6 +355,7 @@ public class MapGeneratorController : MonoBehaviour
             allObject.Add(cell, createdCell);
         }
     }
+
     public IEnumerator RoomPathFindWithDebugging()
     {
         if (MainInfoGrid == null)
@@ -421,7 +434,8 @@ public class MapGeneratorController : MonoBehaviour
                     continue;
 
                 GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
-                Debug.LogWarning($"You move to grid cords X: {toAdd.Coordinate.x} Y: {toAdd.Coordinate.y} Node is: {currPathfinding.GetGrid().GetValue(toAdd.Coordinate.x, toAdd.Coordinate.y).IsWalkable} And Type: {toAdd.GridCellType}");
+                Debug.LogWarning(
+                    $"You move to grid cords X: {toAdd.Coordinate.x} Y: {toAdd.Coordinate.y} Node is: {currPathfinding.GetGrid().GetValue(toAdd.Coordinate.x, toAdd.Coordinate.y).IsWalkable} And Type: {toAdd.GridCellType}");
                 toAdd.GridCellType = E_GridCellType.Hallway;
                 Hallwaycell.Add(toAdd);
                 // Debugowanie pojedynczej kratki
@@ -453,7 +467,8 @@ public class MapGeneratorController : MonoBehaviour
                         bool isNextToPassableCell = false;
                         foreach (var neighborOfNeighbor in neighborNeighbors)
                         {
-                            var neighborOfNeighborCell = MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
+                            var neighborOfNeighborCell =
+                                MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
                             if (neighborOfNeighborCell.GridCellType == E_GridCellType.Pass)
                             {
                                 isNextToPassableCell = true;
@@ -481,20 +496,22 @@ public class MapGeneratorController : MonoBehaviour
         var randomSize = MainGridData.RandomizeGridSize(seed);
         GenerateGrid(randomSize.x, randomSize.y);
     }
+
     public void GenerateGrid(int gridX, int gridY)
     {
         // Tworzenie głównej siatki
-        MainInfoGrid = new CustomGrid.Grid<GridCellData>(gridX, gridY, MainGridData.cellScale, transform.position, (CustomGrid.Grid<GridCellData> g, int x, int y) =>
-        {
-            GridCellData cellData = new GridCellData();
-            cellData.SetCoordinate(x, y);
-            cellData.SetCellSize(MainGridData.cellScale);
+        MainInfoGrid = new CustomGrid.Grid<GridCellData>(gridX, gridY, MainGridData.cellScale, transform.position,
+            (CustomGrid.Grid<GridCellData> g, int x, int y) =>
+            {
+                GridCellData cellData = new GridCellData();
+                cellData.SetCoordinate(x, y);
+                cellData.SetCellSize(MainGridData.cellScale);
 
-            // Obliczanie pozycji (start od 0, 0)
-            Vector3 position = new Vector3(x * MainGridData.cellScale, 0, y * MainGridData.cellScale);
-            cellData.SetPosition(position);
-            return cellData;
-        });
+                // Obliczanie pozycji (start od 0, 0)
+                Vector3 position = new Vector3(x * MainGridData.cellScale, 0, y * MainGridData.cellScale);
+                cellData.SetPosition(position);
+                return cellData;
+            });
 
         foreach (var gridElement in MainInfoGrid.GetGridArray())
         {
@@ -519,7 +536,7 @@ public class MapGeneratorController : MonoBehaviour
 
         // Wyznacz punkty docelowe na podstawie kierunku
         Vector2 entryPointCandidate = room1Center + new Vector2(nx, ny) * 0.5f; // Punkt w kierunku wyjścia
-        Vector2 exitPointCandidate = room2Center - new Vector2(nx, ny) * 0.5f;  // Punkt w kierunku wejścia
+        Vector2 exitPointCandidate = room2Center - new Vector2(nx, ny) * 0.5f; // Punkt w kierunku wejścia
 
         // Znajdź najbliższe komórki na krawędziach pokojów
         GridCellData entryPoint = FindClosestEdgeCellToDirection(entryPointCandidate, room1);
@@ -527,6 +544,7 @@ public class MapGeneratorController : MonoBehaviour
 
         return (entryPoint, exitPoint);
     }
+
     private GridCellData FindClosestEdgeCellToDirection(Vector2 candidatePoint, Room room)
     {
         GridCellData closestCell = null;
@@ -552,6 +570,7 @@ public class MapGeneratorController : MonoBehaviour
 
         return closestCell;
     }
+
     private bool IsEdgeCell(GridCellData cell, Room room)
     {
         // Krawędź pokoju - znajdź minimalne i maksymalne wartości x i y
@@ -564,6 +583,7 @@ public class MapGeneratorController : MonoBehaviour
         return cell.Coordinate.x == minX || cell.Coordinate.x == maxX ||
                cell.Coordinate.y == minY || cell.Coordinate.y == maxY;
     }
+
     public List<Triangle> GenerateTriangulation()
     {
         Triangulator = new DelaunayTriangulator();
@@ -585,6 +605,7 @@ public class MapGeneratorController : MonoBehaviour
         AllPoints = GetPointsFromTriangles(allTriangle);
         return allTriangle;
     }
+
     public List<Edge> GetEdgesFromTriangles(List<Triangle> triangles)
     {
         List<Edge> edges = new List<Edge>();
@@ -599,6 +620,7 @@ public class MapGeneratorController : MonoBehaviour
 
         return edges;
     }
+
     private void AddEdgeIfNotExist(List<Edge> edges, Edge edge)
     {
         // Dodaj krawędź do listy, jeśli jeszcze jej tam nie ma (uwzględniając odwrotne kierunki)
@@ -607,6 +629,7 @@ public class MapGeneratorController : MonoBehaviour
             edges.Add(edge);
         }
     }
+
     public List<Point> GetPointsFromTriangles(List<Triangle> triangles)
     {
         List<Point> points = new List<Point>();
@@ -621,6 +644,7 @@ public class MapGeneratorController : MonoBehaviour
 
         return points;
     }
+
     private void AddPointIfNotExist(List<Point> points, Point point)
     {
         // Dodaj punkt do listy, jeśli jeszcze go tam nie ma
@@ -629,6 +653,7 @@ public class MapGeneratorController : MonoBehaviour
             points.Add(point);
         }
     }
+
     public List<Edge> GetUsedEdges(List<Edge> allEdge, List<Point> allPoints)
     {
         List<Edge> usedEdge = PrimAlgorithm.FindMST(allEdge, allPoints);
@@ -636,7 +661,6 @@ public class MapGeneratorController : MonoBehaviour
         HashSet<Vector2Int> mergedPoints = new HashSet<Vector2Int>();
         if (!RoomGanerateSetting.UseAdditionalEdges)
         {
-
             foreach (Edge edge in usedEdge)
             {
                 var edgePoint1Vector2 = new Vector2((float)edge.Point1.X, (float)edge.Point1.Y);
@@ -698,6 +722,7 @@ public class MapGeneratorController : MonoBehaviour
             usedEdge.Add(edge);
             additionalEdges++;
         }
+
         foreach (Edge edge in usedEdge)
         {
             var edgePoint1Vector2 = new Vector2((float)edge.Point1.X, (float)edge.Point1.Y);
@@ -742,6 +767,7 @@ public class MapGeneratorController : MonoBehaviour
 
         return usedEdge;
     }
+
     private bool IsPointMerged(Vector2Int point, HashSet<Vector2Int> mergedPoints)
     {
         foreach (var p in mergedPoints)
@@ -751,8 +777,10 @@ public class MapGeneratorController : MonoBehaviour
                 return true;
             }
         }
+
         return false;
     }
+
     private Vector2Int GetClosestMergedPoint(Vector2Int point, HashSet<Vector2Int> mergedPoints)
     {
         Vector2Int closestPoint = point;
@@ -770,6 +798,7 @@ public class MapGeneratorController : MonoBehaviour
 
         return closestPoint;
     }
+
     public void RoomPathFind()
     {
         if (MainInfoGrid == null)
@@ -865,7 +894,8 @@ public class MapGeneratorController : MonoBehaviour
                         bool isNextToPassableCell = false;
                         foreach (var neighborOfNeighbor in neighborNeighbors)
                         {
-                            var neighborOfNeighborCell = MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
+                            var neighborOfNeighborCell =
+                                MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
                             if (neighborOfNeighborCell.GridCellType == E_GridCellType.Pass)
                             {
                                 isNextToPassableCell = true;
@@ -886,12 +916,16 @@ public class MapGeneratorController : MonoBehaviour
                 }
             }
         }
+
         return;
     }
+
     private Vector2Int GetStartCoordinate(GridCellData selectedGridCellData)
     {
         GridCellData baseStartPoint = selectedGridCellData;
-        List<PathNode> allNeighbourStart = pathfindingGrid.GetNeighbourList(pathfindingGrid.GetValue(baseStartPoint.Coordinate.x, baseStartPoint.Coordinate.y), false);
+        List<PathNode> allNeighbourStart =
+            pathfindingGrid.GetNeighbourList(
+                pathfindingGrid.GetValue(baseStartPoint.Coordinate.x, baseStartPoint.Coordinate.y), false);
         List<GridCellData> selectedNeighbourStart = new List<GridCellData>();
         foreach (var element in allNeighbourStart)
         {
@@ -899,15 +933,17 @@ public class MapGeneratorController : MonoBehaviour
             if (cell.GridCellType != E_GridCellType.Room && cell.GridCellType != E_GridCellType.Pass)
                 selectedNeighbourStart.Add(cell);
         }
+
         if (selectedNeighbourStart.Count > 0)
         {
-
             int randomIndex = random.NextInt(0, selectedNeighbourStart.Count);
             GridCellData selectedCell = selectedNeighbourStart[randomIndex];
             return selectedCell.Coordinate;
         }
+
         return default;
     }
+
     public void DefiniedSpawn()
     {
         int biggestRoomGridCount = 0;
@@ -955,7 +991,8 @@ public class MapGeneratorController : MonoBehaviour
                 biggestRoomsWithMostPass.Add(room);
         }
 
-        Room randomRoom = biggestRoomsWithMostPass[UnityEngine.Random.RandomRange(0, biggestRoomsWithMostPass.Count - 1)];
+        Room randomRoom =
+            biggestRoomsWithMostPass[UnityEngine.Random.RandomRange(0, biggestRoomsWithMostPass.Count - 1)];
         randomRoom.RoomType = E_RoomType.SpawnRoom;
 
         foreach (var cell in randomRoom.CellInRoom)
@@ -963,14 +1000,12 @@ public class MapGeneratorController : MonoBehaviour
             if (cell.GridCellType == E_GridCellType.Pass)
             {
                 cell.GridCellType = E_GridCellType.SpawnPass;
-
             }
             else if (cell.GridCellType == E_GridCellType.Room)
             {
                 cell.GridCellType = E_GridCellType.SpawnRoom;
             }
         }
-
     }
 
     public void GenerateTexture()
@@ -1075,7 +1110,6 @@ public class MapGeneratorController : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void DrawWalls()
@@ -1084,7 +1118,6 @@ public class MapGeneratorController : MonoBehaviour
         {
             Graphics.DrawMeshInstanced(element.Key, 0, meshesMaterial, element.Value.ToArray());
         }
-
     }
 
     Mesh CombineMeshesFromDictionary(Dictionary<Mesh, List<Matrix4x4>> meshDictionary)
@@ -1108,7 +1141,7 @@ public class MapGeneratorController : MonoBehaviour
                 if (mesh.vertexCount == 0 || mesh.triangles.Length == 0)
                 {
                     Debug.LogWarning($"Mesh {mesh.name} is empty or invalid. Skipping this mesh.");
-                    continue;  // Pomijamy pusty mesh
+                    continue; // Pomijamy pusty mesh
                 }
 
                 CombineInstance instance = new CombineInstance
@@ -1162,7 +1195,7 @@ public class MapGeneratorController : MonoBehaviour
                 if (mesh.vertexCount == 0 || mesh.triangles.Length == 0)
                 {
                     Debug.LogWarning($"Mesh {mesh.name} is empty or invalid. Skipping this mesh.");
-                    continue;  // Pomijamy pusty mesh
+                    continue; // Pomijamy pusty mesh
                 }
 
                 // Tworzymy nowy GameObject dla każdej kombinacji
@@ -1185,6 +1218,75 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
     }
+
+
+    public void GenerateMeshes()
+    {
+        // Tworzymy Holder jako obiekt nadrzędny
+        Transform holder = generatedRoomTransform;
+
+        foreach (Room room in RoomGanerateSetting.CreatedRoom)
+        {
+            // Przechodzimy przez wszystkie macierze w room
+            List<Matrix4x4> normalWallCell = new List<Matrix4x4>();
+            List<Matrix4x4> passWallCell = new List<Matrix4x4>();
+            List<Matrix4x4> floorCell = new List<Matrix4x4>();
+
+            foreach (var roomCell in room.CellInRoom)
+            {
+                normalWallCell.AddRange(roomCell.RoomWallMatrix4s4(segmentSize));
+                floorCell.AddRange(roomCell.FlorMatrix4x4(segmentSize));
+            }
+
+            foreach (var roomCell in room.CellInRoom)
+            {
+                passWallCell.AddRange(roomCell.RoomPassWallMatrix4x4(segmentSize));
+            }
+
+            // Spawnujemy pojedyncze meshe dla ścian
+            SpawnMeshesFromMatrix(passWallCell, passesMeshes, holder);
+            SpawnMeshesFromMatrix(normalWallCell, wallMeshes, holder);
+            SpawnMeshesFromMatrix(floorCell, floorMashes, holder);
+        }
+
+        foreach (var hallwayCell in Hallwaycell)
+        {
+            List<Matrix4x4> cellMatrix = new List<Matrix4x4>();
+            List<Matrix4x4> cellFloorMatrix = new List<Matrix4x4>();
+
+            cellMatrix.AddRange(hallwayCell.HallwayWallMatrix4x4(segmentSize));
+            cellFloorMatrix.AddRange(hallwayCell.FlorMatrix4x4(segmentSize));
+
+            // Spawnujemy pojedyncze meshe dla korytarzy
+            SpawnMeshesFromMatrix(cellMatrix, hallwayMeshes, holder);
+            SpawnMeshesFromMatrix(cellFloorMatrix, floorMashes, holder);
+        }
+    }
+
+    private void SpawnMeshesFromMatrix(List<Matrix4x4> matrices, List<Mesh> meshPool, Transform parent)
+    {
+        foreach (var matrix in matrices)
+        {
+            // Wybieramy losowy mesh z puli
+            int randomMeshIndex = Random.Range(0, meshPool.Count);
+            Mesh randomMesh = meshPool[randomMeshIndex];
+
+            // Tworzymy nowy obiekt
+            GameObject meshObject = new GameObject(randomMesh.name);
+
+            // Ustawiamy transformację na podstawie macierzy
+            meshObject.transform.SetParent(parent);
+            meshObject.transform.position = matrix.GetColumn(3); // Pozycja
+            meshObject.transform.rotation =
+                Quaternion.LookRotation(matrix.GetColumn(2), matrix.GetColumn(1)); // Rotacja
+            meshObject.transform.localScale = new Vector3(1,1,1); // Skalowanie
+
+            // Dodajemy komponenty MeshFilter i MeshRenderer
+            MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
+            meshFilter.mesh = randomMesh;
+
+            MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
+            meshRenderer.material = meshesMaterial; // Funkcja wybierająca losowy materiał
+        }
+    }
 }
-
-
