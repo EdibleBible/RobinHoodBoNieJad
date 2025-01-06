@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public struct RoomGanerateSetting
@@ -15,15 +17,18 @@ public struct RoomGanerateSetting
     public int MaxAttempts;
 
     [Header("Additional way")] public bool UseAdditionalEdges;
-    [Range(0, 25)] public int AdditionSelectedEdges;
-    [Range(0, 100)] public int ChanceToSelectEdge;
+    [UnityEngine.Range(0, 25)] public int AdditionSelectedEdges;
+    [UnityEngine.Range(0, 100)] public int ChanceToSelectEdge;
 
     [Header("Secret way")] public bool CreateSecretWay;
-    [Range(0, 5)] public int SecretWayMaxCount;
+    [UnityEngine.Range(0, 5)] public int SecretWayMaxCount;
 
     [Header("Rooms")] public List<Room> CreatedRoom;
 
-    [Header("Inroom Generator")] public GameObject playerPrefab;
+    [Header("Inroom Generator")] 
+    public GameObject PlayerPrefab;
+    public List<GameObject> ObjectToPickList;
+    public GameObject DepositPointPrefab;
 
     public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid, uint seed)
     {
@@ -131,8 +136,17 @@ public struct RoomGanerateSetting
     {
         foreach (var room in CreatedRoom)
         {
-            room.SpawnPlayer(playerPrefab);
+            room.SpawnPlayer(PlayerPrefab,DepositPointPrefab);
             break;
         }
     }
+
+    public void SpawnObjectInRoom()
+    {
+        foreach (var room in CreatedRoom)
+        {
+            room.SpawnPicakbleObject(ObjectToPickList,0,4 );
+        }
+    }
+    
 }

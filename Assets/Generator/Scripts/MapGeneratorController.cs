@@ -10,7 +10,6 @@ using Unity.AI.Navigation;
 using Unity.Mathematics;
 using UnityEngine.AI;
 
-[ExecuteAlways]
 public class MapGeneratorController : MonoBehaviour
 {
     [SerializeField] private Transform generatedRoomTransform;
@@ -102,65 +101,70 @@ public class MapGeneratorController : MonoBehaviour
 
     private IEnumerator Generate()
     {
-        // Generate grid
-        UpdateActionText("Generating grid and rooms...");
-        UpdateInstructionText("Press SPACE to continue.");
+        
+        UpdateActionText("Generate wall");
+        UpdateInstructionText("Click Space to generate wall");
+        yield return WaitForSpaceBar();
+        
         GenerateGrid(wallSeed);
-
-
-        // Create rooms on grid
         RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, wallSeed);
         DebugGridMesh();
+        
+        UpdateActionText("Generate triangulation");
+        UpdateInstructionText("Click Space to generate triangulation");
         yield return WaitForSpaceBar();
-
-        // Generate triangulation
-        UpdateActionText("Generating triangulation...");
-        UpdateInstructionText("Press SPACE to continue.");
+        
         GenerateTriangulation();
         DebugGridMesh();
+        
+        UpdateActionText("Select Edges");
+        UpdateInstructionText("Click Space to select edges");
         yield return WaitForSpaceBar();
 
-        // Set selected edges
-        UpdateActionText("Setting selected edges...");
-        UpdateInstructionText("Press SPACE to continue.");
         SelectedEdges = GetUsedEdges(AllEdges, AllPoints);
         DebugGridMesh();
+        
+        UpdateActionText("Create Hallways");
+        UpdateInstructionText("Click Space to generate hallways");
         yield return WaitForSpaceBar();
-
-        // Run pathfinding for rooms
-        UpdateActionText("Running pathfinding for rooms...");
-        UpdateInstructionText("Press SPACE to continue.");
+        
         Hallwaycell = new List<GridCellData>();
+        
+        UpdateActionText("Select Spawn");
+        UpdateInstructionText("Click Space to select player spawn");
         yield return StartCoroutine(RoomPathFindWithDebugging());
         yield return WaitForSpaceBar();
 
-        // Define spawn points
-        UpdateActionText("Defining spawn points...");
-        UpdateInstructionText("Press SPACE to continue.");
         DefiniedSpawn();
-
         DebugGridMesh();
-        GenerateMeshes();
-
-        yield return WaitForSpaceBar();
-
-        UpdateActionText("Generateing map navmesh");
-        UpdateInstructionText("Press SPACE to continue.");
-        yield return WaitForSpaceBar();
-
-        BakeNavigation();
         
+        UpdateActionText("Generate Meshes");
+        UpdateInstructionText("Click Space to generate meshes");
+        yield return WaitForSpaceBar();
         foreach (var element in allObject)
         {
             element.Value.SetActive(false);
         }
+        GenerateMeshes();
 
+        UpdateActionText("Bake Navigation");
+        UpdateInstructionText("Click Space to Bake Navigation");
+        yield return WaitForSpaceBar();
+
+        BakeNavigation();
+        
+        UpdateActionText("Spawn Object");
+        UpdateInstructionText("Click Space to spawn object");
+        yield return WaitForSpaceBar();
+
+        RoomGanerateSetting.SpawnObjectInRoom();
+        
+        UpdateActionText("Start");
+        UpdateInstructionText("Click Space to start");
         yield return WaitForSpaceBar();
         
-        UpdateActionText("Rese room");
-        UpdateInstructionText("Press SPACE to finish.");
-        
         RoomGanerateSetting.SpawnPlayer();
+
     }
     
     private void UpdateSeedText(string seedText)

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -11,6 +13,11 @@ public class PlayerInventory : MonoBehaviour
     public int finalPrize;
     public MenuInventory inventoryUI;
     public bool playerCollides;
+
+    private void Awake()
+    {
+        inventoryUI = FindAnyObjectByType<MenuInventory>();
+    }
 
     private void OnEnable()
     {
