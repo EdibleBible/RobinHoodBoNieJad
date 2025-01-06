@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static UnityEngine.UI.ScrollRect;
 [RequireComponent(typeof(CharacterController))]
 
 public class InputPlayerWalk : MonoBehaviour
@@ -33,16 +34,13 @@ public class InputPlayerWalk : MonoBehaviour
         movement = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W)) // North
-            movement += new Vector3(-1, 0, 1);
+            movement += new Vector3(-1, 0, 0);
         if (Input.GetKey(KeyCode.S)) // South
-            movement += new Vector3(1, 0, -1);
+            movement += new Vector3(1, 0, 0);
         if (Input.GetKey(KeyCode.A)) // West
-            movement += new Vector3(-1, 0, -1);
+            movement += new Vector3(0, 0, -1);
         if (Input.GetKey(KeyCode.D)) // East
-            movement += new Vector3(1, 0, 1);
-
-        // Normalize the vector to ensure consistent speed in diagonal directions
-        movement = movement.normalized * moveSpeed * Time.deltaTime;
+            movement += new Vector3(0, 0, 1);
 
         // Grawitacja - jeśli gracz jest na ziemi, resetujemy pionową prędkość
         if (isGrounded)
@@ -64,7 +62,7 @@ public class InputPlayerWalk : MonoBehaviour
 
         if (movement.magnitude > 0)
         {
-            characterController.Move(movement);
+            characterController.Move(movement * Time.deltaTime);
 
             // Rotate the player towards the movement direction
             Quaternion targetRotation = Quaternion.LookRotation(movement);

@@ -75,7 +75,7 @@ public class Room
         Camera cam = Camera.main;
         var camFollow = cam.AddComponent<LevelCameraFollow>();
         camFollow.player = playerObj;
-        camFollow.offset = new Vector3(7, 7, 7);
+        camFollow.offset = new Vector3(2, 2, 0);
         camFollow.followSpeed = 5f;
         camFollow.rotationSpeed = 10f;
     }
