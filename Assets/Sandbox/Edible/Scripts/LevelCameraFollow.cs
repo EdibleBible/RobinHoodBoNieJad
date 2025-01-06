@@ -3,7 +3,7 @@ using UnityEngine;
 public class LevelCameraFollow : MonoBehaviour
 {
     public GameObject player;         // Reference to the player transform
-    public Vector3 offset = new Vector3(0, 5, -10); // Offset from the player
+    public Vector3 offset = new Vector3(7, 7, -7); // Offset from the player
     public float followSpeed = 5f;  // Speed of the camera following the player
     public float rotationSpeed = 10f; // Speed of the camera aligning with the player
 
