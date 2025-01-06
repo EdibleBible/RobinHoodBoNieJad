@@ -149,48 +149,20 @@ public class MapGeneratorController : MonoBehaviour
         yield return WaitForSpaceBar();
 
         BakeNavigation();
-
-        UpdateActionText("YOU END");
-        UpdateInstructionText("Press SPACE to end.");
-
-        yield return WaitForSpaceBar();
-
-
+        
         foreach (var element in allObject)
         {
             element.Value.SetActive(false);
         }
 
         yield return WaitForSpaceBar();
-
-
-        /*GenerateTexture();
-
-        Mesh combinedMesh = CombineMeshesFromDictionary(AllMatrix);
-
-        // Tworzenie obiektu z MeshCollider
-        GameObject colliderObject = new GameObject("CombinedCollider");
-        colliderObject.transform.position = Vector3.zero;
-
-        MeshCollider meshCollider = colliderObject.AddComponent<MeshCollider>();
-        meshCollider.sharedMesh = combinedMesh;
-
-        // Opcjonalne: Dodanie renderera do wizualizacji
-        MeshFilter meshFilter = colliderObject.AddComponent<MeshFilter>();
-        meshFilter.mesh = combinedMesh;
-
-        MeshRenderer renderer = colliderObject.AddComponent<MeshRenderer>();
-        renderer.material = meshesMaterial;*/
-
-        // Debug the grid mesh
+        
         UpdateActionText("Rese room");
         UpdateInstructionText("Press SPACE to finish.");
-
-        yield return WaitForSpaceBar();
-        StartGeneration();
+        
+        RoomGanerateSetting.SpawnPlayer();
     }
-
-
+    
     private void UpdateSeedText(string seedText)
     {
         // Update the action text (assign this to your action TextMesh object)
@@ -1266,7 +1238,7 @@ public class MapGeneratorController : MonoBehaviour
             }
 
             // Spawnujemy pojedyncze meshe dla ścian
-            SpawnMeshesFromMatrix(passWallCell, passesMeshes, holder, passableLayerMask);
+            SpawnMeshesFromMatrix(passWallCell, passesMeshes, holder, passableLayerMask, passThrow: true);
             SpawnMeshesFromMatrix(normalWallCell, wallMeshes, holder, wallLayerMask, true);
             SpawnMeshesFromMatrix(floorCell, floorMashes, holder, floorLayerMask);
         }
@@ -1286,7 +1258,7 @@ public class MapGeneratorController : MonoBehaviour
     }
 
     private void SpawnMeshesFromMatrix(List<Matrix4x4> matrices, List<Mesh> meshPool, Transform parent,
-        LayerMask layerToSet, bool isObstacle = false)
+        LayerMask layerToSet, bool isObstacle = false, bool passThrow = false)
     {
         foreach (var matrix in matrices)
         {
@@ -1312,22 +1284,27 @@ public class MapGeneratorController : MonoBehaviour
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshRenderer.material = meshesMaterial; // Funkcja wybierająca losowy materiał
 
-            // Dodanie uproszczonego kolizera (BoxCollider)
-            var boxCollider = meshObject.AddComponent<BoxCollider>();
-            boxCollider.center = randomMesh.bounds.center;
-            boxCollider.size = randomMesh.bounds.size;
-
-            // Jeśli obiekt jest przeszkodą
-            if (isObstacle)
+            if (!passThrow)
             {
-                var obstacle = meshObject.AddComponent<NavMeshObstacle>();
-                obstacle.carving = true; // Opcjonalne: Włącz wycinanie w NavMesh
+                // Dodanie uproszczonego kolizera (BoxCollider)
+                var boxCollider = meshObject.AddComponent<BoxCollider>();
+                boxCollider.center = randomMesh.bounds.center;
+                boxCollider.size = randomMesh.bounds.size;
+                
+                // Jeśli obiekt jest przeszkodą
+                if (isObstacle)
+                {
+                    var obstacle = meshObject.AddComponent<NavMeshObstacle>();
+                    obstacle.carving = true; // Opcjonalne: Włącz wycinanie w NavMesh
 
-                // Dopasowanie NavMeshObstacle do BoxCollider
-                obstacle.shape = NavMeshObstacleShape.Box;
-                obstacle.size = boxCollider.size;
-                obstacle.center = boxCollider.center;
+                    // Dopasowanie NavMeshObstacle do BoxCollider
+                    obstacle.shape = NavMeshObstacleShape.Box;
+                    obstacle.size = boxCollider.size;
+                    obstacle.center = boxCollider.center;
+                }
             }
+            
+
         }
     }
 

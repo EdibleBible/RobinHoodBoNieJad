@@ -8,25 +8,22 @@ using UnityEngine;
 [Serializable]
 public struct RoomGanerateSetting
 {
-    [Header("BaseInfo")]
-    public Vector2Int MaxRoomSize;
+    [Header("BaseInfo")] public Vector2Int MaxRoomSize;
     public Vector2Int MinRoomSize;
     public int RoomCount;
     public int MinRoomDistance;
     public int MaxAttempts;
 
-    [Header("Additional way")]
-    public bool UseAdditionalEdges;
+    [Header("Additional way")] public bool UseAdditionalEdges;
     [Range(0, 25)] public int AdditionSelectedEdges;
     [Range(0, 100)] public int ChanceToSelectEdge;
 
-    [Header("Secret way")]
-
-    public bool CreateSecretWay;
+    [Header("Secret way")] public bool CreateSecretWay;
     [Range(0, 5)] public int SecretWayMaxCount;
 
-    [Header("Rooms")]
-    public List<Room> CreatedRoom;
+    [Header("Rooms")] public List<Room> CreatedRoom;
+
+    [Header("Inroom Generator")] public GameObject playerPrefab;
 
     public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid, uint seed)
     {
@@ -116,10 +113,12 @@ public struct RoomGanerateSetting
                 GridCellData cell = gridData.GetValue(x, y);
 
                 // Jeśli komórka jest już zajęta przez pomieszczenie, nie można tu utworzyć pokoju
-                if (cell != null && cell.GridCellType == E_GridCellType.Room || (x == 0 || y == 0 || x == gridData.GetGridArray().GetLength(0) - 1 || y == gridData.GetGridArray().GetLength(1) - 1))
+                if (cell != null && cell.GridCellType == E_GridCellType.Room || (x == 0 || y == 0 ||
+                        x == gridData.GetGridArray().GetLength(0) - 1 || y == gridData.GetGridArray().GetLength(1) - 1))
                     return false;
             }
         }
+
         return true;
     }
 
@@ -128,5 +127,12 @@ public struct RoomGanerateSetting
         List<Vector3> roomCentroid = CreatedRoom.Select(room => room.RoomCentroid()).ToList();
     }
 
+    public void SpawnPlayer()
+    {
+        foreach (var room in CreatedRoom)
+        {
+            room.SpawnPlayer(playerPrefab);
+            break;
+        }
+    }
 }
-

@@ -10,7 +10,7 @@ public class SpawnOnNavMesh : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Space))
             SpawnObjectOnNavMesh();
     }
 

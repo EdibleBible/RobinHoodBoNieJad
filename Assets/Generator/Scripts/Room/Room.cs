@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 [Serializable]
 public class Room
@@ -11,6 +14,7 @@ public class Room
     public List<GridCellData> CellInRoom;
     public int XAxisSize;
     public int YAxisSize;
+    
 
     public Vector3 cetroid = new Vector3(0, 0, 0);
 
@@ -35,7 +39,6 @@ public class Room
 
         return new Vector3(centroidX,1, centroidY);
     }
-
     public void MarkCorners()
     {
         if (CellInRoom == null || CellInRoom.Count == 0)
@@ -61,4 +64,27 @@ public class Room
             }
         }
     }
+
+    public void SpawnPlayer(GameObject playerPrefab)
+    {
+        Vector3 spawnPosition = new Vector3();
+        spawnPosition = RoomCentroid();
+
+        var playerObj = SpawnObject(playerPrefab,spawnPosition,quaternion.identity);
+        
+        Camera cam = Camera.main;
+        var camFollow = cam.AddComponent<LevelCameraFollow>();
+        camFollow.player = playerObj;
+        camFollow.offset = new Vector3(7, 7, 7);
+        camFollow.followSpeed = 5f;
+        camFollow.rotationSpeed = 10f;
+    }
+    
+    public static GameObject SpawnObject(GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        // Instantiating prefab
+        GameObject newObject = Object.Instantiate(prefab, position, rotation);
+        return newObject;
+    }
+    
 }
