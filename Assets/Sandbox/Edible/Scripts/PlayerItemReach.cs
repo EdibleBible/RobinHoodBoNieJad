@@ -9,11 +9,12 @@ public class PlayerItemReach : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.GetComponent<IPlayerReach>().IsReachable(true);
+        if(other.TryGetComponent<IPlayerReach>(out IPlayerReach playerReach))
+            playerReach.IsReachable(true);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        other.gameObject.GetComponent<IPlayerReach>().IsReachable(false);
-    }
+        if(other.TryGetComponent<IPlayerReach>(out IPlayerReach playerReach))
+            playerReach.IsReachable(false);    }
 }

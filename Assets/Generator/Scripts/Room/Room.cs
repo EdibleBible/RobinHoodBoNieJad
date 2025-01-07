@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -72,18 +73,22 @@ public class Room
         Vector3 spawnPosition = new Vector3();
         spawnPosition = RoomCentroid();
 
-        var playerObj = SpawnObject(playerPrefab, spawnPosition, quaternion.identity);
-        var deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f,-0.4f,0.2f), quaternion.identity);
+        GameObject playerObj = SpawnObject(playerPrefab, spawnPosition, quaternion.identity);
+        GameObject deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f,-0.4f,0.2f), quaternion.identity);
 
+        CinemachineFreeLook cinemachineFreeLook = Object.FindAnyObjectByType<CinemachineFreeLook>();
+        cinemachineFreeLook.LookAt = playerObj.transform.Find("LookAt");
+        cinemachineFreeLook.Follow = playerObj.transform.Find("Follow");
         
+        /*
         Camera cam = Camera.main;
         var camFollow = cam.AddComponent<LevelCameraFollow>();
         camFollow.player = playerObj;
         camFollow.offset = new Vector3(2, 2, 0);
         camFollow.followSpeed = 5f;
-        camFollow.rotationSpeed = 10f;
-        
-        
+        camFollow.rotationSpeed = 10f;*/
+
+
     }
 
     public void SpawnPicakbleObject(List<GameObject> picakableObjects, int minAmount, int maxAmount)

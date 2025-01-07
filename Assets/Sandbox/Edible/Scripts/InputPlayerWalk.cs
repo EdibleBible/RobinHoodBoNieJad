@@ -1,72 +1,128 @@
 using System;
 using UnityEngine;
-using static UnityEngine.UI.ScrollRect;
-[RequireComponent(typeof(CharacterController))]
 
+[RequireComponent(typeof(CharacterController))]
 public class InputPlayerWalk : MonoBehaviour
 {
     public static event Action<GameObject> PlayerSendEvent;
-    private float moveSpeed; // Speed of the player's movement
-    private float rotationSpeed; // Speed of rotation
+
+    [Header("Movement Parameters")] public float baseMoveSpeed = 5f; // Base speed of the player's movement
+    public float baseRotationSpeed = 10f; // Base speed of rotation
+    public AnimationCurve accelerationCurve; // Curve for acceleration
+    public AnimationCurve decelerationCurve; // Curve for deceleration
+
     private CharacterController characterController; // Reference to the CharacterController component
     private Vector3 movement; // Stores movement input
+    private float currentMoveSpeed; // Current move speed based on acceleration
+    private float targetSpeed; // Target speed the player is moving towards
+
     public SOStats stats;
-    
-    // Grawitacja
-    private float gravity = -9.81f;  // Stała grawitacyjna
-    private float verticalVelocity;   // Prędkość pionowa (grawitacja)
-    private float jumpHeight = 2f;    // Wysokość skoku
-    private bool isGrounded;          // Flaga, czy gracz stoi na ziemi
+
+    // Gravity
+    private float gravity = -9.81f; // Gravity constant
+    private float verticalVelocity; // Vertical velocity (gravity)
+    private float jumpHeight = 2f; // Jump height
+    private bool isGrounded; // Is the player on the ground?
+
+    private float accelerationTime = 1f; // Time to reach max speed
+    private float decelerationTime = 1f; // Time to stop completely
+    private float accelerationProgress = 0f; // Progress through the acceleration curve
+    private Camera cam;
+    private PlayerAnimatorController playerAnimatorController;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        moveSpeed = stats.playerSpeed;
-        rotationSpeed = stats.playerRotationSpeed;
+        playerAnimatorController = GetComponent<PlayerAnimatorController>();
+        baseMoveSpeed = stats.playerSpeed;
+        baseRotationSpeed = stats.playerRotationSpeed;
 
         PlayerSendEvent?.Invoke(gameObject);
+        cam = Camera.main;
     }
 
     void Update()
     {
-        isGrounded = characterController.isGrounded; // Sprawdzamy, czy gracz stoi na ziemi
+        isGrounded = characterController.isGrounded; // Check if the player is on the ground
 
-        movement = Vector3.zero;
+        // Capture input using Unity's Input system
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
-        if (Input.GetKey(KeyCode.W)) // North
-            movement += new Vector3(-1, 0, 0);
-        if (Input.GetKey(KeyCode.S)) // South
-            movement += new Vector3(1, 0, 0);
-        if (Input.GetKey(KeyCode.A)) // West
-            movement += new Vector3(0, 0, -1);
-        if (Input.GetKey(KeyCode.D)) // East
-            movement += new Vector3(0, 0, 1);
+        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
+        float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
 
-        // Grawitacja - jeśli gracz jest na ziemi, resetujemy pionową prędkość
+        // Adjust speed when sprinting (holding Shift)
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            inputMagnitude /= 2;
+        }
+
+        // Adjust current speed using acceleration or deceleration curve
+        targetSpeed = inputMagnitude * baseMoveSpeed;
+
+        if (targetSpeed > currentMoveSpeed)
+        {
+            accelerationProgress += Time.deltaTime / accelerationTime;
+            currentMoveSpeed = Mathf.Lerp(0, baseMoveSpeed, accelerationCurve.Evaluate(accelerationProgress));
+        }
+        else if (targetSpeed < currentMoveSpeed)
+        {
+            accelerationProgress -= Time.deltaTime / decelerationTime;
+            currentMoveSpeed = Mathf.Lerp(baseMoveSpeed, 0, decelerationCurve.Evaluate(1 - accelerationProgress));
+        }
+
+        // Normalize movement direction relative to camera
+        movementDirection = Quaternion.AngleAxis(cam.transform.rotation.eulerAngles.y, Vector3.up) * movementDirection;
+        movementDirection.Normalize();
+
+        // Gravity and jumping logic
+        verticalVelocity += gravity * Time.deltaTime;
+
         if (isGrounded)
         {
-            verticalVelocity = -1f; // Mała wartość by gracz nie "skakał" w powietrzu
-            if (Input.GetKey(KeyCode.Space)) // Skok
-            {
-                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            }
+            verticalVelocity = -1f; // Small value to keep the player grounded
+        }
+
+        // Combine movement and apply gravity
+        Vector3 velocity = movementDirection * currentMoveSpeed;
+        velocity.y = verticalVelocity;
+
+        characterController.Move(velocity * Time.deltaTime);
+        // Oblicz Velocity X i Z
+
+
+        // Oblicz bieżące wartości prędkości X i Z
+        float velocityX = transform.InverseTransformDirection(characterController.velocity).x;
+        float velocityZ = transform.InverseTransformDirection(characterController.velocity).z;
+
+        // Wyślij dane do animatora
+        playerAnimatorController.UpdateAnimatorParameters(velocityX, velocityZ);
+
+        // Rotate the player to face the camera's forward direction
+        Vector3 cameraForward = cam.transform.forward;
+        cameraForward.y = 0; // Ignore vertical tilt of the camera
+        cameraForward.Normalize();
+
+        if (cameraForward != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(cameraForward, Vector3.up);
+            transform.rotation =
+                Quaternion.RotateTowards(transform.rotation, targetRotation, baseRotationSpeed * Time.deltaTime);
+        }
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         else
         {
-            // Jeśli gracz nie jest na ziemi, stosujemy grawitację
-            verticalVelocity += gravity * Time.deltaTime;
-        }
-
-        // Dodajemy ruch pionowy (grawitacja i skok)
-        movement.y = verticalVelocity * Time.deltaTime;
-
-        if (movement.magnitude > 0)
-        {
-            characterController.Move(movement * Time.deltaTime);
-
-            // Rotate the player towards the movement direction
-            Quaternion targetRotation = Quaternion.LookRotation(movement);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }
