@@ -24,8 +24,8 @@ public class InputPlayerWalk : MonoBehaviour
     private float jumpHeight = 2f; // Jump height
     private bool isGrounded; // Is the player on the ground?
 
-    private float accelerationTime = 1f; // Time to reach max speed
-    private float decelerationTime = 1f; // Time to stop completely
+    [SerializeField] private float accelerationTime = 1f; // Time to reach max speed
+    [SerializeField] private float decelerationTime = 1f; // Time to stop completely
     private float accelerationProgress = 0f; // Progress through the acceleration curve
     private Camera cam;
     private PlayerAnimatorController playerAnimatorController;
@@ -55,7 +55,7 @@ public class InputPlayerWalk : MonoBehaviour
         // Adjust speed when sprinting (holding Shift)
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            inputMagnitude /= 2;
+            inputMagnitude *= 2;
         }
 
         // Adjust current speed using acceleration or deceleration curve
@@ -95,9 +95,7 @@ public class InputPlayerWalk : MonoBehaviour
         // Oblicz bieżące wartości prędkości X i Z
         float velocityX = transform.InverseTransformDirection(characterController.velocity).x;
         float velocityZ = transform.InverseTransformDirection(characterController.velocity).z;
-
-        // Wyślij dane do animatora
-        playerAnimatorController.UpdateAnimatorParameters(velocityX, velocityZ);
+        
 
         // Rotate the player to face the camera's forward direction
         Vector3 cameraForward = cam.transform.forward;
