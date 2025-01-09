@@ -11,12 +11,10 @@ public class PlayerInventory : MonoBehaviour
     public int inventorySize = 3;
     public SOStats stats;
     public int finalPrize;
-    public MenuInventory inventoryUI;
     public bool playerCollides;
 
     private void Awake()
     {
-        inventoryUI = FindAnyObjectByType<MenuInventory>();
     }
 
     private void OnEnable()
@@ -40,7 +38,6 @@ public class PlayerInventory : MonoBehaviour
             for (int i = 0; i < itemData.itemSize; i++)
             {
                 slotList.Add(itemData);
-                inventoryUI.UpdateItemIcon(slotList.Count - 1, itemData.itemIcon);
             }
             itemList.Add(itemData);
         }
@@ -84,7 +81,6 @@ public class PlayerInventory : MonoBehaviour
             }
             itemList.Clear();
             slotList.Clear();
-            inventoryUI.ClearInventoryIcons();
         }
     }
 

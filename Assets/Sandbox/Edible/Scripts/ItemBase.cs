@@ -7,6 +7,7 @@ public class ItemBase : MonoBehaviour
     public List<int> itemTypeValues = new() {100};
     public static event System.Action<ItemBase> OnItemAdded;
     public ItemType itemType;
+    public string itemName;
     public int itemSize;
     public Sprite itemIcon;
 
