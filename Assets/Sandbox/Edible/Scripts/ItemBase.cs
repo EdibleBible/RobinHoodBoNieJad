@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class ItemBase : MonoBehaviour, IInteract
 {
-    public enum ItemType {Debug};
-    public List<int> itemTypeValues = new() {100};
+    public enum ItemType {Debug, CollectibleVase, CollectibleGoblet, UtilityBackpack};
+    [HideInInspector] public List<int> itemTypeValues = new() {100, 200, 75, 0};
     public static event System.Action<ItemBase> OnItemAdded;
     public ItemType itemType;
     public string itemName;
+    public string itemDescription;
     public int itemSize;
     public Sprite itemIcon;
     public bool canInteract = true;
@@ -22,4 +23,7 @@ public class ItemBase : MonoBehaviour, IInteract
         }
         return false;
     }
+
+    [Header("Item Attributes")]
+    public int itemAttHotbarSizeMod;
 }

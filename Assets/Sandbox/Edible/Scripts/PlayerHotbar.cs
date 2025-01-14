@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +9,9 @@ public class PlayerHotbar : MonoBehaviour
     public List<MenuHotbarEntry> hotbarEntryList = new();
     [HideInInspector] public PlayerBase playerBase;
     public int size;
+    public int sizeTaken;
     public int currentItemIndex = 0;
+    public ItemBase currentItemBase;
     public InputActionAsset globalInputActions;
     private InputAction dropAction;
     private InputAction scrollAction;
@@ -21,14 +24,18 @@ public class PlayerHotbar : MonoBehaviour
         size = newSize;
     }
 
-    public bool IsHotbarFull()
+    public bool IsHotbarFull(int itemSize)
     {
+        if (size < sizeTaken + itemSize)
+        {
+            return true;
+        }
         return false;
     }
 
     public bool PickUp(ItemBase item)
     {
-        if (!IsHotbarFull())
+        if (!IsHotbarFull(item.itemSize))
         {
             itemList.Add(item);
             GameObject newItem = Instantiate(hotbarEntryPrefab, hotbarUIPanel, false);
@@ -36,6 +43,8 @@ public class PlayerHotbar : MonoBehaviour
             hotbarEntryList.Add(itemEntry);
             itemEntry.image.sprite = item.itemIcon;
             itemEntry.text.text = item.itemName;
+            sizeTaken += item.itemSize;
+            ModPlayer(item, true);
             return true;
         }
         return false;
@@ -58,8 +67,21 @@ public class PlayerHotbar : MonoBehaviour
         itemObject.SetActive(true);
         itemObject.transform.position = itemDropSpot.position;
         itemObject.transform.SetParent(null);
-        itemObject.GetComponent<ItemBase>().canInteract = true;
+        ItemBase item = itemObject.GetComponent<ItemBase>();
+        item.canInteract = true;
+        sizeTaken -= item.itemSize;
+        ModPlayer(item, false);
         itemList.RemoveAt(itemIndex);
+    }
+
+    public void ModPlayer(ItemBase item, bool toAdd)
+    {
+        int boolMultiplier;
+        if (toAdd) { boolMultiplier = 1; } else { boolMultiplier = -1; };
+        if (item.itemAttHotbarSizeMod != 0)
+        {
+            size += item.itemAttHotbarSizeMod * boolMultiplier;
+        }
     }
 
     private void Awake()
@@ -82,7 +104,9 @@ public class PlayerHotbar : MonoBehaviour
 
     private void HandleDrop(InputAction.CallbackContext context)
     {
-        if (currentItemIndex != 0)
+        int itemSize = currentItemBase.itemSize;
+        int sizeMod = currentItemBase.itemAttHotbarSizeMod;
+        if (currentItemIndex != 0 && (size - sizeMod >= sizeTaken - itemSize))
         {
             Drop(currentItemIndex);
         }
@@ -116,6 +140,7 @@ public class PlayerHotbar : MonoBehaviour
         {
             currentItemIndex = 0;
         }
+        currentItemBase = itemList[currentItemIndex].GetComponent<ItemBase>();
         hotbarEntryList[currentItemIndex].SwitchSelector(true);
     }
 }
