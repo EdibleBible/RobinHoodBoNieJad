@@ -65,7 +65,7 @@ public class PlayerWalk : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime);
         
         
-        Debug.Log("velocity: " + characterController.velocity);
+        //Debug.Log("velocity: " + characterController.velocity);
     }
 
     public Vector3 GetCharacterVelocity()
