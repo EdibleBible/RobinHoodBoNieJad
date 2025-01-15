@@ -9,13 +9,11 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
 
     [Header("Walk State")] [SerializeField]
     float walkSpeed;
-
     [SerializeField] float walkAcceleration;
     [SerializeField] float walkDeceleration;
 
     [Header("Crouch State")] [SerializeField]
     float crouchSpeed;
-
     [SerializeField] float crouchAcceleration;
     [SerializeField] float crouchDeceleration;
 

@@ -10,9 +10,9 @@ public class PlayerRotation : MonoBehaviour
 
     [SerializeField] private Transform debugLookPoint;
     [SerializeField] private LayerMask objectLayer;
-    
+
     [SerializeField] private float rotationSpeed = 45f;
-    [SerializeField] private float angleToRotateThreshold = 15f;  // Próg kąta w stopniach
+    [SerializeField] private float angleToRotateThreshold = 15f; // Próg kąta w stopniach
 
     private bool isRotating = false;
 
@@ -38,7 +38,7 @@ public class PlayerRotation : MonoBehaviour
             Debug.DrawRay(camera.transform.position, camera.transform.forward * cameraDistanceOffset, Color.yellow);
             debugLookPoint.position = camera.transform.position + (camera.transform.forward * cameraDistanceOffset);
         }
-        
+
         Vector3 cameraForward = camera.transform.forward;
         cameraForward.y = 0; // Ignore vertical tilt of the camera
         cameraForward.Normalize();
@@ -52,10 +52,10 @@ public class PlayerRotation : MonoBehaviour
             if (angle > angleToRotateThreshold)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(cameraForward, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                transform.rotation =
+                    Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
         }
-
     }
 
     private void OnApplicationFocus(bool hasFocus)

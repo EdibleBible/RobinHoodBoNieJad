@@ -89,13 +89,9 @@ public class GridCellData
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
 
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_up, UpN, Quaternion.Euler(0, 270f, 0f), segmentSize));
-        Debug.Log("Added Up" + matrix4X4s.Count);
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_down, DownN, Quaternion.Euler(0, 90f, 0f), segmentSize));
-        Debug.Log("Added Down" + matrix4X4s.Count);
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_left, LeftN, Quaternion.Euler(0, 180, 0), segmentSize));
-        Debug.Log("Added Left" + matrix4X4s.Count);
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_right, RightN, Quaternion.Euler(0, 0, 0), segmentSize));
-        Debug.Log("Added Right" + matrix4X4s.Count);
 
 
         return matrix4X4s;

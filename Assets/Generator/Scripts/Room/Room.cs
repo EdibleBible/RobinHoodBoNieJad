@@ -20,7 +20,7 @@ public class Room
 
     public Vector3 cetroid = new Vector3(0, 0, 0);
 
-    public Vector3 RoomCentroid()
+    public Vector3 RoomCentroid(float _cellSize)
     {
         if (CellInRoom == null || CellInRoom.Count == 0)
         {
@@ -39,7 +39,8 @@ public class Room
         float centroidX = totalX / CellInRoom.Count;
         float centroidY = totalY / CellInRoom.Count;
 
-        return new Vector3(centroidX, 1, centroidY);
+        Debug.Log(new Vector3(centroidX * _cellSize, 1, centroidY * _cellSize));
+        return new Vector3(centroidX * _cellSize, 1, centroidY * _cellSize);
     }
 
     public void MarkCorners()
@@ -71,7 +72,7 @@ public class Room
     public void SpawnPlayer(GameObject playerPrefab, GameObject depositPrefab)
     {
         Vector3 spawnPosition = new Vector3();
-        spawnPosition = RoomCentroid();
+        spawnPosition = cetroid;
 
         GameObject playerObj = SpawnObject(playerPrefab, spawnPosition, quaternion.identity);
         GameObject deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f,-0.4f,0.2f), quaternion.identity);
@@ -102,8 +103,8 @@ public class Room
         
         for (int i = 0; i < amount; i++)
         {
-            float x = Random.RandomRange(RoomCentroid().x - XAxisSize/2f + 0.5f, RoomCentroid().x + XAxisSize/2f -0.5f);
-            float y = Random.RandomRange(RoomCentroid().z - YAxisSize/2f + 0.5f, RoomCentroid().z + YAxisSize/2f -0.5f);
+            float x = Random.RandomRange(cetroid.x - XAxisSize/2f + 0.5f, cetroid.x + XAxisSize/2f -0.5f);
+            float y = Random.RandomRange(cetroid.z - YAxisSize/2f + 0.5f, cetroid.z + YAxisSize/2f -0.5f);
             
             
             int randomIndex = Random.RandomRange(0, picakableObjects.Count);

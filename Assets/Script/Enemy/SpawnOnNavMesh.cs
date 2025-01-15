@@ -8,6 +8,15 @@ public class SpawnOnNavMesh : MonoBehaviour
     public GameObject objectToSpawn;  // Obiekt, który ma zostać zespawnowany
     public LayerMask navMeshLayer;    // Warstwa NavMesh
 
+    [Header("Debug")] 
+    public bool IsDebug;
+
+    private void Awake()
+    {
+        if(IsDebug)
+            SpawnObjectOnNavMesh();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.X))

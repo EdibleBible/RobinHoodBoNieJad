@@ -21,17 +21,16 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
 
     public override void EnterState()
     {
-        Debug.Log("Entered PlayerCrouchState");
+
     }
 
     public override void ExitState()
     {
-        Debug.Log("Exited PlayerCrouchState");
-    }
+     }
 
     public override void UpdateState()
     {
-        PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime);
+        PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime, out float x, out float y);
         
         Vector3 velocity = PlayerWalk.GetCharacterVelocity();
         Transform transform = PlayerWalk.GetTransform();
@@ -39,7 +38,7 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
         
-        PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ,true);
+        PlayerAnimatorController.UpdateCrouchParameters(x,y, true);
     }
 
     public override E_PlayerState GetNextState()

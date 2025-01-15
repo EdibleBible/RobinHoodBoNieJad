@@ -52,7 +52,7 @@ public struct RoomGanerateSetting
             if (room.CellInRoom.Count > 0)
             {
                 room.RoomID = i;
-                room.cetroid = room.RoomCentroid();
+                room.cetroid = room.RoomCentroid(generatedGrid.GetCellSize());
                 room.MarkCorners();
                 CreatedRoom.Add(room);
             }
@@ -129,7 +129,7 @@ public struct RoomGanerateSetting
 
     public void MakeTraingulateBetweenRoom()
     {
-        List<Vector3> roomCentroid = CreatedRoom.Select(room => room.RoomCentroid()).ToList();
+        List<Vector3> roomCentroid = CreatedRoom.Select(room => room.cetroid).ToList();
     }
 
     public void SpawnPlayer()

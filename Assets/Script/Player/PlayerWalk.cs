@@ -25,10 +25,10 @@ public class PlayerWalk : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
     }
-
-    public void Movement(float speed, float accelerationTime, float decelerationTime)
+    
+    public void Movement(float speed, float accelerationTime, float decelerationTime, out float xVel, out float yVel)
     {
-        //Read Input
+        // Read Input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
@@ -36,7 +36,6 @@ public class PlayerWalk : MonoBehaviour
         inputMagnitude = Mathf.Clamp01(moveDirection.magnitude);
 
         targetMoveSpeed = inputMagnitude * speed;
-
 
         if (targetMoveSpeed > currMoveSpeed)
         {
@@ -50,7 +49,7 @@ public class PlayerWalk : MonoBehaviour
         }
 
         // Normalize movement direction relative to camera
-        moveDirection = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.up) * moveDirection;
+        moveDirection = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0) * moveDirection;
         moveDirection.Normalize();
 
         verticalVelocity += gravity * Time.deltaTime;
@@ -62,10 +61,13 @@ public class PlayerWalk : MonoBehaviour
 
         Vector3 velocity = moveDirection * currMoveSpeed;
         velocity.y = verticalVelocity;
+
+        // Local velocity relative to character's transform
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        xVel = localVelocity.x;
+        yVel = localVelocity.z;
+
         characterController.Move(velocity * Time.deltaTime);
-        
-        
-        Debug.Log("velocity: " + characterController.velocity);
     }
 
     public Vector3 GetCharacterVelocity()

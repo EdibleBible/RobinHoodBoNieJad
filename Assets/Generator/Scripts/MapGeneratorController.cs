@@ -105,6 +105,8 @@ public class MapGeneratorController : MonoBehaviour
         UpdateActionText("Generate wall");
         UpdateInstructionText("Click Space to generate wall");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
         
         GenerateGrid(wallSeed);
         RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, wallSeed);
@@ -113,6 +115,8 @@ public class MapGeneratorController : MonoBehaviour
         UpdateActionText("Generate triangulation");
         UpdateInstructionText("Click Space to generate triangulation");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
         
         GenerateTriangulation();
         DebugGridMesh();
@@ -120,13 +124,16 @@ public class MapGeneratorController : MonoBehaviour
         UpdateActionText("Select Edges");
         UpdateInstructionText("Click Space to select edges");
         yield return WaitForSpaceBar();
-
+        yield return new WaitForSeconds(0.5f);
+        
         SelectedEdges = GetUsedEdges(AllEdges, AllPoints);
         DebugGridMesh();
         
         UpdateActionText("Create Hallways");
         UpdateInstructionText("Click Space to generate hallways");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
         
         Hallwaycell = new List<GridCellData>();
         
@@ -134,6 +141,8 @@ public class MapGeneratorController : MonoBehaviour
         UpdateInstructionText("Click Space to select player spawn");
         yield return StartCoroutine(RoomPathFindWithDebugging());
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
 
         DefiniedSpawn();
         DebugGridMesh();
@@ -141,6 +150,9 @@ public class MapGeneratorController : MonoBehaviour
         UpdateActionText("Generate Meshes");
         UpdateInstructionText("Click Space to generate meshes");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.1f);
+
+        
         foreach (var element in allObject)
         {
             element.Value.SetActive(false);
@@ -150,18 +162,23 @@ public class MapGeneratorController : MonoBehaviour
         UpdateActionText("Bake Navigation");
         UpdateInstructionText("Click Space to Bake Navigation");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.1f);
 
+        
         BakeNavigation();
         
         UpdateActionText("Spawn Object");
         UpdateInstructionText("Click Space to spawn object");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.1f);
 
+        
         RoomGanerateSetting.SpawnObjectInRoom();
         
         UpdateActionText("Start");
         UpdateInstructionText("Click Space to start");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.1f);
         
         RoomGanerateSetting.SpawnPlayer();
 

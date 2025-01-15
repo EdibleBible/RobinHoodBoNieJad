@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerWalkState : BaseState<E_PlayerState>
+public class PlayerRunningState : BaseState<E_PlayerState>
 {
     public float MovementSpeed { get; set; }
     public float AccelerationTime { get; set; }
@@ -9,7 +9,7 @@ public class PlayerWalkState : BaseState<E_PlayerState>
     
     public PlayerAnimatorController PlayerAnimatorController { get; set; }
     
-    public PlayerWalkState(float movementSpeed,float accelerationTime, float decelerationTime, PlayerWalk playerWalk, PlayerAnimatorController playerAnimatorController) : base(E_PlayerState.Walk)
+    public PlayerRunningState(float movementSpeed,float accelerationTime, float decelerationTime, PlayerWalk playerWalk, PlayerAnimatorController playerAnimatorController) : base(E_PlayerState.Running)
     {
         MovementSpeed = movementSpeed;
         AccelerationTime = accelerationTime;
@@ -20,25 +20,25 @@ public class PlayerWalkState : BaseState<E_PlayerState>
     
     public override void EnterState()
     {
-        Debug.Log("Entered PlayerWalkState");
+
     }
 
     public override void ExitState()
     {
-        Debug.Log("Exited PlayerWalkState");
     }
 
     public override void UpdateState()
     {
-        PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime);
-        Vector3 velocity = PlayerWalk.GetCharacterVelocity();
+        PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime, out float x, out float y);
+        var velocity = PlayerWalk.GetCharacterVelocity(); 
         Transform transform = PlayerWalk.GetTransform();
         
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
         
-        PlayerAnimatorController.UpdateWalkParameters(velocityX, velocityZ);
+        PlayerAnimatorController.UpdateWalkParameters(x, y);
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);
+
     }
 
     public override E_PlayerState GetNextState()

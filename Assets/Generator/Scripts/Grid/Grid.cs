@@ -75,6 +75,11 @@ namespace CustomGrid
             GetXY(worldPosition, out x, out y);
             return GetValue(x, y);
         }
+
+        public float GetCellSize()
+        {
+            return cellSize;
+        }
         public Vector2Int GeneratedGridSize()
         {
             return new Vector2Int(width, height);
