@@ -8,16 +8,19 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
     private EnemyPatrollingState _enemyPatrollingState;
     private EnemyChasingState _enemyChasingState;
     
+    [SerializeField] private float findingPointDistance;
+    
     [Header("Idle State")]
     [SerializeField] private EnemyMovementStats idleStats;
     
     [Header("Patrolling State")]
     [SerializeField] private EnemyMovementStats patrollingStats;
     [SerializeField] private EnemyFovStats fovPatrollingState;
-    [SerializeField] private float findingPointDistance;
     
     [Header("Chase State")]
     [SerializeField] private EnemyMovementStats chasingStats; 
+    [SerializeField] private EnemyFovStats fovChaseState;
+
     
     private EnemyMovement enemyMovement;
     private FieldOfView fov;

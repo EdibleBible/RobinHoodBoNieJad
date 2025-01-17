@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 5100715313877386560}
   - component: {fileID: 751968389762151050}
   - component: {fileID: 2090780688419540221}
-  - component: {fileID: 3480885953783604680}
+  - component: {fileID: 5533938673021600224}
+  - component: {fileID: 7996228261843818391}
   - component: {fileID: 6257333795837363401}
   m_Layer: 0
   m_Name: Enemy
@@ -127,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 6257333795837363401}
   currWalkPosition: {x: 0, y: 0, z: 0}
---- !u!114 &3480885953783604680
+--- !u!114 &5533938673021600224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,6 +140,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca731cec8695c0641a270307235ea3c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7996228261843818391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5952023668469632104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 212a7385d5a3fb94082344b86b4947d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  findingPointDistance: 5
+  idleStats:
+    MaxSpeed: 0
+    Acceleration: 0
+    Deceleration: 0
+    AngularSpeed: 0
+    DelayBettwenDistanceCheck: 0
+    StoppingDistance: 0
+    ChangeDestinationPointDistance: 0
+  patrollingStats:
+    MaxSpeed: 5
+    Acceleration: 5
+    Deceleration: 4
+    AngularSpeed: 120
+    DelayBettwenDistanceCheck: 0.2
+    StoppingDistance: 0.5
+    ChangeDestinationPointDistance: 0.5
+  fovPatrollingState:
+    ViewRadius: 5
+    ViewAngle: 75
+    FindingDelay: 0.4
+    TargetLayer:
+      serializedVersion: 2
+      m_Bits: 262144
+    ObstacleLayer:
+      serializedVersion: 2
+      m_Bits: 524288
+  chasingStats:
+    MaxSpeed: 5
+    Acceleration: 5
+    Deceleration: 4
+    AngularSpeed: 120
+    DelayBettwenDistanceCheck: 0.2
+    StoppingDistance: 0.1
+    ChangeDestinationPointDistance: 0.5
+  fovChaseState:
+    ViewRadius: 8
+    ViewAngle: 360
+    FindingDelay: 0.1
+    TargetLayer:
+      serializedVersion: 2
+      m_Bits: 262144
+    ObstacleLayer:
+      serializedVersion: 2
+      m_Bits: 0
 --- !u!195 &6257333795837363401
 NavMeshAgent:
   m_ObjectHideFlags: 0

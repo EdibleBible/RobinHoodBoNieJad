@@ -19,7 +19,7 @@ public class FieldOfView : MonoBehaviour
         return visibleTargets;
     }
 
-    public void SetUpFovParameters(EnemyFovStat _parameters)
+    public void SetUpStats(EnemyFovStats _parameters)
     {
         viewRadius = _parameters.ViewRadius;
         viewAngle = _parameters.ViewAngle;
