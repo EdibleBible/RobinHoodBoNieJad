@@ -5,4 +5,5 @@ public enum E_PlayerState
     Walk,
     Running,
     Crouching,
+    OpenDoorInteraction
 }

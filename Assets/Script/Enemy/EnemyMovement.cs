@@ -1,19 +1,18 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [Header("Enemy Walk Setting")]
+    [Header("Enemy Walk Setting")] 
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float acceleration = 8f;   // Domyślna wartość
-    [SerializeField] private float angularSpeed = 120f; // Domyślna wartość
-
-    private Vector3 nextWalkPoint;
-
-    [Header("Target Settings")] 
-    [SerializeField] private Transform target;
-
+    [SerializeField] private Vector3 currWalkPosition;
+    private float distanceToDestination;
+    private Coroutine checkDistanceCoroutine;
     private void Awake()
     {
         // Pobranie lub przypisanie komponentu NavMeshAgent
@@ -27,94 +26,98 @@ public class EnemyMovement : MonoBehaviour
             Debug.LogError("NavMeshAgent nie został przypisany ani znaleziony w obiekcie!");
         }
     }
-
-    private void Start()
+    public void SetUpSpeed(float _speed, float _accelerationTime, float _decelerationTime, float _angularSpeed, float _stoppingDistance)
     {
-        // Konfiguracja prędkości i rotacji agenta
-        SetUpSpeed(acceleration, angularSpeed);
-
-        // Sprawdzenie, czy agent znajduje się na NavMesh
-        if (!agent.isOnNavMesh)
-        {
-            TryPlaceAgentOnNavMesh();
-        }
+        agent.speed = _speed;
+        agent.acceleration = _accelerationTime;
+        agent.stoppingDistance = _decelerationTime;
+        agent.angularSpeed = _angularSpeed;
+        agent.stoppingDistance = _stoppingDistance;
     }
 
-    private void Update()
+    public Vector3 FindRandomPointOnNavMesh(float _FindingPointDistance)
     {
-        if (agent != null && agent.isOnNavMesh)
+        Vector3 randomDirection = Random.insideUnitSphere * _FindingPointDistance;
+        randomDirection += transform.position;
+        NavMeshHit hit;
+        Vector3 finalPosition = Vector3.zero;
+        if (NavMesh.SamplePosition(randomDirection, out hit, _FindingPointDistance, 1))
         {
-            Vector3 targetPosition = GetTargetPosition();
-            if (targetPosition != Vector3.zero)
-            {
-                agent.SetDestination(targetPosition);
-                Debug.Log("Agent zmienia cel na: " + targetPosition); // Debugowanie celu
-
-                // Możesz dodać sprawdzenie, czy agent jest już blisko celu
-                if (Vector3.Distance(agent.transform.position, targetPosition) < 1f)
-                {
-                    Debug.Log("Agent osiągnął cel.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Brak celu. Agent nie może się ruszać.");
-            }
+            finalPosition = hit.position;
         }
-        else
-        {
-            Debug.LogWarning("NavMeshAgent nie znajduje się na NavMesh. Próbuję ponownie umieścić go na NavMesh...");
-            TryPlaceAgentOnNavMesh();
-        }
+        return finalPosition;
     }
 
-
-    /// <summary>
-    /// Konfiguracja prędkości i rotacji agenta.
-    /// </summary>
-    private void SetUpSpeed(float acceleration, float angularSpeed)
-    {
-        if (agent != null)
-        {
-            agent.acceleration = acceleration;
-            agent.angularSpeed = angularSpeed;
-        }
-        else
-        {
-            Debug.LogError("NavMeshAgent jest nullem. Nie można ustawić prędkości.");
-        }
-    }
-
-    /// <summary>
-    /// Pobiera pozycję celu.
-    /// </summary>
-    private Vector3 GetTargetPosition()
-    {
-        if (target != null)
-        {
-            return target.position;
-        }
-        else
-        {
-            Debug.LogWarning("Brak przypisanego celu dla agenta!");
-            return Vector3.zero;
-        }
-    }
-
-    /// <summary>
-    /// Próbuje umieścić agenta na NavMesh w pobliżu obecnej pozycji.
-    /// </summary>
-    private void TryPlaceAgentOnNavMesh()
+    public bool IsPointOnNavMesh(Vector3 _point, float _range = 1.0f)
     {
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(transform.position, out hit, 5.0f, NavMesh.AllAreas))
+        // Sample the nearest point on the NavMesh
+        if (NavMesh.SamplePosition(_point, out hit, _range, NavMesh.AllAreas))
         {
-            transform.position = hit.position;
-            Debug.Log("Agent został poprawnie umieszczony na NavMesh.");
+            // Check if the sampled point is within the specified range
+            float distance = Vector3.Distance(_point, hit.position);
+            return distance <= _range;
         }
-        else
+
+        return false; // Point is not on the NavMesh
+    }
+
+    public void SetDestination(Vector3 _position)
+    {
+        currWalkPosition = _position;
+        agent.SetDestination(_position);
+    }
+
+    public float ResetDestination()
+    {
+        distanceToDestination = agent.remainingDistance;
+        return distanceToDestination;
+    }
+    
+    public IEnumerator CheckDistance(float _delayInSec)
+    {
+        while (true)
         {
-            Debug.LogError("Nie można znaleźć pobliskiego punktu NavMesh dla agenta!");
+            yield return new WaitForSeconds(_delayInSec);
+            distanceToDestination = agent.remainingDistance;
+            Debug.LogWarning("Check distance. Value is: " + distanceToDestination);
         }
+    }
+
+    public void SetDistance()
+    {
+        distanceToDestination = agent.remainingDistance;
+
+    }
+    
+    public float GetDistanceToDestination()
+    {
+        return distanceToDestination;
+    }
+
+    public void ResetCheckingDistance(float _delayInSec)
+    {
+        if(checkDistanceCoroutine != null)
+            StopCoroutine(checkDistanceCoroutine);
+        checkDistanceCoroutine = null;
+        checkDistanceCoroutine = StartCoroutine(CheckDistance(_delayInSec));
+    }
+
+    public void StopCheckingDistance()
+    {
+        if(checkDistanceCoroutine != null)
+            StopCoroutine(checkDistanceCoroutine);
+    }
+    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(currWalkPosition,0.1f);
+    }
+
+    public void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+            Destroy(other.gameObject);
     }
 }

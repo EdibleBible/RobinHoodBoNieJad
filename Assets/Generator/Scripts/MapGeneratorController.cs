@@ -12,7 +12,7 @@ using UnityEngine.AI;
 
 public class MapGeneratorController : MonoBehaviour
 {
-    [SerializeField] private Transform generatedRoomTransform;
+    public Transform generatedRoomTransform;
 
     public GridOptions MainGridData;
     public RoomGanerateSetting RoomGanerateSetting;
@@ -48,7 +48,7 @@ public class MapGeneratorController : MonoBehaviour
     [Header("Seed")] public uint wallSeed;
     private Unity.Mathematics.Random random;
 
-    [Header("Debug")]
+    [Header("Debug")] [SerializeField] private bool _debug;
     public Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
 
     [SerializeField] private TextMeshProUGUI ActionTextMesh;
@@ -76,6 +76,14 @@ public class MapGeneratorController : MonoBehaviour
         StartGeneration();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RoomGanerateSetting.DetectObjects();
+        }
+    }
+
     public void StartGeneration()
     {
         ClearGeneratedGrid();
@@ -83,8 +91,15 @@ public class MapGeneratorController : MonoBehaviour
         RandimizeSeed();
         UpdateSeedText(wallSeed.ToString());
 
-        UpdateActionText("Clearing grid...");
-        StartCoroutine(Generate());
+        if (_debug)
+        {
+            UpdateActionText("Clearing grid...");
+            StartCoroutine(DebugGeneration());
+        }
+        else
+        {
+            StartCoroutine(GenerateMap());
+        }
     }
 
     private void ClearGeneratedGrid()
@@ -99,74 +114,110 @@ public class MapGeneratorController : MonoBehaviour
         MainInfoGrid = null;
     }
 
-    private IEnumerator Generate()
+    private IEnumerator GenerateMap()
     {
-        
-        UpdateActionText("Generate wall");
-        UpdateInstructionText("Click Space to generate wall");
-        yield return WaitForSpaceBar();
-        
         GenerateGrid(wallSeed);
-        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, wallSeed);
+        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, wallSeed, generatedRoomTransform);
         DebugGridMesh();
-        
-        UpdateActionText("Generate triangulation");
-        UpdateInstructionText("Click Space to generate triangulation");
-        yield return WaitForSpaceBar();
-        
         GenerateTriangulation();
         DebugGridMesh();
-        
-        UpdateActionText("Select Edges");
-        UpdateInstructionText("Click Space to select edges");
-        yield return WaitForSpaceBar();
-
         SelectedEdges = GetUsedEdges(AllEdges, AllPoints);
         DebugGridMesh();
-        
-        UpdateActionText("Create Hallways");
-        UpdateInstructionText("Click Space to generate hallways");
-        yield return WaitForSpaceBar();
-        
         Hallwaycell = new List<GridCellData>();
-        
-        UpdateActionText("Select Spawn");
-        UpdateInstructionText("Click Space to select player spawn");
-        yield return StartCoroutine(RoomPathFindWithDebugging());
-        yield return WaitForSpaceBar();
-
+        GeneratePath();
         DefiniedSpawn();
         DebugGridMesh();
-        
-        UpdateActionText("Generate Meshes");
-        UpdateInstructionText("Click Space to generate meshes");
-        yield return WaitForSpaceBar();
         foreach (var element in allObject)
         {
             element.Value.SetActive(false);
         }
+
+        GenerateMeshes();
+        BakeNavigation();
+        RoomGanerateSetting.SpawnRoomInside();
+        yield return new WaitForEndOfFrame();
+        RoomGanerateSetting.DetectObjects();
+        RoomGanerateSetting.SpawnDoor();
+        RoomGanerateSetting.SpawnPlayer();
+    }
+
+    private IEnumerator DebugGeneration()
+    {
+        UpdateActionText("Generate wall");
+        UpdateInstructionText("Click Space to generate wall");
+        yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
+
+        GenerateGrid(wallSeed);
+        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, wallSeed, generatedRoomTransform);
+        DebugGridMesh();
+
+        UpdateActionText("Generate triangulation");
+        UpdateInstructionText("Click Space to generate triangulation");
+        yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
+
+        GenerateTriangulation();
+        DebugGridMesh();
+
+        UpdateActionText("Select Edges");
+        UpdateInstructionText("Click Space to select edges");
+        yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
+        SelectedEdges = GetUsedEdges(AllEdges, AllPoints);
+        DebugGridMesh();
+
+        UpdateActionText("Create Hallways");
+        UpdateInstructionText("Click Space to generate hallways");
+        yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
+
+        Hallwaycell = new List<GridCellData>();
+
+        UpdateActionText("Select Spawn");
+        UpdateInstructionText("Click Space to select player spawn");
+        yield return StartCoroutine(RoomPathFindWithDebugging());
+        yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.5f);
+
+
+        DefiniedSpawn();
+        DebugGridMesh();
+
+        UpdateActionText("Generate Meshes");
+        UpdateInstructionText("Click Space to generate meshes");
+        yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.1f);
+
+
+        foreach (var element in allObject)
+        {
+            element.Value.SetActive(false);
+        }
+
         GenerateMeshes();
 
         UpdateActionText("Bake Navigation");
         UpdateInstructionText("Click Space to Bake Navigation");
         yield return WaitForSpaceBar();
+        yield return new WaitForSeconds(0.1f);
+
 
         BakeNavigation();
-        
+
         UpdateActionText("Spawn Object");
         UpdateInstructionText("Click Space to spawn object");
-        yield return WaitForSpaceBar();
 
-        RoomGanerateSetting.SpawnObjectInRoom();
-        
-        UpdateActionText("Start");
-        UpdateInstructionText("Click Space to start");
         yield return WaitForSpaceBar();
-        
+        yield return new WaitForSeconds(0.1f);
+
         RoomGanerateSetting.SpawnPlayer();
-
     }
-    
+
     private void UpdateSeedText(string seedText)
     {
         // Update the action text (assign this to your action TextMesh object)
@@ -354,6 +405,132 @@ public class MapGeneratorController : MonoBehaviour
         }
     }
 
+    public void GeneratePath()
+    {
+        if (MainInfoGrid == null)
+            return;
+
+        List<GridCellData> roomCell = new List<GridCellData>();
+
+        // Zbieramy komórki, które nie są przejściowe.
+        foreach (var room in RoomGanerateSetting.CreatedRoom)
+        {
+            foreach (var cell in room.CellInRoom)
+            {
+                roomCell.Add(cell);
+            }
+        }
+
+        var array = MainInfoGrid.GetGridArray();
+        List<GridCellData> list = new List<GridCellData>();
+        foreach (var item in array)
+        {
+            list.Add(item);
+        }
+
+        // Inicjalizacja pathfinding
+        currPathfinding = new Pathfinding(
+            MainInfoGrid.GetWidth(),
+            MainInfoGrid.GetHeight(),
+            MainGridData.cellScale,
+            transform.position,
+            roomCell,
+            list
+        );
+
+        pathfindingGrid = currPathfinding.GetGrid();
+
+        foreach (Edge edge in SelectedEdges)
+        {
+            // Walidacja krawędzi i jej danych
+            if (edge == null || edge.EntryGridCell == null || edge.ExitGridCell == null ||
+                edge.EntryGridCell.Coordinate == null || edge.ExitGridCell.Coordinate == null)
+            {
+                return;
+            }
+
+            // Znajdowanie ścieżki
+            var startPointCord = GetStartCoordinate(edge.EntryGridCell);
+            var endPointCord = GetStartCoordinate(edge.ExitGridCell);
+
+            edge.SetStartPathFind(MainInfoGrid.GetValue(startPointCord.x, startPointCord.y));
+            edge.SetEndPathFind(MainInfoGrid.GetValue(endPointCord.x, endPointCord.y));
+
+            // Znajdowanie ścieżki
+            List<PathNode> pathNodeCell = currPathfinding.FindPath(
+                startPointCord.x,
+                startPointCord.y,
+                endPointCord.x,
+                endPointCord.y
+            );
+
+            if (pathNodeCell == null)
+                continue;
+
+            var obj1Mesh = allObject[edge.EntryGridCell].GetComponent<MeshRenderer>();
+            var obj2Mesh = allObject[edge.ExitGridCell].GetComponent<MeshRenderer>();
+
+            obj1Mesh.material = MainGridData.SecretHallwayMaterial;
+            obj2Mesh.material = MainGridData.SecretPassMaterial;
+
+            // Zaktualizowanie komórek jako 'Hallway'
+            foreach (var node in pathNodeCell)
+            {
+                if ((node.X == edge.EntryGridCell.Coordinate.x && node.Y == edge.EntryGridCell.Coordinate.y) ||
+                    (node.X == edge.ExitGridCell.Coordinate.x && node.Y == edge.ExitGridCell.Coordinate.y))
+                    continue;
+
+                GridCellData toAdd = MainInfoGrid.GetValue(node.X, node.Y);
+                toAdd.GridCellType = E_GridCellType.Hallway;
+                Hallwaycell.Add(toAdd);
+                DebugSingleCellMesh(toAdd);
+            }
+
+            obj1Mesh.material = MainGridData.PassCellMaterial;
+            obj2Mesh.material = MainGridData.PassCellMaterial;
+
+            // Jeśli ścieżka nie może być dotknięta, sprawdzamy sąsiadów
+            if (!currPathfinding.CAN_PATH_TOUCHED)
+            {
+                foreach (var currentNode in pathNodeCell)
+                {
+                    var neighbors = pathfindingGrid.GetNeighbourList(currentNode, false);
+
+                    foreach (var neighbor in neighbors)
+                    {
+                        // Pomijamy sąsiadów na skos
+                        if (Mathf.Abs(neighbor.X - currentNode.X) == 1 && Mathf.Abs(neighbor.Y - currentNode.Y) == 1)
+                            continue;
+
+                        var neighborCell = MainInfoGrid.GetValue(neighbor.X, neighbor.Y);
+                        var neighborNeighbors = pathfindingGrid.GetNeighbourList(neighbor, true);
+
+                        bool isNextToPassableCell = false;
+                        foreach (var neighborOfNeighbor in neighborNeighbors)
+                        {
+                            var neighborOfNeighborCell =
+                                MainInfoGrid.GetValue(neighborOfNeighbor.X, neighborOfNeighbor.Y);
+                            if (neighborOfNeighborCell.GridCellType == E_GridCellType.Pass)
+                            {
+                                isNextToPassableCell = true;
+                                break;
+                            }
+                        }
+
+                        if (isNextToPassableCell)
+                            continue;
+
+                        if (neighborCell.GridCellType == E_GridCellType.Empty)
+                        {
+                            neighbor.IsWalkable = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     public IEnumerator RoomPathFindWithDebugging()
     {
         if (MainInfoGrid == null)
@@ -520,8 +697,8 @@ public class MapGeneratorController : MonoBehaviour
     public (GridCellData entryPoint, GridCellData exitPoint) FindConnectionPosition(Room room1, Room room2)
     {
         // Oblicz centroidy pokojów jako punkty odniesienia
-        Vector2 room1Center = new Vector2(room1.cetroid.x, room1.cetroid.z);
-        Vector2 room2Center = new Vector2(room2.cetroid.x, room2.cetroid.z);
+        Vector2 room1Center = new Vector2(room1.centroid.x, room1.centroid.z);
+        Vector2 room2Center = new Vector2(room2.centroid.x, room2.centroid.z);
 
         // Oblicz różnicę współrzędnych
         float dx = room2Center.x - room1Center.x;
@@ -590,7 +767,7 @@ public class MapGeneratorController : MonoBehaviour
         // Tworzenie punktów
         foreach (Room roomCentre in RoomGanerateSetting.CreatedRoom)
         {
-            Point newPoint = new Point(roomCentre.cetroid.x, roomCentre.cetroid.z);
+            Point newPoint = new Point(roomCentre.centroid.x, roomCentre.centroid.z);
             newPoint.SetPointRoom(roomCentre);
             listOfPoints.Add(newPoint);
         }
@@ -665,9 +842,9 @@ public class MapGeneratorController : MonoBehaviour
                 var edgePoint2Vector2 = new Vector2((float)edge.Point2.X, (float)edge.Point2.Y);
 
                 var room1 = RoomGanerateSetting.CreatedRoom
-                    .FirstOrDefault(x => x.cetroid.x == edgePoint1Vector2.x && x.cetroid.z == edgePoint1Vector2.y);
+                    .FirstOrDefault(x => x.centroid.x == edgePoint1Vector2.x && x.centroid.z == edgePoint1Vector2.y);
                 var room2 = RoomGanerateSetting.CreatedRoom
-                    .FirstOrDefault(x => x.cetroid.x == edgePoint2Vector2.x && x.cetroid.z == edgePoint2Vector2.y);
+                    .FirstOrDefault(x => x.centroid.x == edgePoint2Vector2.x && x.centroid.z == edgePoint2Vector2.y);
 
                 var connectionPoints = FindConnectionPosition(room1, room2);
 
@@ -727,9 +904,9 @@ public class MapGeneratorController : MonoBehaviour
             var edgePoint2Vector2 = new Vector2((float)edge.Point2.X, (float)edge.Point2.Y);
 
             var room1 = RoomGanerateSetting.CreatedRoom
-                .FirstOrDefault(x => x.cetroid.x == edgePoint1Vector2.x && x.cetroid.z == edgePoint1Vector2.y);
+                .FirstOrDefault(x => x.centroid.x == edgePoint1Vector2.x && x.centroid.z == edgePoint1Vector2.y);
             var room2 = RoomGanerateSetting.CreatedRoom
-                .FirstOrDefault(x => x.cetroid.x == edgePoint2Vector2.x && x.cetroid.z == edgePoint2Vector2.y);
+                .FirstOrDefault(x => x.centroid.x == edgePoint2Vector2.x && x.centroid.z == edgePoint2Vector2.y);
 
             var connectionPoints = FindConnectionPosition(room1, room2);
 
@@ -1294,7 +1471,7 @@ public class MapGeneratorController : MonoBehaviour
                 var boxCollider = meshObject.AddComponent<BoxCollider>();
                 boxCollider.center = randomMesh.bounds.center;
                 boxCollider.size = randomMesh.bounds.size;
-                
+
                 // Jeśli obiekt jest przeszkodą
                 if (isObstacle)
                 {
@@ -1307,8 +1484,6 @@ public class MapGeneratorController : MonoBehaviour
                     obstacle.center = boxCollider.center;
                 }
             }
-            
-
         }
     }
 

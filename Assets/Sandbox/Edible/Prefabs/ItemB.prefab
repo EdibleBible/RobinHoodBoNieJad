@@ -13,10 +13,7 @@ GameObject:
   - component: {fileID: 3125863036775027416}
   - component: {fileID: 2148479248831226959}
   - component: {fileID: 4682806924880142275}
-  - component: {fileID: 8611426763088690663}
-  - component: {fileID: 2452488221014190286}
   - component: {fileID: 8493894080864111287}
-  - component: {fileID: 2069281085783977071}
   m_Layer: 10
   m_Name: ItemB
   m_TagString: Item
@@ -34,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.597, y: 0.481, z: -3.834}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -70,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 633b597e65370c445a79dd7354c744f2, type: 2}
+  - {fileID: 2100000, guid: 1afad5df014e0c4458bedab3f918b03b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,34 +137,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8611426763088690663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466800322429633386}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d84ae0c1d7daf04c9a7baa0cfe968ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  materialHighlightOn: {fileID: 2100000, guid: db5704e1c68828545a2e9c99210a40c6, type: 2}
-  materialHighlightOff: {fileID: 2100000, guid: 633b597e65370c445a79dd7354c744f2,
-    type: 2}
-  highlightActive: 0
---- !u!114 &2452488221014190286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466800322429633386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f40b776e7db8fe43863cece3386d5ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8493894080864111287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,23 +150,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemTypeValues: 64000000
-  itemType: 0
-  itemName: Yellow Cube
-  itemSize: 1
+  itemType: 1
+  itemName: VaseGeneric
+  itemDescription: 
+  itemSize: 2
   itemIcon: {fileID: 21300000, guid: a413d5eb86453b24391969048710c697, type: 3}
---- !u!114 &2069281085783977071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466800322429633386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4abcf4f283f93cf42bbe372213d87af3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isReachable: 0
-  materialHighlightOn: {fileID: 2100000, guid: ad1f1882d7a75444a8909539c05335b1, type: 2}
-  materialHighlightOff: {fileID: 2100000, guid: 633b597e65370c445a79dd7354c744f2,
-    type: 2}
+  canInteract: 1
+  itemAttHotbarSizeMod: 0

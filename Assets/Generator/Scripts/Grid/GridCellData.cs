@@ -89,13 +89,9 @@ public class GridCellData
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
 
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_up, UpN, Quaternion.Euler(0, 270f, 0f), segmentSize));
-        Debug.Log("Added Up" + matrix4X4s.Count);
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_down, DownN, Quaternion.Euler(0, 90f, 0f), segmentSize));
-        Debug.Log("Added Down" + matrix4X4s.Count);
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_left, LeftN, Quaternion.Euler(0, 180, 0), segmentSize));
-        Debug.Log("Added Left" + matrix4X4s.Count);
         matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_right, RightN, Quaternion.Euler(0, 0, 0), segmentSize));
-        Debug.Log("Added Right" + matrix4X4s.Count);
 
 
         return matrix4X4s;
@@ -304,7 +300,6 @@ public class GridCellData
         matrix4X4s.AddRange(GeneratePassRoomSide(segmentSize));
         return matrix4X4s;
     }
-
     public IEnumerable<Matrix4x4> FlorMatrix4x4(Vector2 segmentSize)
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
@@ -335,6 +330,18 @@ public class GridCellData
         }
 
         return matrix4X4s;
+    }
+
+    public List<GridCellData> ReturnNeighbor()
+    {
+        List<GridCellData> gridCellData = new List<GridCellData>
+        {
+            UpN,
+            DownN,
+            LeftN,
+            RightN
+        };
+        return gridCellData;
     }
 
     public enum E_GridCellReferenceType

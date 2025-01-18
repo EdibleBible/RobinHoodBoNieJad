@@ -1,31 +1,53 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemyStateMachineController : StateManager<E_EnemyState>
 {
-    [SerializeField] private EnemyIdleState _enemyIdleState;
-    [SerializeField] private EnemyPatrolState _enemyPatrolState;
-
-    [Header("Patrol State")] 
-    [SerializeField] private float patrolSpeed;
-    [SerializeField] private List<Vector3> patrolPoints;
+    private EnemyPatrollingState _enemyPatrollingState;
+    private EnemyChasingState _enemyChasingState;
     
+    [SerializeField] private float findingPointDistance;
+    
+    [Header("Idle State")]
+    [SerializeField] private EnemyMovementStats idleStats;
+    
+    [Header("Patrolling State")]
+    [SerializeField] private EnemyMovementStats patrollingStats;
+    [SerializeField] private EnemyFovStats fovPatrollingState;
+    
+    [Header("Chase State")]
+    [SerializeField] private EnemyMovementStats chasingStats; 
+    [SerializeField] private EnemyFovStats fovChaseState;
+
+    
+    private EnemyMovement enemyMovement;
+    private FieldOfView fov;
+
+    private void Awake()
+    {
+        enemyMovement = GetComponent<EnemyMovement>();
+        fov = GetComponent<FieldOfView>();
+    }
+
     public override void Start()
     {
-        _enemyIdleState = new EnemyIdleState(E_EnemyState.Idle);
-        _enemyPatrolState = new EnemyPatrolState(E_EnemyState.Patrol);
-
-        state.Add(E_EnemyState.Idle, _enemyIdleState);
-        state.Add(E_EnemyState.Patrol, _enemyPatrolState);
-
-        currentState = _enemyIdleState;
-
+        _enemyPatrollingState = new EnemyPatrollingState(fov,fovPatrollingState,enemyMovement,patrollingStats,findingPointDistance);
+        _enemyChasingState = new EnemyChasingState(fov,fovPatrollingState,enemyMovement,chasingStats);
+        
+        
+        state.Add(E_EnemyState.Patrol,_enemyPatrollingState);
+        state.Add(E_EnemyState.Chase, _enemyChasingState);
+        
+        currentState = _enemyPatrollingState;
         base.Start();
     }
 
     public override void Update()
     {
+        Debug.Log(fov.GetVisibleTargets().Count);
+        Debug.Log("State: " + currentState);
         base.Update();
     }
 
@@ -44,85 +66,26 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
         base.OnTriggerStay(other);
     }
 }
-public class EnemyPatrolState : BaseState<E_EnemyState>
+
+[Serializable]
+public class EnemyMovementStats
 {
-    public EnemyPatrolState(E_EnemyState key) : base(key)
-    {
-    }
-
-    public override void EnterState()
-    {
-    }
-
-    public override void ExitState()
-    {
-    }
-
-    public override void UpdateState()
-    {
-    }
-
-    public override E_EnemyState GetNextState()
-    {
-        return stateKey;
-    }
-
-    public override void OnTriggerEnterState(Collider other)
-    {
-    }
-
-    public override void OnTriggerStayState(Collider other)
-    {
-    }
-
-    public override void OnTriggerExitState(Collider other)
-    {
-    }
+    public float MaxSpeed;
+    public float Acceleration;
+    public float Deceleration;
+    public float AngularSpeed;
+    public float DelayBettwenDistanceCheck;
+    public float StoppingDistance;
+    public float ChangeDestinationPointDistance;
 }
 
-public class EnemyIdleState : BaseState<E_EnemyState>
+[Serializable]
+public class EnemyFovStats
 {
-    private bool playerInRange;
-    private bool hearOtherEnemyChase;
-    public EnemyIdleState(E_EnemyState key) : base(key)
-    {
-    }
+    public float ViewRadius;
+    public float ViewAngle;
+    public float FindingDelay;
 
-    public override void EnterState()
-    {
-    }
-
-    public override void ExitState()
-    {
-    }
-
-    public override void UpdateState()
-    {
-    }
-
-    public override E_EnemyState GetNextState()
-    {
-        if (hearOtherEnemyChase)
-        {
-            return E_EnemyState.FollowChase;
-        }
-
-        if (playerInRange)
-        {
-            return E_EnemyState.Chase;
-        }
-        return E_EnemyState.Patrol;
-    }
-
-    public override void OnTriggerEnterState(Collider other)
-    {
-    }
-
-    public override void OnTriggerStayState(Collider other)
-    {
-    }
-
-    public override void OnTriggerExitState(Collider other)
-    {
-    }
+    public LayerMask TargetLayer;
+    public LayerMask ObstacleLayer;
 }

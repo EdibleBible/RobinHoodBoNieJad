@@ -6,16 +6,15 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
     PlayerRunningState _playerRunningState;
     PlayerWalkState _playerWalkState;
     PlayerCrouchState _playerCrouchState;
+    PlayerDoorInteraction _playerDoorInteraction;
 
     [Header("Walk State")] [SerializeField]
     float walkSpeed;
-
     [SerializeField] float walkAcceleration;
     [SerializeField] float walkDeceleration;
 
     [Header("Crouch State")] [SerializeField]
     float crouchSpeed;
-
     [SerializeField] float crouchAcceleration;
     [SerializeField] float crouchDeceleration;
 
@@ -39,10 +38,13 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
         
         _playerCrouchState = new PlayerCrouchState(crouchSpeed, crouchAcceleration, crouchDeceleration, playerWalk,
             playerAnimatorController);
+        
+        _playerDoorInteraction = new PlayerDoorInteraction(playerWalk, playerAnimatorController);
 
         state.Add(E_PlayerState.Running, _playerRunningState);
         state.Add(E_PlayerState.Crouching, _playerCrouchState);
         state.Add(E_PlayerState.Walk, _playerWalkState);
+        state.Add(E_PlayerState.OpenDoorInteraction, _playerDoorInteraction);
 
 
         currentState = _playerWalkState;
