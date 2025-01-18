@@ -5,10 +5,10 @@ using UnityEngine;
 
 public abstract class StateManager<EState> : MonoBehaviour where EState : Enum
 {
-    protected Dictionary<EState,BaseState<EState>> state = new Dictionary<EState, BaseState<EState>>();
-    protected BaseState<EState> currentState;
+    public Dictionary<EState,BaseState<EState>> state = new Dictionary<EState, BaseState<EState>>();
+    public BaseState<EState> currentState;
 
-    protected bool isTransitioningState = false;
+    public bool isTransitioningState = false;
 
     public virtual void Start() 
     {

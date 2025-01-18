@@ -190,7 +190,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310177043}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08506123, y: -0.15058638, z: 0.013006174, w: 0.9848448}
+  m_LocalRotation: {x: 0.08506124, y: -0.15058637, z: 0.013006175, w: 0.9848448}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -671,7 +671,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506642337}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12077952, y: -0.15001455, z: 0.01846763, w: 0.98110497}
+  m_LocalRotation: {x: 0.12077954, y: -0.15001455, z: 0.018467631, w: 0.98110497}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -859,18 +859,113 @@ PrefabInstance:
     - target: {fileID: 4905897187019700600, guid: adf6424cfe36dab40a19ab23d7b651ac,
         type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'mixamorig:Head'\n\tTransform 'mixamorig:Hips'\n\tTransform
-        'mixamorig:Neck'\n\tTransform 'mixamorig:Spine'\n\tTransform 'mixamorig:Head'\n\tTransform
-        'mixamorig:Hips'\n\tTransform 'mixamorig:Neck'\n\tTransform 'mixamorig:Spine'\n\tTransform
-        'mixamorig:Head'\n\tTransform 'mixamorig:Hips'\n\tand more ..."
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6752772322888297743, guid: adf6424cfe36dab40a19ab23d7b651ac,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1727229347}
+    - targetCorrespondingSourceObject: {fileID: 3189544838407555849, guid: adf6424cfe36dab40a19ab23d7b651ac,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1403356528}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3570760385224109893, guid: adf6424cfe36dab40a19ab23d7b651ac,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1372251831}
   m_SourcePrefab: {fileID: 100100000, guid: adf6424cfe36dab40a19ab23d7b651ac, type: 3}
+--- !u!4 &1372251828 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3189544838407555849, guid: adf6424cfe36dab40a19ab23d7b651ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 1372251827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1372251829 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6752772322888297743, guid: adf6424cfe36dab40a19ab23d7b651ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 1372251827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1372251830 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3570760385224109893, guid: adf6424cfe36dab40a19ab23d7b651ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 1372251827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1372251831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372251830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f65f570f674e449bf3a10526eb9e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftFootRaycast: {fileID: 1727229347}
+  rightFootRaycast: {fileID: 1403356528}
+  rayDistance: 0.05
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  walkStepSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  runStepSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  crouchStepSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+--- !u!1 &1403356527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1403356528}
+  m_Layer: 0
+  m_Name: RightRaycast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1403356528
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403356527}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -0.083, z: 0.072}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1372251828}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1480546366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1438,6 +1533,37 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   IsDebug: 1
+--- !u!1 &1727229346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1727229347}
+  m_Layer: 0
+  m_Name: LeftRaycast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1727229347
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727229346}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.083, z: 0.072}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1372251829}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1800651693
 GameObject:
   m_ObjectHideFlags: 3
@@ -1733,7 +1859,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067100642}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.10291375, y: -0.15032563, z: 0.015735887, w: 0.9831396}
+  m_LocalRotation: {x: 0.10291375, y: -0.15032563, z: 0.01573589, w: 0.9831396}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
