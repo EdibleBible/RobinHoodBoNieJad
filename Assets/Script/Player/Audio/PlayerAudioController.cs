@@ -15,6 +15,8 @@ public class PlayerAudioController : MonoBehaviour
 
     private PlayerStateMachineController playerStateMachine;
 
+    public bool DEBUG;
+
     private void Awake()
     {
         playerStateMachine = GetComponent<PlayerStateMachineController>();
@@ -22,13 +24,11 @@ public class PlayerAudioController : MonoBehaviour
 
     private bool leftFootOnGround = false;
     private bool rightFootOnGround = false;
-
     void Update()
     {
         CheckFootContact(leftFootRaycast, ref leftFootOnGround);
         CheckFootContact(rightFootRaycast, ref rightFootOnGround);
     }
-
     private void CheckFootContact(Transform foot, ref bool isFootOnGround)
     {
         RaycastHit hit;
@@ -47,8 +47,6 @@ public class PlayerAudioController : MonoBehaviour
             isFootOnGround = false;
         }
     }
-
-
     private void PlayFootstepSound(Vector3 position)
     {
         /*if (playerStateMachine.currentState.stateKey == E_PlayerState.Walk)
@@ -57,5 +55,14 @@ public class PlayerAudioController : MonoBehaviour
             RuntimeManager.PlayOneShot(runStepSound, position);
         else if (playerStateMachine.currentState.stateKey == E_PlayerState.Crouching)
             RuntimeManager.PlayOneShot(crouchStepSound, position);*/
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (DEBUG)
+        {
+            Gizmos.DrawLine(leftFootRaycast.position, Vector3.up * rayDistance);
+            Gizmos.DrawLine(rightFootRaycast.position, Vector3.up * rayDistance);
+        }
     }
 }
