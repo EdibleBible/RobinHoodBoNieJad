@@ -5,6 +5,7 @@ using Cinemachine;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -16,10 +17,18 @@ public class Room
     public List<GridCellData> CellInRoom;
     public int XAxisSize;
     public int YAxisSize;
+    public GameObject RoomParent;
 
 
-    public Vector3 cetroid = new Vector3(0, 0, 0);
+    public Vector3 centroid = new Vector3(0, 0, 0);
 
+    public void SetUpParent(GameObject roomParent, float size)
+    {
+        RoomParent = roomParent;
+        roomParent.transform.localScale = new Vector3(size, size, size);
+        roomParent.transform.localPosition = new Vector3(centroid.x, -1 , centroid.z);
+    }
+    
     public Vector3 RoomCentroid(float _cellSize)
     {
         if (CellInRoom == null || CellInRoom.Count == 0)
@@ -39,8 +48,7 @@ public class Room
         float centroidX = totalX / CellInRoom.Count;
         float centroidY = totalY / CellInRoom.Count;
 
-        Debug.Log(new Vector3(centroidX * _cellSize, 1, centroidY * _cellSize));
-        return new Vector3(centroidX * _cellSize, 1, centroidY * _cellSize);
+        return new Vector3(centroidX * _cellSize, 0, centroidY * _cellSize);
     }
 
     public void MarkCorners()
@@ -72,7 +80,7 @@ public class Room
     public void SpawnPlayer(GameObject playerPrefab, GameObject depositPrefab)
     {
         Vector3 spawnPosition = new Vector3();
-        spawnPosition = cetroid;
+        spawnPosition = centroid;
 
         GameObject playerObj = SpawnObject(playerPrefab, spawnPosition, quaternion.identity);
         GameObject deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f,-0.4f,0.2f), quaternion.identity);
@@ -103,8 +111,8 @@ public class Room
         
         for (int i = 0; i < amount; i++)
         {
-            float x = Random.RandomRange(cetroid.x - XAxisSize/2f + 0.5f, cetroid.x + XAxisSize/2f -0.5f);
-            float y = Random.RandomRange(cetroid.z - YAxisSize/2f + 0.5f, cetroid.z + YAxisSize/2f -0.5f);
+            float x = Random.RandomRange(centroid.x - XAxisSize/2f + 0.5f, centroid.x + XAxisSize/2f -0.5f);
+            float y = Random.RandomRange(centroid.z - YAxisSize/2f + 0.5f, centroid.z + YAxisSize/2f -0.5f);
             
             
             int randomIndex = Random.RandomRange(0, picakableObjects.Count);
@@ -117,5 +125,84 @@ public class Room
         // Instantiating prefab
         GameObject newObject = Object.Instantiate(prefab, position, rotation);
         return newObject;
+    }
+
+    public void GenerateRoomInside()
+    {
+        List<GameObject> allPrefabs = Resources.LoadAll<GameObject>("RoomInsidePrefab/" + XAxisSize + "x" + YAxisSize).ToList();
+        
+        if (allPrefabs.Count > 0)
+        {
+            int index =  Random.RandomRange(0, allPrefabs.Count);
+            GameObject prefab = allPrefabs[index];
+            GameObject spawnedPrefab = SpawnObject(prefab,Vector3.zero,Quaternion.identity);
+            spawnedPrefab.transform.SetParent(RoomParent.transform);
+            spawnedPrefab.transform.localPosition = new Vector3(0,0,0);
+            spawnedPrefab.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            Debug.LogError("Room has no preapared prefab");
+        }
+    }
+
+    public void DetectObjects(LayerMask inroomObjectLayer)
+    {
+        foreach (GridCellData cell in CellInRoom)
+        {
+            // Sprawdzanie, czy komórka ma odpowiedni typ (Pass lub SpawnPass)
+            if (cell.GridCellType == E_GridCellType.Pass || cell.GridCellType == E_GridCellType.SpawnPass)
+            {
+
+                
+                Vector3 boxCenter = cell.Position; // środek boxa
+                Vector3 boxSize = new Vector3(cell.CellSize.x,cell.CellSize.y,cell.CellSize.x); // rozmiar boxa
+                // Debugowanie środkowej pozycji boxa i jego rozmiaru
+                
+                GameObject obj = new GameObject();
+                var gizmos = obj.AddComponent<BoxGizmos>();
+                gizmos.SetUpGizmos(boxCenter, boxSize);
+                
+                // Przeszukiwanie obiektów w boxie
+                Collider[] colliders = Physics.OverlapBox(boxCenter, boxSize, Quaternion.identity,inroomObjectLayer);
+
+                if (colliders.Length == 0)
+                {
+                    Debug.Log("Brak obiektów w obszarze: " + boxCenter);
+                }
+
+                foreach (var collider in colliders)
+                {
+                    // Debugowanie, który obiekt został znaleziony
+                    Debug.Log("Znaleziony obiekt: " + collider.gameObject.name);
+
+                    // Rysowanie boxa, który wykrywa obiekty (pomaga wizualizować obszar poszukiwań)
+                    
+                    Object.Destroy(collider.GameObject());
+
+                }
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+}
+
+public class BoxGizmos : MonoBehaviour
+{
+    private Vector3 center;
+    private Vector3 size;
+
+    public void SetUpGizmos(Vector3 center, Vector3 size)
+    {
+        this.center = center;
+        this.size = size;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(center, size);
     }
 }

@@ -51,7 +51,7 @@ public class MapGeneratorControllerEditor : Editor
 
         generatorController.GenerateGrid(seed);
 
-        generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, seed);
+        generatorController.RoomGanerateSetting.CreateRoomsOnGrid(generatorController.MainInfoGrid, seed, generatorController.generatedRoomTransform);
 
         generatorController.GenerateTriangulation();
 
