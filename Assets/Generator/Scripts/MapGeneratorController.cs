@@ -136,14 +136,8 @@ public class MapGeneratorController : MonoBehaviour
         BakeNavigation();
         RoomGanerateSetting.SpawnRoomInside();
         yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
         RoomGanerateSetting.DetectObjects();
+        RoomGanerateSetting.SpawnDoor();
         RoomGanerateSetting.SpawnPlayer();
     }
 

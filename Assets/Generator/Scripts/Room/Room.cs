@@ -26,9 +26,9 @@ public class Room
     {
         RoomParent = roomParent;
         roomParent.transform.localScale = new Vector3(size, size, size);
-        roomParent.transform.localPosition = new Vector3(centroid.x, -1 , centroid.z);
+        roomParent.transform.localPosition = new Vector3(centroid.x, -1, centroid.z);
     }
-    
+
     public Vector3 RoomCentroid(float _cellSize)
     {
         if (CellInRoom == null || CellInRoom.Count == 0)
@@ -83,12 +83,13 @@ public class Room
         spawnPosition = centroid;
 
         GameObject playerObj = SpawnObject(playerPrefab, spawnPosition, quaternion.identity);
-        GameObject deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f,-0.4f,0.2f), quaternion.identity);
+        GameObject deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f, -0.4f, 0.2f),
+            quaternion.identity);
 
         CinemachineFreeLook cinemachineFreeLook = Object.FindAnyObjectByType<CinemachineFreeLook>();
         cinemachineFreeLook.LookAt = playerObj.transform.Find("LookAt");
         cinemachineFreeLook.Follow = playerObj.transform.Find("Follow");
-        
+
         /*
         Camera cam = Camera.main;
         var camFollow = cam.AddComponent<LevelCameraFollow>();
@@ -96,27 +97,25 @@ public class Room
         camFollow.offset = new Vector3(2, 2, 0);
         camFollow.followSpeed = 5f;
         camFollow.rotationSpeed = 10f;*/
-
-
     }
 
     public void SpawnPicakbleObject(List<GameObject> picakableObjects, int minAmount, int maxAmount)
     {
-        if(RoomType == E_RoomType.SpawnRoom)
+        if (RoomType == E_RoomType.SpawnRoom)
             return;
         int amount = Random.RandomRange(minAmount, maxAmount);
         if (amount == 0)
             return;
-        
-        
+
+
         for (int i = 0; i < amount; i++)
         {
-            float x = Random.RandomRange(centroid.x - XAxisSize/2f + 0.5f, centroid.x + XAxisSize/2f -0.5f);
-            float y = Random.RandomRange(centroid.z - YAxisSize/2f + 0.5f, centroid.z + YAxisSize/2f -0.5f);
-            
-            
+            float x = Random.RandomRange(centroid.x - XAxisSize / 2f + 0.5f, centroid.x + XAxisSize / 2f - 0.5f);
+            float y = Random.RandomRange(centroid.z - YAxisSize / 2f + 0.5f, centroid.z + YAxisSize / 2f - 0.5f);
+
+
             int randomIndex = Random.RandomRange(0, picakableObjects.Count);
-            SpawnObject(picakableObjects[randomIndex], new Vector3(x,1,y), quaternion.identity);
+            SpawnObject(picakableObjects[randomIndex], new Vector3(x, 1, y), quaternion.identity);
         }
     }
 
@@ -129,15 +128,16 @@ public class Room
 
     public void GenerateRoomInside()
     {
-        List<GameObject> allPrefabs = Resources.LoadAll<GameObject>("RoomInsidePrefab/" + XAxisSize + "x" + YAxisSize).ToList();
-        
+        List<GameObject> allPrefabs =
+            Resources.LoadAll<GameObject>("RoomInsidePrefab/" + XAxisSize + "x" + YAxisSize).ToList();
+
         if (allPrefabs.Count > 0)
         {
-            int index =  Random.RandomRange(0, allPrefabs.Count);
+            int index = Random.RandomRange(0, allPrefabs.Count);
             GameObject prefab = allPrefabs[index];
-            GameObject spawnedPrefab = SpawnObject(prefab,Vector3.zero,Quaternion.identity);
+            GameObject spawnedPrefab = SpawnObject(prefab, Vector3.zero, Quaternion.identity);
             spawnedPrefab.transform.SetParent(RoomParent.transform);
-            spawnedPrefab.transform.localPosition = new Vector3(0,0,0);
+            spawnedPrefab.transform.localPosition = new Vector3(0, 0, 0);
             spawnedPrefab.transform.localScale = Vector3.one;
         }
         else
@@ -153,38 +153,62 @@ public class Room
             // Sprawdzanie, czy komórka ma odpowiedni typ (Pass lub SpawnPass)
             if (cell.GridCellType == E_GridCellType.Pass || cell.GridCellType == E_GridCellType.SpawnPass)
             {
-
-                
                 Vector3 boxCenter = cell.Position; // środek boxa
-                Vector3 boxSize = new Vector3(cell.CellSize.x,cell.CellSize.y,cell.CellSize.x); // rozmiar boxa
+                Vector3 boxSize = new Vector3(cell.CellSize.x, cell.CellSize.y, cell.CellSize.x); // rozmiar boxa
                 // Debugowanie środkowej pozycji boxa i jego rozmiaru
-                
+
                 GameObject obj = new GameObject();
                 var gizmos = obj.AddComponent<BoxGizmos>();
                 gizmos.SetUpGizmos(boxCenter, boxSize);
-                
-                // Przeszukiwanie obiektów w boxie
-                Collider[] colliders = Physics.OverlapBox(boxCenter, boxSize, Quaternion.identity,inroomObjectLayer);
 
-                if (colliders.Length == 0)
-                {
-                    Debug.Log("Brak obiektów w obszarze: " + boxCenter);
-                }
+                // Przeszukiwanie obiektów w boxie
+                Collider[] colliders = Physics.OverlapBox(boxCenter, boxSize, Quaternion.identity, inroomObjectLayer);
 
                 foreach (var collider in colliders)
                 {
-                    // Debugowanie, który obiekt został znaleziony
-                    Debug.Log("Znaleziony obiekt: " + collider.gameObject.name);
-
-                    // Rysowanie boxa, który wykrywa obiekty (pomaga wizualizować obszar poszukiwań)
-                    
                     Object.Destroy(collider.GameObject());
-
                 }
             }
-            else
+        }
+    }
+
+    public void SpawnDoors(GameObject doorPrefab, float doorSpawnOffset)
+    {
+        foreach (GridCellData cell in CellInRoom)
+        {
+            Vector3 rotation = Vector3.zero;
+            Vector3 offset = Vector3.zero;
+            switch (cell.AxisCell)
             {
-                continue;
+                case var axis when axis == cell.UpN:
+                    rotation = new Vector3(0, 90, 0);
+                    offset = new Vector3(0, 0, doorSpawnOffset);
+                    break;
+                case var axis when axis == cell.DownN:
+                    rotation = new Vector3(0, 270, 0);
+                    offset = new Vector3(0, 0, -doorSpawnOffset);
+                    break;
+                case var axis when axis == cell.LeftN:
+                    rotation = new Vector3(0, 0f, 0);
+                    offset = new Vector3(-doorSpawnOffset, 0, 0);
+                    break;
+                case var axis when axis == cell.RightN:
+                    rotation = new Vector3(0, 180, 0);
+                    offset = new Vector3(doorSpawnOffset, 0, 0);
+                    break;
+                default:
+                    Debug.LogWarning("Nieoczekiwany AxisCell");
+                    break;
+            }
+
+            if (cell.GridCellType == E_GridCellType.Pass || cell.GridCellType == E_GridCellType.SpawnPass)
+            {
+                // Tworzenie drzwi
+                GameObject obj = Object.Instantiate(doorPrefab, cell.Position, Quaternion.identity);
+
+                // Ustawianie rotacji
+                obj.transform.rotation = Quaternion.Euler(rotation);
+                obj.transform.position += offset;
             }
         }
     }
@@ -200,6 +224,7 @@ public class BoxGizmos : MonoBehaviour
         this.center = center;
         this.size = size;
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

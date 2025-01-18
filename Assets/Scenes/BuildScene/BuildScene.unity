@@ -3657,6 +3657,7 @@ MonoBehaviour:
   navMeshLayer:
     serializedVersion: 2
     m_Bits: 64
+  IsDebug: 0
 --- !u!1 &364931474
 GameObject:
   m_ObjectHideFlags: 0
@@ -12358,7 +12359,7 @@ MonoBehaviour:
       type: 2}
     MaxAxisSize: {x: 30, y: 30}
     MinAxisSize: {x: 10, y: 10}
-    cellScale: 2
+    cellScale: 1
   RoomGanerateSetting:
     MaxRoomSize: {x: 4, y: 4}
     MinRoomSize: {x: 2, y: 2}
@@ -12436,7 +12437,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 3
       YAxisSize: 4
-      cetroid: {x: 16, y: 1, z: 29}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 2
       CellInRoom:
@@ -12502,7 +12504,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 4
       YAxisSize: 3
-      cetroid: {x: 27, y: 1, z: 10}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 3
       CellInRoom:
@@ -12568,7 +12571,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 3
       YAxisSize: 4
-      cetroid: {x: 16, y: 1, z: 15}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 4
       CellInRoom:
@@ -12619,7 +12623,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 3
       YAxisSize: 3
-      cetroid: {x: 28, y: 1, z: 20}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 5
       CellInRoom:
@@ -12655,7 +12660,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 3
       YAxisSize: 2
-      cetroid: {x: 6, y: 1, z: 33}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 6
       CellInRoom:
@@ -12701,7 +12707,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 4
       YAxisSize: 2
-      cetroid: {x: 7, y: 1, z: 15}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 7
       CellInRoom:
@@ -12727,7 +12734,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 2
       YAxisSize: 2
-      cetroid: {x: 13, y: 1, z: 43}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 8
       CellInRoom:
@@ -12763,7 +12771,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 3
       YAxisSize: 2
-      cetroid: {x: 24, y: 1, z: 39}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 9
       CellInRoom:
@@ -12789,7 +12798,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 2
       YAxisSize: 2
-      cetroid: {x: 29, y: 1, z: 31}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 10
       CellInRoom:
@@ -12825,7 +12835,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 3
       YAxisSize: 2
-      cetroid: {x: 12, y: 1, z: 7}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 11
       CellInRoom:
@@ -12861,7 +12872,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 2
       YAxisSize: 3
-      cetroid: {x: 5, y: 1, z: 26}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 12
       CellInRoom:
@@ -12897,7 +12909,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 2
       YAxisSize: 3
-      cetroid: {x: 5, y: 1, z: 8}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 13
       CellInRoom:
@@ -12963,7 +12976,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 3
       YAxisSize: 4
-      cetroid: {x: 6, y: 1, z: 41}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 14
       CellInRoom:
@@ -12999,7 +13013,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 2
       YAxisSize: 3
-      cetroid: {x: 23, y: 1, z: 30}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     - RoomType: 0
       RoomID: 15
       CellInRoom:
@@ -13025,7 +13040,8 @@ MonoBehaviour:
         IsRoomCorner: 1
       XAxisSize: 2
       YAxisSize: 2
-      cetroid: {x: 13, y: 1, z: 37}
+      RoomParent: {fileID: 0}
+      centroid: {x: 0, y: 0, z: 0}
     PlayerPrefab: {fileID: 3570760385224109893, guid: adf6424cfe36dab40a19ab23d7b651ac,
       type: 3}
     ObjectToPickList:
@@ -13033,6 +13049,12 @@ MonoBehaviour:
     - {fileID: 1466800322429633386, guid: ac872eec61c0ca34db31f3337493d6c5, type: 3}
     DepositPointPrefab: {fileID: 2627152374343599158, guid: 95bfcbf49eef5964a88e4dce2dd47ca0,
       type: 3}
+    InroomObjectLayer:
+      serializedVersion: 2
+      m_Bits: 6291456
+    DoorPrefab: {fileID: 919132149155446097, guid: 9ddbd6aa4bacee842a36e72c838a5dfb,
+      type: 3}
+    DoorSpawnOffset: 0.3
   AllPoints: []
   AllEdges:
   - EntryGridCell:
@@ -15601,13 +15623,14 @@ MonoBehaviour:
   wallMeshes:
   - {fileID: 8733429697405204941, guid: f9a85c06babccb4479a5f2f1cd4e4716, type: 3}
   passesMeshes:
-  - {fileID: -7662684476377255214, guid: f2a531adc53ba8b4297ef9f593ab0747, type: 3}
+  - {fileID: -5387877993904369314, guid: 9ddbd6aa4bacee842a36e72c838a5dfb, type: 3}
   hallwayMeshes:
   - {fileID: 8733429697405204941, guid: f9a85c06babccb4479a5f2f1cd4e4716, type: 3}
   floorMashes:
   - {fileID: -629719859055844128, guid: 2805f36e89fac2f41be7e20d81958d92, type: 3}
   meshesMaterial: {fileID: 2100000, guid: 1c16f334427f10149ba4b953b416caa8, type: 2}
   wallSeed: 6403
+  _debug: 0
   ActionTextMesh: {fileID: 1332277943}
   InstructionTextMesh: {fileID: 1524472806}
   SeedTextMesh: {fileID: 663251227}
