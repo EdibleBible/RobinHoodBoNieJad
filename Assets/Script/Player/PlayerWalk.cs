@@ -68,6 +68,9 @@ public class PlayerWalk : MonoBehaviour
         yVel = localVelocity.z;
 
         characterController.Move(velocity * Time.deltaTime);
+        
+        
+        //Debug.Log("velocity: " + characterController.velocity);
     }
 
     public Vector3 GetCharacterVelocity()

@@ -1,22 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-[RequireComponent(typeof(InputMouseClick))]
 [RequireComponent(typeof(ItemBase))]
 
-public class ObjectItemPickup : MonoBehaviour, IMouseLMB, IPlayerReach, IPointerEnterHandler, IPointerExitHandler
+public class ObjectItemPickup : MonoBehaviour
 {
     public bool isReachable = false;
     private bool isMouseHovering = false;
     public Material materialHighlightOn;
     public Material materialHighlightOff;
-
-    public void MouseClickLeft()
-    {
-        if (isReachable)
-        {
-            gameObject.GetComponent<ItemBase>().PickUp();
-        }
-    }
 
     public void IsReachable(bool reachable)
     {
