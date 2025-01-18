@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using FMODUnity;
+using UnityEngine.Rendering;
 
 public class PlayerAudioController : MonoBehaviour
 {
@@ -49,20 +50,20 @@ public class PlayerAudioController : MonoBehaviour
     }
     private void PlayFootstepSound(Vector3 position)
     {
-        /*if (playerStateMachine.currentState.stateKey == E_PlayerState.Walk)
+        if (playerStateMachine.currentState.stateKey == E_PlayerState.Walk)
             RuntimeManager.PlayOneShot(walkStepSound, position);
         else if (playerStateMachine.currentState.stateKey == E_PlayerState.Running)
             RuntimeManager.PlayOneShot(runStepSound, position);
         else if (playerStateMachine.currentState.stateKey == E_PlayerState.Crouching)
-            RuntimeManager.PlayOneShot(crouchStepSound, position);*/
+            RuntimeManager.PlayOneShot(crouchStepSound, position);
     }
 
     private void OnDrawGizmos()
     {
         if (DEBUG)
         {
-            Gizmos.DrawLine(leftFootRaycast.position, Vector3.up * rayDistance);
-            Gizmos.DrawLine(rightFootRaycast.position, Vector3.up * rayDistance);
+            Gizmos.DrawRay(leftFootRaycast.position, Vector3.down * rayDistance);
+            Gizmos.DrawRay(rightFootRaycast.position, Vector3.down * rayDistance);
         }
     }
 }
