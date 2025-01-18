@@ -1,6 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4994590251442958634
+--- !u!114 &-7326013241679984253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCrouch
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCrouch
+  Guid:
+    Data1: -310207697
+    Data2: 1138274044
+    Data3: 1520931752
+    Data4: 1705262199
+  Banks:
+  - {fileID: -109850311952065118}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 365
+--- !u!114 &-7207059079256381952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,17 +37,98 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Desktop/Master.strings.bank
+  m_Name: bank:/Desktop/Desktop/Master.strings.bank
   m_EditorClassIdentifier: 
-  Path: ../../Users/Aurigae/Documents/FMOD Studio/RobbinGraves/Build/Desktop/Desktop/Master.strings.bank
-  Name: Desktop/Master.strings
+  Path: Assets/Plugins/StreamingAssets/Desktop/Desktop/Master.strings.bank
+  Name: Desktop/Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638710738045772183
+  lastModified: 638728262872306913
   FileSizes:
-  - Name: Desktop
-    Value: 750
+  - Name: 
+    Value: 1088
   Exists: 1
---- !u!114 &-901399793663341192
+--- !u!114 &-5853404397165912347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PickUpMetal
+  m_EditorClassIdentifier: 
+  Path: event:/PickUpMetal
+  Guid:
+    Data1: 1586453062
+    Data2: 1317043413
+    Data3: 413657492
+    Data4: 1967928341
+  Banks:
+  - {fileID: -109850311952065118}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 355
+--- !u!114 &-1963180205754952907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/DropMetal
+  m_EditorClassIdentifier: 
+  Path: event:/DropMetal
+  Guid:
+    Data1: -245069904
+    Data2: 1082111902
+    Data3: 423739293
+    Data4: 427232383
+  Banks:
+  - {fileID: -109850311952065118}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 221
+--- !u!114 &-225293902390102570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PressurePlate
+  m_EditorClassIdentifier: 
+  Path: event:/PressurePlate
+  Guid:
+    Data1: -1724590152
+    Data2: 1122559523
+    Data3: 1130654897
+    Data4: 1361157437
+  Banks:
+  - {fileID: -109850311952065118}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 500
+--- !u!114 &-109850311952065118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30,15 +138,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Desktop/Master.bank
+  m_Name: bank:/Desktop/Desktop/Master.bank
   m_EditorClassIdentifier: 
-  Path: ../../Users/Aurigae/Documents/FMOD Studio/RobbinGraves/Build/Desktop/Desktop/Master.bank
-  Name: Desktop/Master
+  Path: Assets/Plugins/StreamingAssets/Desktop/Desktop/Master.bank
+  Name: Desktop/Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 638710738045747028
-  FileSizes:
-  - Name: Desktop
-    Value: 1574
+  lastModified: 638728262872286610
+  FileSizes: []
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -53,18 +159,25 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: -4994590251442958634}
-  - {fileID: -901399793663341192}
+  - {fileID: -7207059079256381952}
+  - {fileID: -109850311952065118}
   EditorEvents:
-  - {fileID: 4560572143443135834}
+  - {fileID: -7326013241679984253}
+  - {fileID: 3362944181162067082}
+  - {fileID: -5853404397165912347}
+  - {fileID: 8192963784774176967}
+  - {fileID: 1495900515968257935}
+  - {fileID: 5350610268007051629}
+  - {fileID: -1963180205754952907}
+  - {fileID: -225293902390102570}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -901399793663341192}
+  - {fileID: -109850311952065118}
   StringsBanks:
-  - {fileID: -4994590251442958634}
-  cacheTime: 638710738045772183
+  - {fileID: -7207059079256381952}
+  cacheTime: 638728262872306913
   cacheVersion: 131621
---- !u!114 &4560572143443135834
+--- !u!114 &1495900515968257935
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,20 +187,101 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/1
+  m_Name: event:/PickUpJewels
   m_EditorClassIdentifier: 
-  Path: event:/1
+  Path: event:/PickUpJewels
   Guid:
     Data1: 302324337
     Data2: 1272716251
     Data3: 1753660039
     Data4: 2122670872
   Banks:
-  - {fileID: -901399793663341192}
+  - {fileID: -109850311952065118}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 0
+  Length: 576
+--- !u!114 &3362944181162067082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerFootsteps
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerFootsteps
+  Guid:
+    Data1: -1939391943
+    Data2: 1255220306
+    Data3: 1880998017
+    Data4: 869925656
+  Banks:
+  - {fileID: -109850311952065118}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 365
+--- !u!114 &5350610268007051629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerSneaking
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerSneaking
+  Guid:
+    Data1: 827783310
+    Data2: 1087811839
+    Data3: 1171387533
+    Data4: -1550513607
+  Banks:
+  - {fileID: -109850311952065118}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 538
+--- !u!114 &8192963784774176967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerRunning
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerRunning
+  Guid:
+    Data1: -316335545
+    Data2: 1182667393
+    Data3: 1555598477
+    Data4: 660492040
+  Banks:
+  - {fileID: -109850311952065118}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 552
