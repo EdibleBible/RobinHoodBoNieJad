@@ -15,9 +15,20 @@ public class PlayerHotbar : MonoBehaviour
     public InputActionAsset globalInputActions;
     private InputAction dropAction;
     private InputAction scrollAction;
-    public Transform hotbarUIPanel;
+    private MenuHotbar hotbarBase;
+    private Transform hotbarUIPanel;
     public GameObject hotbarEntryPrefab;
     public Transform itemDropSpot;
+    public delegate MenuHotbar GetHotbarTransformEvent();
+    public static event GetHotbarTransformEvent GetHotbarTransform;
+
+    private void OnEnable()
+    {
+        hotbarBase = GetHotbarTransform();
+        hotbarUIPanel = hotbarBase.gameObject.transform;
+        hotbarEntryList.Add(hotbarBase.hotbarHandEntry);
+    }
+
 
     public void Resize(int newSize)
     {

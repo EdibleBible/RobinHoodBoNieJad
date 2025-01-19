@@ -182,16 +182,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4025280932627955926, guid: adf6424cfe36dab40a19ab23d7b651ac,
-        type: 3}
-      propertyPath: hotbarUIPanel
-      value: 
-      objectReference: {fileID: 2014187540}
-    - target: {fileID: 4025280932627955926, guid: adf6424cfe36dab40a19ab23d7b651ac,
-        type: 3}
-      propertyPath: 'hotbarEntryList.Array.data[0]'
-      value: 
-      objectReference: {fileID: 857599513}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -406,7 +396,7 @@ PrefabInstance:
     - target: {fileID: 8652155644515519609, guid: e4cc8d284fb37a44983bd6656418cc9a,
         type: 3}
       propertyPath: m_Name
-      value: InventoryEntry
+      value: HotbarEntryHand
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -843,8 +833,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2014187540}
   - component: {fileID: 2014187541}
+  - component: {fileID: 2014187542}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Hotbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -896,6 +887,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!114 &2014187542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014187539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 994aa4b59926d4646b86af43c09d3e86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hotbarHandEntry: {fileID: 857599513}
 --- !u!1001 &647009449598068344
 PrefabInstance:
   m_ObjectHideFlags: 0
