@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuHotbar : MonoBehaviour
 {
     public MenuHotbarEntry hotbarHandEntry;
+    public Slider progressBar;
 
     void Awake()
     {

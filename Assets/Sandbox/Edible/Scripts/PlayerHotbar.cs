@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerHotbar : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class PlayerHotbar : MonoBehaviour
     private InputAction scrollAction;
     private MenuHotbar hotbarBase;
     private Transform hotbarUIPanel;
+    private Slider hotbarProgressBar;
     public GameObject hotbarEntryPrefab;
     public Transform itemDropSpot;
     public delegate MenuHotbar GetHotbarTransformEvent();
@@ -27,12 +29,15 @@ public class PlayerHotbar : MonoBehaviour
         hotbarBase = GetHotbarTransform();
         hotbarUIPanel = hotbarBase.gameObject.transform;
         hotbarEntryList.Add(hotbarBase.hotbarHandEntry);
+        hotbarProgressBar = hotbarBase.progressBar;
+        hotbarProgressBar.maxValue = size;
     }
 
 
     public void Resize(int newSize)
     {
         size = newSize;
+        hotbarProgressBar.maxValue = newSize;
     }
 
     public bool IsHotbarFull(int itemSize)
@@ -55,6 +60,7 @@ public class PlayerHotbar : MonoBehaviour
             itemEntry.image.sprite = item.itemIcon;
             itemEntry.text.text = item.itemName;
             sizeTaken += item.itemSize;
+            hotbarProgressBar.value = sizeTaken;
             ModPlayer(item, true);
             return true;
         }
@@ -81,6 +87,7 @@ public class PlayerHotbar : MonoBehaviour
         ItemBase item = itemObject.GetComponent<ItemBase>();
         item.canInteract = true;
         sizeTaken -= item.itemSize;
+        hotbarProgressBar.value = sizeTaken;
         ModPlayer(item, false);
         itemList.RemoveAt(itemIndex);
     }
@@ -92,6 +99,7 @@ public class PlayerHotbar : MonoBehaviour
         if (item.itemAttHotbarSizeMod != 0)
         {
             size += item.itemAttHotbarSizeMod * boolMultiplier;
+            hotbarProgressBar.maxValue = size;
         }
     }
 
@@ -115,11 +123,14 @@ public class PlayerHotbar : MonoBehaviour
 
     private void HandleDrop(InputAction.CallbackContext context)
     {
-        int itemSize = currentItemBase.itemSize;
-        int sizeMod = currentItemBase.itemAttHotbarSizeMod;
-        if (currentItemIndex != 0 && (size - sizeMod >= sizeTaken - itemSize))
+        if (currentItemIndex != 0)
         {
-            Drop(currentItemIndex);
+            int itemSize = currentItemBase.itemSize;
+            int sizeMod = currentItemBase.itemAttHotbarSizeMod;
+            if (size - sizeMod >= sizeTaken - itemSize)
+            {
+                Drop(currentItemIndex);
+            }
         }
     }
 
