@@ -190,7 +190,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310177043}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08506124, y: -0.15058637, z: 0.013006175, w: 0.9848448}
+  m_LocalRotation: {x: 0.08506123, y: -0.15058635, z: 0.013006171, w: 0.9848448}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -671,7 +671,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506642337}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12077954, y: -0.15001455, z: 0.018467631, w: 0.98110497}
+  m_LocalRotation: {x: 0.12077953, y: -0.15001452, z: 0.01846763, w: 0.98110497}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -910,31 +910,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftFootRaycast: {fileID: 1727229347}
   rightFootRaycast: {fileID: 1403356528}
-  rayDistance: 0.05
+  rayDistance: 0.04
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
   walkStepSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1939391943
+      Data2: 1255220306
+      Data3: 1880998017
+      Data4: 869925656
+    Path: event:/PlayerFootsteps
   runStepSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -316335545
+      Data2: 1182667393
+      Data3: 1555598477
+      Data4: 660492040
+    Path: event:/PlayerRunning
   crouchStepSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -310207697
+      Data2: 1138274044
+      Data3: 1520931752
+      Data4: 1705262199
+    Path: event:/PlayerCrouch
+  DEBUG: 1
 --- !u!1 &1403356527
 GameObject:
   m_ObjectHideFlags: 0
@@ -1859,7 +1860,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067100642}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.10291375, y: -0.15032563, z: 0.01573589, w: 0.9831396}
+  m_LocalRotation: {x: 0.10291375, y: -0.15032563, z: 0.015735889, w: 0.9831396}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

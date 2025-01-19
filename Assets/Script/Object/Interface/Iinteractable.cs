@@ -1,4 +1,3 @@
-using Unity.Behavior;
 using UnityEngine;
 
 public interface IInteractable
