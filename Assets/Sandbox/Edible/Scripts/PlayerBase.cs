@@ -4,6 +4,7 @@ public class PlayerBase : MonoBehaviour
 {
     public PlayerInputInteract interact;
     public PlayerHotbar hotbar;
+    public SOInventory inventory;
     public Vector3 position { get { return transform.position; } }
     public int hotbarSize {   
         get { return hotbar.size; }    
@@ -12,7 +13,13 @@ public class PlayerBase : MonoBehaviour
 
     private void Awake()
     {
+        interact.playerBase = this;
         hotbar.playerBase = this;
+    }
+
+    private void Start()
+    {
+        hotbar.SaveToInventory(inventory);
     }
 
     public bool PickUp(ItemBase item)

@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class PlayerItemReach : MonoBehaviour
 {
@@ -18,3 +18,4 @@ public class PlayerItemReach : MonoBehaviour
         if(other.TryGetComponent<IPlayerReach>(out IPlayerReach playerReach))
             playerReach.IsReachable(false);    }
 }
+*/

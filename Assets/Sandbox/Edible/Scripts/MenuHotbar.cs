@@ -8,12 +8,22 @@ public class MenuHotbar : MonoBehaviour
 
     void Awake()
     {
-        PlayerHotbar.GetHotbarTransform += ReturnTransform;
+        PlayerHotbar.GetHotbar += ReturnTransform;
     }
 
     MenuHotbar ReturnTransform()
     {
-        PlayerHotbar.GetHotbarTransform -= ReturnTransform;
+        PlayerHotbar.GetHotbar -= ReturnTransform;
         return this;
+    }
+
+    public void SetSize(int size)
+    {
+        progressBar.maxValue = size;
+    }
+
+    public void SetValue(int size)
+    {
+        progressBar.value = size;
     }
 }

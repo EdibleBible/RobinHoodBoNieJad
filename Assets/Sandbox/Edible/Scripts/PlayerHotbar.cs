@@ -1,43 +1,52 @@
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PlayerHotbar : MonoBehaviour
 {
-    public List<ItemBase> itemList = new();
-    public List<MenuHotbarEntry> hotbarEntryList = new();
+    [HideInInspector] public List<ItemBase> itemList = new();
+    [HideInInspector] public List<MenuHotbarEntry> hotbarEntryList = new();
     [HideInInspector] public PlayerBase playerBase;
     public int size;
     public int sizeTaken;
     public int currentItemIndex = 0;
-    public ItemBase currentItemBase;
+    [HideInInspector] public ItemBase currentItemBase;
     public InputActionAsset globalInputActions;
     private InputAction dropAction;
     private InputAction scrollAction;
-    private MenuHotbar hotbarBase;
+    private MenuHotbar hotbar;
     private Transform hotbarUIPanel;
     private Slider hotbarProgressBar;
     public GameObject hotbarEntryPrefab;
     public Transform itemDropSpot;
-    public delegate MenuHotbar GetHotbarTransformEvent();
-    public static event GetHotbarTransformEvent GetHotbarTransform;
+    public delegate MenuHotbar GetHotbarEvent();
+    public static event GetHotbarEvent GetHotbar;
 
     private void OnEnable()
     {
-        hotbarBase = GetHotbarTransform();
-        hotbarUIPanel = hotbarBase.gameObject.transform;
-        hotbarEntryList.Add(hotbarBase.hotbarHandEntry);
-        hotbarProgressBar = hotbarBase.progressBar;
-        hotbarProgressBar.maxValue = size;
+        hotbar = GetHotbar();
+        hotbarUIPanel = hotbar.gameObject.transform;
+        hotbarEntryList.Add(hotbar.hotbarHandEntry);
+        hotbarProgressBar = hotbar.progressBar;
+        hotbar.SetSize(size);
     }
 
+    public void SaveToInventory(SOInventory inventory)
+    {
+        if (itemList.Count > 1)
+        {
+            for (int i = 1; i < itemList.Count; i++)
+            {
+                inventory.itemList.Add(itemList[i]);
+            }
+        }
+    }
 
     public void Resize(int newSize)
     {
         size = newSize;
-        hotbarProgressBar.maxValue = newSize;
+        hotbar.SetSize(newSize);
     }
 
     public bool IsHotbarFull(int itemSize)
@@ -60,7 +69,7 @@ public class PlayerHotbar : MonoBehaviour
             itemEntry.image.sprite = item.itemIcon;
             itemEntry.text.text = item.itemName;
             sizeTaken += item.itemSize;
-            hotbarProgressBar.value = sizeTaken;
+            hotbar.SetValue(sizeTaken);
             ModPlayer(item, true);
             return true;
         }
