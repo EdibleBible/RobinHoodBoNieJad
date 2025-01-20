@@ -4,18 +4,21 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimatorController : MonoBehaviour
 {
-    [Header("IK Position")]
+    /*[Header("IK Position")]
     [SerializeField] private Transform leftHandIKPosition;
     [SerializeField] private Transform rightHandIKPosition;
     
     [Header("IK Weight")]
     [SerializeField] private float leftHandIKWeight;
-    [SerializeField] private float rightHandIKWeight;
+    [SerializeField] private float rightHandIKWeight;*/
     
     private Animator animator;
-    public bool IsOpenDoorInteraction { get; set; }
-
-
+    
+    [Header("Feet IK")]
+    [SerializeField] private LayerMask groundIKLayer;
+    [SerializeField] private float raycastDistance = 1.5f;
+    [SerializeField] private bool DEBUG_FEET;
+    
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -35,8 +38,12 @@ public class PlayerAnimatorController : MonoBehaviour
         animator.SetFloat("Velocity X", velocityX);
         animator.SetFloat("Velocity Z", velocityZ);
     }
+    
+    // Feet IK
+    
+    //DoorOpen and IK
 
-    public void OpenDoorInteraction()
+    /*public void OpenDoorInteraction()
     {
         animator.SetTrigger("OpenDoor");
     }
@@ -49,5 +56,5 @@ public class PlayerAnimatorController : MonoBehaviour
     public void SetDoorInteractionFalse()
     {
         IsOpenDoorInteraction = false;
-    }
+    }*/
 }

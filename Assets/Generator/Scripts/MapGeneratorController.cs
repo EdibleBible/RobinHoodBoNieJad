@@ -42,6 +42,7 @@ public class MapGeneratorController : MonoBehaviour
     [SerializeField] private List<Mesh> hallwayMeshes;
     [SerializeField] private List<Mesh> floorMashes;
     [SerializeField] private Material meshesMaterial;
+    [SerializeField] private Material passesMaterial;
 
     Dictionary<Mesh, List<Matrix4x4>> AllMatrix = new Dictionary<Mesh, List<Matrix4x4>>();
 
@@ -73,6 +74,8 @@ public class MapGeneratorController : MonoBehaviour
     //Playmode Method
     private void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
         StartGeneration();
     }
 
@@ -1451,34 +1454,38 @@ public class MapGeneratorController : MonoBehaviour
             GameObject meshObject = new GameObject(randomMesh.name);
             meshObject.layer = Mathf.RoundToInt(Mathf.Log(layerToSet.value, 2));
 
-            // Ustawiamy transformację na podstawie macierzy
             meshObject.transform.SetParent(parent);
-            meshObject.transform.position = matrix.GetColumn(3); // Pozycja
+            meshObject.transform.position = matrix.GetColumn(3);
             meshObject.transform.rotation =
-                Quaternion.LookRotation(matrix.GetColumn(2), matrix.GetColumn(1)); // Rotacja
-            meshObject.transform.localScale = Vector3.one; // Skalowanie
+                Quaternion.LookRotation(matrix.GetColumn(2), matrix.GetColumn(1));
+            meshObject.transform.localScale = Vector3.one;
 
-            // Dodajemy komponenty MeshFilter i MeshRenderer
             MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
             meshFilter.mesh = randomMesh;
 
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
-            meshRenderer.material = meshesMaterial; // Funkcja wybierająca losowy materiał
+            if (passThrow)
+            {
+                meshRenderer.material = passesMaterial;
+            }
+            else
+            {
+                meshRenderer.material = meshesMaterial;
+                var meshCollider = meshObject.AddComponent<MeshCollider>();
+                meshCollider.convex = true;
+            }
 
             if (!passThrow)
             {
-                // Dodanie uproszczonego kolizera (BoxCollider)
                 var boxCollider = meshObject.AddComponent<BoxCollider>();
                 boxCollider.center = randomMesh.bounds.center;
                 boxCollider.size = randomMesh.bounds.size;
 
-                // Jeśli obiekt jest przeszkodą
                 if (isObstacle)
                 {
                     var obstacle = meshObject.AddComponent<NavMeshObstacle>();
-                    obstacle.carving = true; // Opcjonalne: Włącz wycinanie w NavMesh
+                    obstacle.carving = true;
 
-                    // Dopasowanie NavMeshObstacle do BoxCollider
                     obstacle.shape = NavMeshObstacleShape.Box;
                     obstacle.size = boxCollider.size;
                     obstacle.center = boxCollider.center;

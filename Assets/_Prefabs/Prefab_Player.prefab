@@ -700,6 +700,37 @@ Transform:
   - {fileID: 1104499762601311624}
   m_Father: {fileID: 6645651956897890989}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2036201099687141564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4302871102223153716}
+  m_Layer: 0
+  m_Name: InteractableRaycast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4302871102223153716
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036201099687141564}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.703, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3981816019494861703}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2153680149561663438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1143,6 +1174,8 @@ GameObject:
   - component: {fileID: 1333554174671427527}
   - component: {fileID: 5098423633392506335}
   - component: {fileID: 1109717592782625126}
+  - component: {fileID: 6662169019535611020}
+  - component: {fileID: 8667969494564770948}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -1167,6 +1200,7 @@ Transform:
   - {fileID: 5532667995133521476}
   - {fileID: 8820677202387123483}
   - {fileID: 6907364242637511846}
+  - {fileID: 4302871102223153716}
   - {fileID: 7861792674429706713}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1229,6 +1263,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa425b80cd59cbf48b535aa18831556b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundIKLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  raycastDistance: 1.5
+  DEBUG_FEET: 0
 --- !u!114 &4834845450134540464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1253,6 +1292,15 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.2679554
+      value: 0.020693183
+      inSlope: 0.5025774
+      outSlope: 0.5025774
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
@@ -1315,8 +1363,8 @@ MonoBehaviour:
   objectLayer:
     serializedVersion: 2
     m_Bits: 192
-  rotationSpeed: 45
-  angleToRotateThreshold: 45
+  rotationSpeed: 120
+  angleToRotateThreshold: 15
 --- !u!114 &6290916183467294935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1329,6 +1377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b553623e31d34ca48917a4b1c2c63138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTransitioningState: 0
   walkSpeed: 1
   walkAcceleration: 0.2
   walkDeceleration: 0.5
@@ -1477,6 +1526,64 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interact: {fileID: 0}
   hotbar: {fileID: 0}
+--- !u!114 &6662169019535611020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3570760385224109893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f65f570f674e449bf3a10526eb9e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftFootRaycast: {fileID: 2639855004380021648}
+  rightFootRaycast: {fileID: 885809403551759325}
+  rayDistance: 0.03
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  walkStepSound:
+    Guid:
+      Data1: -1939391943
+      Data2: 1255220306
+      Data3: 1880998017
+      Data4: 869925656
+    Path: event:/PlayerFootsteps
+  runStepSound:
+    Guid:
+      Data1: -316335545
+      Data2: 1182667393
+      Data3: 1555598477
+      Data4: 660492040
+    Path: event:/PlayerRunning
+  crouchStepSound:
+    Guid:
+      Data1: -310207697
+      Data2: 1138274044
+      Data3: 1520931752
+      Data4: 1705262199
+    Path: event:/PlayerCrouch
+  DEBUG: 1
+--- !u!114 &8667969494564770948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3570760385224109893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb228a184496b14ca3a386d6f9d7dd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycasterTransform: {fileID: 4302871102223153716}
+  interactionDistance: 0.35
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  interactionKey: 99
 --- !u!1 &3591814632773789330
 GameObject:
   m_ObjectHideFlags: 0

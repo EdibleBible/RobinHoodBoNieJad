@@ -6,10 +6,11 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
     private EnemyFovStats fovStats;
     private EnemyMovement enemyMovement;
     private EnemyMovementStats movementStats;
+    private EnemyPatrollingStats patrollingStats;
     private float findingPointDistance;
 
 
-    public EnemyPatrollingState(FieldOfView _fov,EnemyFovStats _fovStats,EnemyMovement _enemyMovement, EnemyMovementStats _movementStats,
+    public EnemyPatrollingState(FieldOfView _fov,EnemyFovStats _fovStats,EnemyMovement _enemyMovement, EnemyMovementStats _movementStats,EnemyPatrollingStats _patrollingStats,
         float _findingPointDistance) : base(E_EnemyState.Patrol)
     {
         fov = _fov;
@@ -18,6 +19,8 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
         enemyMovement = _enemyMovement;
         movementStats = _movementStats;
         findingPointDistance = _findingPointDistance;
+        patrollingStats = _patrollingStats;
+        patrollingStats.CreatePatrolPoint(_fov.transform.position);
     }
 
     public override void EnterState()
@@ -25,16 +28,23 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
         fov.SetUpStats(fovStats);
         fov.ResetFindingTargets(fovStats.FindingDelay);
         
-        enemyMovement.SetUpSpeed(movementStats.MaxSpeed, movementStats.Acceleration, movementStats.Deceleration,
+        enemyMovement.SetUpSpeed(movementStats.MaxSpeed, movementStats.Acceleration,
             movementStats.AngularSpeed, movementStats.StoppingDistance);
         enemyMovement.ResetCheckingDistance(movementStats.DelayBettwenDistanceCheck);
 
-        Vector3 randomPoint;
-        do
-            randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
-        while (!enemyMovement.IsPointOnNavMesh(randomPoint));
+        if (patrollingStats.RandomPointPatroll)
+        {
+            Vector3 randomPoint;
+            do
+                randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
+            while (!enemyMovement.IsPointOnNavMesh(randomPoint));
 
-        enemyMovement.SetDestination(randomPoint);
+            enemyMovement.SetDestination(randomPoint);
+        }
+        else
+        {
+            enemyMovement.SetDestination(patrollingStats.GetNearestPoint(fov.transform.position));
+        }
     }
 
     public override void ExitState()
@@ -47,13 +57,21 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
     {
         if (enemyMovement.GetDistanceToDestination() <= movementStats.ChangeDestinationPointDistance)
         {
-            Vector3 randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
-            enemyMovement.ResetDestination();
+            if (patrollingStats.RandomPointPatroll)
+            {
+                Vector3 randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
+                enemyMovement.ResetDestination();
             
-            if (!enemyMovement.IsPointOnNavMesh(randomPoint))
-                randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
+                if (!enemyMovement.IsPointOnNavMesh(randomPoint))
+                    randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
             
-            enemyMovement.SetDestination(randomPoint);
+                enemyMovement.SetDestination(randomPoint);
+            }
+            else
+            {
+                enemyMovement.SetDestination(patrollingStats.GetNextPatrollingPoint());
+                enemyMovement.ResetDestination();
+            }
         }
     }
 

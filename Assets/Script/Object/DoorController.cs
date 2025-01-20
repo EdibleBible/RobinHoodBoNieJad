@@ -4,79 +4,108 @@ using DG.Tweening;
 
 public class DoorController : MonoBehaviour, IInteractable
 {
-    [SerializeField] private GameObject doorPivot;
-    private bool isOpen = false;
-    private Tween isDoorOpenTween;
 
+    public bool CanInteract
+    {
+        get => canInteract;
+        set => canInteract = value;
+    }
 
-    [Header("Open")] [SerializeField] private Vector3 OpenDoorPosition;
-    [SerializeField] private float OpenTime;
-    [SerializeField] private AnimationCurve OpenCurve;
-    [Header("Close")] [SerializeField] private Vector3 CloseDoorPosition;
-    [SerializeField] private float CloseTime;
-    [SerializeField] private AnimationCurve CloseCurve;
+    public bool canInteract = true;
 
-    [Header("Events")]
-    [SerializeField] private GameEvent showUIEvent;
+    [SerializeField] private float openTime;
+    [SerializeField] private AnimationCurve openCurve;
+    
+    [SerializeField] private float closeTime;
+    [SerializeField] private AnimationCurve closeCurve;
+    
+    
+    [Header("LeftDoor")]
+    [SerializeField] private GameObject doorPivotLeft;
+    [SerializeField] private Vector3 leftDoorClosePosition;
+    [SerializeField] private Vector3 leftDoorOpenPosition;
+    
+    [Header("RightDoor")]
+    [SerializeField] private GameObject doorPivotRight;
+    [SerializeField] private Vector3 rightDoorClosePosition;
+    [SerializeField] private Vector3 rightDoorOpenPosition;
+
+    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
+
     public GameEvent ShowUIEvent
     {
         get => showUIEvent;
         set => showUIEvent = value;
     }
+
     public GameEvent InteractEvent
     {
         get => interactEvent;
         set => interactEvent = value;
     }
 
-    [Header("Settings")]
-    [HideInInspector] public bool CanInteract { get; set; }
-
-    
-    [Header("Callbacks")] 
+    [Header("Callbacks")]
     public string InteractMessage
     {
         get => interactMessage;
         set => interactMessage = value;
     }
-    [SerializeField] private string interactMessage; 
+
+    [SerializeField] private string interactMessage;
 
 
-    [Header("Debug")] 
-    [SerializeField] private bool isDebug;
+    [Header("Debug")] [SerializeField] private bool isDebug;
     [SerializeField] private KeyCode debugKey = KeyCode.C;
     
-
-    private void Update()
-    {
-        if (isDebug && Input.GetKeyDown(debugKey))
-        {
-            CanInteract = true;
-            Interact();
-            CanInteract = false;
-        }
-    }
+    private bool isOpen = false;
+    private Tween isDoorOpenTween;
+    public bool IsBlocked;
+    public bool TwoSideInteraction;
 
     public void Interact()
     {
-        Debug.Log("Interact");
+        if (IsBlocked)
+            return;
+
         if (!isOpen && isDoorOpenTween == null && CanInteract)
         {
-            Debug.Log("Open");
             InteractEvent.Raise(this, null);
-            isDoorOpenTween = doorPivot.transform.DOLocalRotate(OpenDoorPosition, OpenTime).SetEase(OpenCurve)
+
+            // Tworzymy tweena dla lewych drzwi
+            Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorOpenPosition, openTime).SetEase(openCurve);
+
+            // Tworzymy tweena dla prawych drzwi
+            Tween rightDoorTween = doorPivotRight.transform.DOLocalRotate(rightDoorOpenPosition, openTime).SetEase(openCurve);
+
+            // Łączymy tweens w Sequence
+            isDoorOpenTween = DOTween.Sequence()
+                .Join(leftDoorTween)
+                .Join(rightDoorTween)
                 .OnComplete(() =>
                 {
                     isDoorOpenTween = null;
                     isOpen = true;
+                    if (!TwoSideInteraction)
+                    {
+                        CanInteract = false;
+                    }
                 });
         }
         else if (isOpen && isDoorOpenTween == null && CanInteract)
         {
-            Debug.Log("Close");
             InteractEvent.Raise(this, null);
-            isDoorOpenTween = doorPivot.transform.DOLocalRotate(CloseDoorPosition, CloseTime).SetEase(CloseCurve)
+
+            // Tworzymy tweena dla lewych drzwi
+            Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorClosePosition, closeTime).SetEase(closeCurve);
+
+            // Tworzymy tweena dla prawych drzwi
+            Tween rightDoorTween = doorPivotRight.transform.DOLocalRotate(rightDoorClosePosition, closeTime).SetEase(closeCurve);
+
+            // Łączymy tweens w Sequence
+            isDoorOpenTween = DOTween.Sequence()
+                .Join(leftDoorTween)
+                .Join(rightDoorTween)
                 .OnComplete(() =>
                 {
                     isDoorOpenTween = null;
@@ -92,6 +121,6 @@ public class DoorController : MonoBehaviour, IInteractable
 
     public void HideUI()
     {
-        ShowUIEvent.Raise(this, (false, InteractMessage));
+        ShowUIEvent.Raise(this, (false, ""));
     }
 }

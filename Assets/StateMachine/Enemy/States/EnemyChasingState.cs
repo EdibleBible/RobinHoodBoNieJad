@@ -19,7 +19,7 @@ public class EnemyChasingState : BaseState<E_EnemyState>
     public override void EnterState()
     {
         fov.SetUpStats(fovStats);
-        enemyMovement.SetUpSpeed(movementStats.MaxSpeed, movementStats.Acceleration, movementStats.Deceleration,
+        enemyMovement.SetUpSpeed(movementStats.MaxSpeed, movementStats.Acceleration,
             movementStats.AngularSpeed, movementStats.StoppingDistance);
         
         

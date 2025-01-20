@@ -26,11 +26,10 @@ public class EnemyMovement : MonoBehaviour
             Debug.LogError("NavMeshAgent nie został przypisany ani znaleziony w obiekcie!");
         }
     }
-    public void SetUpSpeed(float _speed, float _accelerationTime, float _decelerationTime, float _angularSpeed, float _stoppingDistance)
+    public void SetUpSpeed(float _speed, float _accelerationTime, float _angularSpeed, float _stoppingDistance)
     {
         agent.speed = _speed;
         agent.acceleration = _accelerationTime;
-        agent.stoppingDistance = _decelerationTime;
         agent.angularSpeed = _angularSpeed;
         agent.stoppingDistance = _stoppingDistance;
     }

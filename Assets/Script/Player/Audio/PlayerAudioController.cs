@@ -37,7 +37,6 @@ public class PlayerAudioController : MonoBehaviour
 
         if (hitGround && !isFootOnGround)
         {
-            Debug.Log("Krok: " + foot);
             // Stopa dotknęła ziemi, odtwarzamy dźwięk
             PlayFootstepSound(hit.point);
             isFootOnGround = true;
