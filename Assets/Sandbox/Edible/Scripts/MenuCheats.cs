@@ -21,7 +21,6 @@ public class MenuCheats : MonoBehaviour
         cheatsAction = globalInputActions.FindAction("CheatConsole");
         cheatsAction.Enable();
         cheatsAction.performed += ToggleCheats;
-        player = GetPlayerBase();
     }
 
     private void OnDisable()
@@ -32,6 +31,10 @@ public class MenuCheats : MonoBehaviour
 
     private void ToggleCheats(InputAction.CallbackContext context)
     {
+        if (player == null)
+        {
+            player = GetPlayerBase();
+        }
         showConsole = !showConsole;
         if (showConsole)
         {
@@ -53,7 +56,6 @@ public class MenuCheats : MonoBehaviour
 
     public void Cheat()
     {
-        Debug.Log(input);
         switch (input[0])
         {
             case "scene":
@@ -73,17 +75,30 @@ public class MenuCheats : MonoBehaviour
         }
         switch (input[1])
         {
-            case "Lobby":
+            case "MainMenu":
                 SceneManager.LoadScene(0);
                 break;
-            case "Build":
+            case "Lobby":
                 SceneManager.LoadScene(1);
                 break;
-            case "Edible":
+            case "Build":
+            case "Level":
                 SceneManager.LoadScene(2); 
                 break;
-            case "Prala":
+            case "Edible":
                 SceneManager.LoadScene(3);
+                break;
+            case "3DPrala":
+                SceneManager.LoadScene(4);
+                break;
+            case "Sample":
+                SceneManager.LoadScene(5);
+                break;
+            case "Animation":
+                SceneManager.LoadScene(6);
+                break;
+            case "3DKosmo":
+                SceneManager.LoadScene(7);
                 break;
         }
     }
