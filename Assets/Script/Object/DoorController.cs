@@ -4,7 +4,6 @@ using DG.Tweening;
 
 public class DoorController : MonoBehaviour, IInteractable
 {
-    [SerializeField] private GameObject doorPivot;
 
     public bool CanInteract
     {
@@ -13,12 +12,23 @@ public class DoorController : MonoBehaviour, IInteractable
     }
 
     public bool canInteract = true;
-    [Header("Open")] [SerializeField] private Vector3 OpenDoorPosition;
-    [SerializeField] private float OpenTime;
-    [SerializeField] private AnimationCurve OpenCurve;
-    [Header("Close")] [SerializeField] private Vector3 CloseDoorPosition;
-    [SerializeField] private float CloseTime;
-    [SerializeField] private AnimationCurve CloseCurve;
+
+    [SerializeField] private float openTime;
+    [SerializeField] private AnimationCurve openCurve;
+    
+    [SerializeField] private float closeTime;
+    [SerializeField] private AnimationCurve closeCurve;
+    
+    
+    [Header("LeftDoor")]
+    [SerializeField] private GameObject doorPivotLeft;
+    [SerializeField] private Vector3 leftDoorClosePosition;
+    [SerializeField] private Vector3 leftDoorOpenPosition;
+    
+    [Header("RightDoor")]
+    [SerializeField] private GameObject doorPivotRight;
+    [SerializeField] private Vector3 rightDoorClosePosition;
+    [SerializeField] private Vector3 rightDoorOpenPosition;
 
     [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
@@ -61,7 +71,17 @@ public class DoorController : MonoBehaviour, IInteractable
         if (!isOpen && isDoorOpenTween == null && CanInteract)
         {
             InteractEvent.Raise(this, null);
-            isDoorOpenTween = doorPivot.transform.DOLocalRotate(OpenDoorPosition, OpenTime).SetEase(OpenCurve)
+
+            // Tworzymy tweena dla lewych drzwi
+            Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorOpenPosition, openTime).SetEase(openCurve);
+
+            // Tworzymy tweena dla prawych drzwi
+            Tween rightDoorTween = doorPivotRight.transform.DOLocalRotate(rightDoorOpenPosition, openTime).SetEase(openCurve);
+
+            // Łączymy tweens w Sequence
+            isDoorOpenTween = DOTween.Sequence()
+                .Join(leftDoorTween)
+                .Join(rightDoorTween)
                 .OnComplete(() =>
                 {
                     isDoorOpenTween = null;
@@ -75,7 +95,17 @@ public class DoorController : MonoBehaviour, IInteractable
         else if (isOpen && isDoorOpenTween == null && CanInteract)
         {
             InteractEvent.Raise(this, null);
-            isDoorOpenTween = doorPivot.transform.DOLocalRotate(CloseDoorPosition, CloseTime).SetEase(CloseCurve)
+
+            // Tworzymy tweena dla lewych drzwi
+            Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorClosePosition, closeTime).SetEase(closeCurve);
+
+            // Tworzymy tweena dla prawych drzwi
+            Tween rightDoorTween = doorPivotRight.transform.DOLocalRotate(rightDoorClosePosition, closeTime).SetEase(closeCurve);
+
+            // Łączymy tweens w Sequence
+            isDoorOpenTween = DOTween.Sequence()
+                .Join(leftDoorTween)
+                .Join(rightDoorTween)
                 .OnComplete(() =>
                 {
                     isDoorOpenTween = null;
