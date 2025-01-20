@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class MenuDisplay : MonoBehaviour
 {
-    public SOStats stats;
-    public TextMeshProUGUI tmp;
+    public SOInventory inventory;
+    public TextMeshProUGUI scoreDisplay;
 
     public void UpdateScoreTotal()
     {
-        tmp.text = stats.scoreTotal.ToString();
+        scoreDisplay.text = inventory.playerScore.ToString();
     }
 
     private void Start()

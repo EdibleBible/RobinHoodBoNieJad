@@ -5,4 +5,5 @@ using UnityEngine;
 public class SOInventory : ScriptableObject
 {
     public List<ItemBase> itemList = new();
+    public int playerScore;
 }
