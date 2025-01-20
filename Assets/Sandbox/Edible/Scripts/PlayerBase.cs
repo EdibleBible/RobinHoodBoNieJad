@@ -17,10 +17,18 @@ public class PlayerBase : MonoBehaviour
         hotbar.playerBase = this;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        hotbar.SaveToInventory(inventory);
+        MenuCheats.GetPlayerBase += ReturnThis;
     }
+
+    PlayerBase ReturnThis()
+    {
+        MenuCheats.GetPlayerBase -= ReturnThis;
+        return this;
+    }
+
+    
 
     public bool PickUp(ItemBase item)
     {
