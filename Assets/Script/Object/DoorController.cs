@@ -5,10 +5,14 @@ using DG.Tweening;
 public class DoorController : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject doorPivot;
-    private bool isOpen = false;
-    private Tween isDoorOpenTween;
 
+    public bool CanInteract
+    {
+        get => canInteract;
+        set => canInteract = value;
+    }
 
+    public bool canInteract = true;
     [Header("Open")] [SerializeField] private Vector3 OpenDoorPosition;
     [SerializeField] private float OpenTime;
     [SerializeField] private AnimationCurve OpenCurve;
@@ -16,65 +20,60 @@ public class DoorController : MonoBehaviour, IInteractable
     [SerializeField] private float CloseTime;
     [SerializeField] private AnimationCurve CloseCurve;
 
-    [Header("Events")]
-    [SerializeField] private GameEvent showUIEvent;
+    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
+
     public GameEvent ShowUIEvent
     {
         get => showUIEvent;
         set => showUIEvent = value;
     }
+
     public GameEvent InteractEvent
     {
         get => interactEvent;
         set => interactEvent = value;
     }
 
-    [Header("Settings")]
-    [HideInInspector] public bool CanInteract { get; set; }
-
-    
-    [Header("Callbacks")] 
+    [Header("Callbacks")]
     public string InteractMessage
     {
         get => interactMessage;
         set => interactMessage = value;
     }
-    [SerializeField] private string interactMessage; 
+
+    [SerializeField] private string interactMessage;
 
 
-    [Header("Debug")] 
-    [SerializeField] private bool isDebug;
+    [Header("Debug")] [SerializeField] private bool isDebug;
     [SerializeField] private KeyCode debugKey = KeyCode.C;
     
-
-    private void Update()
-    {
-        if (isDebug && Input.GetKeyDown(debugKey))
-        {
-            CanInteract = true;
-            Interact();
-            CanInteract = false;
-        }
-    }
+    private bool isOpen = false;
+    private Tween isDoorOpenTween;
+    public bool IsBlocked;
+    public bool TwoSideInteraction;
 
     public void Interact()
     {
-        Debug.Log("Interact");
+        if (IsBlocked)
+            return;
+
         if (!isOpen && isDoorOpenTween == null && CanInteract)
         {
-            Debug.Log("Open");
             InteractEvent.Raise(this, null);
             isDoorOpenTween = doorPivot.transform.DOLocalRotate(OpenDoorPosition, OpenTime).SetEase(OpenCurve)
                 .OnComplete(() =>
                 {
                     isDoorOpenTween = null;
                     isOpen = true;
+                    if (!TwoSideInteraction)
+                    {
+                        CanInteract = false;
+                    }
                 });
         }
         else if (isOpen && isDoorOpenTween == null && CanInteract)
         {
-            Debug.Log("Close");
             InteractEvent.Raise(this, null);
             isDoorOpenTween = doorPivot.transform.DOLocalRotate(CloseDoorPosition, CloseTime).SetEase(CloseCurve)
                 .OnComplete(() =>
@@ -92,6 +91,6 @@ public class DoorController : MonoBehaviour, IInteractable
 
     public void HideUI()
     {
-        ShowUIEvent.Raise(this, (false, InteractMessage));
+        ShowUIEvent.Raise(this, (false, ""));
     }
 }

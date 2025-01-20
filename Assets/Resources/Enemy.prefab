@@ -152,21 +152,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 212a7385d5a3fb94082344b86b4947d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTransitioningState: 0
   findingPointDistance: 5
   idleStats:
     MaxSpeed: 0
     Acceleration: 0
-    Deceleration: 0
     AngularSpeed: 0
     DelayBettwenDistanceCheck: 0
     StoppingDistance: 0
     ChangeDestinationPointDistance: 0
   patrollingStats:
-    MaxSpeed: 5
-    Acceleration: 5
-    Deceleration: 4
-    AngularSpeed: 120
-    DelayBettwenDistanceCheck: 0.2
+    MaxPatrolPoints: 5
+    PatrolPoints: []
+    MinDistanceBetweenPatrolPoints: 3
+    MaxDistanceBetweenPatrolPoints: 10
+    RandomPointPatroll: 0
+    LoopPatrolPoints: 0
+  patrollingMoveStats:
+    MaxSpeed: 2
+    Acceleration: 2
+    AngularSpeed: 360
+    DelayBettwenDistanceCheck: 1
     StoppingDistance: 0.5
     ChangeDestinationPointDistance: 0.5
   fovPatrollingState:
@@ -180,13 +186,12 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 524288
   chasingStats:
-    MaxSpeed: 5
-    Acceleration: 5
-    Deceleration: 4
-    AngularSpeed: 120
-    DelayBettwenDistanceCheck: 0.2
+    MaxSpeed: 4
+    Acceleration: 2
+    AngularSpeed: 360
+    DelayBettwenDistanceCheck: 0.1
     StoppingDistance: 0.1
-    ChangeDestinationPointDistance: 0.5
+    ChangeDestinationPointDistance: 0.1
   fovChaseState:
     ViewRadius: 8
     ViewAngle: 360
