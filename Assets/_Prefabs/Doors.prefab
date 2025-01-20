@@ -26,14 +26,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1270488484460746594}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071069, y: -0, z: -0, w: 0.70710677}
-  m_LocalPosition: {x: -0.154, y: 0, z: 0.297}
-  m_LocalScale: {x: 100, y: 99.999985, z: 99.99998}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: -1}
+  m_LocalPosition: {x: -0.154, y: 0, z: -0.002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3202383837595637326}
+  - {fileID: 6842361694676952577}
+  - {fileID: 3823416151124518300}
   m_Father: {fileID: 10646763247579413}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -9000, y: 0, z: 0}
 --- !u!33 &4207239466452536585
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -41,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1270488484460746594}
-  m_Mesh: {fileID: -5026252869219121854, guid: 9ddbd6aa4bacee842a36e72c838a5dfb, type: 3}
+  m_Mesh: {fileID: 0}
 --- !u!23 &1406160560803481853
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -117,7 +118,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2932454915409063240}
   - {fileID: 10646763247579413}
   - {fileID: 7587356241608031906}
   m_Father: {fileID: 0}
@@ -278,7 +278,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &5052147834020498605
+--- !u!1 &4486799192625577766
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -286,46 +286,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3202383837595637326}
-  - component: {fileID: 8905613689080255537}
-  - component: {fileID: 3550336846673855508}
+  - component: {fileID: 3823416151124518300}
+  - component: {fileID: 189251438185785913}
+  - component: {fileID: 2685460839428480755}
   m_Layer: 0
-  m_Name: Knobs
+  m_Name: Doors_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3202383837595637326
+--- !u!4 &3823416151124518300
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5052147834020498605}
+  m_GameObject: {fileID: 4486799192625577766}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 4.6566123e-10, z: -0.0019921358, w: 0.9999981}
-  m_LocalPosition: {x: -0.0000149899715, y: 0.00010561349, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0, w: -1}
+  m_LocalPosition: {x: 0.231, y: 0, z: 0.61200005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5713174312754481466}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8905613689080255537
+--- !u!33 &189251438185785913
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5052147834020498605}
-  m_Mesh: {fileID: -3179240852447512352, guid: 9ddbd6aa4bacee842a36e72c838a5dfb, type: 3}
---- !u!23 &3550336846673855508
+  m_GameObject: {fileID: 4486799192625577766}
+  m_Mesh: {fileID: 4972698601005970449, guid: 6dc804de2edffbe41a05d1b9a86797a1, type: 3}
+--- !u!23 &2685460839428480755
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5052147834020498605}
+  m_GameObject: {fileID: 4486799192625577766}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -364,7 +364,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &5301947332049152706
+--- !u!1 &6178695807836224699
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -372,46 +372,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2932454915409063240}
-  - component: {fileID: 1510175401230708032}
-  - component: {fileID: 147997093234413069}
+  - component: {fileID: 6842361694676952577}
+  - component: {fileID: 7591705715807005092}
+  - component: {fileID: 5674499701197135214}
   m_Layer: 0
-  m_Name: Columns
+  m_Name: Doors_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2932454915409063240
+--- !u!4 &6842361694676952577
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5301947332049152706}
+  m_GameObject: {fileID: 6178695807836224699}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: -0.1402849, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalRotation: {x: -0, y: -0, z: 0, w: -1}
+  m_LocalPosition: {x: 0.23099996, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4557374751376709222}
+  m_Father: {fileID: 5713174312754481466}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1510175401230708032
+--- !u!33 &7591705715807005092
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5301947332049152706}
-  m_Mesh: {fileID: -5387877993904369314, guid: 9ddbd6aa4bacee842a36e72c838a5dfb, type: 3}
---- !u!23 &147997093234413069
+  m_GameObject: {fileID: 6178695807836224699}
+  m_Mesh: {fileID: 6754094394222623684, guid: 9db01af5e6511d443abe0ce49ab217e2, type: 3}
+--- !u!23 &5674499701197135214
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5301947332049152706}
+  m_GameObject: {fileID: 6178695807836224699}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
