@@ -4,8 +4,17 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimatorController : MonoBehaviour
 {
-    private Animator animator;
+    [Header("IK Position")]
+    [SerializeField] private Transform leftHandIKPosition;
+    [SerializeField] private Transform rightHandIKPosition;
     
+    [Header("IK Weight")]
+    [SerializeField] private float leftHandIKWeight;
+    [SerializeField] private float rightHandIKWeight;
+    
+    private Animator animator;
+    public bool IsOpenDoorInteraction { get; set; }
+
 
     void Start()
     {
@@ -17,21 +26,6 @@ public class PlayerAnimatorController : MonoBehaviour
     {
         animator.SetFloat("Velocity X", velocityX);
         animator.SetFloat("Velocity Z", velocityZ);
-        
-        /*// Płynne przejście wartości za pomocą Lerp
-        float currentVelocityX = animator.GetFloat("Velocity X");
-        float currentVelocityZ = animator.GetFloat("Velocity Z");
-
-        // Używamy Mathf.Lerp do interpolacji wartości
-        float newVelocityX = Mathf.Lerp(currentVelocityX, velocityX, smoothTime * Time.deltaTime);
-        Debug.LogWarning("X velocity: " + newVelocityX);
-        float newVelocityZ = Mathf.Lerp(currentVelocityZ, velocityZ, smoothTime * Time.deltaTime);
-        Debug.LogWarning("Y velocity: " + velocityZ);
-
-
-        // Ustawiamy wartości w animatorze
-        animator.SetFloat("Velocity X", newVelocityX);
-        animator.SetFloat("Velocity Z", newVelocityZ);*/
     }
 
     public void UpdateCrouchParameters(float velocityX, float velocityZ, bool isCrouching)
@@ -40,19 +34,20 @@ public class PlayerAnimatorController : MonoBehaviour
         
         animator.SetFloat("Velocity X", velocityX);
         animator.SetFloat("Velocity Z", velocityZ);
-        /*// Płynne przejście wartości za pomocą Lerp
-        float currentVelocityX = animator.GetFloat("Velocity X");
-        float currentVelocityZ = animator.GetFloat("Velocity Z");
+    }
 
-        // Ustawiamy animację kucania z wartością bool
-        animator.SetBool("IsCrouch", isCrouching);
+    public void OpenDoorInteraction()
+    {
+        animator.SetTrigger("OpenDoor");
+    }
 
-        // Używamy Mathf.Lerp do interpolacji prędkości
-        float newVelocityX = Mathf.Lerp(currentVelocityX, velocityX, smoothTime * Time.deltaTime);
-        float newVelocityZ = Mathf.Lerp(currentVelocityZ, velocityZ, smoothTime * Time.deltaTime);
+    public void SetDoorInteractionTrue()
+    {
+        IsOpenDoorInteraction = true;
+    }
 
-        // Ustawiamy nowe wartości w animatorze
-        animator.SetFloat("Velocity X", velocityX);
-        animator.SetFloat("Velocity Z", velocityZ);*/
+    public void SetDoorInteractionFalse()
+    {
+        IsOpenDoorInteraction = false;
     }
 }

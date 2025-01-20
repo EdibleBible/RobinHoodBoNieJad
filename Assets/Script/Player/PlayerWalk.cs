@@ -7,6 +7,7 @@ public class PlayerWalk : MonoBehaviour
     private float accelerationProgress = 0f;
     private float currMoveSpeed = 0f;
     private float targetMoveSpeed = 0f;
+    private bool stopMotion = true;
 
     private Camera camera;
 
@@ -21,13 +22,24 @@ public class PlayerWalk : MonoBehaviour
 
     private CharacterController characterController;
 
+    public void SetMotion(bool option)
+    {
+        stopMotion = option;
+    }
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
     }
-    
+
     public void Movement(float speed, float accelerationTime, float decelerationTime, out float xVel, out float yVel)
     {
+        if (!stopMotion)
+        {
+            characterController.Move(Vector3.zero);
+            xVel = 0;
+            yVel = 0;
+            return;
+        }
         // Read Input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -68,8 +80,8 @@ public class PlayerWalk : MonoBehaviour
         yVel = localVelocity.z;
 
         characterController.Move(velocity * Time.deltaTime);
-        
-        
+
+
         //Debug.Log("velocity: " + characterController.velocity);
     }
 

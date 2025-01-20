@@ -10,39 +10,37 @@ using UnityEngine.Serialization;
 [Serializable]
 public struct RoomGanerateSetting
 {
-    [Header("BaseInfo")] 
-    public Vector2Int MaxRoomSize;
+    [Header("BaseInfo")] public Vector2Int MaxRoomSize;
     public Vector2Int MinRoomSize;
     public int RoomCount;
     public int MinRoomDistance;
     public int MaxAttempts;
 
-    [Header("Additional way")] 
-    public bool UseAdditionalEdges;
+    [Header("Additional way")] public bool UseAdditionalEdges;
     [UnityEngine.Range(0, 25)] public int AdditionSelectedEdges;
     [UnityEngine.Range(0, 100)] public int ChanceToSelectEdge;
 
-    [Header("Secret way")] 
-    public bool CreateSecretWay;
+    [Header("Secret way")] public bool CreateSecretWay;
     [UnityEngine.Range(0, 5)] public int SecretWayMaxCount;
 
-    [Header("Rooms")] 
-    public List<Room> CreatedRoom;
+    [Header("Rooms")] public List<Room> CreatedRoom;
 
-    [Header("Inroom Generator")] 
-    public GameObject PlayerPrefab;
+    [Header("Inroom Generator")] public GameObject PlayerPrefab;
     public List<GameObject> ObjectToPickList;
     public GameObject DepositPointPrefab;
     public LayerMask InroomObjectLayer;
+    
+    [Header("Door Spawn")]
+    public GameObject DoorPrefab;
+    public float DoorSpawnOffset;
 
     public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid, uint seed, Transform roomTransform)
     {
         Unity.Mathematics.Random random = new Unity.Mathematics.Random(seed);
         CreatedRoom = new List<Room>();
         int attempt = 0;
-        
-        
-        
+
+
         for (int i = 0; i < RoomCount;)
         {
             i++;
@@ -56,7 +54,7 @@ public struct RoomGanerateSetting
                 continue; // Jeśli nie udało się wygenerować pokoju, przerwij
             }
 
-            
+
             if (room.CellInRoom.Count > 0)
             {
                 room.RoomID = i;
@@ -64,11 +62,11 @@ public struct RoomGanerateSetting
                 room.MarkCorners();
                 CreatedRoom.Add(room);
             }
-            
+
             GameObject roomParent = new GameObject("Room: " + i);
             roomParent.transform.SetParent(roomTransform);
-            
-            room.SetUpParent(roomParent,generatedGrid.GetCellSize());
+
+            room.SetUpParent(roomParent, generatedGrid.GetCellSize());
         }
     }
 
@@ -149,10 +147,11 @@ public struct RoomGanerateSetting
     {
         foreach (var room in CreatedRoom)
         {
-            room.SpawnPlayer(PlayerPrefab,DepositPointPrefab);
+            room.SpawnPlayer(PlayerPrefab, DepositPointPrefab);
             break;
         }
     }
+
     public void SpawnRoomInside()
     {
         foreach (var room in CreatedRoom)
@@ -168,5 +167,12 @@ public struct RoomGanerateSetting
             room.DetectObjects(InroomObjectLayer);
         }
     }
-    
+
+    public void SpawnDoor()
+    {
+        foreach (var room in CreatedRoom)
+        {
+            room.SpawnDoors(DoorPrefab,DoorSpawnOffset);
+        }
+    }
 }

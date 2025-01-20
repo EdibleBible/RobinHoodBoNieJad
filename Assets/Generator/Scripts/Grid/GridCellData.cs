@@ -300,7 +300,6 @@ public class GridCellData
         matrix4X4s.AddRange(GeneratePassRoomSide(segmentSize));
         return matrix4X4s;
     }
-
     public IEnumerable<Matrix4x4> FlorMatrix4x4(Vector2 segmentSize)
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
@@ -331,6 +330,18 @@ public class GridCellData
         }
 
         return matrix4X4s;
+    }
+
+    public List<GridCellData> ReturnNeighbor()
+    {
+        List<GridCellData> gridCellData = new List<GridCellData>
+        {
+            UpN,
+            DownN,
+            LeftN,
+            RightN
+        };
+        return gridCellData;
     }
 
     public enum E_GridCellReferenceType
