@@ -700,6 +700,37 @@ Transform:
   - {fileID: 1104499762601311624}
   m_Father: {fileID: 6645651956897890989}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2036201099687141564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4302871102223153716}
+  m_Layer: 0
+  m_Name: InteractableRaycast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4302871102223153716
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036201099687141564}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.703, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3981816019494861703}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2153680149561663438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,6 +1200,7 @@ Transform:
   - {fileID: 5532667995133521476}
   - {fileID: 8820677202387123483}
   - {fileID: 6907364242637511846}
+  - {fileID: 4302871102223153716}
   - {fileID: 7861792674429706713}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1506,8 +1538,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f65f570f674e449bf3a10526eb9e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftFootRaycast: {fileID: 0}
-  rightFootRaycast: {fileID: 0}
+  leftFootRaycast: {fileID: 2639855004380021648}
+  rightFootRaycast: {fileID: 885809403551759325}
   rayDistance: 0.03
   groundLayerMask:
     serializedVersion: 2
@@ -1546,7 +1578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb228a184496b14ca3a386d6f9d7dd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raycasterTransform: {fileID: 0}
+  raycasterTransform: {fileID: 4302871102223153716}
   interactionDistance: 0.35
   interactableLayer:
     serializedVersion: 2

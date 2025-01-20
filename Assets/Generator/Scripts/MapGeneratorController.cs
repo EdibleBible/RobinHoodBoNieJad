@@ -74,6 +74,8 @@ public class MapGeneratorController : MonoBehaviour
     //Playmode Method
     private void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
         StartGeneration();
     }
 
@@ -1469,6 +1471,8 @@ public class MapGeneratorController : MonoBehaviour
             else
             {
                 meshRenderer.material = meshesMaterial;
+                var meshCollider = meshObject.AddComponent<MeshCollider>();
+                meshCollider.convex = true;
             }
 
             if (!passThrow)

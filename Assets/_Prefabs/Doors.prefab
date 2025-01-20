@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5713174312754481466}
   - component: {fileID: 4207239466452536585}
   - component: {fileID: 1406160560803481853}
-  - component: {fileID: 3843779166566319514}
   m_Layer: 0
   m_Name: doors
   m_TagString: Untagged
@@ -89,27 +88,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3843779166566319514
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1270488484460746594}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 0.50567573}
-  m_Center: {x: 1.5613837e-10, y: 0, z: 0.24716198}
 --- !u!1 &3779888550490983644
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +98,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4557374751376709222}
   - component: {fileID: 1783864906644179005}
-  m_Layer: 0
+  - component: {fileID: 94345368063266394}
+  - component: {fileID: 3904259532809305190}
+  m_Layer: 31
   m_Name: Doors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,33 +137,111 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
-  openTime: 0
+  openTime: 1
   openCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  closeTime: 0
+  closeTime: 1
   closeCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  doorPivotLeft: {fileID: 0}
+  doorPivotLeft: {fileID: 4486799192625577766}
   leftDoorClosePosition: {x: 0, y: 0, z: 0}
-  leftDoorOpenPosition: {x: 0, y: 0, z: 0}
-  doorPivotRight: {fileID: 0}
+  leftDoorOpenPosition: {x: 0, y: -76, z: 0}
+  doorPivotRight: {fileID: 6178695807836224699}
   rightDoorClosePosition: {x: 0, y: 0, z: 0}
-  rightDoorOpenPosition: {x: 0, y: 0, z: 0}
+  rightDoorOpenPosition: {x: 0, y: 76, z: 0}
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   interactMessage: Use Door
   isDebug: 1
   debugKey: 99
   IsBlocked: 0
-  TwoSideInteraction: 0
+  TwoSideInteraction: 1
+--- !u!65 &94345368063266394
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779888550490983644}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.077988185, y: 1.8529506, z: 0.6244725}
+  m_Center: {x: 0.04155406, y: 0.89509535, z: -0.0040660053}
+--- !u!65 &3904259532809305190
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779888550490983644}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.096513316, y: 1.8097156, z: 0.61207765}
+  m_Center: {x: 0.038954765, y: 0.90524524, z: 0.0013602376}
 --- !u!1 &4317476360769838413
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +355,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4486799192625577766}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.231, y: 0, z: 0.61200005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -405,7 +463,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6178695807836224699}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.23099996, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
