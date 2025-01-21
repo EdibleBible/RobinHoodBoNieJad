@@ -56,12 +56,13 @@ public class MenuCheats : MonoBehaviour
 
     public void Cheat()
     {
-        switch (input[0])
+        switch (input[0].ToLower())
         {
             case "scene":
+            case "level":
                 CheatScene(input);
                 break;
-            case "playerInventory":
+            case "playerinventory":
                 CheatInventory(input);
                 break;
         }
@@ -73,39 +74,57 @@ public class MenuCheats : MonoBehaviour
         {
             SceneManager.LoadScene(result);
         }
-        switch (input[1])
+        switch (input[1].ToLower())
         {
-            case "MainMenu":
+            case "mainmenu":
+                LockCursor(false);
                 SceneManager.LoadScene(0);
                 break;
-            case "Lobby":
+            case "lobby":
+                LockCursor(false);
                 SceneManager.LoadScene(1);
                 break;
-            case "Build":
-            case "Level":
+            case "build":
+            case "level":
+                LockCursor(true);
                 SceneManager.LoadScene(2); 
                 break;
-            case "Edible":
+            case "edible":
                 SceneManager.LoadScene(3);
                 break;
-            case "3DPrala":
+            case "3dprala":
                 SceneManager.LoadScene(4);
                 break;
-            case "Sample":
+            case "sample":
+                LockCursor(true);
                 SceneManager.LoadScene(5);
                 break;
-            case "Animation":
+            case "animation":
+                LockCursor(true);
                 SceneManager.LoadScene(6);
                 break;
-            case "3DKosmo":
+            case "3dkosmo":
                 SceneManager.LoadScene(7);
                 break;
         }
     }
 
+    public void LockCursor(bool toLock)
+    {
+        Cursor.visible = !toLock;
+        if (toLock)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        } else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+    }
+
     public void CheatInventory(string[] input)
     {
-        switch (input[1])
+        switch (input[1].ToLower())
         {
             case "save":
                 player.hotbar.SaveToInventory(player.inventory);
