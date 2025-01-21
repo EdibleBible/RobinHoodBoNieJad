@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,6 +16,7 @@ public class MenuCheats : MonoBehaviour
     public delegate PlayerBase GetPlayerEvent();
     public static event GetPlayerEvent GetPlayerBase;
     private PlayerBase player;
+    private bool hasPlayer;
 
     private void Start()
     {
@@ -33,7 +35,12 @@ public class MenuCheats : MonoBehaviour
     {
         if (player == null)
         {
-            player = GetPlayerBase();
+            try { player = GetPlayerBase(); }
+            catch (NullReferenceException) { hasPlayer = false; }
+            if (player != null)
+            {
+                hasPlayer = true;
+            }
         }
         showConsole = !showConsole;
         if (showConsole)
@@ -63,6 +70,7 @@ public class MenuCheats : MonoBehaviour
                 CheatScene(input);
                 break;
             case "playerinventory":
+                if (!hasPlayer) { break; }
                 CheatInventory(input);
                 break;
         }
