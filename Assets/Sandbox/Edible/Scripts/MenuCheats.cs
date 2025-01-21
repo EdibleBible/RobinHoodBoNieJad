@@ -37,18 +37,21 @@ public class MenuCheats : MonoBehaviour
         {
             try { player = GetPlayerBase(); }
             catch (NullReferenceException) { hasPlayer = false; }
-            if (player != null)
+            finally
             {
-                hasPlayer = true;
+                if (player != null)
+                {
+                    hasPlayer = true;
+                }
             }
         }
         showConsole = !showConsole;
         if (showConsole)
         {
             inputBG.enabled = true;
-            inputField.Select();
+            inputField.ActivateInputField();
         }
-        else { inputBG.enabled = false; inputField.text = ""; }
+        else { inputBG.enabled = false; inputField.text = "";}
     }
 
     private void Update()
@@ -66,12 +69,14 @@ public class MenuCheats : MonoBehaviour
         switch (input[0].ToLower())
         {
             case "scene":
-            case "level":
                 CheatScene(input);
                 break;
             case "playerinventory":
                 if (!hasPlayer) { break; }
                 CheatInventory(input);
+                break;
+            case "level":
+                CheatLevel();
                 break;
         }
     }
@@ -143,6 +148,22 @@ public class MenuCheats : MonoBehaviour
                 break;
             case "clear":
                 player.hotbar.Clear();
+                break;
+        }
+    }
+
+    public void CheatLevel()
+    {
+        switch (input[1].ToLower())
+        {
+            case "play":
+                LockCursor(true);
+                SceneManager.LoadScene(2);
+                break;
+            case "exit":
+                LockCursor(false);
+                player.hotbar.SaveToInventory(player.inventory);
+                SceneManager.LoadScene(1);
                 break;
         }
     }

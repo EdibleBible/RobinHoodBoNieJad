@@ -17,6 +17,11 @@ public class PlayerBase : MonoBehaviour
         hotbar.playerBase = this;
     }
 
+    private void Start()
+    {
+        hotbar.LoadFromInventory(inventory);
+    }
+
     private void OnEnable()
     {
         MenuCheats.GetPlayerBase += ReturnThis;
@@ -27,8 +32,6 @@ public class PlayerBase : MonoBehaviour
         MenuCheats.GetPlayerBase -= ReturnThis;
         return this;
     }
-
-    
 
     public bool PickUp(ItemBase item)
     {
