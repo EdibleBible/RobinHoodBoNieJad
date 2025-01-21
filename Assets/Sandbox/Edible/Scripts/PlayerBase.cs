@@ -17,10 +17,10 @@ public class PlayerBase : MonoBehaviour
         hotbar.playerBase = this;
     }
 
-    private void Start()
+    /*private void Start()
     {
         hotbar.LoadFromInventory(inventory);
-    }
+    }*/
 
     private void OnEnable()
     {

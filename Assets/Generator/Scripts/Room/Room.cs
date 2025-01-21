@@ -83,7 +83,7 @@ public class Room
         spawnPosition = centroid;
 
         GameObject playerObj = SpawnObject(playerPrefab, spawnPosition, quaternion.identity);
-        GameObject deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f, -0.4f, 0.2f),
+        GameObject deposit = SpawnObject(depositPrefab, spawnPosition + new Vector3(0.2f, 0.32f, 0.2f),
             quaternion.identity);
 
         CinemachineFreeLook cinemachineFreeLook = Object.FindAnyObjectByType<CinemachineFreeLook>();
