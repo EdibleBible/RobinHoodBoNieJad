@@ -331,7 +331,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4475831895270496210}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5814071888702462145}
+        m_TargetAssemblyTypeName: MenuLobbyInventoryEntry, Assembly-CSharp
+        m_MethodName: Sell
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3104238673863282037
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,6 +399,8 @@ MonoBehaviour:
   itemIcon: {fileID: 1643018146664749477}
   itemName: {fileID: 2795193890210174316}
   itemValueText: {fileID: 479941587264849455}
+  entryIndex: 0
+  lobbyInventory: {fileID: 0}
 --- !u!1 &3816374657604845727
 GameObject:
   m_ObjectHideFlags: 0
