@@ -11,7 +11,6 @@ public class ItemBase : MonoBehaviour, IInteract
     public string itemDescription;
     public int itemSize;
     public Sprite itemIcon;
-    public int itemValue;
     public bool canInteract = true;
 
     public bool Interact(PlayerBase playerBase)
@@ -26,5 +25,6 @@ public class ItemBase : MonoBehaviour, IInteract
     }
 
     [Header("Item Attributes")]
+    public int itemValue;
     public int itemAttHotbarSizeMod;
 }
