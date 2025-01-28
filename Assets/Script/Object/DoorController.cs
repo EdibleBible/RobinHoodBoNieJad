@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using DG.Tweening;
+using FMODUnity;
+using FMOD.Studio;
 
 public class DoorController : MonoBehaviour, IInteractable
 {
@@ -15,23 +17,27 @@ public class DoorController : MonoBehaviour, IInteractable
 
     [SerializeField] private float openTime;
     [SerializeField] private AnimationCurve openCurve;
-    
+
     [SerializeField] private float closeTime;
     [SerializeField] private AnimationCurve closeCurve;
-    
-    
+
+
     [Header("LeftDoor")]
     [SerializeField] private GameObject doorPivotLeft;
     [SerializeField] private Vector3 leftDoorClosePosition;
     [SerializeField] private Vector3 leftDoorOpenPosition;
-    
+
     [Header("RightDoor")]
     [SerializeField] private GameObject doorPivotRight;
     [SerializeField] private Vector3 rightDoorClosePosition;
     [SerializeField] private Vector3 rightDoorOpenPosition;
 
-    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
+    [Header("Events")][SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
+
+    [Header("FMOD")]
+    [SerializeField] private EventReference doorsEvent;
+    EventInstance doorSoundInstance;
 
     public GameEvent ShowUIEvent
     {
@@ -55,9 +61,9 @@ public class DoorController : MonoBehaviour, IInteractable
     [SerializeField] private string interactMessage;
 
 
-    [Header("Debug")] [SerializeField] private bool isDebug;
+    [Header("Debug")][SerializeField] private bool isDebug;
     [SerializeField] private KeyCode debugKey = KeyCode.C;
-    
+
     private bool isOpen = false;
     private Tween isDoorOpenTween;
     public bool IsBlocked;
@@ -71,6 +77,8 @@ public class DoorController : MonoBehaviour, IInteractable
         if (!isOpen && isDoorOpenTween == null && CanInteract)
         {
             InteractEvent.Raise(this, null);
+
+            PlayDoorSound("Open");
 
             // Tworzymy tweena dla lewych drzwi
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorOpenPosition, openTime).SetEase(openCurve);
@@ -96,6 +104,8 @@ public class DoorController : MonoBehaviour, IInteractable
         {
             InteractEvent.Raise(this, null);
 
+            PlayDoorSound("Close");
+
             // Tworzymy tweena dla lewych drzwi
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorClosePosition, closeTime).SetEase(closeCurve);
 
@@ -112,6 +122,15 @@ public class DoorController : MonoBehaviour, IInteractable
                     isOpen = false;
                 });
         }
+    }
+
+    private void PlayDoorSound(string doorState)
+    {
+        doorSoundInstance = FMODUnity.RuntimeManager.CreateInstance(doorsEvent);
+        doorSoundInstance.setParameterByNameWithLabel("Doors", doorState);
+        doorSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject.transform));
+        doorSoundInstance.start();
+        doorSoundInstance.release();
     }
 
     public void ShowUI()
