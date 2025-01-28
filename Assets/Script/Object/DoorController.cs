@@ -127,7 +127,7 @@ public class DoorController : MonoBehaviour, IInteractable
     private void PlayDoorSound(string doorState)
     {
         doorSoundInstance = FMODUnity.RuntimeManager.CreateInstance(doorsEvent);
-        doorSoundInstance.setParameterByNameWithLabel("Doors", doorState);
+        doorSoundInstance.setParameterByNameWithLabel("Door", doorState);
         doorSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject.transform));
         doorSoundInstance.start();
         doorSoundInstance.release();
