@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 3257450002369383708}
   - component: {fileID: 2973088264107976584}
   - component: {fileID: 2880741787329933546}
-  - component: {fileID: 3914502436316094428}
+  - component: {fileID: 1414465637657781389}
+  - component: {fileID: 9212481258201562378}
   m_Layer: 0
   m_Name: ColliderZone
   m_TagString: Untagged
@@ -139,7 +140,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3914502436316094428
+--- !u!114 &1414465637657781389
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,16 +149,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 552456503631261236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 986f31ea766f6ea42b69ff1106c67687, type: 3}
+  m_Script: {fileID: 11500000, guid: 0887bc78887d81749bc256ecd2911360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemList: []
-  slotList: []
-  inventorySize: 3
-  stats: {fileID: 11400000, guid: cfbb569872faaa3449f3d7ca2b8442af, type: 2}
-  finalPrize: 0
-  inventoryUI: {fileID: 0}
-  playerCollides: 0
+  globalInputActions: {fileID: -944628639613478452, guid: 0ccaf3d76eaa4e64cbafbdd492dfcca0,
+    type: 3}
+  useObject:
+    m_Name: Use Object
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ec6425cd-9f23-482f-ad08-76913b759e2d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+--- !u!114 &9212481258201562378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552456503631261236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 805370f0d15650b40a5f5fc7da9e0f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2627152374343599158
 GameObject:
   m_ObjectHideFlags: 0
