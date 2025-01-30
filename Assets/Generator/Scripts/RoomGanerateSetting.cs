@@ -151,7 +151,7 @@ public struct RoomGanerateSetting
             break;
         }
     }
-
+    
     public void SpawnRoomInside()
     {
         foreach (var room in CreatedRoom)

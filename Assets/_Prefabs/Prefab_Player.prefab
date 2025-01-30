@@ -93,7 +93,7 @@ Transform:
   m_GameObject: {fileID: 435310063852529398}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.388}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -130,7 +130,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.4368032, y: 1.9495809, z: 1.0906447}
+  m_Size: {x: 1.4368032, y: 2.2, z: 1.77}
   m_Center: {x: 0.064534195, y: 0.5312532, z: 0.7439006}
 --- !u!114 &2966468671061525661
 MonoBehaviour:
@@ -144,8 +144,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbadd6eb77252084581273cee55706db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBase: {fileID: 0}
-  globalInputActions: {fileID: 0}
+  playerBase: {fileID: 1109717592782625126}
+  globalInputActions: {fileID: -944628639613478452, guid: 0ccaf3d76eaa4e64cbafbdd492dfcca0,
+    type: 3}
 --- !u!1 &442784213538496487
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,6 +267,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2302466163047148731}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &759762744413003927
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2018566085612201870}
+  m_Layer: 0
+  m_Name: DropSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2018566085612201870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759762744413003927}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.947, z: 0.647}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3981816019494861703}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &810426941439558571
 GameObject:
@@ -1172,7 +1204,7 @@ GameObject:
   - component: {fileID: 6290916183467294935}
   - component: {fileID: 3529988420471910963}
   - component: {fileID: 1333554174671427527}
-  - component: {fileID: 5098423633392506335}
+  - component: {fileID: 4025280932627955926}
   - component: {fileID: 1109717592782625126}
   - component: {fileID: 6662169019535611020}
   - component: {fileID: 8667969494564770948}
@@ -1200,6 +1232,7 @@ Transform:
   - {fileID: 5532667995133521476}
   - {fileID: 8820677202387123483}
   - {fileID: 6907364242637511846}
+  - {fileID: 2018566085612201870}
   - {fileID: 4302871102223153716}
   - {fileID: 7861792674429706713}
   m_Father: {fileID: 0}
@@ -1495,7 +1528,7 @@ MonoBehaviour:
   - {fileID: 6752772322888297743}
   - {fileID: 4333484453987510489}
   - {fileID: 8972669307018734631}
---- !u!114 &5098423633392506335
+--- !u!114 &4025280932627955926
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1504,14 +1537,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 3570760385224109893}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff9877e83a3e5e54bb9269bd48db5e4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 35fcfb95d9bb4ae43be76ee10c15a2c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listParent: {fileID: 0}
-  listItemPrefab: {fileID: 8652155644515519609, guid: e4cc8d284fb37a44983bd6656418cc9a,
+  itemList:
+  - {fileID: 4496757488845694131, guid: 14f6dffcbd8095b4684d845e7b846c53, type: 3}
+  hotbarEntryList: []
+  playerBase: {fileID: 0}
+  size: 2
+  sizeTaken: 0
+  currentItemIndex: 0
+  currentItemBase: {fileID: 0}
+  globalInputActions: {fileID: -944628639613478452, guid: 0ccaf3d76eaa4e64cbafbdd492dfcca0,
     type: 3}
-  items: []
-  itemList: []
+  hotbarEntryPrefab: {fileID: 8652155644515519609, guid: e4cc8d284fb37a44983bd6656418cc9a,
+    type: 3}
+  itemDropSpot: {fileID: 2018566085612201870}
 --- !u!114 &1109717592782625126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1524,8 +1565,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 516b756906ac05b42a2600f233a455a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interact: {fileID: 0}
-  hotbar: {fileID: 0}
+  interact: {fileID: 2966468671061525661}
+  hotbar: {fileID: 4025280932627955926}
+  inventory: {fileID: 11400000, guid: ee22af26dd4fe004495d00302392eb3a, type: 2}
 --- !u!114 &6662169019535611020
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,5 +25,6 @@ public class ItemBase : MonoBehaviour, IInteract
     }
 
     [Header("Item Attributes")]
+    public int itemValue;
     public int itemAttHotbarSizeMod;
 }

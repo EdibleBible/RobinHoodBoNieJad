@@ -9,6 +9,7 @@ using System;
 using Unity.AI.Navigation;
 using Unity.Mathematics;
 using UnityEngine.AI;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class MapGeneratorController : MonoBehaviour
 {
@@ -48,6 +49,7 @@ public class MapGeneratorController : MonoBehaviour
 
     [Header("Seed")] public uint wallSeed;
     private Unity.Mathematics.Random random;
+    public SOLevel levelData;
 
     [Header("Debug")] [SerializeField] private bool _debug;
     public Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
@@ -60,6 +62,7 @@ public class MapGeneratorController : MonoBehaviour
     {
         wallSeed = setValue;
         random = new Unity.Mathematics.Random(wallSeed);
+        levelData.levelSeed = (int)setValue;
         return wallSeed;
     }
 
@@ -68,6 +71,7 @@ public class MapGeneratorController : MonoBehaviour
         var randimInt = new System.Random().Next(1000, 9999);
         wallSeed = (uint)randimInt;
         random = new Unity.Mathematics.Random(wallSeed);
+        levelData.levelSeed = (int)wallSeed;
         return wallSeed;
     }
 
