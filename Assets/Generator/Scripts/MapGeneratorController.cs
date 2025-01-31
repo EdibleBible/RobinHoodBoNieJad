@@ -1428,7 +1428,7 @@ public class MapGeneratorController : MonoBehaviour
             // Spawnujemy pojedyncze meshe dla ścian
             SpawnMeshesFromMatrix(passWallCell, passesMeshes, holder, passableLayerMask, passThrow: true);
             SpawnMeshesFromMatrix(normalWallCell, wallMeshes, holder, wallLayerMask, true);
-            SpawnMeshesFromMatrix(floorCell, floorMashes, holder, floorLayerMask);
+            SpawnMeshesFromMatrix(floorCell, floorMashes, holder, floorLayerMask,false,false,true);
         }
 
         foreach (var hallwayCell in Hallwaycell)
@@ -1441,12 +1441,12 @@ public class MapGeneratorController : MonoBehaviour
 
             // Spawnujemy pojedyncze meshe dla korytarzy
             SpawnMeshesFromMatrix(cellMatrix, hallwayMeshes, holder, wallLayerMask, true);
-            SpawnMeshesFromMatrix(cellFloorMatrix, floorMashes, holder, floorLayerMask);
+            SpawnMeshesFromMatrix(cellFloorMatrix, floorMashes, holder, floorLayerMask,false,false,true);
         }
     }
 
     private void SpawnMeshesFromMatrix(List<Matrix4x4> matrices, List<Mesh> meshPool, Transform parent,
-        LayerMask layerToSet, bool isObstacle = false, bool passThrow = false)
+        LayerMask layerToSet, bool isObstacle = false, bool passThrow = false, bool isFloor = false)
     {
         foreach (var matrix in matrices)
         {
@@ -1468,6 +1468,8 @@ public class MapGeneratorController : MonoBehaviour
             meshFilter.mesh = randomMesh;
 
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
+            
+            
             if (passThrow)
             {
                 meshRenderer.material = passesMaterial;
@@ -1475,24 +1477,28 @@ public class MapGeneratorController : MonoBehaviour
             else
             {
                 meshRenderer.material = meshesMaterial;
-                var meshCollider = meshObject.AddComponent<MeshCollider>();
-                meshCollider.convex = true;
             }
 
             if (!passThrow)
             {
-                var boxCollider = meshObject.AddComponent<BoxCollider>();
-                boxCollider.center = randomMesh.bounds.center;
-                boxCollider.size = randomMesh.bounds.size;
-
+                if (isFloor)
+                {
+                    meshObject.AddComponent<MeshCollider>();
+                }
+                else
+                {
+                    var boxCollider = meshObject.AddComponent<BoxCollider>();
+                    boxCollider.center = randomMesh.bounds.center;
+                    boxCollider.size = randomMesh.bounds.size;
+                }
+                
                 if (isObstacle)
                 {
                     var obstacle = meshObject.AddComponent<NavMeshObstacle>();
                     obstacle.carving = true;
 
+
                     obstacle.shape = NavMeshObstacleShape.Box;
-                    obstacle.size = boxCollider.size;
-                    obstacle.center = boxCollider.center;
                 }
             }
         }
