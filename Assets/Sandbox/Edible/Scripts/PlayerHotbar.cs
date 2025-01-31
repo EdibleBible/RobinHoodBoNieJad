@@ -1,26 +1,91 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerHotbar : MonoBehaviour
 {
-    public List<ItemBase> itemList = new();
-    public List<MenuHotbarEntry> hotbarEntryList = new();
+    [HideInInspector] public List<ItemBase> itemList = new();
+    [HideInInspector] public List<MenuHotbarEntry> hotbarEntryList = new();
     [HideInInspector] public PlayerBase playerBase;
     public int size;
     public int sizeTaken;
     public int currentItemIndex = 0;
-    public ItemBase currentItemBase;
+    [HideInInspector] public ItemBase currentItemBase;
     public InputActionAsset globalInputActions;
     private InputAction dropAction;
     private InputAction scrollAction;
-    public Transform hotbarUIPanel;
+    private MenuHotbar hotbar;
+    private Transform hotbarUIPanel;
+    private Slider hotbarProgressBar;
     public GameObject hotbarEntryPrefab;
     public Transform itemDropSpot;
+    public delegate MenuHotbar GetHotbarEvent();
+    public static event GetHotbarEvent GetHotbar;
+
+    private void Start()
+    {
+        hotbar = GetHotbar();
+        hotbarUIPanel = hotbar.gameObject.transform;
+        hotbarEntryList.Add(hotbar.hotbarHandEntry);
+        hotbarProgressBar = hotbar.progressBar;
+        hotbar.SetSize(size);
+    }
+
+    public void SaveToInventory(SOInventory inventory)
+    {
+        if (itemList.Count > 1)
+        {
+            for (int i = 1; i < itemList.Count; i++)
+            {
+                inventory.itemList.Add(itemList[i]);
+            }
+        }
+    }
+
+    public void LoadFromInventory(SOInventory inventory)
+    {
+        for(int i = 0; i < inventory.itemList.Count;i++)
+        {
+            Index(inventory.itemList[i]);
+        }
+    }
+
+    public void Clear()
+    {
+        currentItemIndex = 0;
+        currentItemBase = null;
+        if (itemList.Count > 1)
+        {
+            for (int i = 1; i < itemList.Count; i++)
+            {
+                Deindex(i);
+            }
+        }
+    }
+
+    public void Index(ItemBase item)
+    {
+        itemList.Add(item);
+        GameObject newItem = Instantiate(hotbarEntryPrefab, hotbarUIPanel, false);
+        MenuHotbarEntry itemEntry = newItem.GetComponent<MenuHotbarEntry>();
+        itemEntry.image.sprite = item.itemIcon;
+        itemEntry.text.text = item.itemName;
+        hotbarEntryList.Add(itemEntry);
+    }
+
+    public void Deindex(int index)
+    {
+        Destroy(hotbarEntryList[index].gameObject);
+        hotbarEntryList.RemoveAt(index);
+        itemList.RemoveAt(index);
+    }
 
     public void Resize(int newSize)
     {
         size = newSize;
+        hotbar.SetSize(newSize);
     }
 
     public bool IsHotbarFull(int itemSize)
@@ -36,13 +101,9 @@ public class PlayerHotbar : MonoBehaviour
     {
         if (!IsHotbarFull(item.itemSize))
         {
-            itemList.Add(item);
-            GameObject newItem = Instantiate(hotbarEntryPrefab, hotbarUIPanel, false);
-            MenuHotbarEntry itemEntry = newItem.GetComponent<MenuHotbarEntry>();
-            hotbarEntryList.Add(itemEntry);
-            itemEntry.image.sprite = item.itemIcon;
-            itemEntry.text.text = item.itemName;
+            Index(item);
             sizeTaken += item.itemSize;
+            hotbar.SetValue(sizeTaken);
             ModPlayer(item, true);
             return true;
         }
@@ -60,8 +121,6 @@ public class PlayerHotbar : MonoBehaviour
     public void Drop(int itemIndex)
     {
         HotbarScroll(-1);
-        Destroy(hotbarEntryList[itemIndex].gameObject);
-        hotbarEntryList.RemoveAt(itemIndex);
         GameObject itemObject = itemList[itemIndex].gameObject;
         itemObject.SetActive(true);
         itemObject.transform.position = itemDropSpot.position;
@@ -69,8 +128,9 @@ public class PlayerHotbar : MonoBehaviour
         ItemBase item = itemObject.GetComponent<ItemBase>();
         item.canInteract = true;
         sizeTaken -= item.itemSize;
+        hotbarProgressBar.value = sizeTaken;
+        Deindex(itemIndex);
         ModPlayer(item, false);
-        itemList.RemoveAt(itemIndex);
     }
 
     public void ModPlayer(ItemBase item, bool toAdd)
@@ -80,6 +140,7 @@ public class PlayerHotbar : MonoBehaviour
         if (item.itemAttHotbarSizeMod != 0)
         {
             size += item.itemAttHotbarSizeMod * boolMultiplier;
+            hotbarProgressBar.maxValue = size;
         }
     }
 
@@ -103,11 +164,14 @@ public class PlayerHotbar : MonoBehaviour
 
     private void HandleDrop(InputAction.CallbackContext context)
     {
-        int itemSize = currentItemBase.itemSize;
-        int sizeMod = currentItemBase.itemAttHotbarSizeMod;
-        if (currentItemIndex != 0 && (size - sizeMod >= sizeTaken - itemSize))
+        if (currentItemIndex != 0)
         {
-            Drop(currentItemIndex);
+            int itemSize = currentItemBase.itemSize;
+            int sizeMod = currentItemBase.itemAttHotbarSizeMod;
+            if (size - sizeMod >= sizeTaken - itemSize)
+            {
+                Drop(currentItemIndex);
+            }
         }
     }
 

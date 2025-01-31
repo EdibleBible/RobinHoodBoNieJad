@@ -7,7 +7,7 @@ public interface IInteractable
     bool CanInteract { get; set; }
     string InteractMessage { get; set; }
 
-    void Interact();
+    void Interact(Transform player);
     void ShowUI();
     void HideUI();
 }

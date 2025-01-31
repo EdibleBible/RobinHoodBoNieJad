@@ -30,6 +30,15 @@ public class PlayerAudioController : MonoBehaviour
         CheckFootContact(leftFootRaycast, ref leftFootOnGround);
         CheckFootContact(rightFootRaycast, ref rightFootOnGround);
     }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            PlayFootstepSound(transform.position);
+        }
+    }
+    
     private void CheckFootContact(Transform foot, ref bool isFootOnGround)
     {
         RaycastHit hit;
@@ -49,12 +58,18 @@ public class PlayerAudioController : MonoBehaviour
     }
     private void PlayFootstepSound(Vector3 position)
     {
-        if (playerStateMachine.currentState.stateKey == E_PlayerState.Walk)
-            RuntimeManager.PlayOneShot(walkStepSound, position);
-        else if (playerStateMachine.currentState.stateKey == E_PlayerState.Running)
-            RuntimeManager.PlayOneShot(runStepSound, position);
-        else if (playerStateMachine.currentState.stateKey == E_PlayerState.Crouching)
-            RuntimeManager.PlayOneShot(crouchStepSound, position);
+        switch (playerStateMachine.currentState.stateKey)
+        {
+            case E_PlayerState.Walk:
+                RuntimeManager.PlayOneShot(walkStepSound, position);
+                break;
+            case E_PlayerState.Running:
+                RuntimeManager.PlayOneShot(runStepSound, position);
+                break;
+            case E_PlayerState.Crouching:
+                RuntimeManager.PlayOneShot(crouchStepSound, position);
+                break;
+        }
     }
 
     private void OnDrawGizmos()
