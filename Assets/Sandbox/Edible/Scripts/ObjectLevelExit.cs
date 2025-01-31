@@ -1,25 +1,44 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ObjectLevelExit : MonoBehaviour, IUseObject , IInteractable
+public class ObjectLevelExit : MonoBehaviour, IUseObject
 {
     private PlayerBase player;
+    private bool isPlayer;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            player = other.gameObject.GetComponent<PlayerBase>();
+            isPlayer = true;
+            ShowUI();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isPlayer = false;
+            HideUI();
+        }
+    }
+
+    public void UseObject()
+    {
+        if (isPlayer &&  player != null)
+        {
+            player.hotbar.SaveToInventory(player.inventory);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene(1);
+        }
+    }
+    
     
     [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
-    public GameEvent ShowUIEvent
-    {
-        get => showUIEvent;
-        set => showUIEvent = value;
-    }
-
-    public GameEvent InteractEvent
-    {
-        get => interactEvent;
-        set => interactEvent = value;
-    }
-
-    public bool CanInteract { get; set; }
 
     [Header("Callbacks")]
     public string InteractMessage
@@ -30,41 +49,16 @@ public class ObjectLevelExit : MonoBehaviour, IUseObject , IInteractable
 
     [SerializeField] private string interactMessage;
 
-    private void OnTriggerEnter(Collider other)
+    public GameEvent ShowUIEvent
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            CanInteract = true;
-            ShowUI();
-        }
+        get => showUIEvent;
+        set => showUIEvent = value;
     }
 
-    private void OnTriggerExit(Collider other)
+    public GameEvent InteractEvent
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            CanInteract = false;
-            HideUI();
-        }
-    }
-
-    public void UseObject()
-    {
-        if (CanInteract &&  player != null)
-        {
-            player.hotbar.SaveToInventory(player.inventory);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            SceneManager.LoadScene(1);
-        }
-    }
-    
-    public void Interact(Transform player)
-    {
-        if (CanInteract)
-        {
-            UseObject();
-        }
+        get => interactEvent;
+        set => interactEvent = value;
     }
 
     public void ShowUI()
