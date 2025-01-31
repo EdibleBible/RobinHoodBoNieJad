@@ -14,7 +14,7 @@ public class MenuLobbyInventory : MonoBehaviour
     public TMP_Text pagesText;
     public TMP_Text coinsText;
 
-    private void Start()
+    private void OnEnable()
     {
         IndexInventory(); 
         if (itemList != null)
