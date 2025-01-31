@@ -53,7 +53,6 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
 
     public override void Update()
     {
-        Debug.Log(currentState.stateKey);
         base.Update();
     }
 }

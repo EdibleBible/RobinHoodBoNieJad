@@ -6870,6 +6870,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4151852004474798931, guid: 9dbb5b4006ab64b45905687fb8a5f2a9,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5169680380881882063, guid: 9dbb5b4006ab64b45905687fb8a5f2a9,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -11606,9 +11611,9 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_YAxis:
-    Value: 0.5
+    Value: 1
     m_SpeedMode: 0
-    m_MaxSpeed: 2
+    m_MaxSpeed: 1
     m_AccelTime: 0.2
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
@@ -11624,7 +11629,7 @@ MonoBehaviour:
       m_LegacyHeadingDefinition: -1
       m_LegacyVelocityFilterStrength: -1
   m_YAxisRecentering:
-    m_enabled: 1
+    m_enabled: 0
     m_WaitTime: 1
     m_RecenteringTime: 2
     m_LegacyHeadingDefinition: -1
@@ -11632,7 +11637,7 @@ MonoBehaviour:
   m_XAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 150
+    m_MaxSpeed: 300
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
@@ -11657,15 +11662,15 @@ MonoBehaviour:
     m_RecenteringTime: 2
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
-  m_BindingMode: 4
+  m_BindingMode: 5
   m_SplineCurvature: 0.2
   m_Orbits:
-  - m_Height: 0.6
-    m_Radius: 1.6
-  - m_Height: 0.4
-    m_Radius: 1.6
-  - m_Height: 0.2
-    m_Radius: 1.6
+  - m_Height: 0.15
+    m_Radius: 0.5
+  - m_Height: 0.1
+    m_Radius: 0.7
+  - m_Height: -0.1
+    m_Radius: 0.5
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
   - {fileID: 1720227697}
@@ -11707,12 +11712,12 @@ MonoBehaviour:
   m_IgnoreTag: Player
   m_TransparentLayers:
     serializedVersion: 2
-    m_Bits: 0
-  m_MinimumDistanceFromTarget: 0.1
+    m_Bits: 262144
+  m_MinimumDistanceFromTarget: 0.05
   m_AvoidObstacles: 1
   m_DistanceLimit: 0
   m_MinimumOcclusionTime: 0
-  m_CameraRadius: 0.1
+  m_CameraRadius: 0.05
   m_Strategy: 0
   m_MaximumEffort: 4
   m_SmoothingTime: 0
@@ -11774,7 +11779,7 @@ MonoBehaviour:
   m_ScreenX: 0.5
   m_ScreenY: 0.6
   m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0.01518438
+  m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0.8
   m_SoftZoneHeight: 0.8
   m_BiasX: 0
@@ -11792,8 +11797,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 0.4, z: -1.6}
+  m_BindingMode: 5
+  m_FollowOffset: {x: 0, y: 0.15, z: -0.5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -15925,14 +15930,14 @@ MonoBehaviour:
     m_Bits: 256
   segmentSize: {x: 1, y: 1}
   wallMeshes:
-  - {fileID: 8733429697405204941, guid: f9a85c06babccb4479a5f2f1cd4e4716, type: 3}
+  - {fileID: 2186430941476567602, guid: 832a6b1bde335034c90633b99f025a55, type: 3}
   passesMeshes:
   - {fileID: -5136794645981112168, guid: 825d4e28ccf2bf649900ac596fe92b1f, type: 3}
   hallwayMeshes:
-  - {fileID: 8733429697405204941, guid: f9a85c06babccb4479a5f2f1cd4e4716, type: 3}
+  - {fileID: 2186430941476567602, guid: 832a6b1bde335034c90633b99f025a55, type: 3}
   floorMashes:
-  - {fileID: -629719859055844128, guid: 2805f36e89fac2f41be7e20d81958d92, type: 3}
-  meshesMaterial: {fileID: 2100000, guid: 1c16f334427f10149ba4b953b416caa8, type: 2}
+  - {fileID: -629719859055844128, guid: 93cfe4a80b80231448e6c0dee7188d04, type: 3}
+  meshesMaterial: {fileID: 2100000, guid: 0b9ab5ec577edc143b71a8a51e5d5416, type: 2}
   passesMaterial: {fileID: 2100000, guid: ee9922118c55ba5469be7ba70b0519a7, type: 2}
   wallSeed: 6403
   levelData: {fileID: 11400000, guid: 38228541c82fd9249aa4ddc009af7fbe, type: 2}
@@ -17669,8 +17674,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 0.4, z: -1.6}
+  m_BindingMode: 5
+  m_FollowOffset: {x: 0, y: 0.15, z: -0.5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -22868,9 +22873,9 @@ MonoBehaviour:
   m_HorizontalDamping: 0
   m_VerticalDamping: 0
   m_ScreenX: 0.5
-  m_ScreenY: 0.6042303
+  m_ScreenY: 0.5
   m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0.0021691974
+  m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0.8
   m_SoftZoneHeight: 0.8
   m_BiasX: 0
@@ -22888,8 +22893,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 0.4, z: -1.6}
+  m_BindingMode: 5
+  m_FollowOffset: {x: 0, y: 0.15, z: -0.5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -24409,10 +24414,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 330585546}
+  - {fileID: 1191695404}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1295877341}
   - {fileID: 364054057}
   - {fileID: 1601887809}
-  - {fileID: 1191695404}
   - {fileID: 424355111}

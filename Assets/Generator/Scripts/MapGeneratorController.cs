@@ -1468,6 +1468,7 @@ public class MapGeneratorController : MonoBehaviour
             meshFilter.mesh = randomMesh;
 
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
+            
             if (passThrow)
             {
                 meshRenderer.material = passesMaterial;
@@ -1475,8 +1476,6 @@ public class MapGeneratorController : MonoBehaviour
             else
             {
                 meshRenderer.material = meshesMaterial;
-                var meshCollider = meshObject.AddComponent<MeshCollider>();
-                meshCollider.convex = true;
             }
 
             if (!passThrow)

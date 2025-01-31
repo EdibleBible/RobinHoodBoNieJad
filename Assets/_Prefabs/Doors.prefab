@@ -136,7 +136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e3551f6e95137e48868c3267e01366a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canInteract: 1
   openTime: 1
   openCurve:
     serializedVersion: 2
@@ -187,12 +186,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 262144
   doorPivotLeft: {fileID: 4486799192625577766}
   leftDoorClosePosition: {x: 0, y: 0, z: 0}
-  leftDoorOpenPosition: {x: 0, y: -76, z: 0}
+  leftDoorAngle: 76
   doorPivotRight: {fileID: 6178695807836224699}
   rightDoorClosePosition: {x: 0, y: 0, z: 0}
-  rightDoorOpenPosition: {x: 0, y: 76, z: 0}
+  rightDoorAngle: 76
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   doorsEvent:
@@ -202,7 +204,8 @@ MonoBehaviour:
       Data3: -2070573669
       Data4: -1421739515
     Path: event:/Doors_single
-  interactMessage: Use Door
+  soundSource: {fileID: 7587356241608031906}
+  interactMessage: Open Door
   isDebug: 1
   debugKey: 99
   IsBlocked: 0
