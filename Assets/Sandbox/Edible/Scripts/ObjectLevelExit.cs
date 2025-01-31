@@ -8,16 +8,16 @@ public class ObjectLevelExit : MonoBehaviour, IUseObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            player = other.transform.parent.GetComponent<PlayerBase>();
+            player = other.gameObject.GetComponent<PlayerBase>();
             isPlayer = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.transform.parent.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             isPlayer = false;
         }

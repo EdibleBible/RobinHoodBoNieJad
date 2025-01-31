@@ -14,7 +14,7 @@ public class MenuLobbyInventoryEntry : MonoBehaviour
     {
         itemIcon.sprite = item.itemIcon;
         itemName.text = item.itemName;
-        itemValueText.text = item.itemTypeValues[0].ToString();
+        itemValueText.text = item.itemValue.ToString();
     }
 
     public void Sell()
