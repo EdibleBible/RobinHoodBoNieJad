@@ -25,14 +25,12 @@ public class DoorController : MonoBehaviour, IInteractable
     [SerializeField] private float rightDoorAngle;
     private Vector3 endRightDoorOpenPosition;
 
-
-    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
-    [SerializeField] private GameEvent interactEvent;
-
     [Header("FMOD")] [SerializeField] private EventReference doorsEvent;
     [SerializeField] private Transform soundSource;
     private EventInstance doorSoundInstance;
-
+    
+    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
+    [SerializeField] private GameEvent interactEvent;
     public GameEvent ShowUIEvent
     {
         get => showUIEvent;
@@ -184,30 +182,30 @@ private void DrawBoxDebug(Vector3 origin, Vector3 halfExtents, Vector3 direction
 }
 
 
-    private void PlayDoorSound(string doorState)
+private void PlayDoorSound(string doorState, float volume = 0.2f)
+{
+    // Jeśli istnieje instancja dźwięku, zatrzymaj ją przed stworzeniem nowej
+    if (doorSoundInstance.isValid())
     {
-        // Jeśli istnieje instancja dźwięku, zatrzymaj ją przed stworzeniem nowej
-        if (doorSoundInstance.isValid())
-        {
-            doorSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            doorSoundInstance.release();
-        }
-
-        // Tworzenie nowej instancji dźwięku
-        doorSoundInstance = FMODUnity.RuntimeManager.CreateInstance(doorsEvent);
-        doorSoundInstance.setParameterByNameWithLabel("Door", doorState);
-
-        // Ustawienie dźwięku jako 2D
-        doorSoundInstance.set3DAttributes(
-            FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero)); // Ignorowanie pozycji, gra jak 2D
-
-        // Zamiast używać 3D, od razu ustawiamy dźwięk jako 2D
-        doorSoundInstance.setProperty(EVENT_PROPERTY.MINIMUM_DISTANCE, 1.0f);
-        doorSoundInstance.setProperty(EVENT_PROPERTY.MAXIMUM_DISTANCE, 15.0f);
-
-        // Uruchomienie dźwięku
-        doorSoundInstance.start();
+        doorSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        doorSoundInstance.release();
     }
+
+    // Tworzenie nowej instancji dźwięku
+    doorSoundInstance = FMODUnity.RuntimeManager.CreateInstance(doorsEvent);
+    doorSoundInstance.setParameterByNameWithLabel("Door", doorState);
+
+    // Ustawienie głośności
+    doorSoundInstance.setVolume(volume);
+
+    // Ustawienie dźwięku jako 2D
+    doorSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
+    doorSoundInstance.setProperty(EVENT_PROPERTY.MINIMUM_DISTANCE, 1.0f);
+    doorSoundInstance.setProperty(EVENT_PROPERTY.MAXIMUM_DISTANCE, 15.0f);
+
+    // Uruchomienie dźwięku
+    doorSoundInstance.start();
+}
 
 
     public void ShowUI()

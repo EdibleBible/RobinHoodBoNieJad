@@ -154,7 +154,7 @@ public class Room
             if (cell.GridCellType == E_GridCellType.Pass || cell.GridCellType == E_GridCellType.SpawnPass)
             {
                 Vector3 boxCenter = cell.Position; // środek boxa
-                Vector3 boxSize = new Vector3(cell.CellSize.x, cell.CellSize.y, cell.CellSize.x); // rozmiar boxa
+                Vector3 boxSize = new Vector3(cell.CellSize.x/2, cell.CellSize.y/2, cell.CellSize.x/2); // rozmiar boxa
                 // Debugowanie środkowej pozycji boxa i jego rozmiaru
 
                 GameObject obj = new GameObject();

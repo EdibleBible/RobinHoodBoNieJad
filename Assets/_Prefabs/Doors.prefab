@@ -195,8 +195,6 @@ MonoBehaviour:
   doorPivotRight: {fileID: 6178695807836224699}
   rightDoorClosePosition: {x: 0, y: 0, z: 0}
   rightDoorAngle: 76
-  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
-  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   doorsEvent:
     Guid:
       Data1: 632322657
@@ -205,7 +203,9 @@ MonoBehaviour:
       Data4: -1421739515
     Path: event:/Doors_single
   soundSource: {fileID: 7587356241608031906}
-  interactMessage: Open Door
+  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
+  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
+  interactMessage: C - Open door
   isDebug: 1
   debugKey: 99
   IsBlocked: 0

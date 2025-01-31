@@ -227,20 +227,22 @@ public class MapGeneratorController : MonoBehaviour
 
     private void UpdateSeedText(string seedText)
     {
-        // Update the action text (assign this to your action TextMesh object)
-        SeedTextMesh.text = "SEED: " + seedText;
+        if (SeedTextMesh != null)
+            SeedTextMesh.text = "SEED: " + seedText;
     }
 
     private void UpdateActionText(string actionText)
     {
-        // Update the action text (assign this to your action TextMesh object)
-        ActionTextMesh.text = actionText;
+        if (ActionTextMesh != null)
+            ActionTextMesh.text = actionText;
     }
 
     private void UpdateInstructionText(string instructionText)
     {
-        // Update the instruction text (assign this to your instruction TextMesh object)
-        InstructionTextMesh.text = instructionText;
+        if (InstructionTextMesh != null)
+        {
+            InstructionTextMesh.text = instructionText;
+        }
     }
 
     private IEnumerator WaitForSpaceBar()
@@ -1428,7 +1430,7 @@ public class MapGeneratorController : MonoBehaviour
             // Spawnujemy pojedyncze meshe dla ścian
             SpawnMeshesFromMatrix(passWallCell, passesMeshes, holder, passableLayerMask, passThrow: true);
             SpawnMeshesFromMatrix(normalWallCell, wallMeshes, holder, wallLayerMask, true);
-            SpawnMeshesFromMatrix(floorCell, floorMashes, holder, floorLayerMask,false,false,true);
+            SpawnMeshesFromMatrix(floorCell, floorMashes, holder, floorLayerMask, false, false, true);
         }
 
         foreach (var hallwayCell in Hallwaycell)
@@ -1441,7 +1443,7 @@ public class MapGeneratorController : MonoBehaviour
 
             // Spawnujemy pojedyncze meshe dla korytarzy
             SpawnMeshesFromMatrix(cellMatrix, hallwayMeshes, holder, wallLayerMask, true);
-            SpawnMeshesFromMatrix(cellFloorMatrix, floorMashes, holder, floorLayerMask,false,false,true);
+            SpawnMeshesFromMatrix(cellFloorMatrix, floorMashes, holder, floorLayerMask, false, false, true);
         }
     }
 
@@ -1468,8 +1470,8 @@ public class MapGeneratorController : MonoBehaviour
             meshFilter.mesh = randomMesh;
 
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
-            
-            
+
+
             if (passThrow)
             {
                 meshRenderer.material = passesMaterial;
@@ -1491,7 +1493,7 @@ public class MapGeneratorController : MonoBehaviour
                     boxCollider.center = randomMesh.bounds.center;
                     boxCollider.size = randomMesh.bounds.size;
                 }
-                
+
                 if (isObstacle)
                 {
                     var obstacle = meshObject.AddComponent<NavMeshObstacle>();
