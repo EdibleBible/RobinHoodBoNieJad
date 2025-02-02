@@ -6,15 +6,17 @@ public class PlayerWalkState : BaseState<E_PlayerState>
     public float AccelerationTime { get; set; }
     public float DecelerationTime { get; set; }
     public PlayerWalk PlayerWalk { get; set; }
-    
+
+    public PlayerRotation PLayerRotation;
     public PlayerAnimatorController PlayerAnimatorController { get; set; }
     
-    public PlayerWalkState(float movementSpeed,float accelerationTime, float decelerationTime, PlayerWalk playerWalk, PlayerAnimatorController playerAnimatorController) : base(E_PlayerState.Walk)
+    public PlayerWalkState(float movementSpeed,float accelerationTime, float decelerationTime, PlayerWalk playerWalk, PlayerAnimatorController playerAnimatorController, PlayerRotation playerRotation) : base(E_PlayerState.Walk)
     {
         MovementSpeed = movementSpeed;
         AccelerationTime = accelerationTime;
         DecelerationTime = decelerationTime;
         PlayerWalk = playerWalk;
+        PLayerRotation = playerRotation;
         PlayerAnimatorController = playerAnimatorController;
     }
     
@@ -34,6 +36,8 @@ public class PlayerWalkState : BaseState<E_PlayerState>
         
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
+        
+        PLayerRotation.UpdateRotation(velocityZ);
         
         PlayerAnimatorController.UpdateWalkParameters(x, y);
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);

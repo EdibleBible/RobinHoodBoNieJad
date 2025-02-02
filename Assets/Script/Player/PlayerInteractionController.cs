@@ -5,6 +5,7 @@ public class PlayerInteractionController : MonoBehaviour
 {
     [SerializeField] private Transform raycasterTransform;
     [SerializeField] private float interactionDistance;
+    [SerializeField] private float sphereRadius;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private KeyCode interactionKey;
     private IInteractable currentInteractable;
@@ -12,8 +13,7 @@ public class PlayerInteractionController : MonoBehaviour
 
     private void Update()
     {
-        if (Physics.Raycast(raycasterTransform.position, raycasterTransform.forward, out hitInfo, interactionDistance,
-                interactableLayer))
+        if (Physics.SphereCast(raycasterTransform.position, sphereRadius, raycasterTransform.forward, out hitInfo, interactionDistance, interactableLayer))
         {
             if (hitInfo.collider.gameObject.TryGetComponent<IInteractable>(out var interactable))
             {
@@ -40,7 +40,6 @@ public class PlayerInteractionController : MonoBehaviour
             }
         }
 
-
         if (currentInteractable != null && Input.GetKeyDown(interactionKey))
         {
             currentInteractable.Interact(transform);
@@ -49,15 +48,12 @@ public class PlayerInteractionController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (hitInfo.collider == null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(raycasterTransform.position, raycasterTransform.forward * interactionDistance);
-        }
-        else
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(raycasterTransform.position, raycasterTransform.forward * hitInfo.distance);
-        }
+        Gizmos.color = hitInfo.collider == null ? Color.red : Color.green;
+        Vector3 start = raycasterTransform.position;
+        Vector3 end = start + raycasterTransform.forward * (hitInfo.collider == null ? interactionDistance : hitInfo.distance);
+    
+        Gizmos.DrawWireSphere(start, sphereRadius);
+        Gizmos.DrawLine(start, end);
+        Gizmos.DrawWireSphere(end, sphereRadius);
     }
 }

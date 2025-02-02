@@ -6,8 +6,18 @@ using FMOD.Studio;
 
 public class DoorController : MonoBehaviour, IInteractable
 {
+    [Header("Bools")]
+    public bool TwoSideInteraction
+    {
+        get => twoSideInteraction;
+        set => twoSideInteraction = value;
+    }
+    
+    public bool twoSideInteraction;
     public bool CanInteract { get; set; } = true;
+    public bool IsBlocked { get; set; }
 
+    [Header("Open Setting")]
     [SerializeField] private float openTime;
     [SerializeField] private AnimationCurve openCurve;
 
@@ -28,9 +38,10 @@ public class DoorController : MonoBehaviour, IInteractable
     [Header("FMOD")] [SerializeField] private EventReference doorsEvent;
     [SerializeField] private Transform soundSource;
     private EventInstance doorSoundInstance;
-    
+
     [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
+
     public GameEvent ShowUIEvent
     {
         get => showUIEvent;
@@ -52,18 +63,34 @@ public class DoorController : MonoBehaviour, IInteractable
 
     [SerializeField] private string interactMessage;
 
+    public string BlockedMessage
+    {
+        get => blockedMessage;
+        set => blockedMessage = value;
+    }
+
+    [SerializeField] private string blockedMessage;
+
     [Header("Debug")] [SerializeField] private bool isDebug;
     [SerializeField] private KeyCode debugKey = KeyCode.C;
 
     private bool isOpen = false;
     private Tween isDoorOpenTween;
-    public bool IsBlocked;
-    public bool TwoSideInteraction;
 
 
     public void Interact(Transform player)
     {
-        if (IsBlocked || isDoorOpenTween != null || !CanInteract) return;
+        if (IsBlocked)
+        {
+            ShowUIEvent.Raise(this, (true, BlockedMessage, true));
+            return;
+        }
+
+        if (isDoorOpenTween != null || !CanInteract)
+        {
+            return;
+        }
+
 
         InteractEvent.Raise(this, null);
 
@@ -107,115 +134,116 @@ public class DoorController : MonoBehaviour, IInteractable
         }
     }
 
-private void CheckPlayerPosition()
-{
-    Debug.Log("CheckPlayerPosition");
-
-    // Ustawienia BoxCast
-    float boxWidth = 0.1f; // Szerokość boxa (dostosuj do swoich potrzeb)
-    float boxHeight = 0.1f; // Wysokość boxa (dostosuj do swoich potrzeb)
-    float boxDepth = 0.05f; // Głębokość boxa (krótkie rzutowanie wzdłuż osi)
-    Vector3 boxHalfExtents = new Vector3(boxWidth / 2f, boxHeight / 2f, boxDepth / 2f); // Półwymiary boxa
-
-    RaycastHit hit;
-
-    // Debugowanie, wyświetlanie kierunku rzutowania
-    Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), transform.right * 10f, Color.yellow, 5f);
-
-    // BoxCast z początkowym punktem transform.position, kierunkiem Vector3.right, rozmiarem boxa
-    bool isHit = Physics.BoxCast(transform.position + new Vector3(0, 0.5f, 0), boxHalfExtents, transform.right, out hit, Quaternion.identity, 10f, playerLayer);
-
-    // Debugowanie BoxCast
-    if (isHit)
+    private void CheckPlayerPosition()
     {
-        Debug.Log("Player detected in BoxCast!");
+        Debug.Log("CheckPlayerPosition");
 
-        // Rysowanie linii reprezentujących boxa w przestrzeni
-        DrawBoxDebug(transform.position + new Vector3(0, 0.5f, 0), boxHalfExtents, transform.right);
+        // Ustawienia BoxCast
+        float boxWidth = 0.1f; // Szerokość boxa (dostosuj do swoich potrzeb)
+        float boxHeight = 0.1f; // Wysokość boxa (dostosuj do swoich potrzeb)
+        float boxDepth = 0.05f; // Głębokość boxa (krótkie rzutowanie wzdłuż osi)
+        Vector3 boxHalfExtents = new Vector3(boxWidth / 2f, boxHeight / 2f, boxDepth / 2f); // Półwymiary boxa
 
-        // Jeśli wykryto gracza, ustaw odpowiednie pozycje otwierania drzwi
-        endRightDoorOpenPosition = new Vector3(0, -rightDoorAngle, 0);
-        endLeftDoorOpenPosition = new Vector3(0, leftDoorAngle, 0);
+        RaycastHit hit;
 
-        // Debuguj informacje o trafionym obiekcie
-        Debug.Log($"Hit object: {hit.collider.gameObject.name}");
-        Debug.Log($"Hit point: {hit.point}");
+        // Debugowanie, wyświetlanie kierunku rzutowania
+        Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), transform.right * 10f, Color.yellow, 5f);
+
+        // BoxCast z początkowym punktem transform.position, kierunkiem Vector3.right, rozmiarem boxa
+        bool isHit = Physics.BoxCast(transform.position + new Vector3(0, 0.5f, 0), boxHalfExtents, transform.right,
+            out hit, Quaternion.identity, 10f, playerLayer);
+
+        // Debugowanie BoxCast
+        if (isHit)
+        {
+            Debug.Log("Player detected in BoxCast!");
+
+            // Rysowanie linii reprezentujących boxa w przestrzeni
+            DrawBoxDebug(transform.position + new Vector3(0, 0.5f, 0), boxHalfExtents, transform.right);
+
+            // Jeśli wykryto gracza, ustaw odpowiednie pozycje otwierania drzwi
+            endRightDoorOpenPosition = new Vector3(0, -rightDoorAngle, 0);
+            endLeftDoorOpenPosition = new Vector3(0, leftDoorAngle, 0);
+
+            // Debuguj informacje o trafionym obiekcie
+            Debug.Log($"Hit object: {hit.collider.gameObject.name}");
+            Debug.Log($"Hit point: {hit.point}");
+        }
+        else
+        {
+            Debug.Log("Player not detected in BoxCast!");
+
+            // Jeśli nie wykryto gracza, ustaw inne pozycje
+            endRightDoorOpenPosition = new Vector3(0, rightDoorAngle, 0);
+            endLeftDoorOpenPosition = new Vector3(0, -leftDoorAngle, 0);
+
+            // Rysowanie linii reprezentujących boxa w przestrzeni, gdy nie ma trafienia
+            DrawBoxDebug(transform.position + new Vector3(0, 0.5f, 0), boxHalfExtents, transform.right);
+        }
     }
-    else
-    {
-        Debug.Log("Player not detected in BoxCast!");
-
-        // Jeśli nie wykryto gracza, ustaw inne pozycje
-        endRightDoorOpenPosition = new Vector3(0, rightDoorAngle, 0);
-        endLeftDoorOpenPosition = new Vector3(0, -leftDoorAngle, 0);
-
-        // Rysowanie linii reprezentujących boxa w przestrzeni, gdy nie ma trafienia
-        DrawBoxDebug(transform.position + new Vector3(0, 0.5f, 0), boxHalfExtents, transform.right);
-    }
-}
 
 // Funkcja rysująca box w przestrzeni w celu debugowania
-private void DrawBoxDebug(Vector3 origin, Vector3 halfExtents, Vector3 direction)
-{
-    Vector3 frontRight = origin + direction * 10f + new Vector3(halfExtents.x, halfExtents.y, halfExtents.z);
-    Vector3 frontLeft = origin + direction * 10f + new Vector3(-halfExtents.x, halfExtents.y, halfExtents.z);
-    Vector3 backRight = origin + direction * 10f + new Vector3(halfExtents.x, -halfExtents.y, halfExtents.z);
-    Vector3 backLeft = origin + direction * 10f + new Vector3(-halfExtents.x, -halfExtents.y, halfExtents.z);
-    Vector3 frontRightLower = origin + direction * 10f + new Vector3(halfExtents.x, halfExtents.y, -halfExtents.z);
-    Vector3 frontLeftLower = origin + direction * 10f + new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z);
-    Vector3 backRightLower = origin + direction * 10f + new Vector3(halfExtents.x, -halfExtents.y, -halfExtents.z);
-    Vector3 backLeftLower = origin + direction * 10f + new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
-
-    // Rysowanie boków boxa
-    Debug.DrawLine(frontRight, frontLeft, Color.blue, 5f);
-    Debug.DrawLine(frontLeft, backLeft, Color.blue, 5f);
-    Debug.DrawLine(backLeft, backRight, Color.blue, 5f);
-    Debug.DrawLine(backRight, frontRight, Color.blue, 5f);
-    Debug.DrawLine(frontRightLower, frontLeftLower, Color.blue, 5f);
-    Debug.DrawLine(frontLeftLower, backLeftLower, Color.blue, 5f);
-    Debug.DrawLine(backLeftLower, backRightLower, Color.blue, 5f);
-    Debug.DrawLine(backRightLower, frontRightLower, Color.blue, 5f);
-    Debug.DrawLine(frontRight, frontRightLower, Color.green, 5f);
-    Debug.DrawLine(frontLeft, frontLeftLower, Color.green, 5f);
-    Debug.DrawLine(backRight, backRightLower, Color.green, 5f);
-    Debug.DrawLine(backLeft, backLeftLower, Color.green, 5f);
-}
-
-
-private void PlayDoorSound(string doorState, float volume = 0.2f)
-{
-    // Jeśli istnieje instancja dźwięku, zatrzymaj ją przed stworzeniem nowej
-    if (doorSoundInstance.isValid())
+    private void DrawBoxDebug(Vector3 origin, Vector3 halfExtents, Vector3 direction)
     {
-        doorSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        doorSoundInstance.release();
+        Vector3 frontRight = origin + direction * 10f + new Vector3(halfExtents.x, halfExtents.y, halfExtents.z);
+        Vector3 frontLeft = origin + direction * 10f + new Vector3(-halfExtents.x, halfExtents.y, halfExtents.z);
+        Vector3 backRight = origin + direction * 10f + new Vector3(halfExtents.x, -halfExtents.y, halfExtents.z);
+        Vector3 backLeft = origin + direction * 10f + new Vector3(-halfExtents.x, -halfExtents.y, halfExtents.z);
+        Vector3 frontRightLower = origin + direction * 10f + new Vector3(halfExtents.x, halfExtents.y, -halfExtents.z);
+        Vector3 frontLeftLower = origin + direction * 10f + new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z);
+        Vector3 backRightLower = origin + direction * 10f + new Vector3(halfExtents.x, -halfExtents.y, -halfExtents.z);
+        Vector3 backLeftLower = origin + direction * 10f + new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
+
+        // Rysowanie boków boxa
+        Debug.DrawLine(frontRight, frontLeft, Color.blue, 5f);
+        Debug.DrawLine(frontLeft, backLeft, Color.blue, 5f);
+        Debug.DrawLine(backLeft, backRight, Color.blue, 5f);
+        Debug.DrawLine(backRight, frontRight, Color.blue, 5f);
+        Debug.DrawLine(frontRightLower, frontLeftLower, Color.blue, 5f);
+        Debug.DrawLine(frontLeftLower, backLeftLower, Color.blue, 5f);
+        Debug.DrawLine(backLeftLower, backRightLower, Color.blue, 5f);
+        Debug.DrawLine(backRightLower, frontRightLower, Color.blue, 5f);
+        Debug.DrawLine(frontRight, frontRightLower, Color.green, 5f);
+        Debug.DrawLine(frontLeft, frontLeftLower, Color.green, 5f);
+        Debug.DrawLine(backRight, backRightLower, Color.green, 5f);
+        Debug.DrawLine(backLeft, backLeftLower, Color.green, 5f);
     }
 
-    // Tworzenie nowej instancji dźwięku
-    doorSoundInstance = FMODUnity.RuntimeManager.CreateInstance(doorsEvent);
-    doorSoundInstance.setParameterByNameWithLabel("Door", doorState);
 
-    // Ustawienie głośności
-    doorSoundInstance.setVolume(volume);
+    private void PlayDoorSound(string doorState, float volume = 0.2f)
+    {
+        // Jeśli istnieje instancja dźwięku, zatrzymaj ją przed stworzeniem nowej
+        if (doorSoundInstance.isValid())
+        {
+            doorSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            doorSoundInstance.release();
+        }
 
-    // Ustawienie dźwięku jako 2D
-    doorSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
-    doorSoundInstance.setProperty(EVENT_PROPERTY.MINIMUM_DISTANCE, 1.0f);
-    doorSoundInstance.setProperty(EVENT_PROPERTY.MAXIMUM_DISTANCE, 15.0f);
+        // Tworzenie nowej instancji dźwięku
+        doorSoundInstance = FMODUnity.RuntimeManager.CreateInstance(doorsEvent);
+        doorSoundInstance.setParameterByNameWithLabel("Door", doorState);
 
-    // Uruchomienie dźwięku
-    doorSoundInstance.start();
-}
+        // Ustawienie głośności
+        doorSoundInstance.setVolume(volume);
+
+        // Ustawienie dźwięku jako 2D
+        doorSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
+        doorSoundInstance.setProperty(EVENT_PROPERTY.MINIMUM_DISTANCE, 1.0f);
+        doorSoundInstance.setProperty(EVENT_PROPERTY.MAXIMUM_DISTANCE, 15.0f);
+
+        // Uruchomienie dźwięku
+        doorSoundInstance.start();
+    }
 
 
     public void ShowUI()
     {
-        ShowUIEvent.Raise(this, (true, InteractMessage));
+        ShowUIEvent.Raise(this, (true, InteractMessage, false));
     }
 
     public void HideUI()
     {
-        ShowUIEvent.Raise(this, (false, ""));
+        ShowUIEvent.Raise(this, (false, "", false));
     }
 
     private void OnDrawGizmos()
