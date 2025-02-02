@@ -42,6 +42,7 @@ public class PlayerInteractionController : MonoBehaviour
 
         if (currentInteractable != null && Input.GetKeyDown(interactionKey))
         {
+            Debug.Log("Interacted with " + currentInteractable);
             currentInteractable.Interact(transform);
         }
     }

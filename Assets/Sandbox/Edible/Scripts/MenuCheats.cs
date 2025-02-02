@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class MenuCheats : MonoBehaviour
 {
-    bool showConsole;
+    /*bool showConsole;
     string[] input;
     public InputActionAsset globalInputActions;
     private InputAction cheatsAction;
@@ -166,5 +166,5 @@ public class MenuCheats : MonoBehaviour
                 SceneManager.LoadScene(1);
                 break;
         }
-    }
+    }*/
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 547377061462381365}
   - component: {fileID: 3474376603115887760}
   - component: {fileID: 1716856986168354906}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: goblet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 5946085791760680172}
   - component: {fileID: 5954815173573131841}
   - component: {fileID: 4931807967672230577}
-  m_Layer: 10
+  m_Layer: 31
   m_Name: ItemGoblet
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -236,12 +236,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f693b2442337e2643ab16292e5fe2511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemTypeValues: 64000000
-  itemType: 2
-  itemName: Goblet
-  itemDescription: 
-  itemSize: 1
+  ItemType: 2
+  ItemName: Goblet
+  ItemDescription: Goblet_Description
+  ItemSize: 1
   itemIcon: {fileID: 21300000, guid: 2cd3a81f7a08dd344b95df343579225a, type: 3}
-  canInteract: 1
-  itemValue: 40
-  itemAttHotbarSizeMod: 0
+  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
+  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
+  interactMessage: C - Pickup Goblet
+  blockedMessage: Item Is Blocked

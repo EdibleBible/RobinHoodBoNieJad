@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class MenuHotbar : MonoBehaviour
 {
-    public MenuHotbarEntry hotbarHandEntry;
+    /*public MenuHotbarEntry hotbarHandEntry;
     public Slider progressBar;
 
     void Awake()
@@ -25,5 +25,5 @@ public class MenuHotbar : MonoBehaviour
     public void SetValue(int size)
     {
         progressBar.value = size;
-    }
+    }*/
 }

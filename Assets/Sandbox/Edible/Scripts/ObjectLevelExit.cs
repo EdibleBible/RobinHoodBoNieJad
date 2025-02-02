@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ObjectLevelExit : MonoBehaviour, IUseObject
+public class ObjectLevelExit : MonoBehaviour/*, IUseObject*/
 {
-    private PlayerBase player;
+    /*private PlayerBase player;
     private bool isPlayer;
 
     private void OnTriggerEnter(Collider other)
@@ -69,5 +69,5 @@ public class ObjectLevelExit : MonoBehaviour, IUseObject
     public void HideUI()
     {
         ShowUIEvent.Raise(this, (false, ""));
-    }
+    }*/
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MenuDisplay : MonoBehaviour
 {
-    public SOInventory inventory;
+    /*public SOInventory inventory;
     public TextMeshProUGUI scoreDisplay;
 
     public void UpdateScoreTotal()
@@ -14,5 +14,5 @@ public class MenuDisplay : MonoBehaviour
     private void Start()
     {
         UpdateScoreTotal();
-    }
+    }*/
 }

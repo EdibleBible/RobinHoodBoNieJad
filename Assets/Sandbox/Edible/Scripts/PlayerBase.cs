@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
-    public PlayerInputInteract interact;
+    [SerializeField] private SOInventory playerInventory;
+    /*public PlayerInputInteract interact;
     public PlayerHotbar hotbar;
     public SOInventory inventory;
     public Vector3 position { get { return transform.position; } }
-    public int hotbarSize {   
-        get { return hotbar.size; }    
-        set { hotbar.Resize(value); } 
+    public int hotbarSize {
+        get { return hotbar.size; }
+        set { hotbar.Resize(value); }
     }
 
     private void Awake()
@@ -20,7 +21,7 @@ public class PlayerBase : MonoBehaviour
     /*private void Start()
     {
         hotbar.LoadFromInventory(inventory);
-    }*/
+    }#1#
 
     private void OnEnable()
     {
@@ -36,5 +37,9 @@ public class PlayerBase : MonoBehaviour
     public bool PickUp(ItemBase item)
     {
         return hotbar.PickUp(item);
+    }*/
+    public bool PickUp(ItemBase itemBase)
+    {
+        return playerInventory.AddItemToInventory(itemBase);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class MenuLobbyInventoryEntry : MonoBehaviour
 {
-    public Image itemIcon;
+    /*public Image itemIcon;
     public TMP_Text itemName;
     public TMP_Text itemValueText;
     public int entryIndex;
@@ -20,5 +20,5 @@ public class MenuLobbyInventoryEntry : MonoBehaviour
     public void Sell()
     {
         lobbyInventory.Sell(entryIndex);
-    }
+    }*/
 }

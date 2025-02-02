@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 public class MenuLobbyInventory : MonoBehaviour
 {
-    public SOInventory inventory;
+    /*public SOInventory inventory;
     public List<MenuLobbyInventoryEntry> entryList = new();
     public List<ItemBase> itemList = new();
     public int inventoryPage;
@@ -82,5 +82,5 @@ public class MenuLobbyInventory : MonoBehaviour
         }
         pagesText.text = (inventoryPage + 1).ToString() + "/" + (pagesCount + 1).ToString();
         ReloadInventory();
-    }
+    }*/
 }

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class ObjectRandomSpawner : MonoBehaviour
 {
-    public SOLevel levelData;
+    /*public SOLevel levelData;
     public float seedMod = 100;
     [Range(0,100)] public int itemModChance;
     private int seed;
@@ -31,5 +31,5 @@ public class ObjectRandomSpawner : MonoBehaviour
                 item.itemName = "Enchanted " + item.itemName;
             }
         }
-    }
+    }*/
 }

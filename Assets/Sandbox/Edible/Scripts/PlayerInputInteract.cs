@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputInteract : MonoBehaviour
 {
-    [HideInInspector] public PlayerBase playerBase;
+    /*[HideInInspector] public PlayerBase playerBase;
 
     //Handles indexing objects reachable by the player
     public List<IInteract> objectsInReach = new();
@@ -69,5 +69,5 @@ public class PlayerInputInteract : MonoBehaviour
         {
             closestObjectBase = null; //Clears reference to avoid multiple interaction in one frame
         }
-    }
+    }*/
 }
