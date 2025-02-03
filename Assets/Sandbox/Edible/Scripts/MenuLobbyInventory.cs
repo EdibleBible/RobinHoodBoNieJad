@@ -5,7 +5,7 @@ public class MenuLobbyInventory : MonoBehaviour
 {
     public SOInventory inventory;
     public List<MenuLobbyInventoryEntry> entryList = new();
-    public List<ItemBase> itemList = new();
+    public List<ItemData> itemList = new();
     public int inventoryPage;
     public GameObject entryPrefab;
     public Transform panel1;
@@ -14,20 +14,20 @@ public class MenuLobbyInventory : MonoBehaviour
     public TMP_Text pagesText;
     public TMP_Text coinsText;
 
-    private void Start()
+    private void OnEnable()
     {
         IndexInventory(); 
         if (itemList != null)
         {
             ReloadInventory();
         }
-        coinsText.text = inventory.playerScore.ToString();
+        coinsText.text = inventory.CurrInvenoryScore.ToString();
         pagesText.text = (inventoryPage + 1).ToString() + "/" + (pagesCount + 1).ToString();
     }
 
     private void IndexInventory()
     {
-        itemList = inventory.itemList;
+        itemList = inventory.ItemsInInventory;
         pagesCount = Mathf.FloorToInt(itemList.Count / 10);
     }
 
@@ -71,9 +71,9 @@ public class MenuLobbyInventory : MonoBehaviour
 
     public void Sell(int index)
     {
-        ItemBase item = itemList[index];
-        inventory.playerScore += item.itemValue;
-        coinsText.text = inventory.playerScore.ToString();
+        ItemData item = itemList[index];
+        inventory.CurrInvenoryScore += item.ItemValue;
+        coinsText.text = inventory.CurrInvenoryScore.ToString();
         itemList.RemoveAt(index);
         IndexInventory();
         if (index + 1 == itemList.Count && index != 0)

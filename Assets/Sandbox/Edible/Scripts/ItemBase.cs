@@ -1,30 +1,106 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class ItemBase : MonoBehaviour, IInteract
+public class ItemBase : MonoBehaviour, IInteractable
 {
-    public enum ItemType {Debug, CollectibleVase, CollectibleGoblet, UtilityBackpack};
-    [HideInInspector] public List<int> itemTypeValues = new() {100, 200, 75, 0};
-    public static event System.Action<ItemBase> OnItemAdded;
-    public ItemType itemType;
-    public string itemName;
-    public string itemDescription;
-    public int itemSize;
-    public Sprite itemIcon;
-    public bool canInteract = true;
+    public ItemData ItemData;
+    [HideInInspector] public bool CanInteract { get; set; } = true;
+    [HideInInspector] public bool IsBlocked { get; set; } = false;
+    [HideInInspector] public bool TwoSideInteraction { get; set; } = false;
 
-    public bool Interact(PlayerBase playerBase)
+    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
+    [SerializeField] private GameEvent interactEvent;
+
+    public GameEvent ShowUIEvent
     {
-        if (canInteract && playerBase.PickUp(this)){
-            gameObject.SetActive(false);
-            gameObject.transform.parent = playerBase.transform;
-            canInteract = false;
-            return true;
-        }
-        return false;
+        get => showUIEvent;
+        set => showUIEvent = value;
     }
 
-    [Header("Item Attributes")]
-    public int itemValue;
-    public int itemAttHotbarSizeMod;
+    public GameEvent InteractEvent
+    {
+        get => interactEvent;
+        set => interactEvent = value;
+    }
+
+    [Header("Callbacks")]
+    public string InteractMessage
+    {
+        get => interactMessage;
+        set => interactMessage = value;
+    }
+
+    [SerializeField] private string interactMessage;
+
+    public string BlockedMessage
+    {
+        get => blockedMessage;
+        set => blockedMessage = value;
+    }
+
+    [SerializeField] private string blockedMessage;
+
+    public void Interact(Transform player)
+    {
+        Debug.Log("Chujek");
+
+        if (!CanInteract || IsBlocked)
+        {
+            Debug.Log("Chuj");
+            ShowUIEvent.Raise(this, (true, BlockedMessage, true));
+            return;
+        }
+
+        //POTEM TO ZMIEŃ
+        PlayerBase playerBase = player.GetComponent<PlayerBase>();
+
+        if (playerBase == null)
+        {
+            Debug.LogError("Player is not a PlayerBase");
+            return;
+        }
+
+        if (playerBase.PickUp(ItemData))
+        {
+            Debug.Log("Chhuj");
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("item is not picked up");
+        }
+    }
+
+    public void ShowUI()
+    {
+        ShowUIEvent.Raise(this, (true, InteractMessage, false));
+    }
+
+    public void HideUI()
+    {
+        ShowUIEvent.Raise(this, (false, "", false));
+    }
+}
+
+[Serializable]
+public class ItemData
+{
+    [Header("Item Attributes")] 
+    public ItemType ItemType;
+    public string ItemName;
+    public string ItemDescription;
+    public int ItemSize;
+    public float ItemValue;
+    public Sprite ItemIcon;
+    public GameObject ItemPrefab;
+}
+
+public enum ItemType
+{
+    Debug,
+    CollectibleVase,
+    CollectibleGoblet,
+    UtilityBackpack
 }

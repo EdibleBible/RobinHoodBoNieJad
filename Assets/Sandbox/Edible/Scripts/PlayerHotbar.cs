@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -116,7 +117,7 @@ public class PlayerHotbar : MonoBehaviour
         Destroy(hotbarEntryList[itemIndex].gameObject);
         hotbarEntryList.RemoveAt(itemIndex);
         itemList.Remove(item);
-    }*/
+    }#1#
 
     public void Drop(int itemIndex)
     {
@@ -207,3 +208,4 @@ public class PlayerHotbar : MonoBehaviour
         hotbarEntryList[currentItemIndex].SwitchSelector(true);
     }
 }
+*/

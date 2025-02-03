@@ -9,10 +9,14 @@ public class PlayerRotation : MonoBehaviour
     private PlayerAnimatorController animatorController;
 
     [SerializeField] private Transform debugLookPoint;
+    [SerializeField] private Vector3 lookPointOffset;
     [SerializeField] private LayerMask objectLayer;
 
     [SerializeField] private float rotationSpeed = 45f;
-    [SerializeField] private float angleToRotateThreshold = 15f; // Próg kąta w stopniach
+    private float currAngleToRotateThreshold = 0;
+    [SerializeField] private float angleToRotateThresholdStay = 45f;
+    [SerializeField] private float angleToRotateThresholdMoveForward = 15f;
+    [SerializeField] private float angleToRotateThresholdMoveBackward= 0f;
 
     private bool isRotating = false;
 
@@ -21,21 +25,36 @@ public class PlayerRotation : MonoBehaviour
         camera = Camera.main;
         animatorController = GetComponent<PlayerAnimatorController>(); // Pobieramy kontroler animacji
     }
-
-    private void Update()
+    public void UpdateRotation(float velocity = 0f)
     {
+        if (velocity > 0)
+        {
+            currAngleToRotateThreshold = angleToRotateThresholdMoveForward;
+        }
+        else if (velocity < 0)
+        {
+            currAngleToRotateThreshold = angleToRotateThresholdMoveBackward;
+
+        }
+        else if (velocity == 0)
+        {
+            currAngleToRotateThreshold = angleToRotateThresholdStay;
+
+        }
+        
+        
         cameraPlayerDistance = Vector3.Distance(transform.position, camera.transform.position);
         float cameraDistanceOffset = cameraPlayerDistance * 1.5f;
 
-        if (Physics.Raycast(camera.transform.position, camera.transform.forward, out RaycastHit hit,
+        if (Physics.Raycast(camera.transform.position + lookPointOffset , camera.transform.forward + lookPointOffset, out RaycastHit hit,
                 cameraDistanceOffset, objectLayer))
         {
-            Debug.DrawRay(camera.transform.position, camera.transform.forward * hit.distance, Color.red);
+            Debug.DrawRay(camera.transform.position + lookPointOffset, camera.transform.forward * hit.distance + lookPointOffset, Color.red);
             debugLookPoint.position = hit.point;
         }
         else
         {
-            Debug.DrawRay(camera.transform.position, camera.transform.forward * cameraDistanceOffset, Color.yellow);
+            Debug.DrawRay(camera.transform.position + lookPointOffset, camera.transform.forward * cameraDistanceOffset + lookPointOffset, Color.yellow);
             debugLookPoint.position = camera.transform.position + (camera.transform.forward * cameraDistanceOffset);
         }
 
@@ -49,7 +68,7 @@ public class PlayerRotation : MonoBehaviour
             float angle = Vector3.Angle(transform.forward, cameraForward);
             Debug.DrawRay(transform.position, cameraForward * angle, Color.green);
 
-            if (angle > angleToRotateThreshold)
+            if (angle > currAngleToRotateThreshold)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(cameraForward, Vector3.up);
                 transform.rotation =

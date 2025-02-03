@@ -9,12 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7837832141298137616}
-  - component: {fileID: 241425327601153948}
-  - component: {fileID: 3125863036775027416}
   - component: {fileID: 2148479248831226959}
   - component: {fileID: 4682806924880142275}
   - component: {fileID: 8493894080864111287}
-  m_Layer: 10
+  m_Layer: 31
   m_Name: ItemVase
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -37,59 +35,6 @@ Transform:
   - {fileID: 3730173637033282647}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &241425327601153948
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466800322429633386}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &3125863036775027416
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466800322429633386}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 1afad5df014e0c4458bedab3f918b03b, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &2148479248831226959
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -150,15 +95,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f693b2442337e2643ab16292e5fe2511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemTypeValues: 64000000
-  itemType: 1
-  itemName: Vase
-  itemDescription: 
-  itemSize: 2
-  itemIcon: {fileID: 21300000, guid: 14aa97b3a986ce149ab33e23f7e222dd, type: 3}
-  canInteract: 1
-  itemValue: 75
-  itemAttHotbarSizeMod: 0
+  ItemData:
+    ItemType: 1
+    ItemName: Vase
+    ItemDescription: Vase Description
+    ItemSize: 2
+    ItemValue: 20
+    itemIcon: {fileID: 21300000, guid: 14aa97b3a986ce149ab33e23f7e222dd, type: 3}
+    ItemPrefab: {fileID: 1466800322429633386, guid: a186079f22a39bd40916d1f44fb4a2e8,
+      type: 3}
+  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
+  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
+  interactMessage: C - Pickup Vase
+  blockedMessage: Item Is Blocked
 --- !u!1 &4075737340114704109
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +119,7 @@ GameObject:
   - component: {fileID: 3730173637033282647}
   - component: {fileID: 318601900765889522}
   - component: {fileID: 2562286454646159160}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: vase
   m_TagString: Untagged
   m_Icon: {fileID: 0}

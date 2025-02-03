@@ -6,16 +6,17 @@ public class PlayerRunningState : BaseState<E_PlayerState>
     public float AccelerationTime { get; set; }
     public float DecelerationTime { get; set; }
     public PlayerWalk PlayerWalk { get; set; }
-    
+    public PlayerRotation PlayerRotation { get; set; }
     public PlayerAnimatorController PlayerAnimatorController { get; set; }
     
-    public PlayerRunningState(float movementSpeed,float accelerationTime, float decelerationTime, PlayerWalk playerWalk, PlayerAnimatorController playerAnimatorController) : base(E_PlayerState.Running)
+    public PlayerRunningState(float movementSpeed,float accelerationTime, float decelerationTime, PlayerWalk playerWalk, PlayerAnimatorController playerAnimatorController, PlayerRotation playerRotation) : base(E_PlayerState.Running)
     {
         MovementSpeed = movementSpeed;
         AccelerationTime = accelerationTime;
         DecelerationTime = decelerationTime;
         PlayerWalk = playerWalk;
         PlayerAnimatorController = playerAnimatorController;
+        PlayerRotation = playerRotation;
     }
     
     public override void EnterState()
@@ -35,6 +36,9 @@ public class PlayerRunningState : BaseState<E_PlayerState>
         
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
+        
+        PlayerRotation.UpdateRotation(velocityZ);
+
         
         PlayerAnimatorController.UpdateWalkParameters(x, y);
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);

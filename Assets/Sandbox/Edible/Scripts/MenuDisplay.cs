@@ -8,7 +8,7 @@ public class MenuDisplay : MonoBehaviour
 
     public void UpdateScoreTotal()
     {
-        scoreDisplay.text = inventory.playerScore.ToString();
+        scoreDisplay.text = inventory.CurrInvenoryScore.ToString();
     }
 
     private void Start()

@@ -71,10 +71,6 @@ public class MenuCheats : MonoBehaviour
             case "scene":
                 CheatScene(input);
                 break;
-            case "playerinventory":
-                if (!hasPlayer) { break; }
-                CheatInventory(input);
-                break;
             case "level":
                 CheatLevel();
                 break;
@@ -135,23 +131,6 @@ public class MenuCheats : MonoBehaviour
 
     }
 
-    public void CheatInventory(string[] input)
-    {
-        switch (input[1].ToLower())
-        {
-            case "save":
-                player.hotbar.SaveToInventory(player.inventory);
-                break;
-            case "load":
-                player.hotbar.Clear();
-                player.hotbar.LoadFromInventory(player.inventory);
-                break;
-            case "clear":
-                player.hotbar.Clear();
-                break;
-        }
-    }
-
     public void CheatLevel()
     {
         switch (input[1].ToLower())
@@ -160,11 +139,7 @@ public class MenuCheats : MonoBehaviour
                 LockCursor(true);
                 SceneManager.LoadScene(2);
                 break;
-            case "exit":
-                LockCursor(false);
-                player.hotbar.SaveToInventory(player.inventory);
-                SceneManager.LoadScene(1);
-                break;
+
         }
     }
 }
