@@ -5,20 +5,14 @@ using UnityEngine;
 [Serializable]
 public class TutorialClaster
 {
-    public string EventName;
+    public string EventName;  // Nazwa eventu dla lepszego sterowania.
     public List<TutorialDataHolder> TutorialElements = new List<TutorialDataHolder>();
     private int currTutorialIndex = -1;
-
-    public event Action OnTutorialCompleted;
+    public bool isAutoProgress = true;  // Czy przejście do kolejnego elementu ma się odbywać automatycznie po kliknięciu
+    public event Action OnTutorialCompleted; // Wywoływane, gdy zakończy się cały klaster.
 
     public void HideClaster()
     {
-        if (TutorialElements.Count == 0)
-        {
-            Debug.LogWarning($"[{EventName}] Brak elementów do ukrycia.");
-            return;
-        }
-
         foreach (var element in TutorialElements)
         {
             element.HideTutorial();
@@ -27,21 +21,19 @@ public class TutorialClaster
 
     public void ResetClaster()
     {
-        if (currTutorialIndex >= 0 && currTutorialIndex < TutorialElements.Count)
-        {
-            HideClaster();
-        }
         currTutorialIndex = -1;
+        HideClaster();
     }
 
     public void GoToNextTutorialInClaster()
     {
         if (TutorialElements.Count == 0)
         {
-            Debug.LogWarning($"[{EventName}] Brak elementów w klastrze tutoriali.");
+            Debug.LogWarning("Brak elementów w klastrze tutoriali.");
             return;
         }
 
+        // Ukryj obecny element (jeśli nie jest to pierwsze wywołanie)
         if (currTutorialIndex >= 0 && currTutorialIndex < TutorialElements.Count)
         {
             TutorialElements[currTutorialIndex].HideTutorial();
@@ -51,13 +43,20 @@ public class TutorialClaster
 
         if (currTutorialIndex >= TutorialElements.Count)
         {
-            Debug.Log($"[{EventName}] Zakończono klaster tutoriali.");
-            OnTutorialCompleted?.Invoke();
-            ResetClaster();  // Resetujemy klaster po zakończeniu
+            Debug.Log($"Zakończono klaster tutoriali: {EventName}");
+            OnTutorialCompleted?.Invoke(); // Powiadomienie o zakończeniu tutorialu
             return;
         }
 
         TutorialElements[currTutorialIndex].ChangeTutorialText();
+    }
+
+    public void TriggerNextTutorialManually()
+    {
+        if (!isAutoProgress)
+        {
+            GoToNextTutorialInClaster();
+        }
     }
 }
 
@@ -69,13 +68,14 @@ public class TutorialDataHolder
 
     public void ChangeTutorialText()
     {
-        if (TutorialElement == null)
+        if (TutorialElement != null)
         {
-            Debug.LogWarning($"Brak przypisanego elementu tutorialu! Nie można wyświetlić tekstu: {TutorialText}");
-            return;
+            TutorialElement.ShowTutorial(TutorialText);
         }
-        
-        TutorialElement.ShowTutorial(TutorialText);
+        else
+        {
+            Debug.LogWarning("Brak przypisanego elementu tutorialu.");
+        }
     }
 
     public void HideTutorial()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class TutorialEventManager : MonoBehaviour
 {
@@ -19,7 +20,10 @@ public class TutorialEventManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if(currentClaster == null)
+            return;
+        
+        if (Input.GetKeyDown(KeyCode.L) && !currentClaster.isAutoProgress)
         {
             NextTutorialElement();
         }
@@ -49,10 +53,21 @@ public class TutorialEventManager : MonoBehaviour
             currentClaster.GoToNextTutorialInClaster();
         }
     }
-}
 
+    public void TriggerTutorialEvent(string eventName)
+    {
+        // Znajdź event po nazwie i wyzwól go
+        var tutorialEvent = FindObjectsOfType<MonoBehaviour>()
+                .OfType<ITutorialEvent>() // <- LINQ (potrzebny using System.Linq)
+                .FirstOrDefault(t => t.EventName == eventName);
 
-public interface ITutorialEvent
-{
-    void TriggerTutorial();
+        if (tutorialEvent != null)
+        {
+            tutorialEvent.TriggerSelectedTutorial();
+        }
+        else
+        {
+            Debug.LogWarning($"Nie znaleziono eventu: {eventName}");
+        }
+    }
 }

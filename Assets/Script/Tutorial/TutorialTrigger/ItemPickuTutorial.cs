@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class ItemPickupTutorial : MonoBehaviour, ITutorialEvent
 {
@@ -17,9 +17,9 @@ public class ItemPickupTutorial : MonoBehaviour, ITutorialEvent
 
         // Opcjonalnie wyłączenie komponentu lub całego obiektu po aktywacji
         gameObject.SetActive(false);
-    }*/
+    }#1#
     public void TriggerTutorial()
     {
         throw new System.NotImplementedException();
     }
-}
+}*/

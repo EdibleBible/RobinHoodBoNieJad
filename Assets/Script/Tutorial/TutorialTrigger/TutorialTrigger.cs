@@ -1,21 +1,23 @@
 using UnityEngine;
 
-public class TutorialTrigger : MonoBehaviour, ITutorialEvent
+public class TriggerTutorial : MonoBehaviour, ITutorialEvent
 {
-    [SerializeField] private string eventName = "Part1";
+    [SerializeField] private string eventName; // Nazwa eventu przypisanego do triggera
     public string EventName => eventName;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))  // Sprawdza, czy gracz wchodzi do triggera
+        if (other.CompareTag("Player"))  // Warunek wejścia gracza
         {
-            TriggerTutorial();
+            TriggerSelectedTutorial();
         }
+        
+        Destroy(this);
     }
 
-    public void TriggerTutorial()
+    public void TriggerSelectedTutorial()
     {
-        Debug.Log($"Wywołano tutorial: {EventName}");
-        TutorialEventManager.Instance.StartTutorial(EventName);
+        Debug.Log($"Wejście w trigger: {eventName}");
+        TutorialEventManager.Instance.StartTutorial(eventName);  // Triggerowanie eventu w menedżerze
     }
 }

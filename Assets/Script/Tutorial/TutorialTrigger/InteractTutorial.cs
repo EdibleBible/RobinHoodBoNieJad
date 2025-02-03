@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class InteractTutorial : MonoBehaviour, ITutorialEvent
 {
@@ -22,9 +22,9 @@ public class InteractTutorial : MonoBehaviour, ITutorialEvent
     public void TriggerEvent()
     {
         throw new System.NotImplementedException();
-    }*/
+    }#1#
     public void TriggerTutorial()
     {
         throw new System.NotImplementedException();
     }
-}
+}*/
