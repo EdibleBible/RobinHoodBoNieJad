@@ -42,7 +42,6 @@ public class PlayerRotation : MonoBehaviour
 
         }
         
-        Debug.Log(currAngleToRotateThreshold);
         
         cameraPlayerDistance = Vector3.Distance(transform.position, camera.transform.position);
         float cameraDistanceOffset = cameraPlayerDistance * 1.5f;

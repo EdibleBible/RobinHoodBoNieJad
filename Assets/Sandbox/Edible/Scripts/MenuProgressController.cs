@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MenuProgressController : MonoBehaviour
 {
-    /*public SOStats stats;
+    public SOStats stats;
     public MenuDisplay scoreDisplay;
 
     private void Awake()
@@ -22,5 +22,5 @@ public class MenuProgressController : MonoBehaviour
         stats.levelSuccess = false;
         stats.scoreTotal = 0;
         scoreDisplay.UpdateScoreTotal();
-    }*/
+    }
 }

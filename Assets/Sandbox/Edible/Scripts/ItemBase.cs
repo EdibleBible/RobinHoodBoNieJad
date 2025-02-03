@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ItemBase : MonoBehaviour, IInteractable
 {
@@ -12,7 +13,6 @@ public class ItemBase : MonoBehaviour, IInteractable
     [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
 
-    public GameEvent PickupItemEvent;
     public GameEvent ShowUIEvent
     {
         get => showUIEvent;
@@ -44,8 +44,11 @@ public class ItemBase : MonoBehaviour, IInteractable
 
     public void Interact(Transform player)
     {
+        Debug.Log("Chujek");
+
         if (!CanInteract || IsBlocked)
         {
+            Debug.Log("Chuj");
             ShowUIEvent.Raise(this, (true, BlockedMessage, true));
             return;
         }
@@ -61,8 +64,8 @@ public class ItemBase : MonoBehaviour, IInteractable
 
         if (playerBase.PickUp(ItemData))
         {
+            Debug.Log("Chhuj");
             Destroy(gameObject);
-            PickupItemEvent?.Raise(this, ItemData);
         }
         else
         {
@@ -90,7 +93,8 @@ public class ItemData
     public string ItemDescription;
     public int ItemSize;
     public float ItemValue;
-    public Sprite itemIcon;
+    public Sprite ItemIcon;
+    public GameObject ItemPrefab;
 }
 
 public enum ItemType

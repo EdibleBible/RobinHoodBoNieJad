@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class PlayerInteractionController : MonoBehaviour
 {
+    [SerializeField] private PlayerBase playerBase;
     [SerializeField] private Transform raycasterTransform;
     [SerializeField] private float interactionDistance;
     [SerializeField] private float sphereRadius;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private KeyCode interactionKey;
+    [SerializeField] private KeyCode dropKey;
     private IInteractable currentInteractable;
     private RaycastHit hitInfo;
 
@@ -44,6 +46,12 @@ public class PlayerInteractionController : MonoBehaviour
         {
             Debug.Log("Interacted with " + currentInteractable);
             currentInteractable.Interact(transform);
+        }
+
+        if (Input.GetKeyDown(dropKey))
+        {
+            Debug.Log("Drop 1");
+            playerBase.DropItem();
         }
     }
 

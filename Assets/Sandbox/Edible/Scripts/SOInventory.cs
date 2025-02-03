@@ -50,7 +50,8 @@ public class SOInventory : ScriptableObject
 
         ItemsInInventory.Remove(item);
         CurrInvenoryScore = CalculateInvenoryScore();
-        CurrInvenoryScore -= item.ItemSize;
+        CurrInventoryLoad -= item.ItemSize;
+        Debug.Log(CurrInventoryLoad);
         return true;
     }
 

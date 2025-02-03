@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class PlayerHotbar : MonoBehaviour
 {
-    /*[HideInInspector] public List<ItemBase> itemList = new();
+    [HideInInspector] public List<ItemBase> itemList = new();
     [HideInInspector] public List<MenuHotbarEntry> hotbarEntryList = new();
     [HideInInspector] public PlayerBase playerBase;
     public int size;
@@ -205,5 +206,6 @@ public class PlayerHotbar : MonoBehaviour
         }
         currentItemBase = itemList[currentItemIndex].GetComponent<ItemBase>();
         hotbarEntryList[currentItemIndex].SwitchSelector(true);
-    }*/
+    }
 }
+*/
