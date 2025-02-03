@@ -2096,7 +2096,6 @@ MonoBehaviour:
   itemSlotPrefab: {fileID: 6276118916670504454, guid: 41e46e93790dee24f87df32d43340bfb,
     type: 3}
   itemSlotParent: {fileID: 161806718}
-  currSelectedSlot: 1
 --- !u!1 &1961922252 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3779888550490983644, guid: 2bdda2312119b0f46bfe3b61536a3ad1,
@@ -2482,9 +2481,59 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
         type: 3}
+      propertyPath: leverEvent.Path
+      value: event:/Lever
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Path
+      value: event:/Lever
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
       propertyPath: gameobjectToInteract
       value: 
       objectReference: {fileID: 1961922252}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverEvent.Guid.Data1
+      value: 770989710
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverEvent.Guid.Data2
+      value: 1121854897
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverEvent.Guid.Data3
+      value: 1529357197
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverEvent.Guid.Data4
+      value: 2136266808
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data1
+      value: 770989710
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data2
+      value: 1121854897
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data3
+      value: 1529357197
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data4
+      value: 2136266808
+      objectReference: {fileID: 0}
     - target: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
         type: 3}
       propertyPath: m_Name
