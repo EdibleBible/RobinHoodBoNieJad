@@ -342,7 +342,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310177043}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.00000003181443, z: -3.238975e-16, w: 1}
+  m_LocalRotation: {x: 0.0000000018624896, y: 9.313227e-10, z: -1.4349951e-18, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -767,7 +767,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506642337}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.037742212, y: 0.0000000014137248, z: -5.3395982e-11, w: 0.99928755}
+  m_LocalRotation: {x: 0.03774225, y: 0.00000002269642, z: -8.572246e-10, w: 0.99928755}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1106,6 +1106,12 @@ PrefabInstance:
       propertyPath: InventorySetUpEvent
       value: 
       objectReference: {fileID: 11400000, guid: f89e93adceec4c64e9a894ffddd12c69,
+        type: 2}
+    - target: {fileID: 1109717592782625126, guid: adf6424cfe36dab40a19ab23d7b651ac,
+        type: 3}
+      propertyPath: InventoryUpdateSelectedItemEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: c7decfd095c514b4f80aa39dbc2380fa,
         type: 2}
     - target: {fileID: 3570760385224109893, guid: adf6424cfe36dab40a19ab23d7b651ac,
         type: 3}
@@ -1824,6 +1830,7 @@ GameObject:
   - component: {fileID: 1777232724}
   - component: {fileID: 1777232725}
   - component: {fileID: 1777232726}
+  - component: {fileID: 1777232727}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -1898,6 +1905,34 @@ MonoBehaviour:
       - m_Target: {fileID: 1902357361}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: AddItemToUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1777232727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777232723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b288f956189904aa97a5b1f54aae18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: c7decfd095c514b4f80aa39dbc2380fa, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1902357361}
+        m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
+        m_MethodName: UpdateSelectedSlot
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2260,7 +2295,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067100642}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.00000003181443, z: -3.238975e-16, w: 1}
+  m_LocalRotation: {x: 0.0000000018624896, y: 9.313227e-10, z: -1.4349951e-18, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

@@ -7,9 +7,7 @@ public class InventoryUI : MonoBehaviour
     private List<ItemSlot> itemSlots = new List<ItemSlot>();
     [SerializeField] private ItemSlot itemSlotPrefab;
     [SerializeField] private Transform itemSlotParent;
-
-    [SerializeField] private int currSelectedSlot = 0;
-
+    
     public void SetUpInventory(Component sender, object data)
     {
         foreach (Transform child in itemSlotParent)
@@ -24,7 +22,7 @@ public class InventoryUI : MonoBehaviour
             for (int i = 0; i < inventoryData.InventorySize; i++)
             {
                 var slot = Instantiate(itemSlotPrefab, itemSlotParent);
-                slot.SetUpSlot(i, null, i == currSelectedSlot);
+                slot.SetUpSlot(i, null, i == 0);
                 itemSlots.Add(slot);
             }
         }
@@ -63,29 +61,17 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
-
-    private void Update()
+    
+    public void UpdateSelectedSlot(Component sender, object data)
     {
-        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-
-        if (scrollInput > 0f)
+        if (data is (int currSelected, int prevSelected))
         {
-            UpdateSelectedSlot(-1); // Scroll w górę
-        }
-        else if (scrollInput < 0f)
-        {
-            UpdateSelectedSlot(1); // Scroll w dół
+            if(itemSlots == null || itemSlots.Count == 0) 
+                return;
+            
+            itemSlots[prevSelected].DeselectSlot();
+            itemSlots[currSelected].SelectSlot();
         }
     }
 
-    private void UpdateSelectedSlot(int direction)
-    {
-        if (itemSlots.Count == 0) return;
-
-        if (currSelectedSlot + direction < 0 || currSelectedSlot + direction >= itemSlots.Count) return;
-
-        itemSlots[currSelectedSlot].DeselectSlot();
-        currSelectedSlot += direction;
-        itemSlots[currSelectedSlot].SelectSlot();
-    }
 }
