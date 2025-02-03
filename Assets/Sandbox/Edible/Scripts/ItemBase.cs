@@ -44,11 +44,9 @@ public class ItemBase : MonoBehaviour, IInteractable
 
     public void Interact(Transform player)
     {
-        Debug.Log("Chujek");
 
         if (!CanInteract || IsBlocked)
         {
-            Debug.Log("Chuj");
             ShowUIEvent.Raise(this, (true, BlockedMessage, true));
             return;
         }
@@ -64,7 +62,6 @@ public class ItemBase : MonoBehaviour, IInteractable
 
         if (playerBase.PickUp(ItemData))
         {
-            Debug.Log("Chhuj");
             Destroy(gameObject);
         }
         else

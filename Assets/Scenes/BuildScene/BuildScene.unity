@@ -4912,6 +4912,11 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 47.05
       objectReference: {fileID: 0}
+    - target: {fileID: 4955505487370838413, guid: be716a249d1058443bc2687520007d63,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7382410972824630300, guid: be716a249d1058443bc2687520007d63,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -13743,7 +13748,7 @@ MonoBehaviour:
     MinAxisSize: {x: 10, y: 10}
     cellScale: 1
   RoomGanerateSetting:
-    MaxRoomSize: {x: 2, y: 2}
+    MaxRoomSize: {x: 4, y: 4}
     MinRoomSize: {x: 2, y: 2}
     RoomCount: 15
     MinRoomDistance: 1

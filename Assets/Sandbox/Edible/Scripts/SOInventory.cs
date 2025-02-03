@@ -30,7 +30,7 @@ public class SOInventory : ScriptableObject
 
         if (tempoleryInventoryLoad > InventorySize)
         {
-            Debug.LogWarning("Inventory full");
+            Debug.Log("Inventory full");
             return false;
         }
 
@@ -64,7 +64,7 @@ public class SOInventory : ScriptableObject
                 score += item.ItemValue;
             else
             {
-                Debug.LogWarning("Item is not in inventory");
+                Debug.Log("Item is not in inventory");
                 continue;
             }
         }
