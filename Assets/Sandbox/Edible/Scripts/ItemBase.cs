@@ -1,14 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemBase : MonoBehaviour, IInteractable
 {
-    [Header("Item Attributes")] public ItemType ItemType;
-    public string ItemName;
-    public string ItemDescription;
-    public int ItemSize;
-    public Sprite itemIcon;
-
+    public ItemData ItemData;
     [HideInInspector] public bool CanInteract { get; set; } = true;
     [HideInInspector] public bool IsBlocked { get; set; } = false;
     [HideInInspector] public bool TwoSideInteraction { get; set; } = false;
@@ -16,6 +12,7 @@ public class ItemBase : MonoBehaviour, IInteractable
     [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
 
+    public GameEvent PickupItemEvent;
     public GameEvent ShowUIEvent
     {
         get => showUIEvent;
@@ -62,8 +59,11 @@ public class ItemBase : MonoBehaviour, IInteractable
             return;
         }
 
-        if (playerBase.PickUp(this))
+        if (playerBase.PickUp(ItemData))
+        {
             Destroy(gameObject);
+            PickupItemEvent?.Raise(this, ItemData);
+        }
         else
         {
             Debug.LogWarning("item is not picked up");
@@ -79,33 +79,18 @@ public class ItemBase : MonoBehaviour, IInteractable
     {
         ShowUIEvent.Raise(this, (false, "", false));
     }
-    
-    
+}
 
-    /*public enum ItemType {};
-    [HideInInspector] public List<int> itemTypeValues = new() {100, 200, 75, 0};
-    public static event System.Action<ItemBase> OnItemAdded;
-    public ItemType itemType;
-    public string itemName;
-    public string itemDescription;
-    public int itemSize;
+[Serializable]
+public class ItemData
+{
+    [Header("Item Attributes")] 
+    public ItemType ItemType;
+    public string ItemName;
+    public string ItemDescription;
+    public int ItemSize;
+    public float ItemValue;
     public Sprite itemIcon;
-    public bool canInteract = true;
-
-    public bool Interact(PlayerBase playerBase)
-    {
-        if (canInteract && playerBase.PickUp(this)){
-            gameObject.SetActive(false);
-            gameObject.transform.parent = playerBase.transform;
-            canInteract = false;
-            return true;
-        }
-        return false;
-    }
-
-    [Header("Item Attributes")]
-    public int itemValue;
-    public int itemAttHotbarSizeMod;*/
 }
 
 public enum ItemType
