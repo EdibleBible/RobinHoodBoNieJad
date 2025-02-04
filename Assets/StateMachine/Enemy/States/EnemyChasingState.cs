@@ -41,6 +41,14 @@ public class EnemyChasingState : BaseState<E_EnemyState>
     public override void UpdateState()
     {
         enemyMovement.SetDestination(fov.GetVisibleTargets()[0].transform.position);
+        
+        enemyMovement.UpdateMoveAnimation(enemyMovement.GetNormalizedSpeed());
+        
+        if (enemyMovement.GetNormalizedSpeed() > 0.1)
+        {
+            enemyMovement.StopLookingCoroutine();
+            enemyMovement.SetupLookAround(false);
+        }
     }
 
     public override E_EnemyState GetNextState()
