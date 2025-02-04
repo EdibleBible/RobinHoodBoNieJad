@@ -9,6 +9,7 @@ public class FieldOfView : MonoBehaviour
     private float viewRadius;
     private float viewAngle;
 
+    [SerializeField] private Transform fieldOfViewCaster;
     private LayerMask obstacleMask;
     private LayerMask targetMask;
     private List<Transform> visibleTargets = new List<Transform>();
@@ -58,16 +59,16 @@ public class FieldOfView : MonoBehaviour
     private void FindVisibleTargets()
     {
         visibleTargets.Clear();
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(fieldOfViewCaster.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
         {
             Transform target = targetsInViewRadius[i].transform;
             Vector3 dirTotarget = (target.position - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, dirTotarget) < viewAngle / 2) ;
+            if (Vector3.Angle(fieldOfViewCaster.forward, dirTotarget) < viewAngle / 2) ;
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-                if (!Physics.Raycast(transform.position, dirTotarget, distanceToTarget, obstacleMask))
+                float distanceToTarget = Vector3.Distance(fieldOfViewCaster.position, target.position);
+                if (!Physics.Raycast(fieldOfViewCaster.position, dirTotarget, distanceToTarget, obstacleMask))
                 {
                     visibleTargets.Add(target);
                 }
@@ -89,7 +90,7 @@ public class FieldOfView : MonoBehaviour
     {
         if (!_angleIsGlobal)
         {
-            _angleDegrees += transform.eulerAngles.y;
+            _angleDegrees += fieldOfViewCaster.eulerAngles.y;
         }
 
         return new Vector3(Mathf.Sin(_angleDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(_angleDegrees * Mathf.Deg2Rad));
