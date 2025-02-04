@@ -8,6 +8,9 @@ public class InventoryUI : MonoBehaviour
     private List<ItemSlot> itemSlots = new List<ItemSlot>();
     [SerializeField] private ItemSlot itemSlotPrefab;
     [SerializeField] private Transform itemSlotParent;
+    
+    [SerializeField] private GameEvent DropItemEvent;
+
 
     public void SetUpInventory(Component sender, object data)
     {
@@ -64,7 +67,7 @@ public class InventoryUI : MonoBehaviour
                         requiredSlot[i].AssignItem(itemData, true);
                     }
                 }
-                
+
                 var selectedSlot = requiredSlot.Where(x => x.IsSelected).FirstOrDefault();
                 if (selectedSlot != null)
                 {
@@ -78,22 +81,35 @@ public class InventoryUI : MonoBehaviour
     {
         if (data is int slotToDropIndex && sender is PlayerBase playerBase)
         {
-            itemSlots[slotToDropIndex].RemoveAssignedItem();
-            playerBase.CurrSelectedItem = null;
+            var item = itemSlots[slotToDropIndex].AssignedItem;
+            DropItemEvent.Raise(this,itemSlots[slotToDropIndex].AssignedItem);
+            if (item.ItemSize == 1)
+            {
+                itemSlots[slotToDropIndex].RemoveAssignedItem();
+                playerBase.CurrSelectedItem = null;
+            }
+            else
+            {
+                var allSlots = itemSlots.Where(x => x.AssignedItem == item);
+                foreach (var slot in allSlots)
+                {
+                    slot.RemoveAssignedItem();
+                }
+            }
+            
         }
     }
-    
+
     public void UpdateSelectedSlot(Component sender, object data)
     {
         if (data is (int currSelected, int prevSelected) && sender is PlayerBase playerBase)
         {
-            if(itemSlots == null || itemSlots.Count == 0) 
+            if (itemSlots == null || itemSlots.Count == 0)
                 return;
-            
+
             itemSlots[prevSelected].DeselectSlot();
             itemSlots[currSelected].SelectSlot();
             playerBase.CurrSelectedItem = itemSlots[currSelected].AssignedItem;
         }
     }
-
 }

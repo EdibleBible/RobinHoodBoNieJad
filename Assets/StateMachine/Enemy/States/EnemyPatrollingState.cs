@@ -7,27 +7,32 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
     private EnemyMovement enemyMovement;
     private EnemyMovementStats movementStats;
     private EnemyPatrollingStats patrollingStats;
+    private Coroutine waitCoroutine;
     private float findingPointDistance;
 
 
-    public EnemyPatrollingState(FieldOfView _fov,EnemyFovStats _fovStats,EnemyMovement _enemyMovement, EnemyMovementStats _movementStats,EnemyPatrollingStats _patrollingStats,
+    public EnemyPatrollingState(FieldOfView _fov, EnemyFovStats _fovStats, EnemyMovement _enemyMovement,
+        EnemyMovementStats _movementStats, EnemyPatrollingStats _patrollingStats,
         float _findingPointDistance) : base(E_EnemyState.Patrol)
     {
         fov = _fov;
         fovStats = _fovStats;
-        
+
         enemyMovement = _enemyMovement;
         movementStats = _movementStats;
         findingPointDistance = _findingPointDistance;
         patrollingStats = _patrollingStats;
-        patrollingStats.CreatePatrolPoint(_fov.transform.position);
+        if (!patrollingStats.UseCreatedPath)
+            patrollingStats.CreatePatrolPoint(_fov.transform.position);
+        else
+            patrollingStats.UpdatePatrolPoints();
     }
 
     public override void EnterState()
     {
         fov.SetUpStats(fovStats);
         fov.ResetFindingTargets(fovStats.FindingDelay);
-        
+
         enemyMovement.SetUpSpeed(movementStats.MaxSpeed, movementStats.Acceleration,
             movementStats.AngularSpeed, movementStats.StoppingDistance);
         enemyMovement.ResetCheckingDistance(movementStats.DelayBettwenDistanceCheck);
@@ -45,6 +50,8 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
         {
             enemyMovement.SetDestination(patrollingStats.GetNearestPoint(fov.transform.position));
         }
+
+        enemyMovement.UpdateMoveAnimation(enemyMovement.GetNormalizedSpeed());
     }
 
     public override void ExitState()
@@ -61,18 +68,26 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
             {
                 Vector3 randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
                 enemyMovement.ResetDestination();
-            
+
                 if (!enemyMovement.IsPointOnNavMesh(randomPoint))
                     randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
-            
+
                 enemyMovement.SetDestination(randomPoint);
             }
-            else
+            else 
             {
-                enemyMovement.SetDestination(patrollingStats.GetNextPatrollingPoint());
-                enemyMovement.ResetDestination();
+                enemyMovement.RunCoroutine(patrollingStats.GetNextPatrollingPoint(), 3);
             }
         }
+
+        enemyMovement.UpdateMoveAnimation(enemyMovement.GetNormalizedSpeed());
+        
+        if (enemyMovement.GetNormalizedSpeed() > 0.1)
+        {
+            enemyMovement.StopLookingCoroutine();
+            enemyMovement.SetupLookAround(false);
+        }
+        
     }
 
     public override E_EnemyState GetNextState()

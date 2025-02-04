@@ -90,11 +90,13 @@ public class EnemyFovStats
 public class EnemyPatrollingStats
 {
     public int MaxPatrolPoints;
-    public List<Vector3> PatrolPoints;
+    [HideInInspector] public List<Vector3> PatrolPoints = new List<Vector3>(); // Lista pozycji
+    public List<Transform> PatrolTransforms = new List<Transform>(); // Lista transformów
     public float MinDistanceBetweenPatrolPoints;
     public float MaxDistanceBetweenPatrolPoints;
 
     public bool RandomPointPatroll;
+    public bool UseCreatedPath;
     public bool LoopPatrolPoints;
     private bool forward;
     private bool isChanged;
@@ -124,6 +126,19 @@ public class EnemyPatrollingStats
             {
                 Debug.LogWarning($"Nie udało się znaleźć punktu dla indeksu {i}");
                 break;
+            }
+        }
+    }
+    
+    public void UpdatePatrolPoints()
+    {
+        PatrolPoints.Clear(); // Czyścimy starą listę
+
+        foreach (Transform patrolTransform in PatrolTransforms)
+        {
+            if (patrolTransform != null)
+            {
+                PatrolPoints.Add(patrolTransform.position); // Dodajemy aktualną pozycję transformu
             }
         }
     }

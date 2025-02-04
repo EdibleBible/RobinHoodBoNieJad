@@ -50,7 +50,6 @@ public class PlayerInteractionController : MonoBehaviour
 
         if (Input.GetKeyDown(dropKey))
         {
-            Debug.Log("Drop 1");
             playerBase.DropItem();
         }
     }

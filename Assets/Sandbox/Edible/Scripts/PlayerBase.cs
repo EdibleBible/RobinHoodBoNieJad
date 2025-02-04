@@ -24,15 +24,6 @@ public class PlayerBase : MonoBehaviour
 
     private void Update()
     {
-        if (CurrSelectedItem == null)
-        {
-            Debug.LogWarning("No item selected");
-        }
-        else
-        {
-            Debug.Log(CurrSelectedItem.ItemName);
-        }
-
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
 
         if (scrollInput > 0f)
@@ -69,10 +60,8 @@ public class PlayerBase : MonoBehaviour
 
     public void DropItem()
     {
-        Debug.Log("Drop 2");
         if (CurrSelectedItem != null)
         {
-            Debug.Log("Drop 3");
             var obj = Instantiate(CurrSelectedItem.ItemPrefab);
             obj.transform.position = dropPointTransform.position;
             obj.transform.rotation = quaternion.identity;
