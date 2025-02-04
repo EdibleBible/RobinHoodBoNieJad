@@ -62,6 +62,7 @@ public class ItemBase : MonoBehaviour, IInteractable
 
         if (playerBase.PickUp(ItemData))
         {
+            InteractEvent.Raise(this, null);
             Destroy(gameObject);
         }
         else

@@ -12,7 +12,7 @@ public class NextInteractTutorialTrigger : MonoBehaviour
 
         if (interactable != null)
         {
-            Debug.Log("Znaleziono komponent implementujący IInteractable.");
+            Debug.Log("Znaleziono komponent implementujący IInteractable." + gameObject.name);
         }
         else
         {
@@ -22,9 +22,14 @@ public class NextInteractTutorialTrigger : MonoBehaviour
 
     public void CheckInteractEvent(Component sender, object data)
     {
-        if (sender is IInteractable interactable && interactable == this.interactable)
+        if (sender is IInteractable interactable)
         {
-            TriggerSelectedTutorial();
+            Debug.Log(interactable.ToString());
+            Debug.Log(this.interactable.ToString());
+            if (interactable == this.interactable)
+            {
+                TriggerSelectedTutorial();
+            }
         }
     }
     
