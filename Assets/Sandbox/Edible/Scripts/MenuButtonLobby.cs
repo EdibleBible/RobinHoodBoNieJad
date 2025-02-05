@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,6 +17,12 @@ public class MenuButtonLobby : MonoBehaviour
     public float fadeDuration = 0.5f;
     private bool isReadyToContinue = false;
     [SerializeField] private List<GameObject> objToOff = new List<GameObject>();
+
+    private void Awake()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 
     public void Open(GameObject lobbyObject)
     {
