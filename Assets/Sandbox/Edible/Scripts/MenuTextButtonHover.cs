@@ -37,7 +37,7 @@ public class MenuTextButtonHover : MonoBehaviour, IPointerEnterHandler, IPointer
         Vector3 textWorldLeftEdge = textRect.position - textRect.right * (textSize.x * 0.5f);
 
         // Compute the 1% screen width offset
-        float offset = Screen.width * 0.02f;
+        float offset = Screen.width * 0.07f;
 
         // Convert world position to UI position relative to the canvas, with 1% left offset
         Vector3 spriteUIPosition = WorldToCanvasPosition(canvas, textWorldLeftEdge - new Vector3(offset, 0f, 0f));
