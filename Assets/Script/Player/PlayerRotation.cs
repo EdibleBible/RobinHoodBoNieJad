@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerAnimatorController))]
 public class PlayerRotation : MonoBehaviour
 {
-    private Camera camera;
+    [SerializeField] private Camera camera;
     private float cameraPlayerDistance;
     private PlayerAnimatorController animatorController;
 
@@ -16,15 +16,17 @@ public class PlayerRotation : MonoBehaviour
     private float currAngleToRotateThreshold = 0;
     [SerializeField] private float angleToRotateThresholdStay = 45f;
     [SerializeField] private float angleToRotateThresholdMoveForward = 15f;
-    [SerializeField] private float angleToRotateThresholdMoveBackward= 0f;
+    [SerializeField] private float angleToRotateThresholdMoveBackward = 0f;
 
     private bool isRotating = false;
 
     private void Awake()
     {
-        camera = Camera.main;
+        if (camera == null)
+            camera = Camera.main;
         animatorController = GetComponent<PlayerAnimatorController>(); // Pobieramy kontroler animacji
     }
+
     public void UpdateRotation(float velocity = 0f)
     {
         if (velocity > 0)
@@ -34,27 +36,28 @@ public class PlayerRotation : MonoBehaviour
         else if (velocity < 0)
         {
             currAngleToRotateThreshold = angleToRotateThresholdMoveBackward;
-
         }
         else if (velocity == 0)
         {
             currAngleToRotateThreshold = angleToRotateThresholdStay;
-
         }
-        
-        
+
+
         cameraPlayerDistance = Vector3.Distance(transform.position, camera.transform.position);
         float cameraDistanceOffset = cameraPlayerDistance * 1.5f;
 
-        if (Physics.Raycast(camera.transform.position + lookPointOffset , camera.transform.forward + lookPointOffset, out RaycastHit hit,
+        if (Physics.Raycast(camera.transform.position + lookPointOffset, camera.transform.forward + lookPointOffset,
+                out RaycastHit hit,
                 cameraDistanceOffset, objectLayer))
         {
-            Debug.DrawRay(camera.transform.position + lookPointOffset, camera.transform.forward * hit.distance + lookPointOffset, Color.red);
+            Debug.DrawRay(camera.transform.position + lookPointOffset,
+                camera.transform.forward * hit.distance + lookPointOffset, Color.red);
             debugLookPoint.position = hit.point;
         }
         else
         {
-            Debug.DrawRay(camera.transform.position + lookPointOffset, camera.transform.forward * cameraDistanceOffset + lookPointOffset, Color.yellow);
+            Debug.DrawRay(camera.transform.position + lookPointOffset,
+                camera.transform.forward * cameraDistanceOffset + lookPointOffset, Color.yellow);
             debugLookPoint.position = camera.transform.position + (camera.transform.forward * cameraDistanceOffset);
         }
 

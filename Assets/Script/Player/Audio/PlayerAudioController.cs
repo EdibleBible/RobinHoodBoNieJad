@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using UnityEngine.Rendering;
@@ -16,6 +18,8 @@ public class PlayerAudioController : MonoBehaviour
 
     private PlayerStateMachineController playerStateMachine;
 
+    private bool canCheck;
+
     public bool DEBUG;
 
     private void Awake()
@@ -23,10 +27,24 @@ public class PlayerAudioController : MonoBehaviour
         playerStateMachine = GetComponent<PlayerStateMachineController>();
     }
 
-    private bool leftFootOnGround = false;
-    private bool rightFootOnGround = false;
+    /*private void Start()
+    {
+        StartCoroutine(CanCheck());
+    }
+
+    private IEnumerator CanCheck()
+    {
+        yield return new WaitForSeconds(1f);
+        canCheck = true;
+    }*/
+
+    private bool leftFootOnGround = true;
+    private bool rightFootOnGround = true;
     void Update()
     {
+        /*if(!canCheck)
+            return;*/
+        
         CheckFootContact(leftFootRaycast, ref leftFootOnGround);
         CheckFootContact(rightFootRaycast, ref rightFootOnGround);
     }

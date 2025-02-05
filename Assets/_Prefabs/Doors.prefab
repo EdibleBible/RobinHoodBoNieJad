@@ -98,7 +98,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4557374751376709222}
   - component: {fileID: 1783864906644179005}
-  - component: {fileID: 94345368063266394}
   - component: {fileID: 3904259532809305190}
   m_Layer: 31
   m_Name: Doors
@@ -136,6 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e3551f6e95137e48868c3267e01366a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  twoSideInteraction: 1
   openTime: 1
   openCurve:
     serializedVersion: 2
@@ -206,31 +206,9 @@ MonoBehaviour:
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   interactMessage: C - Open door
+  blockedMessage: 
   isDebug: 1
   debugKey: 99
-  IsBlocked: 0
-  TwoSideInteraction: 1
---- !u!65 &94345368063266394
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3779888550490983644}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.077988185, y: 1.8529506, z: 0.6244725}
-  m_Center: {x: 0.04155406, y: 0.89509535, z: -0.0040660053}
 --- !u!65 &3904259532809305190
 BoxCollider:
   m_ObjectHideFlags: 0
