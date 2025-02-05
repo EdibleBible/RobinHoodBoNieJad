@@ -98,6 +98,9 @@ public class DoorController : MonoBehaviour, IInteractable
         {
             CheckPlayerPosition();
             PlayDoorSound("Open");
+            
+            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" + endLeftDoorOpenPosition);
+
 
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(endLeftDoorOpenPosition, openTime)
                 .SetEase(openCurve);
@@ -117,6 +120,9 @@ public class DoorController : MonoBehaviour, IInteractable
         else
         {
             PlayDoorSound("Close");
+            
+            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" + endLeftDoorOpenPosition);
+
 
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorClosePosition, closeTime)
                 .SetEase(closeCurve);
@@ -132,6 +138,12 @@ public class DoorController : MonoBehaviour, IInteractable
                     isOpen = false;
                 });
         }
+    }
+
+    private void Update()
+    {
+        Debug.Log(doorPivotLeft.transform.rotation);
+        Debug.Log(doorPivotRight.transform.rotation);
     }
 
     private void CheckPlayerPosition()
@@ -164,7 +176,7 @@ public class DoorController : MonoBehaviour, IInteractable
             // Jeśli wykryto gracza, ustaw odpowiednie pozycje otwierania drzwi
             endRightDoorOpenPosition = new Vector3(0, -rightDoorAngle, 0);
             endLeftDoorOpenPosition = new Vector3(0, leftDoorAngle, 0);
-
+            
             // Debuguj informacje o trafionym obiekcie
             Debug.Log($"Hit object: {hit.collider.gameObject.name}");
             Debug.Log($"Hit point: {hit.point}");
@@ -176,6 +188,7 @@ public class DoorController : MonoBehaviour, IInteractable
             // Jeśli nie wykryto gracza, ustaw inne pozycje
             endRightDoorOpenPosition = new Vector3(0, rightDoorAngle, 0);
             endLeftDoorOpenPosition = new Vector3(0, -leftDoorAngle, 0);
+
 
             // Rysowanie linii reprezentujących boxa w przestrzeni, gdy nie ma trafienia
             DrawBoxDebug(transform.position + new Vector3(0, 0.5f, 0), boxHalfExtents, transform.right);

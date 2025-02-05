@@ -11,7 +11,7 @@ public class SOInventory : ScriptableObject
     public List<ItemData> ItemsInInventory = new List<ItemData>();
     public float CurrInvenoryScore;
     public int InventorySize;
-
+    
     public void ClearInventory()
     {
         CurrInvenoryScore = 0;
