@@ -25,7 +25,7 @@ public class ItemSlot : MonoBehaviour
         else
         {
             itemImage.sprite = backpackSprite;
-            itemImage.color = new Color(255, 255, 255, 0.7f);
+            itemImage.color = new Color(255, 255, 255, 0.2f);
         }
 
         if (isSelected)

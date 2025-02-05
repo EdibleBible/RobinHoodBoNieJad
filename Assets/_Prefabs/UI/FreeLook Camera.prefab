@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5003861637614152244}
   - component: {fileID: 3514138814911457824}
+  - component: {fileID: 8837369367561650176}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: Untagged
@@ -57,7 +58,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_CommonLens: 1
   m_Lens:
-    FieldOfView: 35
+    FieldOfView: 50
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -101,8 +102,8 @@ MonoBehaviour:
   m_XAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 150
-    m_AccelTime: 0.1
+    m_MaxSpeed: 250
+    m_AccelTime: 0.4
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
@@ -130,9 +131,9 @@ MonoBehaviour:
   m_SplineCurvature: 0
   m_Orbits:
   - m_Height: 0.3
-    m_Radius: 0.15
-  - m_Height: 0
-    m_Radius: 0.65
+    m_Radius: 0.05
+  - m_Height: 0.1
+    m_Radius: 0.5
   - m_Height: -0.3
     m_Radius: 0.4
   m_LegacyHeadingBias: 3.4028235e+38
@@ -140,6 +141,36 @@ MonoBehaviour:
   - {fileID: 7135188241445040773}
   - {fileID: 7230709490211187897}
   - {fileID: 7939320342687471491}
+--- !u!114 &8837369367561650176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229135162885850471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 524736
+  m_IgnoreTag: Player
+  m_TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 262144
+  m_MinimumDistanceFromTarget: 0.01
+  m_AvoidObstacles: 1
+  m_DistanceLimit: 0
+  m_MinimumOcclusionTime: 0
+  m_CameraRadius: 0.05
+  m_Strategy: 1
+  m_MaximumEffort: 4
+  m_SmoothingTime: 0.7
+  m_Damping: 0.7
+  m_DampingWhenOccluded: 0.7
+  m_OptimalTargetDistance: 1
 --- !u!1 &2485308404292592670
 GameObject:
   m_ObjectHideFlags: 3
@@ -165,7 +196,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2485308404292592670}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000018754896, y: 3.1333794e-18, z: -1.1769533e-19, w: 1}
+  m_LocalRotation: {x: 0.06638361, y: 0.7354194, z: -0.072820865, w: 0.6704094}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -201,7 +232,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 35
+    FieldOfView: 50
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -278,7 +309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 0, z: -0.65}
+  m_FollowOffset: {x: 0, y: 0.1, z: -0.5}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0.25
@@ -371,7 +402,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6137477417781874496}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000018754896, y: 3.1333794e-18, z: -1.1769533e-19, w: 1}
+  m_LocalRotation: {x: 0.06638361, y: 0.7354194, z: -0.072820865, w: 0.6704094}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -407,7 +438,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 35
+    FieldOfView: 50
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -450,7 +481,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7297787024392787892}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.03774225, y: 0.00000002269642, z: -8.572246e-10, w: 0.99928755}
+  m_LocalRotation: {x: 0.09639596, y: 0.7321961, z: -0.10600044, w: 0.6658533}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -486,7 +517,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 35
+    FieldOfView: 50
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -563,7 +594,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 0, z: -0.65}
+  m_FollowOffset: {x: 0, y: 0.1, z: -0.5}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0.25
@@ -690,7 +721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 0, z: -0.65}
+  m_FollowOffset: {x: 0, y: 0.1, z: -0.5}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0.5

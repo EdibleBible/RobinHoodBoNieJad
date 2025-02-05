@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class InputEscMenu : MonoBehaviour
+public class InputEscMenuInGame : MonoBehaviour
 {
     public InputActionAsset globalInputActions;
     private InputAction escAction;
@@ -26,10 +26,14 @@ public class InputEscMenu : MonoBehaviour
         if (escapeMenu.activeInHierarchy)
         {
             escapeMenu.SetActive(false);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.None;
         }
         else
         {
             escapeMenu.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
         }
     }
 
