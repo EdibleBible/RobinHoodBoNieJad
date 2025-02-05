@@ -8,8 +8,10 @@ public class ObjectLevelExit : MonoBehaviour, IUseObject
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Dupa");
         if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Dupa 1");
             player = other.gameObject.GetComponent<PlayerBase>();
             isPlayer = true;
             ShowUI();
@@ -18,8 +20,10 @@ public class ObjectLevelExit : MonoBehaviour, IUseObject
 
     private void OnTriggerExit(Collider other)
     {
+        Debug.Log("Dupa 3");
         if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Dupa 4");
             isPlayer = false;
             HideUI();
         }
@@ -62,11 +66,11 @@ public class ObjectLevelExit : MonoBehaviour, IUseObject
 
     public void ShowUI()
     {
-        ShowUIEvent.Raise(this, (true, InteractMessage));
+        ShowUIEvent.Raise(this, (true, InteractMessage,false));
     }
 
     public void HideUI()
     {
-        ShowUIEvent.Raise(this, (false, ""));
+        ShowUIEvent.Raise(this, (false, "",false));
     }
 }

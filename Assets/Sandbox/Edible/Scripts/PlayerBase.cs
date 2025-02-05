@@ -15,10 +15,14 @@ public class PlayerBase : MonoBehaviour
 
     public ItemData CurrSelectedItem;
 
-    public void Awake()
+    public void Start()
     {
         playerInventory.ClearInventory();
         playerInventory.SetUpInventory();
+        Debug.Log("Inventory Setup");
+        Debug.Log(InventorySetUpEvent);
+        Debug.Log(this);
+        Debug.Log(playerInventory);
         InventorySetUpEvent?.Raise(this, playerInventory);
     }
 

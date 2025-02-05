@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class TutorialEventManager : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class TutorialEventManager : MonoBehaviour
         {
             NextTutorialElement();
         }
+        
+        currentClaster.Update();
     }
 
     public void StartTutorial(string eventName)
@@ -70,4 +73,6 @@ public class TutorialEventManager : MonoBehaviour
             Debug.LogWarning($"Nie znaleziono eventu: {eventName}");
         }
     }
+    
+    
 }

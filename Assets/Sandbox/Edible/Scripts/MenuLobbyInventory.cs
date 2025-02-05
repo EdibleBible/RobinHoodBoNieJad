@@ -35,6 +35,10 @@ public class MenuLobbyInventory : MonoBehaviour
 
     private void ReloadInventory()
     {
+        foreach(var element in shopCellControllers)
+        {
+            element.ChangeShowElement(false);
+        }
         foreach(var entry in entryList)
         {
             Destroy(entry.gameObject);

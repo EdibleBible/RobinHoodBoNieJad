@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerAnimatorController))]
 public class PlayerRotation : MonoBehaviour
 {
+    public event Action<bool> OnHeadTurned; // True = right, False = left
+    
     [SerializeField] private Camera camera;
     private float cameraPlayerDistance;
     private PlayerAnimatorController animatorController;
@@ -18,13 +20,15 @@ public class PlayerRotation : MonoBehaviour
     [SerializeField] private float angleToRotateThresholdMoveForward = 15f;
     [SerializeField] private float angleToRotateThresholdMoveBackward = 0f;
 
-    private bool isRotating = false;
+    private Vector3 lastCameraForward;
+    [SerializeField] private float headTurnThreshold = 5f; // Minimalny kąt, który uznajemy za obrót głowy
 
     private void Awake()
     {
         if (camera == null)
             camera = Camera.main;
         animatorController = GetComponent<PlayerAnimatorController>(); // Pobieramy kontroler animacji
+        lastCameraForward = camera.transform.forward; // Inicjalizacja kierunku kamery
     }
 
     public void UpdateRotation(float velocity = 0f)
@@ -37,11 +41,10 @@ public class PlayerRotation : MonoBehaviour
         {
             currAngleToRotateThreshold = angleToRotateThresholdMoveBackward;
         }
-        else if (velocity == 0)
+        else
         {
             currAngleToRotateThreshold = angleToRotateThresholdStay;
         }
-
 
         cameraPlayerDistance = Vector3.Distance(transform.position, camera.transform.position);
         float cameraDistanceOffset = cameraPlayerDistance * 1.5f;
@@ -65,9 +68,10 @@ public class PlayerRotation : MonoBehaviour
         cameraForward.y = 0; // Ignore vertical tilt of the camera
         cameraForward.Normalize();
 
+        DetectHeadTurn(cameraForward); // Sprawdzanie ruchu głowy
+
         if (cameraForward != Vector3.zero)
         {
-            // Obliczamy kąt między kierunkiem kamery a kierunkiem postaci
             float angle = Vector3.Angle(transform.forward, cameraForward);
             Debug.DrawRay(transform.position, cameraForward * angle, Color.green);
 
@@ -78,6 +82,19 @@ public class PlayerRotation : MonoBehaviour
                     Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
         }
+    }
+
+    private void DetectHeadTurn(Vector3 cameraForward)
+    {
+        float angleDifference = Vector3.SignedAngle(lastCameraForward, cameraForward, Vector3.up);
+
+        if (Mathf.Abs(angleDifference) > headTurnThreshold)
+        {
+            bool isTurningRight = angleDifference > 0;
+            OnHeadTurned?.Invoke(isTurningRight);
+        }
+
+        lastCameraForward = cameraForward; // Aktualizujemy ostatni kierunek kamery
     }
 
     private void OnApplicationFocus(bool hasFocus)

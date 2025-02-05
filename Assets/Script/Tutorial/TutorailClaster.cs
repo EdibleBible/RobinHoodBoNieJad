@@ -5,11 +5,15 @@ using UnityEngine;
 [Serializable]
 public class TutorialClaster
 {
-    public string EventName;  // Nazwa eventu dla lepszego sterowania.
+    public string EventName;  
     public List<TutorialDataHolder> TutorialElements = new List<TutorialDataHolder>();
     private int currTutorialIndex = -1;
-    public bool isAutoProgress = true;  // Czy przejście do kolejnego elementu ma się odbywać automatycznie po kliknięciu
-    public event Action OnTutorialCompleted; // Wywoływane, gdy zakończy się cały klaster.
+    public bool isAutoProgress = true;  
+    public event Action OnTutorialCompleted;
+
+    private bool isWaitingForNext = false;
+    private float timer = 0f;
+    private float waitTime = 0f;
 
     public void HideClaster()
     {
@@ -17,6 +21,7 @@ public class TutorialClaster
         {
             element.HideTutorial();
         }
+        isWaitingForNext = false;
     }
 
     public void ResetClaster()
@@ -33,7 +38,6 @@ public class TutorialClaster
             return;
         }
 
-        // Ukryj obecny element (jeśli nie jest to pierwsze wywołanie)
         if (currTutorialIndex >= 0 && currTutorialIndex < TutorialElements.Count)
         {
             TutorialElements[currTutorialIndex].HideTutorial();
@@ -44,11 +48,32 @@ public class TutorialClaster
         if (currTutorialIndex >= TutorialElements.Count)
         {
             Debug.Log($"Zakończono klaster tutoriali: {EventName}");
-            OnTutorialCompleted?.Invoke(); // Powiadomienie o zakończeniu tutorialu
+            OnTutorialCompleted?.Invoke();
             return;
         }
 
         TutorialElements[currTutorialIndex].ChangeTutorialText();
+
+        // Sprawdzenie, czy dany tutorial jest tymczasowy
+        if (TutorialElements[currTutorialIndex].TempolaryTutorial)
+        {
+            waitTime = TutorialElements[currTutorialIndex].Time;
+            timer = 0f;
+            isWaitingForNext = true;
+        }
+    }
+
+    public void Update()
+    {
+        if (isWaitingForNext)
+        {
+            timer += Time.deltaTime;
+            if (timer >= waitTime)
+            {
+                isWaitingForNext = false;
+                GoToNextTutorialInClaster();
+            }
+        }
     }
 
     public void TriggerNextTutorialManually()
@@ -60,11 +85,14 @@ public class TutorialClaster
     }
 }
 
+
 [Serializable]
 public class TutorialDataHolder
 {
     public TutorialElement TutorialElement;
     [TextArea] public string TutorialText;
+    public bool TempolaryTutorial;
+    public float Time;
 
     public void ChangeTutorialText()
     {
@@ -86,3 +114,4 @@ public class TutorialDataHolder
         }
     }
 }
+

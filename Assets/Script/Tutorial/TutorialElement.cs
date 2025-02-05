@@ -5,6 +5,8 @@ public class TutorialElement : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI TutorialTextMesh;
     [SerializeField] private GameObject tutorialObject;
+
+    
     
     public void ShowTutorial(string TutorialText)
     {
@@ -13,7 +15,6 @@ public class TutorialElement : MonoBehaviour
         TutorialTextMesh.text = TutorialText;
         
     }
-
     public void HideTutorial()
     {
         tutorialObject.SetActive(false);

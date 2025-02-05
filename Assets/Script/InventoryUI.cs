@@ -11,9 +11,15 @@ public class InventoryUI : MonoBehaviour
     
     [SerializeField] private GameEvent DropItemEvent;
 
-
+    public void KUTAS()
+    {
+        Debug.Log("KUTAS");
+    }
+    
+    
     public void SetUpInventory(Component sender, object data)
     {
+        Debug.Log("Inventory Setup");
         foreach (Transform child in itemSlotParent)
         {
             Destroy(child.gameObject);

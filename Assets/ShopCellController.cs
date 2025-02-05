@@ -11,4 +11,9 @@ public class ShopCellController : MonoBehaviour
     {
         ShowElement = false;
     }
+
+    public void ChangeShowElement(bool data)
+    {
+        ShowElement = data;
+    }
 }

@@ -140,16 +140,8 @@ public class DoorController : MonoBehaviour, IInteractable
         }
     }
 
-    private void Update()
-    {
-        Debug.Log(doorPivotLeft.transform.rotation);
-        Debug.Log(doorPivotRight.transform.rotation);
-    }
-
     private void CheckPlayerPosition()
     {
-        Debug.Log("CheckPlayerPosition");
-
         // Ustawienia BoxCast
         float boxWidth = 0.1f; // Szerokość boxa (dostosuj do swoich potrzeb)
         float boxHeight = 0.1f; // Wysokość boxa (dostosuj do swoich potrzeb)

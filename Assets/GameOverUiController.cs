@@ -31,11 +31,10 @@ public class GameOverUiController : MonoBehaviour
         StartCoroutine(LoadGameWithFade(sceneToLoad,sceneToUnload));
     }
 
-    private IEnumerator LoadGameWithFade(string gameSceneIndex, string lobbySceneName)
+    private IEnumerator LoadGameWithFade(string gameSceneName, string lobbySceneName)
     {
         loadingScreen.SetActive(true);
-
-        yield return StartCoroutine(Fade(1));
+        yield return StartCoroutine(Fade(1, fadeDuration));
 
         foreach (var obj in objToOff)
         {
@@ -45,7 +44,7 @@ public class GameOverUiController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        AsyncOperation gameLoadOperation = SceneManager.LoadSceneAsync(gameSceneIndex, LoadSceneMode.Additive);
+        AsyncOperation gameLoadOperation = SceneManager.LoadSceneAsync(gameSceneName, LoadSceneMode.Additive);
         gameLoadOperation.allowSceneActivation = false;
 
         float elapsedTime = 0f;
@@ -53,33 +52,38 @@ public class GameOverUiController : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float progress = Mathf.Clamp01(gameLoadOperation.progress / 0.9f);
-            
+
             if (progress >= 1f && elapsedTime >= minLoadTime)
             {
                 isReadyToContinue = true;
-                gameLoadOperation.allowSceneActivation = true;
             }
-
 
             if (isReadyToContinue && Input.GetKeyDown(KeyCode.Space))
             {
-                yield return StartCoroutine(Fade(0));
+                gameLoadOperation.allowSceneActivation = true;
+                
+                // Ustawienie nowej sceny jako aktywnej przed usunięciem starej
+                SceneManager.SetActiveScene(SceneManager.GetSceneAt(0));
+                
+                // Poczekaj na aktywację nowej sceny
+                yield return new WaitForSeconds(0.1f);
+
+                // Teraz możemy bezpiecznie wyładować starą scenę
                 SceneManager.UnloadSceneAsync(lobbySceneName);
-                yield return null;
             }
 
             yield return null;
         }
     }
 
-    private IEnumerator Fade(float targetAlpha)
+    private IEnumerator Fade(float targetAlpha, float duration)
     {
         float startAlpha = fadeCanvasGroup.alpha;
         float time = 0;
 
-        while (time < fadeDuration)
+        while (time < duration)
         {
-            fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+            fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / duration);
             time += Time.deltaTime;
             yield return null;
         }
