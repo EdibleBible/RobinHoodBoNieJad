@@ -27,6 +27,7 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 
     [SerializeField] private EnemyFovStats fovChaseState;
 
+    public float maxNavMeshCheckDistance = 5f;
 
     private EnemyMovement enemyMovement;
     private FieldOfView fov;
@@ -39,16 +40,30 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 
     public override void Start()
     {
+        EnsureOnNavMesh(); // Sprawdzenie i ustawienie postaci na NavMeshu
+
         _enemyPatrollingState = new EnemyPatrollingState(fov, fovPatrollingState, enemyMovement, patrollingMoveStats,
             patrollingStats, findingPointDistance);
         _enemyChasingState = new EnemyChasingState(fov, fovPatrollingState, enemyMovement, chasingStats);
-
 
         state.Add(E_EnemyState.Patrol, _enemyPatrollingState);
         state.Add(E_EnemyState.Chase, _enemyChasingState);
 
         currentState = _enemyPatrollingState;
         base.Start();
+    }
+
+    private void EnsureOnNavMesh()
+    {
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, maxNavMeshCheckDistance, NavMesh.AllAreas))
+        {
+            transform.position = hit.position; // Ustawienie pozycji na NavMeshu
+        }
+        else
+        {
+            Debug.LogError("Enemy could not find NavMesh near its spawn position!", this);
+        }
     }
 
     private void OnDrawGizmos()
