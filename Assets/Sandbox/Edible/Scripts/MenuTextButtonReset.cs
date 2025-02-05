@@ -10,6 +10,7 @@ public class MenuTextButtonReset : MonoBehaviour
     public void Reset()
     {
         inventory.ItemsInInventory.Clear();
+        inventory.CollectedItemTypes.Clear();
         inventory.CurrInvenoryScore = 0;
         inventory.InventorySize = 3;
         store.storeItems.Clear();

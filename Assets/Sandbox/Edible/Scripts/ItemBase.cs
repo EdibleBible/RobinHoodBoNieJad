@@ -100,5 +100,6 @@ public enum ItemType
     Debug,
     CollectibleVase,
     CollectibleGoblet,
-    UtilityBackpack
+    UtilityBackpack,
+    CollectibleBox
 }
