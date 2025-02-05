@@ -1880,53 +1880,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 0f18d8cf1f0bf4c46abb8b5504a0a512, type: 2}
   m_BuildHeightMesh: 0
---- !u!1 &1908702187 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1253176561450558782}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1908702192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1908702187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89b288f956189904aa97a5b1f54aae18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1908702193}
-        m_TargetAssemblyTypeName: InteractTutorialTrigger, Assembly-CSharp
-        m_MethodName: CheckInteractEvent
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1908702193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1908702187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cb74e4861f83994bab9a617e71c9f5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventName: Part2
 --- !u!1 &1953948788
 GameObject:
   m_ObjectHideFlags: 0
@@ -2303,11 +2256,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lever
       objectReference: {fileID: 0}
-    - target: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7671762581676521934, guid: b8453b97dff1c8748b7ab1e23ee897f8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2358,43 +2306,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8564065430151323234, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.3870939
-      objectReference: {fileID: 0}
-    - target: {fileID: 8564065430151323234, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 0.2768223
-      objectReference: {fileID: 0}
-    - target: {fileID: 8564065430151323234, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      propertyPath: m_Center.x
-      value: 0.07631187
-      objectReference: {fileID: 0}
-    - target: {fileID: 8564065430151323234, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      propertyPath: m_Center.y
-      value: -0.062279098
-      objectReference: {fileID: 0}
-    - target: {fileID: 8564065430151323234, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      propertyPath: m_Center.z
-      value: 0.0034934098
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1908702193}
-    - targetCorrespondingSourceObject: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1908702192}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8453b97dff1c8748b7ab1e23ee897f8, type: 3}
 --- !u!1001 &2314999340633663801
 PrefabInstance:
