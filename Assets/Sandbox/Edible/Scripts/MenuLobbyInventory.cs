@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 public class MenuLobbyInventory : MonoBehaviour
@@ -13,6 +14,7 @@ public class MenuLobbyInventory : MonoBehaviour
     private int pagesCount;
     public TMP_Text pagesText;
     public TMP_Text coinsText;
+    [SerializeField] private List<ShopCellController> shopCellControllers = new();
 
     private void OnEnable()
     {
@@ -42,16 +44,10 @@ public class MenuLobbyInventory : MonoBehaviour
         if (pagesCount == inventoryPage) {upperCap = itemList.Count % 10;}
         for (int i = 0 + (10 * inventoryPage); i < upperCap + (10 * inventoryPage); i++)
         {
-            Transform parentPanel;
-            if (i < 5 + (10 * inventoryPage))
-            {
-                parentPanel = panel1;
-            }
-            else
-            {
-                parentPanel = panel2;
-            }
-            MenuLobbyInventoryEntry newEntry = Instantiate(entryPrefab, parentPanel.transform).GetComponent<MenuLobbyInventoryEntry>();
+            var emptyCell = shopCellControllers.Where(x => !x.ShowElement).FirstOrDefault();
+            MenuLobbyInventoryEntry newEntry = Instantiate(entryPrefab, emptyCell.ItemHolder).GetComponent<MenuLobbyInventoryEntry>();
+            emptyCell.ShowElement = true;
+            newEntry.gameObject.transform.localPosition = new Vector3(0, 0, 0);
             entryList.Add(newEntry);
             newEntry.LoadItem(itemList[i]);
             newEntry.entryIndex = i;

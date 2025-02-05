@@ -26,13 +26,9 @@ public class InputEscMenu : MonoBehaviour
         if (escapeMenu.activeInHierarchy)
         {
             escapeMenu.SetActive(false);
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         } else
         {
             escapeMenu.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
         }
     }
 
@@ -41,14 +37,10 @@ public class InputEscMenu : MonoBehaviour
         if (escapeMenu.activeInHierarchy)
         {
             escapeMenu.SetActive(false);
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
             escapeMenu.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
         }
     }
 
