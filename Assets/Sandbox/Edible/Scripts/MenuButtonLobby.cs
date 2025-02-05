@@ -13,7 +13,7 @@ public class MenuButtonLobby : MonoBehaviour
     public Slider progressBar;
     public TextMeshProUGUI continueText;
     public float minLoadTime = 1f;
-    public CanvasGroup fadeCanvasGroup;
+    public List<CanvasGroup> fadeCanvasGroup;
     public float fadeDuration = 0.5f;
     private bool isReadyToContinue = false;
     [SerializeField] private List<GameObject> objToOff = new List<GameObject>();
@@ -87,16 +87,20 @@ public class MenuButtonLobby : MonoBehaviour
 
     private IEnumerator Fade(float targetAlpha)
     {
-        float startAlpha = fadeCanvasGroup.alpha;
+        float startAlpha = fadeCanvasGroup[0].alpha;
         float time = 0;
 
         while (time < fadeDuration)
         {
-            fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+            foreach (var group in fadeCanvasGroup)
+            {
+                group.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+
+            }
             time += Time.deltaTime;
             yield return null;
         }
 
-        fadeCanvasGroup.alpha = targetAlpha;
+        fadeCanvasGroup[0].alpha = targetAlpha;
     }
 }
