@@ -6561,7 +6561,9 @@ MonoBehaviour:
   progressBar: {fileID: 815944013}
   continueText: {fileID: 1740525077}
   minLoadTime: 1
-  fadeCanvasGroup: {fileID: 1811433949}
+  fadeCanvasGroup:
+  - {fileID: 1811433949}
+  - {fileID: 1688758316}
   fadeDuration: 0.5
   objToOff:
   - {fileID: 691858731}
@@ -6571,6 +6573,7 @@ MonoBehaviour:
   - {fileID: 911519385}
   - {fileID: 2030898029}
   - {fileID: 2081127167}
+  - {fileID: 1472526957}
 --- !u!1 &911519385
 GameObject:
   m_ObjectHideFlags: 0
@@ -12814,7 +12817,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688758311}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -15611,7 +15614,7 @@ PrefabInstance:
     - target: {fileID: 2351297443096887867, guid: 1e6f123f86a0791419323a2b81b4c4f9,
         type: 3}
       propertyPath: m_Alpha
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3599710052328981303, guid: 1e6f123f86a0791419323a2b81b4c4f9,
         type: 3}
