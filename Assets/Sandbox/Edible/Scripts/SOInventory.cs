@@ -10,6 +10,7 @@ public class SOInventory : ScriptableObject
     
     public List<ItemData> ItemsInInventory = new List<ItemData>();
     public float CurrInvenoryScore;
+    public float ScoreBackup;
     public int InventorySize;
     public List<ItemType> CollectedItemTypes;
     

@@ -17,9 +17,12 @@ public class MenuButtonLobby : MonoBehaviour
     public float fadeDuration = 0.5f;
     private bool isReadyToContinue = false;
     [SerializeField] private List<GameObject> objToOff = new List<GameObject>();
+    public SOInventory inventory;
 
     private void Awake()
     {
+        inventory.CurrInvenoryScore += inventory.ScoreBackup;
+        inventory.ScoreBackup = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
@@ -36,6 +39,7 @@ public class MenuButtonLobby : MonoBehaviour
 
     public void StartGame()
     {
+        inventory.ScoreBackup = inventory.CurrInvenoryScore;
         StartCoroutine(LoadGameWithFade(2, "Lobby"));
     }
 
