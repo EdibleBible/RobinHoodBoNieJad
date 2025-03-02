@@ -34,15 +34,19 @@ public class DelaunayTriangulator
         return points;
     }
 
-    public IEnumerable<Triangle> BowyerWatson(IEnumerable<Point> points)
+    public IEnumerable<Triangle> BowyerWatson(Dictionary<Room, Point> points)
     {
+        // Utwórz mapowanie z punktu na pomieszczenie
+        var pointToRoom = points.ToDictionary(p => p.Value, p => p.Key);
+
         // Generowanie supertrójkąta obejmującego wszystkie punkty
         var supraTriangle = GenerateSupraTriangle();
         var triangulation = new HashSet<Triangle> { supraTriangle };
 
+        // Klasyczny przebieg algorytmu Bowyer-Watsona
         foreach (var point in points)
         {
-            var badTriangles = FindBadTriangles(point, triangulation);
+            var badTriangles = FindBadTriangles(point.Value, triangulation);
             var polygon = FindHoleBoundaries(badTriangles);
 
             // Usuwanie złych trójkątów
@@ -53,21 +57,62 @@ public class DelaunayTriangulator
                     vertex.AdjacentTriangles.Remove(triangle);
                 }
             }
+
             triangulation.RemoveWhere(o => badTriangles.Contains(o));
 
             // Dodawanie nowych trójkątów
             foreach (var edge in polygon)
             {
-                var triangle = new Triangle(point, edge.Point1, edge.Point2);
-                triangulation.Add(triangle);
+                var newTriangle = new Triangle(point.Value, edge.Point1, edge.Point2);
+                triangulation.Add(newTriangle);
             }
         }
 
-        // Usuwanie wszystkich trójkątów zawierających wierzchołki supertrójkąta
+        // Usuwanie trójkątów zawierających wierzchołki supertrójkąta
         triangulation.RemoveWhere(o => o.Vertices.Any(v => supraTriangle.Vertices.Contains(v)));
 
-        return triangulation;
+        // Filtrowanie trójkątów – pozostawiamy te, które łączą tylko pomieszczenia, które nie dotykają się.
+        var filteredTriangles = new HashSet<Triangle>();
+
+        foreach (var triangle in triangulation)
+        {
+            // Wyciągamy unikalne pomieszczenia powiązane z wierzchołkami trójkąta
+            HashSet<Room> triangleRooms = new HashSet<Room>();
+            foreach (var vertex in triangle.Vertices)
+            {
+                if (pointToRoom.TryGetValue(vertex, out Room room))
+                    triangleRooms.Add(room);
+            }
+
+            // Jeśli trójkąt zawiera wierzchołki z więcej niż jednego pomieszczenia,
+            // sprawdzamy czy którakolwiek para pomieszczeń jest ze sobą w kontakcie.
+            bool valid = true;
+            Room[] roomArray = triangleRooms.ToArray();
+            for (int i = 0; i < roomArray.Length && valid; i++)
+            {
+                for (int j = i + 1; j < roomArray.Length; j++)
+                {
+                    bool contact = false;
+                    // Sprawdzamy, czy w którymś z pomieszczeń w ContactRooms wpis dla drugiego pomieszczenia wskazuje kontakt.
+                    if (roomArray[i].ContactRooms.TryGetValue(roomArray[j], out contact) ||
+                        roomArray[j].ContactRooms.TryGetValue(roomArray[i], out contact))
+                    {
+                        if (contact)
+                        {
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (valid)
+                filteredTriangles.Add(triangle);
+        }
+
+        return filteredTriangles;
     }
+
     private List<Edge> FindHoleBoundaries(ISet<Triangle> badTriangles)
     {
         var edges = new List<Edge>();
@@ -77,10 +122,12 @@ public class DelaunayTriangulator
             edges.Add(new Edge(triangle.Vertices[1], triangle.Vertices[2]));
             edges.Add(new Edge(triangle.Vertices[2], triangle.Vertices[0]));
         }
+
         var grouped = edges.GroupBy(o => o);
         var boundaryEdges = edges.GroupBy(o => o).Where(o => o.Count() == 1).Select(o => o.First());
         return boundaryEdges.ToList();
     }
+
     private Triangle GenerateSupraTriangle()
     {
         //   1  -> maxX
@@ -101,4 +148,3 @@ public class DelaunayTriangulator
         return new HashSet<Triangle>(badTriangles);
     }
 }
-

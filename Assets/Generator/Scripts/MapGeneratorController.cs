@@ -538,8 +538,7 @@ public class MapGeneratorController : MonoBehaviour
             }
         }
     }
-
-
+    
     public IEnumerator RoomPathFindWithDebugging()
     {
         if (MainInfoGrid == null)
@@ -771,14 +770,14 @@ public class MapGeneratorController : MonoBehaviour
     public List<Triangle> GenerateTriangulation()
     {
         Triangulator = new DelaunayTriangulator();
-        List<Point> listOfPoints = new List<Point>();
+        Dictionary<Room,Point> listOfPoints = new Dictionary<Room,Point>();
 
         // Tworzenie punktów
         foreach (Room roomCentre in RoomGanerateSetting.CreatedRoom)
         {
             Point newPoint = new Point(roomCentre.centroid.x, roomCentre.centroid.z);
             newPoint.SetPointRoom(roomCentre);
-            listOfPoints.Add(newPoint);
+            listOfPoints.Add(roomCentre,newPoint);
         }
 
         // Generowanie triangulacji

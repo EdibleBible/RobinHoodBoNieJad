@@ -14,6 +14,7 @@ public struct RoomGanerateSetting
     public Vector2Int MinRoomSize;
     public int RoomCount;
     public int MinRoomDistance;
+    public int MaxRoomDistance;
     public int MaxAttempts;
 
     [Header("Additional way")] public bool UseAdditionalEdges;
@@ -29,9 +30,8 @@ public struct RoomGanerateSetting
     public List<GameObject> ObjectToPickList;
     public GameObject DepositPointPrefab;
     public LayerMask InroomObjectLayer;
-    
-    [Header("Door Spawn")]
-    public GameObject DoorPrefab;
+
+    [Header("Door Spawn")] public GameObject DoorPrefab;
     public float DoorSpawnOffset;
 
     public void CreateRoomsOnGrid(CustomGrid.Grid<GridCellData> generatedGrid, uint seed, Transform roomTransform)
@@ -43,10 +43,15 @@ public struct RoomGanerateSetting
 
         for (int i = 0; i < RoomCount;)
         {
-            i++;
-            // Próba wygenerowania pokoju
-            Room room = GenerateRoom(generatedGrid, random, ref attempt);
+            Room room = null;
+            if (i == 0)
+                room = GenerateRoom(generatedGrid, random, ref attempt, true);
+            else
+                room = GenerateRoom(generatedGrid, random, ref attempt, false);
+
+
             // Jeśli po kilku próbach nie udało się stworzyć pokoju, przerywamy
+            i++;
 
             if (room == null)
             {
@@ -67,10 +72,22 @@ public struct RoomGanerateSetting
             roomParent.transform.SetParent(roomTransform);
 
             room.SetUpParent(roomParent, generatedGrid.GetCellSize());
+
+        }
+
+        foreach (var room in CreatedRoom)
+        {
+            room.SetRoomAssigned();
+        }
+
+        foreach (var room in CreatedRoom)
+        {
+            room.ChcekRoomContact(CreatedRoom);
         }
     }
-
-    private Room GenerateRoom(CustomGrid.Grid<GridCellData> gridData, Unity.Mathematics.Random random, ref int attempt)
+    
+    private Room GenerateRoom(CustomGrid.Grid<GridCellData> gridData, Unity.Mathematics.Random random, ref int attempt,
+        bool isFirstRoom)
     {
         Room room = new Room();
         room.CellInRoom = new List<GridCellData>();
@@ -83,16 +100,17 @@ public struct RoomGanerateSetting
             localAttempts++;
             attempt++;
 
-            // Losuj rozmiar pokoju
-            int width = random.NextInt(MinRoomSize.x, MaxRoomSize.x + 1);
-            int height = random.NextInt(MinRoomSize.y, MaxRoomSize.y + 1);
+            // Jeśli Min i Max Room Size są równe, nie losujemy, tylko przypisujemy wartość
+            int width = (MinRoomSize.x == MaxRoomSize.x) ? MinRoomSize.x : random.NextInt(MinRoomSize.x, MaxRoomSize.x + 1);
+            int height = (MinRoomSize.y == MaxRoomSize.y) ? MinRoomSize.y : random.NextInt(MinRoomSize.y, MaxRoomSize.y + 1);
 
             // Losuj pozycję startową
             int x = random.NextInt(0, gridData.GeneratedGridSize().x - width);
             int y = random.NextInt(0, gridData.GeneratedGridSize().y - height);
 
-            // Sprawdź, czy pokój można umieścić
-            if (CanPlaceRoom(gridData, new Vector2Int(x, y), width, height))
+            // Sprawdź warunki dla pierwszego pokoju i kolejnych
+            if (CanPlaceRoom(gridData, new Vector2Int(x, y), width, height) &&
+                (isFirstRoom || MaxRoomDistance == 0 || IsWithinMaxDistanceOfAnyRoom(gridData, new Vector2Int(x, y), width, height)))
             {
                 // Dodaj komórki pokoju do siatki
                 for (int i = x; i < x + width; i++)
@@ -115,8 +133,7 @@ public struct RoomGanerateSetting
 
         return roomIsGenerated ? room : null; // Zwróć pokój, jeśli został wygenerowany, w przeciwnym razie null
     }
-
-    // Funkcja walidująca, czy pokój zmieści się w siatce
+    
     private bool CanPlaceRoom(CustomGrid.Grid<GridCellData> gridData, Vector2Int start, int width, int height)
     {
         for (int x = start.x - MinRoomDistance; x < start.x + width + MinRoomDistance; x++)
@@ -128,21 +145,47 @@ public struct RoomGanerateSetting
 
                 GridCellData cell = gridData.GetValue(x, y);
 
-                // Jeśli komórka jest już zajęta przez pomieszczenie, nie można tu utworzyć pokoju
-                if (cell != null && cell.GridCellType == E_GridCellType.Room || (x == 0 || y == 0 ||
-                        x == gridData.GetGridArray().GetLength(0) - 1 || y == gridData.GetGridArray().GetLength(1) - 1))
+                // Jeśli komórka jest już zajęta przez pokój lub dotyka krawędzi mapy, odrzuć
+                if (cell != null && cell.GridCellType == E_GridCellType.Room ||
+                    (x == 0 || y == 0 || x == gridData.GetGridArray().GetLength(0) - 1 ||
+                     y == gridData.GetGridArray().GetLength(1) - 1))
                     return false;
             }
         }
 
         return true;
     }
+    
+    private bool IsWithinMaxDistanceOfAnyRoom(CustomGrid.Grid<GridCellData> gridData, Vector2Int start, int width,
+        int height)
+    {
+        if (MaxRoomDistance == 0) return true; // Jeśli max dystans to 0, zawsze zwracaj true
 
+        for (int x = start.x - MaxRoomDistance; x < start.x + width + MaxRoomDistance; x++)
+        {
+            for (int y = start.y - MaxRoomDistance; y < start.y + height + MaxRoomDistance; y++)
+            {
+                if (x < 0 || y < 0 || x >= gridData.GeneratedGridSize().x || y >= gridData.GeneratedGridSize().y)
+                    continue;
+
+                GridCellData cell = gridData.GetValue(x, y);
+
+                // Jeśli znaleziono przynajmniej jeden pokój w promieniu MaxRoomDistance, zwróć true
+                if (cell != null && cell.GridCellType == E_GridCellType.Room)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    
     public void MakeTraingulateBetweenRoom()
     {
         List<Vector3> roomCentroid = CreatedRoom.Select(room => room.centroid).ToList();
     }
-
+    
     public void SpawnPlayer()
     {
         foreach (var room in CreatedRoom)
@@ -159,7 +202,7 @@ public struct RoomGanerateSetting
             room.GenerateRoomInside();
         }
     }
-
+    
     public void DetectObjects()
     {
         foreach (var room in CreatedRoom)
@@ -167,12 +210,12 @@ public struct RoomGanerateSetting
             room.DetectObjects(InroomObjectLayer);
         }
     }
-
+    
     public void SpawnDoor()
     {
         foreach (var room in CreatedRoom)
         {
-            room.SpawnDoors(DoorPrefab,DoorSpawnOffset);
+            room.SpawnDoors(DoorPrefab, DoorSpawnOffset);
         }
     }
 }

@@ -5,7 +5,6 @@ using Cinemachine;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -18,6 +17,7 @@ public class Room
     public int XAxisSize;
     public int YAxisSize;
     public GameObject RoomParent;
+    public Dictionary<Room, bool> ContactRooms = new Dictionary<Room, bool>();
 
 
     public Vector3 centroid = new Vector3(0, 0, 0);
@@ -154,7 +154,8 @@ public class Room
             if (cell.GridCellType == E_GridCellType.Pass || cell.GridCellType == E_GridCellType.SpawnPass)
             {
                 Vector3 boxCenter = cell.Position; // środek boxa
-                Vector3 boxSize = new Vector3(cell.CellSize.x/2, cell.CellSize.y/2, cell.CellSize.x/2); // rozmiar boxa
+                Vector3 boxSize =
+                    new Vector3(cell.CellSize.x / 2, cell.CellSize.y / 2, cell.CellSize.x / 2); // rozmiar boxa
                 // Debugowanie środkowej pozycji boxa i jego rozmiaru
 
                 GameObject obj = new GameObject();
@@ -210,6 +211,38 @@ public class Room
                 obj.transform.rotation = Quaternion.Euler(rotation);
                 obj.transform.position += offset;
             }
+        }
+    }
+
+    public void ChcekRoomContact(List<Room> AllRooms)
+    {
+        foreach (var room in AllRooms)
+        {
+            if (room != this)
+                ContactRooms.Add(room, false);
+        }
+
+        foreach (var cell in CellInRoom)
+        {
+            var cellNeighbour = cell.ReturnNeighbour();
+            foreach (var neigbour in cellNeighbour)
+            {
+                if (neigbour == null)
+                    continue;
+
+                if (neigbour.GetConnectedRoom() != null)
+                {
+                    ContactRooms[neigbour.GetConnectedRoom()] = true;
+                }
+            }
+        }
+    }
+
+    public void SetRoomAssigned()
+    {
+        foreach (var cell in CellInRoom)
+        {
+            cell.SetupCellRoom(this);
         }
     }
 }
