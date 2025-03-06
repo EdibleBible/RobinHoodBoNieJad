@@ -12,35 +12,36 @@ public class DoorController : MonoBehaviour, IInteractable
         get => twoSideInteraction;
         set => twoSideInteraction = value;
     }
-    
+
     public bool twoSideInteraction;
     public bool CanInteract { get; set; } = true;
     public bool IsBlocked { get; set; }
 
-    [Header("Open Setting")]
-    [SerializeField] private float openTime;
-    [SerializeField] private AnimationCurve openCurve;
+    [Header("Open Setting")] [SerializeField]
+    public float openTime;
 
-    [SerializeField] private float closeTime;
-    [SerializeField] private AnimationCurve closeCurve;
-    [SerializeField] private LayerMask playerLayer;
+    public AnimationCurve openCurve;
 
-    [Header("LeftDoor")] [SerializeField] private GameObject doorPivotLeft;
-    [SerializeField] private Vector3 leftDoorClosePosition;
-    [SerializeField] private float leftDoorAngle;
-    private Vector3 endLeftDoorOpenPosition;
+    public float closeTime;
+    public AnimationCurve closeCurve;
+    public LayerMask playerLayer;
 
-    [Header("RightDoor")] [SerializeField] private GameObject doorPivotRight;
-    [SerializeField] private Vector3 rightDoorClosePosition;
-    [SerializeField] private float rightDoorAngle;
-    private Vector3 endRightDoorOpenPosition;
+    [Header("LeftDoor")] public GameObject doorPivotLeft;
+    public Vector3 leftDoorClosePosition;
+    public float leftDoorAngle;
+    public Vector3 endLeftDoorOpenPosition;
 
-    [Header("FMOD")] [SerializeField] private EventReference doorsEvent;
-    [SerializeField] private Transform soundSource;
-    private EventInstance doorSoundInstance;
+    [Header("RightDoor")] public GameObject doorPivotRight;
+    public Vector3 rightDoorClosePosition;
+    public float rightDoorAngle;
+    public Vector3 endRightDoorOpenPosition;
 
-    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
-    [SerializeField] private GameEvent interactEvent;
+    [Header("FMOD")] public EventReference doorsEvent;
+    public Transform soundSource;
+    public EventInstance doorSoundInstance;
+
+    [Header("Events")] public GameEvent showUIEvent;
+    public GameEvent interactEvent;
 
     public GameEvent ShowUIEvent
     {
@@ -61,7 +62,7 @@ public class DoorController : MonoBehaviour, IInteractable
         set => interactMessage = value;
     }
 
-    [SerializeField] private string interactMessage;
+    public string interactMessage;
 
     public string BlockedMessage
     {
@@ -69,16 +70,16 @@ public class DoorController : MonoBehaviour, IInteractable
         set => blockedMessage = value;
     }
 
-    [SerializeField] private string blockedMessage;
+    public string blockedMessage;
 
-    [Header("Debug")] [SerializeField] private bool isDebug;
-    [SerializeField] private KeyCode debugKey = KeyCode.C;
+    [Header("Debug")] public bool isDebug;
+    public KeyCode debugKey = KeyCode.C;
 
-    private bool isOpen = false;
-    private Tween isDoorOpenTween;
+    public bool IsUsed { get; set; } = false;
+    public Tween isDoorOpenTween;
 
 
-    public void Interact(Transform player)
+    public virtual void Interact(Transform player)
     {
         if (IsBlocked)
         {
@@ -94,12 +95,13 @@ public class DoorController : MonoBehaviour, IInteractable
 
         InteractEvent.Raise(this, null);
 
-        if (!isOpen)
+        if (!IsUsed)
         {
             CheckPlayerPosition();
             PlayDoorSound("Open");
-            
-            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" + endLeftDoorOpenPosition);
+
+            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" +
+                      endLeftDoorOpenPosition);
 
 
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(endLeftDoorOpenPosition, openTime)
@@ -113,15 +115,16 @@ public class DoorController : MonoBehaviour, IInteractable
                 .OnComplete(() =>
                 {
                     isDoorOpenTween = null;
-                    isOpen = true;
+                    IsUsed = true;
                     if (!TwoSideInteraction) CanInteract = false;
                 });
         }
         else
         {
             PlayDoorSound("Close");
-            
-            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" + endLeftDoorOpenPosition);
+
+            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" +
+                      endLeftDoorOpenPosition);
 
 
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorClosePosition, closeTime)
@@ -135,12 +138,12 @@ public class DoorController : MonoBehaviour, IInteractable
                 .OnComplete(() =>
                 {
                     isDoorOpenTween = null;
-                    isOpen = false;
+                    IsUsed = false;
                 });
         }
     }
 
-    private void CheckPlayerPosition()
+    public void CheckPlayerPosition()
     {
         // Ustawienia BoxCast
         float boxWidth = 0.1f; // Szerokość boxa (dostosuj do swoich potrzeb)
@@ -168,7 +171,7 @@ public class DoorController : MonoBehaviour, IInteractable
             // Jeśli wykryto gracza, ustaw odpowiednie pozycje otwierania drzwi
             endRightDoorOpenPosition = new Vector3(0, -rightDoorAngle, 0);
             endLeftDoorOpenPosition = new Vector3(0, leftDoorAngle, 0);
-            
+
             // Debuguj informacje o trafionym obiekcie
             Debug.Log($"Hit object: {hit.collider.gameObject.name}");
             Debug.Log($"Hit point: {hit.point}");
@@ -188,7 +191,7 @@ public class DoorController : MonoBehaviour, IInteractable
     }
 
 // Funkcja rysująca box w przestrzeni w celu debugowania
-    private void DrawBoxDebug(Vector3 origin, Vector3 halfExtents, Vector3 direction)
+    public void DrawBoxDebug(Vector3 origin, Vector3 halfExtents, Vector3 direction)
     {
         Vector3 frontRight = origin + direction * 10f + new Vector3(halfExtents.x, halfExtents.y, halfExtents.z);
         Vector3 frontLeft = origin + direction * 10f + new Vector3(-halfExtents.x, halfExtents.y, halfExtents.z);
@@ -215,7 +218,7 @@ public class DoorController : MonoBehaviour, IInteractable
     }
 
 
-    private void PlayDoorSound(string doorState, float volume = 0.2f)
+    public void PlayDoorSound(string doorState, float volume = 0.2f)
     {
         // Jeśli istnieje instancja dźwięku, zatrzymaj ją przed stworzeniem nowej
         if (doorSoundInstance.isValid())
@@ -241,17 +244,17 @@ public class DoorController : MonoBehaviour, IInteractable
     }
 
 
-    public void ShowUI()
+    public virtual void ShowUI()
     {
         ShowUIEvent.Raise(this, (true, InteractMessage, false));
     }
 
-    public void HideUI()
+    public virtual void HideUI()
     {
         ShowUIEvent.Raise(this, (false, "", false));
     }
 
-    private void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawRay(transform.position, transform.right * 0.7f);

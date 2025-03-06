@@ -21,8 +21,128 @@ public class Room
 
 
     public Vector3 centroid = new Vector3(0, 0, 0);
+    
+    public Vector3 RoomCentroid(float _cellSize)
+    {
+        if (CellInRoom == null || CellInRoom.Count == 0)
+        {
+            throw new System.Exception("Room has no cells to calculate centroid.");
+        }
 
+        float totalX = 0;
+        float totalY = 0;
+
+        foreach (var cell in CellInRoom)
+        {
+            totalX += cell.Coordinate.x;
+            totalY += cell.Coordinate.y;
+        }
+
+        float centroidX = totalX / CellInRoom.Count;
+        float centroidY = totalY / CellInRoom.Count;
+
+        return new Vector3(centroidX * _cellSize, 0, centroidY * _cellSize);
+    }
+    
+public void MarkCorners(List<Room> allRooms)
+{
+    /*if (CellInRoom == null || CellInRoom.Count == 0)
+    {
+        throw new System.Exception("Room has no cells to mark corners.");
+    }
+
+    // Zbiór komórek do analizy – zaczynamy od komórek bieżącego pokoju.
+    HashSet<GridCellData> unionCells = new HashSet<GridCellData>(CellInRoom);
+    
+    // Dodajemy komórki z pokoi, które nachodzą na ten pokój (czyli mają przynajmniej jedną wspólną komórkę)
+    foreach (var otherRoom in allRooms)
+    {
+        if (otherRoom == this)
+            continue;
+        
+        // Jeśli istnieje przynajmniej jedna komórka wspólna, dodajemy wszystkie komórki tego pokoju.
+        if (otherRoom.CellInRoom.Any(cell => CellInRoom.Contains(cell)))
+        {
+            foreach (var cell in otherRoom.CellInRoom)
+            {
+                unionCells.Add(cell);
+            }
+        }
+    }
+
+    // Wyznaczamy skrajne wartości wspólnego obszaru
+    float minX = unionCells.Min(cell => cell.Coordinate.x);
+    float maxX = unionCells.Max(cell => cell.Coordinate.x);
+    float minY = unionCells.Min(cell => cell.Coordinate.y);
+    float maxY = unionCells.Max(cell => cell.Coordinate.y);
+
+    // W bieżącym pokoju oznaczamy jako narożniki te komórki, których współrzędne odpowiadają skrajnym wartościom
+    foreach (var cell in CellInRoom)
+    {
+        if ((cell.Coordinate.x == minX && cell.Coordinate.y == minY) || // Lewy dolny róg
+            (cell.Coordinate.x == minX && cell.Coordinate.y == maxY) || // Lewy górny róg
+            (cell.Coordinate.x == maxX && cell.Coordinate.y == minY) || // Prawy dolny róg
+            (cell.Coordinate.x == maxX && cell.Coordinate.y == maxY))   // Prawy górny róg
+        {
+            cell.SetIsRoomCorner();
+        }
+    }*/
+}
+
+public void MarkBorders(List<Room> allRooms)
+{
+    if (CellInRoom == null || CellInRoom.Count == 0)
+    {
+        throw new System.Exception("Room has no cells to mark borders.");
+    }
+
+    // Zbiór komórek do analizy – zaczynamy od komórek bieżącego pokoju.
+    HashSet<GridCellData> unionCells = new HashSet<GridCellData>(CellInRoom);
+    
+    // Dodajemy komórki z pokoi, które nachodzą na ten pokój
+    foreach (var otherRoom in allRooms)
+    {
+        if (otherRoom == this)
+            continue;
+        
+        if (otherRoom.CellInRoom.Any(cell => CellInRoom.Contains(cell)))
+        {
+            foreach (var cell in otherRoom.CellInRoom)
+            {
+                unionCells.Add(cell);
+            }
+        }
+    }
+
+    // Wyznaczamy skrajne wartości wspólnego obszaru
+    float minX = unionCells.Min(cell => cell.Coordinate.x);
+    float maxX = unionCells.Max(cell => cell.Coordinate.x);
+    float minY = unionCells.Min(cell => cell.Coordinate.y);
+    float maxY = unionCells.Max(cell => cell.Coordinate.y);
+
+    // Oznaczamy jako krawędź te komórki bieżącego pokoju, których współrzędne leżą na skraju wspólnego obszaru.
+    foreach (var cell in CellInRoom)
+    {
+        if (cell.Coordinate.x == minX ||
+            cell.Coordinate.x == maxX ||
+            cell.Coordinate.y == minY ||
+            cell.Coordinate.y == maxY)
+        {
+            cell.SetIsRoomBorder();
+        }
+    }
+}
+
+    
     public void SetUpParent(GameObject roomParent, float size)
+    {
+        RoomParent = roomParent;
+        roomParent.transform.localScale = new Vector3(size, size, size);
+        roomParent.transform.localPosition = new Vector3(centroid.x, -1, centroid.z);
+    }
+    
+
+    /*public void SetUpParent(GameObject roomParent, float size)
     {
         RoomParent = roomParent;
         roomParent.transform.localScale = new Vector3(size, size, size);
@@ -96,7 +216,7 @@ public class Room
         camFollow.player = playerObj;
         camFollow.offset = new Vector3(2, 2, 0);
         camFollow.followSpeed = 5f;
-        camFollow.rotationSpeed = 10f;*/
+        camFollow.rotationSpeed = 10f;#1#
     }
 
     public void SpawnPicakbleObject(List<GameObject> picakableObjects, int minAmount, int maxAmount)
@@ -244,7 +364,10 @@ public class Room
         {
             cell.SetupCellRoom(this);
         }
-    }
+    }*/
+
+
+
 }
 
 public class BoxGizmos : MonoBehaviour

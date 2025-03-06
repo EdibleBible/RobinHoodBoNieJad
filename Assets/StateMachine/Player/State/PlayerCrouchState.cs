@@ -38,8 +38,7 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
         lookAtTween?.Kill();
         followTween?.Kill();
         
-        lookAtTween = LookAtTarget.DOLocalMove(LookAtTarget.localPosition - MoveCameraOffset, 0.3f).SetEase(Ease.OutQuad);
-        followTween = FollowTarget.DOLocalMove(FollowTarget.localPosition - MoveCameraOffset, 0.3f).SetEase(Ease.OutQuad);
+        PlayerRotation.SetCrouch(true);
     }
 
     public override void ExitState()
@@ -47,8 +46,8 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
         lookAtTween?.Kill();
         followTween?.Kill();
         
-        lookAtTween = LookAtTarget.DOLocalMove(LookAtTarget.localPosition + MoveCameraOffset, 0.3f).SetEase(Ease.OutQuad);
-        followTween = FollowTarget.DOLocalMove(FollowTarget.localPosition + MoveCameraOffset, 0.3f).SetEase(Ease.OutQuad);
+        PlayerRotation.SetCrouch(false);
+
     }
 
     public override void UpdateState()
@@ -61,7 +60,7 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
 
-        PlayerRotation.UpdateRotation(velocityZ);
+        PlayerRotation.UpdateRotation();
 
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, true);
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SOLevel", menuName = "Scriptable Objects/SOLevel")]

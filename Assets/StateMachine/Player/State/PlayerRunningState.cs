@@ -37,7 +37,7 @@ public class PlayerRunningState : BaseState<E_PlayerState>
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
         
-        PlayerRotation.UpdateRotation(velocityZ);
+        PlayerRotation.UpdateRotation();
 
         
         PlayerAnimatorController.UpdateWalkParameters(x, y);

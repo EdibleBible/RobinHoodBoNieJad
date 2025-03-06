@@ -1,10 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerInteractionController : MonoBehaviour
 {
     [SerializeField] private PlayerBase playerBase;
     [SerializeField] private Transform raycasterTransform;
+    [SerializeField] private Transform holdPositionTransform;
     [SerializeField] private float interactionDistance;
     [SerializeField] private float sphereRadius;
     [SerializeField] private LayerMask interactableLayer;
@@ -30,6 +32,21 @@ public class PlayerInteractionController : MonoBehaviour
                     }
 
                     currentInteractable = interactable;
+                }
+            }
+            else if (hitInfo.collider.transform.parent.TryGetComponent<IInteractable>(out var interactableParent))
+            {
+                if (interactableParent.CanInteract)
+                {
+                    if (currentInteractable == null)
+                        interactableParent.ShowUI();
+                    else
+                    {
+                        currentInteractable.HideUI();
+                        interactableParent.ShowUI();
+                    }
+
+                    currentInteractable = interactableParent;
                 }
             }
         }
@@ -63,5 +80,10 @@ public class PlayerInteractionController : MonoBehaviour
         Gizmos.DrawWireSphere(start, sphereRadius);
         Gizmos.DrawLine(start, end);
         Gizmos.DrawWireSphere(end, sphereRadius);
+    }
+
+    public Transform GetHoldPosition()
+    {
+        return holdPositionTransform;
     }
 }

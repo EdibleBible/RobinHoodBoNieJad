@@ -1,113 +1,99 @@
-using System;
+using Cinemachine;
 using UnityEngine;
+using DG.Tweening; // DOTween
 
 [RequireComponent(typeof(PlayerAnimatorController))]
 public class PlayerRotation : MonoBehaviour
 {
-    public event Action<bool> OnHeadTurned; // True = right, False = left
-    
-    [SerializeField] private Camera camera;
-    private float cameraPlayerDistance;
-    private PlayerAnimatorController animatorController;
+    [Header("Ustawienia Cinemachine")]
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
-    [SerializeField] private Transform debugLookPoint;
-    [SerializeField] private Vector3 lookPointOffset;
-    [SerializeField] private LayerMask objectLayer;
+    [Header("Ustawienia obrotu kamery")]
+    [SerializeField] private float mouseSensitivityX = 100f;
+    [SerializeField] private float mouseSensitivityY = 100f;
+    [SerializeField] private bool invertY = false;
+    [SerializeField] private float minPitch = -90f;
+    [SerializeField] private float maxPitch = 90f;
 
-    [SerializeField] private float rotationSpeed = 45f;
-    private float currAngleToRotateThreshold = 0;
-    [SerializeField] private float angleToRotateThresholdStay = 45f;
-    [SerializeField] private float angleToRotateThresholdMoveForward = 15f;
-    [SerializeField] private float angleToRotateThresholdMoveBackward = 0f;
+    [Header("Ustawienia obrotu gracza")]
+    [SerializeField] private float playerRotationSpeed = 720f;
+    [SerializeField] private float angleThreshold = 5f;
+    [SerializeField] private float rotationSmoothTime = 0.1f;
 
-    private Vector3 lastCameraForward;
-    [SerializeField] private float headTurnThreshold = 5f; // Minimalny kąt, który uznajemy za obrót głowy
+    [Header("Ustawienia kamery kucania")]
+    [SerializeField] private Vector3 crouchOffset = new Vector3(0, -0.5f, 0);
+    [SerializeField] private float crouchTransitionTime = 0.3f;
+
+    private Transform camTransform;
+    private float pitch = 0f;
+    private float yaw = 0f;
+    private float currentYawVelocity = 0f;
+
+    private Vector3 originalCamLocalPos;
+    private Tween cameraTween;
 
     private void Awake()
     {
-        if (camera == null)
-            camera = Camera.main;
-        animatorController = GetComponent<PlayerAnimatorController>(); // Pobieramy kontroler animacji
-        lastCameraForward = camera.transform.forward; // Inicjalizacja kierunku kamery
+        if (virtualCamera == null)
+        {
+            virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        }
+
+        camTransform = Camera.main.transform;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        yaw = transform.eulerAngles.y;
+
+        // Zapamiętujemy oryginalną pozycję kamery
+        originalCamLocalPos = camTransform.localPosition;
     }
 
-    public void UpdateRotation(float velocity = 0f)
+    // Metoda wywoływana z Update() z zewnątrz, która obsługuje obrót kamery i gracza
+    public void UpdateRotation()
     {
-        if (velocity > 0)
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivityX * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivityY * Time.deltaTime;
+
+        yaw += mouseX;
+        pitch += invertY ? mouseY : -mouseY;
+        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+
+        // Ustawiamy obrót kamery (pitch)
+        camTransform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+
+        // Obliczamy docelowy obrót gracza (yaw)
+        Quaternion targetRotation = Quaternion.Euler(0f, yaw, 0f);
+        float angleDifference = Quaternion.Angle(transform.rotation, targetRotation);
+
+        if (angleDifference > angleThreshold)
         {
-            currAngleToRotateThreshold = angleToRotateThresholdMoveForward;
-        }
-        else if (velocity < 0)
-        {
-            currAngleToRotateThreshold = angleToRotateThresholdMoveBackward;
+            float smoothedYaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, yaw, ref currentYawVelocity, rotationSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, smoothedYaw, 0f);
         }
         else
         {
-            currAngleToRotateThreshold = angleToRotateThresholdStay;
-        }
-
-        cameraPlayerDistance = Vector3.Distance(transform.position, camera.transform.position);
-        float cameraDistanceOffset = cameraPlayerDistance * 1.5f;
-
-        if (Physics.Raycast(camera.transform.position + lookPointOffset, camera.transform.forward + lookPointOffset,
-                out RaycastHit hit,
-                cameraDistanceOffset, objectLayer))
-        {
-            Debug.DrawRay(camera.transform.position + lookPointOffset,
-                camera.transform.forward * hit.distance + lookPointOffset, Color.red);
-            debugLookPoint.position = hit.point;
-        }
-        else
-        {
-            Debug.DrawRay(camera.transform.position + lookPointOffset,
-                camera.transform.forward * cameraDistanceOffset + lookPointOffset, Color.yellow);
-            debugLookPoint.position = camera.transform.position + (camera.transform.forward * cameraDistanceOffset);
-        }
-
-        Vector3 cameraForward = camera.transform.forward;
-        cameraForward.y = 0; // Ignore vertical tilt of the camera
-        cameraForward.Normalize();
-
-        DetectHeadTurn(cameraForward); // Sprawdzanie ruchu głowy
-
-        if (cameraForward != Vector3.zero)
-        {
-            float angle = Vector3.Angle(transform.forward, cameraForward);
-            Debug.DrawRay(transform.position, cameraForward * angle, Color.green);
-
-            if (angle > currAngleToRotateThreshold)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(cameraForward, Vector3.up);
-                transform.rotation =
-                    Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            }
+            transform.rotation = targetRotation;
         }
     }
 
-    private void DetectHeadTurn(Vector3 cameraForward)
+    // Metoda wywoływana przy zmianie stanu kucania (np. w zależności od wejścia gracza)
+    public void SetCrouch(bool isCrouching)
     {
-        float angleDifference = Vector3.SignedAngle(lastCameraForward, cameraForward, Vector3.up);
-
-        if (Mathf.Abs(angleDifference) > headTurnThreshold)
+        // Zabezpieczenie przed spamowaniem: przerywamy bieżący tween, jeśli istnieje
+        if (cameraTween != null && cameraTween.IsActive())
         {
-            bool isTurningRight = angleDifference > 0;
-            OnHeadTurned?.Invoke(isTurningRight);
+            cameraTween.Kill();
         }
 
-        lastCameraForward = cameraForward; // Aktualizujemy ostatni kierunek kamery
-    }
+        // Docelowa pozycja kamery zależna od stanu kucania
+        Vector3 targetPos = isCrouching ? originalCamLocalPos + crouchOffset : originalCamLocalPos;
 
-    private void OnApplicationFocus(bool hasFocus)
-    {
-        if (hasFocus)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
+        // Jeśli kamera już znajduje się w docelowej pozycji, nie rozpoczynamy tweeningu
+        if (camTransform.localPosition == targetPos) return;
+
+        cameraTween = camTransform.DOLocalMove(targetPos, crouchTransitionTime)
+                                  .SetEase(Ease.OutSine);
     }
 }

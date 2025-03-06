@@ -1,21 +1,14 @@
 ﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [Serializable, ExecuteAlways]
 public struct GridOptions
 {
     [Header("Grid Material")]
-    public Material EmptyCellMaterial;
-    public Material RoomCellMaterial;
-    public Material PassCellMaterial;
-    public Material HallwayMaterial;
-    public Material SpawnRoomMaterial;
-    public Material SpawnPassMaterial;
-    public Material SecretHallwayMaterial;
-    public Material SecretPassMaterial;
-
+    public SerializedDictionary<E_GridCellType, Material> materials;
     [Header("Grid Parameters")]
     public Vector2Int MaxAxisSize;
     public Vector2Int MinAxisSize;

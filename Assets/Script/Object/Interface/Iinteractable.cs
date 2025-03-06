@@ -8,8 +8,8 @@ public interface IInteractable
     bool IsBlocked { get; set; }
     bool TwoSideInteraction { get; set; }
     string InteractMessage { get; set; }
-    
     string BlockedMessage { get; set; }
+    bool IsUsed { get; set; }
 
     void Interact(Transform player);
     void ShowUI();

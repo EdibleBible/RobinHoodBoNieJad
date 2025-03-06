@@ -10,7 +10,25 @@ using UnityEngine;
 [CustomEditor(typeof(MapGeneratorController))]
 public class MapGeneratorControllerEditor : Editor
 {
-    private bool showTriangulation = true;
+    public override void OnInspectorGUI()
+    {
+        MapGeneratorController controller = (MapGeneratorController)target;
+        DrawDefaultInspector();
+        
+        if (GUILayout.Button("Generate With Random"))
+        {
+            controller.GenerateMap(true);
+        }
+
+        if (GUILayout.Button("Generate"))
+        {
+            controller.GenerateMap(false);
+        }
+    }
+}
+
+#region old
+    /*private bool showTriangulation = true;
     private bool showGrid = true;
     private bool showTexture = true;
 
@@ -116,5 +134,5 @@ public class MapGeneratorControllerEditor : Editor
             Vector3 v2 = new Vector3((float)edge.Point2.X, 1, (float)edge.Point2.Y);
             Handles.DrawLine(v1, v2);
         }
-    }
-}
+    }*/
+#endregion

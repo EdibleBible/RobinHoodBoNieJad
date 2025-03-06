@@ -40,6 +40,8 @@ public class ItemBase : MonoBehaviour, IInteractable
         set => blockedMessage = value;
     }
 
+    public bool IsUsed { get; set; } = false;
+
     [SerializeField] private string blockedMessage;
 
     public void Interact(Transform player)
@@ -63,6 +65,7 @@ public class ItemBase : MonoBehaviour, IInteractable
         if (playerBase.PickUp(ItemData))
         {
             InteractEvent.Raise(this, null);
+            IsUsed = true;
             Destroy(gameObject);
         }
         else
@@ -101,5 +104,13 @@ public enum ItemType
     CollectibleVase,
     CollectibleGoblet,
     UtilityBackpack,
-    CollectibleBox
+    CollectibleBox,
+    
+    
+    //Useable
+    Key,
+    Axe,
+    SteelShoes,
+    FastShoes,
+    Forklift
 }

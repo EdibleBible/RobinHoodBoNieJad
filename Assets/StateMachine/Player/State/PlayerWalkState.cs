@@ -37,7 +37,7 @@ public class PlayerWalkState : BaseState<E_PlayerState>
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
         
-        PLayerRotation.UpdateRotation(velocityZ);
+        PLayerRotation.UpdateRotation();
         
         PlayerAnimatorController.UpdateWalkParameters(x, y);
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);

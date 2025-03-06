@@ -10,16 +10,9 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Transform itemSlotParent;
     
     [SerializeField] private GameEvent DropItemEvent;
-
-    public void KUTAS()
-    {
-        Debug.Log("KUTAS");
-    }
-    
     
     public void SetUpInventory(Component sender, object data)
     {
-        Debug.Log("Inventory Setup");
         foreach (Transform child in itemSlotParent)
         {
             Destroy(child.gameObject);
@@ -103,6 +96,23 @@ public class InventoryUI : MonoBehaviour
                 }
             }
             
+        }
+        else if(data is ItemData itemData && sender is PlayerBase basePlayer)
+        {
+            var itemSlot = itemSlots.FirstOrDefault(x => x.AssignedItem == itemData);
+            if (itemSlot.AssignedItem.ItemSize == 1)
+            {
+                itemSlot.RemoveAssignedItem();
+                basePlayer.CurrSelectedItem = null;
+            }
+            else
+            {
+                var allSlots = itemSlots.Where(x => x.AssignedItem == itemSlot.AssignedItem);
+                foreach (var slot in allSlots)
+                {
+                    slot.RemoveAssignedItem();
+                }
+            }
         }
     }
 

@@ -22,7 +22,7 @@ public class LeverController : MonoBehaviour, IInteractable
     public bool IsBlocked { get; set; }
 
     [Header("FMOD")]
-    [SerializeField] private EventReference leverDownEvent; // Dodano event dla dŸwigni
+    [SerializeField] private EventReference leverDownEvent; // Dodano event dla dï¿½wigni
     [SerializeField] private Transform soundSource;
     private EventInstance doorSoundInstance;
     private EventInstance leverSoundInstance;
@@ -55,10 +55,15 @@ public class LeverController : MonoBehaviour, IInteractable
         get => blockedMessage;
         set => blockedMessage = value;
     }
+
+    public bool IsUsed { get; set; }
     [SerializeField] private string blockedMessage;
 
     private void Awake()
     {
+        if(gameobjectToInteract == null)
+            return;
+        
         if (gameobjectToInteract.TryGetComponent<IInteractable>(out IInteractable iInteractable))
         {
             objectToInteract = iInteractable;
@@ -70,7 +75,6 @@ public class LeverController : MonoBehaviour, IInteractable
     {
         if (IsBlocked)
         {
-            ShowUIEvent.Raise(this, (true, BlockedMessage, true));
             return;
         }
 
@@ -84,16 +88,23 @@ public class LeverController : MonoBehaviour, IInteractable
         if (!TwoSideInteraction)
         {
             HideUI();
-            objectToInteract.IsBlocked = false;
-            objectToInteract.TwoSideInteraction = false;
+            if (objectToInteract != null)
+            {
+                objectToInteract.IsBlocked = false;
+                objectToInteract.TwoSideInteraction = false;
+            }
             CanInteract = false;
         }
-
-        objectToInteract.IsBlocked = false;
-        objectToInteract.Interact(player);
+        
+        if (objectToInteract != null)
+        {
+            objectToInteract.IsBlocked = false;
+            objectToInteract.Interact(player);
+        }
+        
         animator.SetTrigger("Interact");
-
-        PlayLeverSound(); // Odtwarzanie dŸwiêku dŸwigni
+        IsUsed = !IsUsed;
+        PlayLeverSound(); // Odtwarzanie dï¿½wiï¿½ku dï¿½wigni
     }
 
     private void PlayLeverSound()
@@ -104,18 +115,24 @@ public class LeverController : MonoBehaviour, IInteractable
             RuntimeManager.AttachInstanceToGameObject(leverSoundInstance, soundSource);
         }
         leverSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
-        leverSoundInstance.setVolume(0.3f); // Ustawienie g³oœnoœci na 50%
+        leverSoundInstance.setVolume(0.3f);
         leverSoundInstance.start();
         leverSoundInstance.release();
     }
 
     public void ShowUI()
     {
+        if(IsBlocked)
+            return;
+        
         ShowUIEvent.Raise(this, (true, InteractMessage, false));
     }
 
     public void HideUI()
     {
+        if(IsBlocked)
+            return;
+        
         ShowUIEvent.Raise(this, (false, "", false));
     }
 }

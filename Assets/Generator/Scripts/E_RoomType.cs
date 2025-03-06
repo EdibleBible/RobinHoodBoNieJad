@@ -2,4 +2,5 @@
 {
     StandardRoom = 0,
     SpawnRoom = 1,
+    ExitRoom = 2,
 }

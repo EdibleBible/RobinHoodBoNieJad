@@ -50,7 +50,7 @@ public class ItemSlot : MonoBehaviour
         }
         else
         {
-            itemImage.color = new Color(255, 255, 255, 0.7f);
+            itemImage.color = new Color(255, 255, 255, 0.2f);
         }
     }
 
@@ -58,7 +58,7 @@ public class ItemSlot : MonoBehaviour
     {
         AssignedItem = null;
         itemImage.sprite = backpackSprite;
-        itemImage.color = new Color(255, 255, 255, 0.7f);
+        itemImage.color = new Color(255, 255, 255, 0.2f);
         Debug.Log(AssignedItem);
     }
 

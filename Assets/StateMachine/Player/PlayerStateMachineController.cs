@@ -14,8 +14,9 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
     [SerializeField] float walkAcceleration;
     [SerializeField] float walkDeceleration;
 
-    [Header("Crouch State")] 
-    [SerializeField] float crouchSpeed;
+    [Header("Crouch State")] [SerializeField]
+    float crouchSpeed;
+
     [SerializeField] float crouchAcceleration;
     [SerializeField] float crouchDeceleration;
     [SerializeField] Transform lookAtTarget;
@@ -30,6 +31,8 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
     private PlayerRotation playerRotation;
     private PlayerAnimatorController playerAnimatorController;
 
+    private bool playerInteracting = false;
+
     public override void Start()
     {
         playerWalk = gameObject.GetComponent<PlayerWalk>();
@@ -43,7 +46,7 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
             playerAnimatorController, playerRotation);
 
         _playerCrouchState = new PlayerCrouchState(crouchSpeed, crouchAcceleration, crouchDeceleration, playerWalk,
-            playerAnimatorController, playerRotation, lookAtTarget,followTarget, cameraOffset);
+            playerAnimatorController, playerRotation, lookAtTarget, followTarget, cameraOffset);
 
         _playerDoorInteraction = new PlayerDoorInteraction(playerWalk, playerAnimatorController);
 
@@ -59,6 +62,19 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
 
     public override void Update()
     {
-        base.Update();
+        if (!playerInteracting)
+        {
+            Debug.Log("Player is not interacting");
+            base.Update();
+        }
+        else
+        {
+            Debug.unityLogger.Log("Player interacting");
+        }
+    }
+
+    public void SeePlayerInteracting(bool isInteracting)
+    {
+        playerInteracting = isInteracting;
     }
 }

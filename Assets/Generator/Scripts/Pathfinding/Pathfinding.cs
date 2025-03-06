@@ -174,7 +174,7 @@ public class Pathfinding
         {
             usedCostPenalty = MOVE_EMPTY_CELL_COST;
         }
-        else if(b.cellData.GridCellType == E_GridCellType.Hallway)
+        else if(b.cellData.GridCellType == E_GridCellType.HallwayInside || b.cellData.GridCellType == E_GridCellType.HallwayBorder)
         {
             usedCostPenalty = MOVE_HALLWAY_CELL_COST;
 

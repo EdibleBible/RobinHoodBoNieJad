@@ -1690,7 +1690,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78f426a0ba315f4dacfc55af75acd1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialClusters: []
+  tutorialClusters:
+  - EventName: MovementTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 8044029631698731080}
+      TutorialText: 'W,A,S,D - Movement
+
+        Mouse - RotateCamera'
+      TempolaryTutorial: 0
+      Time: 100
+    - TutorialElement: {fileID: 8044029631698731080}
+      TutorialText: Try to oppen door
+      TempolaryTutorial: 1
+      Time: 100
+    - TutorialElement: {fileID: 8044029631698731080}
+      TutorialText: 'You find a goblet, pick up '
+      TempolaryTutorial: 1
+      Time: 100
+    - TutorialElement: {fileID: 8044029631698731080}
+      TutorialText: In left corner you ca see your quests, Go find other items
+      TempolaryTutorial: 1
+      Time: 3
+    isAutoProgress: 0
+  - EventName: EnemyTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: Be careful, there may be some enemies here, maybe try to find
+        another way
+      TempolaryTutorial: 1
+      Time: 3
+    isAutoProgress: 1
+  - EventName: InventorySpaceTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: "\rBelow the mission you can see your inventory"
+      TempolaryTutorial: 0
+      Time: 3
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: Some items may require more than one slot
+      TempolaryTutorial: 0
+      Time: 3
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: 'Mouse Scroll - Change select item
+
+        Q - Drop Item'
+      TempolaryTutorial: 0
+      Time: 3
+    isAutoProgress: 1
+  - EventName: LeverTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: "\rSome doors are blocked by lever"
+      TempolaryTutorial: 0
+      Time: 3
+    isAutoProgress: 1
+  - EventName: RUNTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: 'Left Shift - Run
+
+        Find exit '
+      TempolaryTutorial: 1
+      Time: 2.5
+    isAutoProgress: 1
 --- !u!114 &8025075767602262229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1709,7 +1771,7 @@ MonoBehaviour:
   fadeDuration: 0.7
   objToOff: []
   sceneToLoad: Lobby
-  sceneToUnload: Animation
+  sceneToUnload: Diorama
 --- !u!1 &8704462328085259308
 GameObject:
   m_ObjectHideFlags: 0
