@@ -96,6 +96,7 @@ public class ItemData
     public float ItemValue;
     public Sprite ItemIcon;
     public GameObject ItemPrefab;
+    public int CollectibleId;
 }
 
 public enum ItemType
@@ -103,13 +104,13 @@ public enum ItemType
     Debug,
     CollectibleVase,
     CollectibleGoblet,
-    UtilityBackpack,
+    Backpack, //Usable
     CollectibleBox,
     
     
     //Useable
     Key,
-    Axe,
+    Hammer,
     SteelShoes,
     FastShoes,
     Forklift
