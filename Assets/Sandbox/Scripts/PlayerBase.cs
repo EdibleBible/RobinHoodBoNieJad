@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Script.ScriptableObjects;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,7 +17,9 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private GameEvent InventoryUpdateSelectedItemEvent;
     private int currentSelectedItem = 0;
 
-    public ItemData CurrSelectedItem;
+    public SOPlayerStatsController PlayerStatsController;
+    
+    [HideInInspector]public ItemData CurrSelectedItem;
 
     public void Start()
     {
@@ -69,6 +72,7 @@ public class PlayerBase : MonoBehaviour
             obj.transform.position = dropPointTransform.position;
             obj.transform.rotation = quaternion.identity;
             PlayerInventory.RemoveItemFromInventory(CurrSelectedItem);
+            CurrSelectedItem.RemoveModifier(PlayerStatsController);
             DropItemEvent?.Raise(this, currentSelectedItem);
         }
     }

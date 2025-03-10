@@ -1,125 +1,105 @@
 using System;
 using UnityEngine;
 
-public class PickableObject : MonoBehaviour, IInteractable
+public class PickableObject : MonoBehaviour, IInteractable , IInteractableStop
 {
-    [Header("Bools")]
-    public bool TwoSideInteraction
-    {
-        get => twoSideInteraction;
-        set => twoSideInteraction = value;
-    }
-
-    public bool twoSideInteraction;
+    public Rigidbody rb;
+    
+    public GameEvent showUIEvent;
+    public GameEvent interactEvent;
+    
+    public GameEvent ShowUIEvent { get => showUIEvent; set => showUIEvent = value; }
+    public GameEvent InteractEvent { get => interactEvent; set => interactEvent = value; }
     public bool CanInteract { get; set; } = true;
-    public bool IsBlocked { get; set; }
+    public bool IsBlocked { get; set; } = false;
+    public bool TwoSideInteraction { get; set; } = true;
 
-    [Header("Events")] [SerializeField] private GameEvent showUIEvent;
-    [SerializeField] private GameEvent interactEvent;
+    public string interactMessage;
+    public string blockMessage;
+    public string InteractMessage { get => interactMessage; set => interactMessage = value; }
+    public string BlockedMessage { get => blockMessage; set => blockMessage = value; }
+    public bool IsUsed { get; set; } = false;
+    public bool IsInteracting { get; set; }
 
-    public GameEvent ShowUIEvent
-    {
-        get => showUIEvent;
-        set => showUIEvent = value;
-    }
-
-    public GameEvent InteractEvent
-    {
-        get => interactEvent;
-        set => interactEvent = value;
-    }
-
-    [Header("Callbacks")]
-    public string InteractMessage
-    {
-        get => interactMessage;
-        set => interactMessage = value;
-    }
-
-    [SerializeField] private string interactMessage;
-
-    public string AlternativeInteractMessage
-    {
-        get => alternativeInteractMessage;
-        set => alternativeInteractMessage = value;
-    }
-
-    [SerializeField] private string alternativeInteractMessage;
-    
-
-    [SerializeField] private string blockedMessage;
-
-    public string BlockedMessage
-    {
-        get => blockedMessage;
-        set => blockedMessage = value;
-    }
-    public bool IsUsed { get; set; }
-
-
-    [Header("IK Animation")] [SerializeField]
-    private Transform LeftHandIKPosition;
-
-    [SerializeField] private Transform RightHandIKPosition;
-
-    [SerializeField] private Rigidbody rb;
-    
-    [SerializeField] private Vector3 pickUpOffset;
-    [SerializeField] private Vector3 baseScale;
-    [SerializeField] private Vector3 pickupScale;
+    public Vector3 BaseSize;
+    public Vector3 InteractSize;
+    public Vector3 PickupOffset;
 
     private void Awake()
     {
-        baseScale = transform.localScale;
+        BaseSize = transform.localScale;
     }
 
+    public void StopInteracting()
+    {
+        if(!IsUsed && !IsInteracting)
+            return;
+        
+        Drop();
+        HideUI();
+        ShowUI();
+    }
+    
     public void Interact(Transform player)
     {
-        if (IsBlocked)
+        if(IsUsed && IsInteracting)
             return;
+        
+        Pickup(player);
+        HideUI();
+        ShowStopUI();
+    }
 
-        if (!IsUsed)
-        {
-            PlayerInteractionController interactionController = player.GetComponent<PlayerInteractionController>();
-            transform.SetParent(interactionController.GetHoldPosition());
-            transform.localPosition = Vector3.zero + pickUpOffset;
-            transform.localRotation = Quaternion.identity;
-            transform.localScale = pickupScale;
-            rb.isKinematic = true;
-            IsUsed = true;
-            HideUI();
-            ShowUI();
-        }
-        else
-        {
-            rb.isKinematic = false;
-            transform.SetParent(null);
-            IsUsed = false;
-            transform.localScale = baseScale;
-            HideUI();
-            ShowUI();
-        }
+    public void Pickup(Transform player)
+    {
+        PlayerInteractionController playerBase = player.GetComponent<PlayerInteractionController>();
+        Transform holdPosition = playerBase.GetHoldPosition();
+        rb.isKinematic = true;
+        transform.SetParent(holdPosition);
+        transform.localPosition = Vector3.zero + PickupOffset;
+        transform.localRotation = Quaternion.identity;
+        ChangeSize(InteractSize);
+
+        
+        IsUsed = true;
+        IsInteracting = true;
+    }
+
+    public void Drop()
+    {
+        rb.isKinematic = false;
+        transform.SetParent(null);
+        ChangeSize(BaseSize);
+
+        
+        IsUsed = false;
+        IsInteracting = false;        
+    }
+
+    public void ChangeSize(Vector3 newSize)
+    {
+        transform.localScale = newSize;
     }
 
     public void ShowUI()
     {
-        if (IsBlocked)
+        if(!CanInteract)
             return;
+        ShowUIEvent.Raise(this,(true, "Pickup", false));
 
-        if (IsUsed)
-            ShowUIEvent.Raise(this, (true, InteractMessage, false));
-        else
-        {
-            ShowUIEvent.Raise(this, (true, alternativeInteractMessage, false));
+    }
+    
+    public void ShowStopUI()
+    {
+        if(!CanInteract)
+            return;
+        
+        ShowUIEvent.Raise(this,(true, "Drop", false));
 
-        }
     }
 
     public void HideUI()
     {
-        if (IsBlocked)
-            return;
-
-        ShowUIEvent.Raise(this, (false, "", false));
+        ShowUIEvent.Raise(this,(false, "", false));
     }
 }

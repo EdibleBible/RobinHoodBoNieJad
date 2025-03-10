@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+using Script.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,6 +12,7 @@ public class ItemBase : MonoBehaviour, IInteractable
     [HideInInspector] public bool CanInteract { get; set; } = true;
     [HideInInspector] public bool IsBlocked { get; set; } = false;
     [HideInInspector] public bool TwoSideInteraction { get; set; } = false;
+
 
     [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
@@ -43,10 +47,10 @@ public class ItemBase : MonoBehaviour, IInteractable
     public bool IsUsed { get; set; } = false;
 
     [SerializeField] private string blockedMessage;
+    private IStatChangeable statChangeableImplementation;
 
     public void Interact(Transform player)
     {
-
         if (!CanInteract || IsBlocked)
         {
             ShowUIEvent.Raise(this, (true, BlockedMessage, true));
@@ -65,6 +69,7 @@ public class ItemBase : MonoBehaviour, IInteractable
         if (playerBase.PickUp(ItemData))
         {
             InteractEvent.Raise(this, null);
+            ItemData.AddModifier(playerBase.PlayerStatsController);
             IsUsed = true;
             Destroy(gameObject);
         }
@@ -85,17 +90,61 @@ public class ItemBase : MonoBehaviour, IInteractable
     }
 }
 
-[Serializable]
-public class ItemData
+public interface IStatChangeable
 {
-    [Header("Item Attributes")] 
-    public ItemType ItemType;
+    public void AddModifier(SOPlayerStatsController statToControll);
+    public void RemoveModifier(SOPlayerStatsController statToControll);
+    public List<StatParameters> StatsToChange { get; set; }
+}
+
+[Serializable]
+public struct StatParameters
+{
+    public E_ModifiersType ModifierType;
+    public float Additive;
+    public float Multiplicative;
+}
+
+[Serializable]
+public class ItemData : IStatChangeable
+{
+    [Header("Item Attributes")] public ItemType ItemType;
     public string ItemName;
     public string ItemDescription;
     public int ItemSize;
     public float ItemValue;
     public Sprite ItemIcon;
     public GameObject ItemPrefab;
+
+    public List<StatParameters> StatsToChange
+    {
+        get => statToChange;
+        set => statToChange = value;
+    }
+
+    public List<StatParameters> statToChange;
+
+    public void AddModifier(SOPlayerStatsController statToControll)
+    {
+        if(StatsToChange == null)
+            return;
+        
+        foreach (var stat in StatsToChange)
+        {
+            statToControll.ChangeModifier(stat.Additive, stat.Multiplicative, stat.ModifierType);
+        }
+    }
+    
+    public void RemoveModifier(SOPlayerStatsController statToControll)
+    {
+        if(StatsToChange == null)
+            return;
+        
+        foreach (var stat in StatsToChange)
+        {
+            statToControll.ChangeModifier(-stat.Additive, -stat.Multiplicative, stat.ModifierType);
+        }
+    }
 }
 
 public enum ItemType
@@ -105,8 +154,8 @@ public enum ItemType
     CollectibleGoblet,
     UtilityBackpack,
     CollectibleBox,
-    
-    
+
+
     //Useable
     Key,
     Axe,

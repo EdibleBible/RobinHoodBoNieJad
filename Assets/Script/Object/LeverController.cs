@@ -122,7 +122,7 @@ public class LeverController : MonoBehaviour, IInteractable
 
     public void ShowUI()
     {
-        if(IsBlocked)
+        if(IsBlocked || !CanInteract)
             return;
         
         ShowUIEvent.Raise(this, (true, InteractMessage, false));
@@ -130,7 +130,7 @@ public class LeverController : MonoBehaviour, IInteractable
 
     public void HideUI()
     {
-        if(IsBlocked)
+        if(IsBlocked || !CanInteract)
             return;
         
         ShowUIEvent.Raise(this, (false, "", false));

@@ -1,4 +1,5 @@
 using System;
+using Script.ScriptableObjects;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -21,6 +22,7 @@ public class PlayerWalk : MonoBehaviour
     private float verticalVelocity;
 
     private CharacterController characterController;
+    [SerializeField] private SOPlayerStatsController playerStatsController;
 
     public void SetMotion(bool option)
     {
@@ -47,11 +49,14 @@ public class PlayerWalk : MonoBehaviour
         moveDirection = new Vector3(horizontal, 0, vertical);
         inputMagnitude = Mathf.Clamp01(moveDirection.magnitude);
 
-        targetMoveSpeed = inputMagnitude * speed;
+        speed = (speed + playerStatsController.GetSOPlayerStats(E_ModifiersType.PlayerSpeed).Additive) *
+                playerStatsController.GetSOPlayerStats(E_ModifiersType.PlayerSpeed).Multiplicative;
 
+        targetMoveSpeed = inputMagnitude * speed;
+        
         if (targetMoveSpeed > currMoveSpeed)
         {
-            accelerationProgress += Time.deltaTime / accelerationTime;
+            accelerationProgress += Time.deltaTime / (accelerationTime + playerStatsController.GetSOPlayerStats(E_ModifiersType.Acceleration).Additive) * playerStatsController.GetSOPlayerStats(E_ModifiersType.Acceleration).Multiplicative;
             currMoveSpeed = Mathf.Lerp(0, speed, accelerationCurve.Evaluate(accelerationProgress));
         }
         else if (targetMoveSpeed < currMoveSpeed)
@@ -81,8 +86,6 @@ public class PlayerWalk : MonoBehaviour
 
         characterController.Move(velocity * Time.deltaTime);
 
-
-        //Debug.Log("velocity: " + characterController.velocity);
     }
 
     public Vector3 GetCharacterVelocity()

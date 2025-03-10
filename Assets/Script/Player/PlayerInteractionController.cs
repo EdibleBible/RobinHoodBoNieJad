@@ -11,6 +11,7 @@ public class PlayerInteractionController : MonoBehaviour
     [SerializeField] private float sphereRadius;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private KeyCode interactionKey;
+    [SerializeField] private KeyCode interactionStopKey;
     [SerializeField] private KeyCode dropKey;
     private IInteractable currentInteractable;
     private RaycastHit hitInfo;
@@ -19,50 +20,41 @@ public class PlayerInteractionController : MonoBehaviour
     {
         if (Physics.SphereCast(raycasterTransform.position, sphereRadius, raycasterTransform.forward, out hitInfo, interactionDistance, interactableLayer))
         {
-            if (hitInfo.collider.gameObject.TryGetComponent<IInteractable>(out var interactable))
-            {
-                if (interactable.CanInteract)
-                {
-                    if (currentInteractable == null)
-                        interactable.ShowUI();
-                    else
-                    {
-                        currentInteractable.HideUI();
-                        interactable.ShowUI();
-                    }
+            IInteractable interactable = hitInfo.collider.GetComponentInParent<IInteractable>();
 
-                    currentInteractable = interactable;
-                }
-            }
-            else if (hitInfo.collider.transform.parent.TryGetComponent<IInteractable>(out var interactableParent))
+            if (interactable != null && interactable.CanInteract && currentInteractable != interactable)
             {
-                if (interactableParent.CanInteract)
-                {
-                    if (currentInteractable == null)
-                        interactableParent.ShowUI();
-                    else
-                    {
-                        currentInteractable.HideUI();
-                        interactableParent.ShowUI();
-                    }
+                currentInteractable?.HideUI();
 
-                    currentInteractable = interactableParent;
-                }
+                if (interactable is IInteractableStop interactableStop && interactableStop.IsInteracting)
+                    interactableStop.ShowStopUI();
+                else
+                    interactable.ShowUI();
+
+                currentInteractable = interactable;
             }
         }
-        else
+        else if (currentInteractable is IInteractableStop interactableStop && !interactableStop.IsInteracting)
         {
-            if (currentInteractable != null)
-            {
-                currentInteractable.HideUI();
-                currentInteractable = null;
-            }
+            currentInteractable.HideUI();
+            currentInteractable = null;
+        }
+        else if (currentInteractable != null && !(currentInteractable is IInteractableStop))
+        {
+            currentInteractable.HideUI();
+            currentInteractable = null;
         }
 
         if (currentInteractable != null && Input.GetKeyDown(interactionKey))
         {
             Debug.Log("Interacted with " + currentInteractable);
             currentInteractable.Interact(transform);
+        }
+        
+        if (currentInteractable != null && currentInteractable is IInteractableStop stop && Input.GetKeyDown(interactionStopKey))
+        {
+            Debug.Log("Interacted with " + currentInteractable);
+            stop.StopInteracting();
         }
 
         if (Input.GetKeyDown(dropKey))

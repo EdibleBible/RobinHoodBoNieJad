@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class LockPickDoorController : DoorController, ILockPick
 {
+    public bool IsInteracting { get; set; }
     public bool IsLocked
     {
         get => isLocked;
@@ -74,14 +75,17 @@ public class LockPickDoorController : DoorController, ILockPick
             PlayerBase playerBase = player.GetComponent<PlayerBase>();
             ItemData currSelectedItem = playerBase.CurrSelectedItem;
 
-            if (currSelectedItem.ItemType == ItemType.Key)
+            if (currSelectedItem != null)
             {
-                playerBase.RemoveItemFromInventory(currSelectedItem);
-                IsLocked = false;
-                base.Interact(player);
-                InteractMessage = ChnagedInteractMessage;
-                HideUI();
-                ShowUI();
+                if (currSelectedItem.ItemType == ItemType.Key)
+                {
+                    playerBase.RemoveItemFromInventory(currSelectedItem);
+                    IsLocked = false;
+                    base.Interact(player);
+                    InteractMessage = ChnagedInteractMessage;
+                    HideUI();
+                    ShowUI();
+                }
             }
             else if (currSelectedItem == null || currSelectedItem.ItemType != ItemType.Key)
             {
@@ -110,6 +114,7 @@ public class LockPickDoorController : DoorController, ILockPick
             StopInteracting();
         }
     }
+
 
     public void StopInteracting()
     {
