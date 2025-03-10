@@ -153,6 +153,7 @@ public class ItemData : IStatChangeable
             statToControll.ChangeModifier(-stat.Additive, -stat.Multiplicative, stat.ModifierType);
         }
     }
+    public int CollectibleId;
 }
 
 public enum ItemType
@@ -160,7 +161,7 @@ public enum ItemType
     Debug,
     CollectibleVase,
     CollectibleGoblet,
-    UtilityBackpack,
+    Backpack, //Usable
     CollectibleBox,
 
 
