@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Script.ScriptableObjects;
 using Unity.Mathematics;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class PlayerBase : MonoBehaviour
     {
         PlayerInventory.ClearInventory();
         PlayerInventory.SetUpInventory();
-        InventorySetUpEvent?.Raise(this, PlayerInventory);
+        ResetInventory();
     }
 
     private void Update()
@@ -45,7 +46,7 @@ public class PlayerBase : MonoBehaviour
     private void UpdateSelectedSlot(int direction)
     {
         if (currentSelectedItem + direction < 0 ||
-            currentSelectedItem + direction >= PlayerInventory.InventorySize) return;
+            currentSelectedItem + direction >= PlayerInventory.CurrInventorySize) return;
         (int curr, int prev) data = (currentSelectedItem + direction, currentSelectedItem);
         currentSelectedItem = data.curr;
         InventoryUpdateSelectedItemEvent?.Raise(this, data);
@@ -73,6 +74,10 @@ public class PlayerBase : MonoBehaviour
             obj.transform.rotation = quaternion.identity;
             PlayerInventory.RemoveItemFromInventory(CurrSelectedItem);
             CurrSelectedItem.RemoveModifier(PlayerStatsController);
+            if (CurrSelectedItem.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Inventory))
+            {
+                ResetInventory();
+            }
             DropItemEvent?.Raise(this, currentSelectedItem);
         }
     }
@@ -82,4 +87,11 @@ public class PlayerBase : MonoBehaviour
         PlayerInventory.RemoveItemFromInventory(itemToRemove);
         DropItemEvent?.Raise(this, itemToRemove);
     }
+
+    public void ResetInventory()
+    {
+        PlayerInventory.CalculateItemsSlotsCount();
+        InventorySetUpEvent?.Raise(this, PlayerInventory);
+    }
+    
 }

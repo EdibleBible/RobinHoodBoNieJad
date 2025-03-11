@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 506426981049874858}
   - component: {fileID: 5585536315077938088}
   - component: {fileID: 6521016062456583299}
-  m_Layer: 10
+  m_Layer: 31
   m_Name: ItemBackpackGeneric
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.469853, y: 0.4683742, z: 5.405644}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -149,12 +149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f693b2442337e2643ab16292e5fe2511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemTypeValues: 64000000
-  itemType: 2
-  itemName: Backpack
-  itemDescription: 
-  itemSize: 1
-  itemIcon: {fileID: 21300000, guid: 267b4ca732a770c4288cfe8f1fb2e493, type: 3}
-  canInteract: 1
-  itemValue: 5
-  itemAttHotbarSizeMod: 2
+  ItemData:
+    ItemType: 3
+    ItemName: Backpack
+    ItemDescription: Backpack Description
+    ItemSize: 0
+    ItemValue: 0
+    ItemIcon: {fileID: 21300000, guid: 267b4ca732a770c4288cfe8f1fb2e493, type: 3}
+    ItemPrefab: {fileID: 4041210090659328158}
+    statToChange:
+    - ModifierType: 2
+      Additive: 1
+      Multiplicative: 0
+  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
+  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
+  interactMessage: C - Pickup Backpack
+  blockedMessage: 

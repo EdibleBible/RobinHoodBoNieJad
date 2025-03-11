@@ -70,6 +70,10 @@ public class ItemBase : MonoBehaviour, IInteractable
         {
             InteractEvent.Raise(this, null);
             ItemData.AddModifier(playerBase.PlayerStatsController);
+            if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Inventory))
+            {
+                playerBase.ResetInventory();
+            }
             IsUsed = true;
             Destroy(gameObject);
         }
@@ -161,5 +165,6 @@ public enum ItemType
     Axe,
     SteelShoes,
     FastShoes,
-    Forklift
+    Forklift,
+    Potion
 }

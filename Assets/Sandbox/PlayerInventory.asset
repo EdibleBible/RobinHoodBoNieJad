@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a771aed5a8e4bca4588dd7b5fb648055, type: 3}
   m_Name: PlayerInventory
   m_EditorClassIdentifier: 
+  PlayerStatsController: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e,
+    type: 2}
   CurrInventoryLoad: 0
   ItemsInInventory: []
-  CurrInvenoryScore: 250
+  CurrInvenoryScore: 0
   ScoreBackup: 0
-  InventorySize: 3
+  BaseInventorySize: 3
+  CurrInventorySize: 0
   CollectedItemTypes: 

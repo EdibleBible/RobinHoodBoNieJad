@@ -22,7 +22,7 @@ public class InventoryUI : MonoBehaviour
 
         if (sender is PlayerBase && data is SOInventory inventoryData)
         {
-            for (int i = 0; i < inventoryData.InventorySize; i++)
+            for (int i = 0; i < inventoryData.CurrInventorySize; i++)
             {
                 var slot = Instantiate(itemSlotPrefab, itemSlotParent);
                 slot.SetUpSlot(i, null, i == 0);
@@ -35,7 +35,11 @@ public class InventoryUI : MonoBehaviour
     {
         if (data is ItemData itemData && sender is PlayerBase playerBase)
         {
-            if (itemData.ItemSize == 1)
+            if (itemData.ItemSize == 0)
+            {
+                return;
+            }
+            else if (itemData.ItemSize == 1)
             {
                 var firstEmptySlot = itemSlots.FirstOrDefault(x => x.AssignedItem == null);
                 if (firstEmptySlot != null)

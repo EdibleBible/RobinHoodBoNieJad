@@ -128,6 +128,7 @@ public class PressurePlateController : MonoBehaviour, IInteractable
         {
             objectToInteract.CanInteract = true;
             objectToInteract.Interact(transform);
+            objectToInteract.IsBlocked = true;
         }
     }
 

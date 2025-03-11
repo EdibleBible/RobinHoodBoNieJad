@@ -12,7 +12,8 @@ public class MenuTextButtonReset : MonoBehaviour
         inventory.ItemsInInventory.Clear();
         inventory.CollectedItemTypes.Clear();
         inventory.CurrInvenoryScore = 0;
-        inventory.InventorySize = 3;
+        inventory.BaseInventorySize = 3;
+        inventory.CalculateItemsSlotsCount();
         store.storeItems.Clear();
         store.storeItems.Add(storeBackpack.GetComponent<ItemModifier>());
         SceneManager.LoadScene(0);

@@ -1,19 +1,32 @@
+using System;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using Script.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "SOInventory", menuName = "Scriptable Objects/SOInventory")]
 public class SOInventory : ScriptableObject
 {
+    public SOPlayerStatsController PlayerStatsController;
+
     [HideInInspector] public int CurrInventoryLoad;
-    
+
     public List<ItemData> ItemsInInventory = new List<ItemData>();
     public float CurrInvenoryScore;
     public float ScoreBackup;
-    public int InventorySize;
+    public int BaseInventorySize;
+    public int CurrInventorySize;
     public List<ItemType> CollectedItemTypes;
-    
+
+    public void CalculateItemsSlotsCount()
+    {
+        CurrInventorySize =
+            (BaseInventorySize +
+             (int)Math.Floor(PlayerStatsController.GetSOPlayerStats(E_ModifiersType.Inventory).Additive)) *
+             (int)Math.Floor(PlayerStatsController.GetSOPlayerStats(E_ModifiersType.Inventory).Multiplicative);
+    }
+
     public void ClearInventory()
     {
         CurrInvenoryScore = 0;
@@ -30,7 +43,7 @@ public class SOInventory : ScriptableObject
     {
         int tempoleryInventoryLoad = CurrInventoryLoad + item.ItemSize;
 
-        if (tempoleryInventoryLoad > InventorySize)
+        if (tempoleryInventoryLoad > CurrInventorySize)
         {
             Debug.Log("Inventory full");
             return false;
@@ -87,7 +100,7 @@ public class SOInventory : ScriptableObject
                 continue;
             }
         }
-        
+
         return load;
     }
 }

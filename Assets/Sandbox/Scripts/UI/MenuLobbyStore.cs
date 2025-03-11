@@ -79,7 +79,7 @@ public class MenuLobbyStore : MonoBehaviour
         coinsText.text = inventory.CurrInvenoryScore.ToString();
         if (item.playerInventorySize > 0)
         {
-            inventory.InventorySize += item.playerInventorySize;
+            inventory.CurrInventorySize += item.playerInventorySize;
         }
         itemList.RemoveAt(index);
         IndexInventory();
