@@ -86,25 +86,35 @@ public class LockPickDoorController : DoorController, ILockPick
                     HideUI();
                     ShowUI();
                 }
+                else
+                {
+                    Lockipick(playerBase);
+                }
             }
             else if (currSelectedItem == null || currSelectedItem.ItemType != ItemType.Key)
             {
-                Vector3 spawnPosition = playerBase.camera.transform.position;
-                SpawnedObject = Instantiate(lockPickPrefab, spawnPosition, playerBase.camera.transform.rotation, playerBase.camera.transform);
-                SpawnedObject.transform.localScale = lockPickScale;
-                SpawnedObject.transform.localPosition += LockPickPositionOffset;
-                spawnedLockPick = SpawnedObject.GetComponentInChildren<LockPick>();
-                spawnedLockPick.SetUpCamera(playerBase.camera);
-                spawnedLockPick.SetObjectToLockPick(this);
-                StateMachineController.SeePlayerInteracting(true);
-                IsLockPicking = true;
-                HideUI();
+                Lockipick(playerBase);
             }
         }
         else
         {
             base.Interact(player);
         }
+    }
+
+    private void Lockipick(PlayerBase playerBase)
+    {
+        Vector3 spawnPosition = playerBase.camera.transform.position;
+        SpawnedObject = Instantiate(lockPickPrefab, spawnPosition, playerBase.camera.transform.rotation, playerBase.camera.transform);
+        SpawnedObject.transform.localScale = lockPickScale;
+        SpawnedObject.transform.localPosition += LockPickPositionOffset;
+        spawnedLockPick = SpawnedObject.GetComponentInChildren<LockPick>();
+        spawnedLockPick.SetUpCamera(playerBase.camera);
+        spawnedLockPick.SetObjectToLockPick(this);
+        StateMachineController.SeePlayerInteracting(true);
+        IsLockPicking = true;
+        HideUI();
+        ShowUI();
     }
 
     private void Update()

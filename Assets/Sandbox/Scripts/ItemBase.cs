@@ -99,6 +99,8 @@ public interface IStatChangeable
     public void AddModifier(SOPlayerStatsController statToControll);
     public void RemoveModifier(SOPlayerStatsController statToControll);
     public List<StatParameters> StatsToChange { get; set; }
+    
+    public bool ChangedStats { get; set; }
 }
 
 [Serializable]
@@ -119,12 +121,14 @@ public class ItemData : IStatChangeable
     public float ItemValue;
     public Sprite ItemIcon;
     public GameObject ItemPrefab;
-
+    public bool ChangedStats { get; set; }
+    
     public List<StatParameters> StatsToChange
     {
         get => statToChange;
         set => statToChange = value;
     }
+
 
     public List<StatParameters> statToChange;
 
@@ -162,7 +166,7 @@ public enum ItemType
 
     //Useable
     Key,
-    Axe,
+    Hammer,
     SteelShoes,
     FastShoes,
     Forklift,

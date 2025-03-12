@@ -3,14 +3,20 @@ using UnityEngine;
 
 namespace Script.ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "SOPlayerStats", menuName = "Scriptable Objects/SOStat")]
-    public class SOStatsModifiers : ScriptableObject
+    [Serializable]
+    public class StatsModifiers 
     {
         public E_ModifiersType ModifiersType;
         public float Additive;
         public float Multiplicative;
 
-
+        public StatsModifiers(E_ModifiersType modifiersType, float additive, float multiplicative)
+        {
+            ModifiersType = modifiersType;
+            Additive = additive;
+            Multiplicative = multiplicative;
+        }
+        
         public void Reset()
         {
             Additive = 0;

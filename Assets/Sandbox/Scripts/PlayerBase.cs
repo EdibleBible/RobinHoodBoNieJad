@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Script.ScriptableObjects;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerBase : MonoBehaviour
 {
@@ -20,13 +17,17 @@ public class PlayerBase : MonoBehaviour
 
     public SOPlayerStatsController PlayerStatsController;
     
-    [HideInInspector]public ItemData CurrSelectedItem;
+    [HideInInspector] public ItemData CurrSelectedItem = null;
 
     public void Start()
     {
         PlayerInventory.ClearInventory();
         PlayerInventory.SetUpInventory();
         ResetInventory();
+        
+        PlayerStatsController.SetPlayerBaseModifiers();
+        InventoryUpdateSelectedItemEvent?.Raise(this, (0,0));
+
     }
 
     private void Update()

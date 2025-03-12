@@ -6,6 +6,13 @@ using UnityEngine;
 [CustomEditor(typeof(SOPlayerStatsController))]
 public class SOPlayerStatsControllerEditor : Editor
 {
+    private SerializedProperty playerStatsProperty;
+
+    private void OnEnable()
+    {
+        playerStatsProperty = serializedObject.FindProperty("PlayerStats");
+    }
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -13,49 +20,48 @@ public class SOPlayerStatsControllerEditor : Editor
 
         List<E_ModifiersType> existingTypes = new List<E_ModifiersType>();
 
-        for (int i = 0; i < statsController.PlayerStats.Count; i++)
+        for (int i = 0; i < playerStatsProperty.arraySize; i++)
         {
-            SOStatsModifiers stat = statsController.PlayerStats[i];
+            SerializedProperty statProperty = playerStatsProperty.GetArrayElementAtIndex(i);
+            SerializedProperty modifierTypeProperty = statProperty.FindPropertyRelative("ModifiersType");
+            SerializedProperty additiveProperty = statProperty.FindPropertyRelative("Additive");
+            SerializedProperty multiplicativeProperty = statProperty.FindPropertyRelative("Multiplicative");
 
-            if (stat == null) continue;
+            E_ModifiersType modifierType = (E_ModifiersType)modifierTypeProperty.enumValueIndex;
 
             // Sprawdzamy, czy enum już wystąpił
-            if (existingTypes.Contains(stat.ModifiersType))
+            if (existingTypes.Contains(modifierType))
             {
-                EditorGUILayout.HelpBox($"Stat '{stat.ModifiersType}' już istnieje! Usuń duplikat.", MessageType.Warning);
+                EditorGUILayout.HelpBox($"Stat '{modifierType}' już istnieje! Usuń duplikat.", MessageType.Warning);
             }
             else
             {
-                existingTypes.Add(stat.ModifiersType);
+                existingTypes.Add(modifierType);
             }
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.BeginHorizontal();
 
-            // Pole do edycji obiektu ScriptableObject
-            statsController.PlayerStats[i] = (SOStatsModifiers)EditorGUILayout.ObjectField(stat, typeof(SOStatsModifiers), false);
+            EditorGUILayout.PropertyField(modifierTypeProperty, new GUIContent("Typ modyfikatora"));
 
             if (GUILayout.Button("Usuń", GUILayout.Width(60)))
             {
-                statsController.PlayerStats.RemoveAt(i);
+                playerStatsProperty.DeleteArrayElementAtIndex(i);
                 break;
             }
 
             EditorGUILayout.EndHorizontal();
 
-            // Jeśli obiekt nie jest null, wyświetlamy edycję jego wartości
-            if (stat != null)
-            {
-                EditorGUILayout.LabelField($"Modyfikator: {stat.ModifiersType}", EditorStyles.boldLabel);
-                stat.Additive = EditorGUILayout.FloatField("Additive", stat.Additive);
-                stat.Multiplicative = EditorGUILayout.FloatField("Multiplicative", stat.Multiplicative);
+            // Edycja wartości
+            EditorGUILayout.LabelField($"Modyfikator: {modifierType}", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(additiveProperty, new GUIContent("Additive"));
+            EditorGUILayout.PropertyField(multiplicativeProperty, new GUIContent("Multiplicative"));
 
-                // Przycisk Reset
-                if (GUILayout.Button("Reset", GUILayout.Width(100)))
-                {
-                    stat.Additive = 0;
-                    stat.Multiplicative = 1;
-                }
+            // Przycisk Reset
+            if (GUILayout.Button("Reset", GUILayout.Width(100)))
+            {
+                additiveProperty.floatValue = 0;
+                multiplicativeProperty.floatValue = 1;
             }
 
             EditorGUILayout.EndVertical();
@@ -63,18 +69,14 @@ public class SOPlayerStatsControllerEditor : Editor
 
         // Dodawanie nowego statystyk modyfikatora
         EditorGUILayout.Space();
-        SOStatsModifiers newModifier = (SOStatsModifiers)EditorGUILayout.ObjectField("Dodaj nowy stat", null, typeof(SOStatsModifiers), false);
 
-        if (newModifier != null)
+        if (GUILayout.Button("Dodaj nowy stat"))
         {
-            if (existingTypes.Contains(newModifier.ModifiersType))
-            {
-                EditorGUILayout.HelpBox("Ten typ statystyk już istnieje!", MessageType.Error);
-            }
-            else
-            {
-                statsController.PlayerStats.Add(newModifier);
-            }
+            playerStatsProperty.arraySize++;
+            SerializedProperty newElement = playerStatsProperty.GetArrayElementAtIndex(playerStatsProperty.arraySize - 1);
+            newElement.FindPropertyRelative("ModifiersType").enumValueIndex = 0; // Domyślny enum
+            newElement.FindPropertyRelative("Additive").floatValue = 0;
+            newElement.FindPropertyRelative("Multiplicative").floatValue = 1;
         }
 
         serializedObject.ApplyModifiedProperties();
