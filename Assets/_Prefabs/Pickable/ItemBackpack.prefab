@@ -185,11 +185,15 @@ MonoBehaviour:
     ItemType: 3
     ItemName: Backpack
     ItemDescription: Backpack Description
-    ItemSize: 1
+    ItemSize: 0
     ItemValue: 500
     ItemIcon: {fileID: 21300000, guid: 267b4ca732a770c4288cfe8f1fb2e493, type: 3}
     ItemPrefab: {fileID: 1466800322429633386, guid: 7594ff08f3791014b8c01c1ea7c3fd42,
       type: 3}
+    statToChange:
+    - ModifierType: 2
+      Additive: 2
+      Multiplicative: 1
     CollectibleId: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
