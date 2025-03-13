@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using FMODUnity;
 
 public class MenuButtonLobby : MonoBehaviour
 {
@@ -29,8 +30,16 @@ public class MenuButtonLobby : MonoBehaviour
 
     public void Open(GameObject lobbyObject)
     {
+        // Zatrzymanie dŸwiêku przy zmianie canvasu
+        StopAllHoverSounds();
         lobbyObject.SetActive(true);
     }
+
+    private void StopAllHoverSounds()
+    {
+        HoverMouse.OnSceneChange();
+    }
+
 
     public void Close(GameObject lobbyObject)
     {

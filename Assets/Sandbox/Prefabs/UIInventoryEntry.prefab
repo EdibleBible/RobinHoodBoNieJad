@@ -223,6 +223,8 @@ GameObject:
   - component: {fileID: 6838241314482265449}
   - component: {fileID: 4475831895270496210}
   - component: {fileID: 7205145542258720369}
+  - component: {fileID: 2027091048773907569}
+  - component: {fileID: 570649891981442770}
   m_Layer: 5
   m_Name: ButtonSell
   m_TagString: Untagged
@@ -344,6 +346,32 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2027091048773907569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2949111806565098846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUIHover
+--- !u!114 &570649891981442770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2949111806565098846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6356158874f7eae488228f8e3489df1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/CoinsUI
 --- !u!1 &3104238673863282037
 GameObject:
   m_ObjectHideFlags: 0
