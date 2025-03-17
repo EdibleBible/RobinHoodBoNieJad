@@ -17,7 +17,8 @@ public class DoorController : MonoBehaviour, IInteractable
     public bool CanInteract { get; set; } = true;
     public bool IsBlocked { get; set; }
 
-    [Header("Open Setting")] [SerializeField]
+    [Header("Open Setting")]
+    [SerializeField]
     public float openTime;
 
     public AnimationCurve openCurve;
@@ -190,7 +191,7 @@ public class DoorController : MonoBehaviour, IInteractable
         }
     }
 
-// Funkcja rysująca box w przestrzeni w celu debugowania
+    // Funkcja rysująca box w przestrzeni w celu debugowania
     public void DrawBoxDebug(Vector3 origin, Vector3 halfExtents, Vector3 direction)
     {
         Vector3 frontRight = origin + direction * 10f + new Vector3(halfExtents.x, halfExtents.y, halfExtents.z);

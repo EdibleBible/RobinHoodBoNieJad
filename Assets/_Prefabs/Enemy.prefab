@@ -676,6 +676,7 @@ GameObject:
   - component: {fileID: 1965976177509380622}
   - component: {fileID: 8524611368905361129}
   - component: {fileID: 6677410963108605311}
+  - component: {fileID: 2869906792892896835}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -875,6 +876,37 @@ CapsuleCollider:
   m_Height: 1.0657157
   m_Direction: 1
   m_Center: {x: -0.00784429, y: 0.5274745, z: 0}
+--- !u!114 &2869906792892896835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5952023668469632104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 771447546
+      Data2: 1326955049
+      Data3: 210547865
+      Data4: 328040256
+    Path: event:/EnemyBreathe
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &6065041032441795194
 GameObject:
   m_ObjectHideFlags: 0
