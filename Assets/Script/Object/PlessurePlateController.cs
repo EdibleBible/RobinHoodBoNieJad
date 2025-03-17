@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
@@ -9,7 +9,11 @@ public class PressurePlateController : MonoBehaviour, IInteractable
 {
     [Header("Reference")] [SerializeField] private GameObject gameobjectToInteract;
     private IInteractable objectToInteract;
-    [SerializeField] private Animator animator;
+    [SerializeField] private Transform plateTransform;
+
+    [Header("Settings")] [SerializeField] private float pressDepth = 0.1f;
+    [SerializeField] private float pressDuration = 0.2f;
+    [SerializeField] private float releaseDuration = 0.2f;
 
     [Header("Bools")]
     public bool TwoSideInteraction
@@ -30,7 +34,7 @@ public class PressurePlateController : MonoBehaviour, IInteractable
     private EventInstance releaseSoundInstance;
 
     [Header("Events")] [SerializeField] private GameEvent interactEvent;
-    public GameEvent ShowUIEvent { get; set; } // Puste, UI nie jest obsługiwane
+    public GameEvent ShowUIEvent { get; set; }
 
     public GameEvent InteractEvent
     {
@@ -38,53 +42,88 @@ public class PressurePlateController : MonoBehaviour, IInteractable
         set => interactEvent = value;
     }
 
-    [Header("Callbacks")] public string InteractMessage { get; set; } // Puste, UI nie jest obsługiwane
-    public string BlockedMessage { get; set; } // Puste, UI nie jest obsługiwane
+    [Header("Callbacks")] public string InteractMessage { get; set; }
+    public string BlockedMessage { get; set; }
 
-    private HashSet<GameObject> pressingObjects = new(); // Lista obiektów na płycie
+    private HashSet<GameObject> pressingObjects = new();
     private Coroutine checkCoroutine;
+    private Vector3 initialPosition;
 
     private void Awake()
     {
-        if (gameobjectToInteract == null) return;
-        if (gameobjectToInteract.TryGetComponent<IInteractable>(out IInteractable iInteractable))
+        if (gameobjectToInteract != null &&
+            gameobjectToInteract.TryGetComponent<IInteractable>(out IInteractable iInteractable))
         {
             objectToInteract = iInteractable;
-            objectToInteract.TwoSideInteraction = twoSidesInteraction;
+            objectToInteract.TwoSideInteraction = TwoSideInteraction;
+            objectToInteract.IsBlocked = true;
+        }
+
+        if (plateTransform == null)
+        {
+            plateTransform = transform;
+        }
+
+        initialPosition = plateTransform.position;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (IsBlocked || !CanInteract || !IsValidObject(other.gameObject))
+        {
+            Debug.LogWarning("2 " + other.gameObject.name + " trigger entered");
+            return;
+        }
+
+        // Sprawdzenie, czy obiekt to PickableObject i czy nie jest w interakcji
+        var pickable = other.GetComponent<PickableObject>();
+        if (pickable != null && pickable.IsInteracting)
+        {
+            Debug.LogWarning("Obiekt " + other.gameObject.name + " jest w interakcji i nie zostanie dodany do listy.");
+            return;
+        }
+
+        Debug.LogWarning("3");
+        pressingObjects.Add(other.gameObject);
+        Debug.LogWarning("4");
+
+        if (!IsUsed)
+        {
+            Debug.LogWarning("5");
+            ActivatePlate();
+        }
+
+        if (TwoSideInteraction && checkCoroutine == null)
+        {
+            Debug.LogWarning("6");
+            checkCoroutine = StartCoroutine(CheckPlateStatus());
         }
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (IsBlocked || !CanInteract || !IsValidObject(other.gameObject))
-            return;
-
-        pressingObjects.Add(other.gameObject);
-
-        if (!IsUsed)
-            ActivatePlate();
-
-        if (TwoSideInteraction && checkCoroutine == null)
-            checkCoroutine = StartCoroutine(CheckPlateStatus());
-    }
 
     private IEnumerator CheckPlateStatus()
     {
+        Debug.LogWarning("object count " + pressingObjects.Count);
+
         while (pressingObjects.Count > 0)
         {
-            Debug.Log("Checking plate status");
-            yield return new WaitForSeconds(1f); // Co 0.5s sprawdzamy, czy coś jest na płycie
+            yield return new WaitForSeconds(1f);
         }
 
         DeactivatePlate();
         checkCoroutine = null;
     }
 
-    private void OnCollisionExit(Collision other)
+    private void OnTriggerExit(Collider other)
     {
+        Debug.LogWarning("1E");
         if (!IsValidObject(other.gameObject))
+        {
+            Debug.LogWarning("2E");
             return;
+        }
 
+        Debug.LogWarning("3E");
         pressingObjects.Remove(other.gameObject);
     }
 
@@ -95,14 +134,14 @@ public class PressurePlateController : MonoBehaviour, IInteractable
 
     private void ActivatePlate()
     {
+        objectToInteract.IsBlocked = false;
+        objectToInteract.CanInteract = true;
+
         InteractEvent.Raise(this, null);
-
         objectToInteract?.Interact(transform);
-
         objectToInteract.CanInteract = false;
 
-        if (animator != null)
-            animator.SetTrigger("Press");
+        plateTransform.DOMoveY(initialPosition.y - pressDepth, pressDuration);
 
         IsUsed = true;
         PlayPressSound();
@@ -110,16 +149,10 @@ public class PressurePlateController : MonoBehaviour, IInteractable
 
     private void DeactivatePlate()
     {
-        Debug.Log("desactivate plate 1");
         if (!CanInteract)
             return;
 
-        Debug.Log("desactivate plate 2");
-
-        if (animator != null)
-            animator.SetTrigger("Release");
-
-        Debug.Log("desactivate plate 3");
+        plateTransform.DOMoveY(initialPosition.y, releaseDuration);
 
         IsUsed = false;
         PlayReleaseSound();
@@ -131,6 +164,7 @@ public class PressurePlateController : MonoBehaviour, IInteractable
             objectToInteract.IsBlocked = true;
         }
     }
+
     private void PlayPressSound()
     {
         pressSoundInstance = RuntimeManager.CreateInstance(pressSoundEvent);
@@ -155,17 +189,13 @@ public class PressurePlateController : MonoBehaviour, IInteractable
 
     public void Interact(Transform player)
     {
-        //empty
     }
 
     public void ShowUI()
     {
-        //empty
-
-    } 
+    }
 
     public void HideUI()
     {
-        //empty
-    } 
+    }
 }
