@@ -46677,6 +46677,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 797693d40706fee4ebf53d4761fe634c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1060692757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060692728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d63616086bee04db51e3093d27d960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySound:
+    Guid:
+      Data1: 370836881
+      Data2: 1124376184
+      Data3: -710971980
+      Data4: 130863477
+    Path: event:/EnemySound
+  minDelay: 1
+  maxDelay: 4
 --- !u!1001 &1062072605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -82719,6 +82740,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1060692747}
+    - targetCorrespondingSourceObject: {fileID: 5952023668469632104, guid: a417c072737182a459a2ce131a95f2e8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1060692757}
   m_SourcePrefab: {fileID: 100100000, guid: a417c072737182a459a2ce131a95f2e8, type: 3}
 --- !u!1001 &1902210942
 PrefabInstance:
