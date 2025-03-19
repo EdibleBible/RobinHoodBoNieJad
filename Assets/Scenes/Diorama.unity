@@ -4701,7 +4701,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7249727355722924482, guid: 52b7599b296b24240a035892d3be76f1,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1248735203}
+      addedObject: {fileID: 1248735207}
   m_SourcePrefab: {fileID: 100100000, guid: 52b7599b296b24240a035892d3be76f1, type: 3}
 --- !u!1001 &111758528
 PrefabInstance:
@@ -46695,7 +46695,7 @@ MonoBehaviour:
       Data2: 1124376184
       Data3: -710971980
       Data4: 130863477
-    Path: event:/EnemySound
+    Path: event:/Enemy/EnemySound
   minDelay: 1
   maxDelay: 4
 --- !u!1001 &1062072605
@@ -54515,14 +54515,20 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 108371374}
   m_PrefabAsset: {fileID: 0}
---- !u!81 &1248735203
-AudioListener:
+--- !u!114 &1248735207
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248735193}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 1248735193}
 --- !u!1 &1249607609
 GameObject:
   m_ObjectHideFlags: 0

@@ -749,6 +749,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be716a249d1058443bc2687520007d63, type: 3}
+--- !u!4 &210307197 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2964057025131133530, guid: 77eade35ac002ec46914da75be5dfadb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1376191137}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &217381828 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7249727355722924482, guid: 52b7599b296b24240a035892d3be76f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1585715031}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &222249656
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,9 +879,34 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
         type: 3}
+      propertyPath: leverDownEvent.Path
+      value: event:/LeverDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
       propertyPath: gameobjectToInteract
       value: 
       objectReference: {fileID: 164546327}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data1
+      value: 1020143867
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data2
+      value: 1116950883
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data3
+      value: 1060341694
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631240821983339970, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+        type: 3}
+      propertyPath: leverDownEvent.Guid.Data4
+      value: -1884381453
+      objectReference: {fileID: 0}
     - target: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
         type: 3}
       propertyPath: m_Name
@@ -3426,6 +3463,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 989108771195345000, guid: 77eade35ac002ec46914da75be5dfadb,
         type: 3}
+      propertyPath: soundSource
+      value: 
+      objectReference: {fileID: 210307197}
+    - target: {fileID: 989108771195345000, guid: 77eade35ac002ec46914da75be5dfadb,
+        type: 3}
       propertyPath: wallEvent.Path
       value: event:/WallDestroy
       objectReference: {fileID: 0}
@@ -4137,6 +4179,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1354112274513773853, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: attenuationObject
+      value: 
+      objectReference: {fileID: 217381828}
     - target: {fileID: 2523567848326904798, guid: 52b7599b296b24240a035892d3be76f1,
         type: 3}
       propertyPath: m_LocalPosition.x
