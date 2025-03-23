@@ -30,14 +30,17 @@ public class MenuButtonLobby : MonoBehaviour
 
     public void Open(GameObject lobbyObject)
     {
-        // Zatrzymanie d�wi�ku przy zmianie canvasu
+        // Zatrzymanie d�wi�ku przy zmianie canvasu
         StopAllHoverSounds();
         lobbyObject.SetActive(true);
     }
 
     private void StopAllHoverSounds()
     {
+        // ten skrypt nie działa xD nie wiem czyu to merge czy co ale ta część nie działa (nie ma instancji klasy/Metody HoverMouse), w skrócie nie istnieje ten obiekt ~~TED
+        /*
         HoverMouse.OnSceneChange();
+    */
     }
 
 

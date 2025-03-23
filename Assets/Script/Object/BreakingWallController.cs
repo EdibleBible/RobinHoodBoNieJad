@@ -22,7 +22,7 @@ public class BreakingWallController : MonoBehaviour, IInteractable
     public string blockedMessage;
     public bool IsUsed { get; set; }
 
-    [Header("FMOD")] public EventReference doorsEvent;
+    [Header("FMOD")] public EventReference wallEvent;
     public Transform soundSource;
     public EventInstance BreakSound;
 
@@ -82,6 +82,20 @@ public class BreakingWallController : MonoBehaviour, IInteractable
 
     public void PlayWallSound(float volume = 0.2f)
     {
+        BreakSound = RuntimeManager.CreateInstance(wallEvent);
+
+        if (soundSource != null)
+        {
+            BreakSound.set3DAttributes(RuntimeUtils.To3DAttributes(soundSource.position));
+        }
+        else
+        {
+            BreakSound.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+        }
+
+        BreakSound.setParameterByName("Volume", volume);
+        BreakSound.start();
+        BreakSound.release();
     }
 
     public void PlayWallAnimation()

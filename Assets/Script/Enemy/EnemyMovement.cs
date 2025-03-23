@@ -8,7 +8,8 @@ using Random = UnityEngine.Random;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [Header("Enemy Walk Setting")] [SerializeField]
+    [Header("Enemy Walk Setting")]
+    [SerializeField]
     private NavMeshAgent agent;
 
     [SerializeField] private Vector3 currWalkPosition;
