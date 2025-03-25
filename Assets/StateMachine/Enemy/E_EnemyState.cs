@@ -5,5 +5,6 @@ public enum E_EnemyState
     Idle,
     Patrol,
     Chase,
-    FollowChase
+    FollowChase,
+    Alarmed
 }

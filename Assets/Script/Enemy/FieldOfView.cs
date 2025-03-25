@@ -109,3 +109,14 @@ public class FieldOfView : MonoBehaviour
     }
     
 }
+
+[Serializable]
+public class EnemyFovStats
+{
+    public float ViewRadius;
+    public float ViewAngle;
+    public float FindingDelay;
+
+    public LayerMask TargetLayer;
+    public LayerMask ObstacleLayer;
+}

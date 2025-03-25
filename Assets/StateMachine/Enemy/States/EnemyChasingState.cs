@@ -3,52 +3,48 @@ using UnityEngine.Rendering.Universal;
 
 public class EnemyChasingState : BaseState<E_EnemyState>
 {
-    private EnemyMovement enemyMovement;
+    private EnemyMovement movement;
     private EnemyMovementStats movementStats;
+
     private FieldOfView fov;
     private EnemyFovStats fovStats;
-    
-    public EnemyChasingState(FieldOfView _fov,EnemyFovStats _enemyFovStats ,EnemyMovement _enemyMovement, EnemyMovementStats _movementStats) : base(E_EnemyState.Chase)
+
+    private EnemyAlarmedStats alarmedStats;
+
+    public EnemyChasingState(EnemyMovement _movement, EnemyMovementStats _movementStats, FieldOfView _fov,
+        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats) : base(E_EnemyState.Chase)
     {
-        enemyMovement = _enemyMovement;
+        movement = _movement;
         movementStats = _movementStats;
         fov = _fov;
-        fovStats = _enemyFovStats;
+        fovStats = _fovStats;
+        alarmedStats = _alarmedStats;
     }
-    
+
     public override void EnterState()
     {
+        movement.SetUpParameters(movementStats);
         fov.SetUpStats(fovStats);
-        enemyMovement.SetUpSpeed(movementStats.MaxSpeed, movementStats.Acceleration,
-            movementStats.AngularSpeed, movementStats.StoppingDistance);
-        
-        
-        enemyMovement.ResetCheckingDistance(movementStats.DelayBettwenDistanceCheck);
         fov.StartFindingTargets(fovStats.FindingDelay);
-        
-        enemyMovement.SetDestination(fov.GetVisibleTargets()[0].transform.position);
-        
-        
-        Debug.Log("Chase State Enter");
+        movement.OnDestinationReached += OnReachDestination;
+        movement.OnStopLookingAround += OnStopLookingAround;
+
+        movement.GoToNextPoint();
     }
 
     public override void ExitState()
     {
+        movement.OnDestinationReached -= OnReachDestination;
+        movement.OnStopLookingAround -= OnStopLookingAround;
         fov.StopFindingTargets();
-        enemyMovement.StopCheckingDistance();
+        movement.StopLookingAround();
+        movement.StopCheckingDistance();
     }
 
     public override void UpdateState()
     {
-        enemyMovement.SetDestination(fov.GetVisibleTargets()[0].transform.position);
-        
-        enemyMovement.UpdateMoveAnimation(enemyMovement.GetNormalizedSpeed());
-        
-        if (enemyMovement.GetNormalizedSpeed() > 0.1)
-        {
-            enemyMovement.StopLookingCoroutine();
-            enemyMovement.SetupLookAround(false);
-        }
+        movement.SetEnemyDestination(fov.GetVisibleTargets()[0].transform.position, false);
+        movement.UpdateMoveAnimation(movement.Agent.velocity.magnitude);
     }
 
     public override E_EnemyState GetNextState()
@@ -57,21 +53,24 @@ public class EnemyChasingState : BaseState<E_EnemyState>
         {
             return E_EnemyState.Patrol;
         }
-        else
-        {
-            return stateKey;   
-        }
+
+        return E_EnemyState.Chase;
+    }
+
+    private void OnReachDestination()
+    {
+        Debug.Log("Reach destination");
+        movement.StartLookingAround(movementStats.LookingAroundTime);
+    }
+
+    private void OnStopLookingAround()
+    {
+        Debug.Log("Stop looking around");
+        movement.GoToNextPoint();
     }
 
     public override void OnTriggerEnterState(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            if (other.TryGetComponent<GameoverController>(out var controller))
-            {
-                controller.LoseGame();
-            }
-        }
     }
 
     public override void OnTriggerStayState(Collider other)

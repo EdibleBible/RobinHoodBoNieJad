@@ -10,27 +10,35 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 {
     private EnemyPatrollingState _enemyPatrollingState;
     private EnemyChasingState _enemyChasingState;
+    private EnemyAlarmedState _enemyAlarmedState;
 
-    [SerializeField] private float findingPointDistance;
-
-    [Header("Idle State")] [SerializeField]
-    private EnemyMovementStats idleStats;
-
-    [Header("Patrolling State")] [SerializeField]
-    private EnemyPatrollingStats patrollingStats;
-
-    [SerializeField] private EnemyMovementStats patrollingMoveStats;
-    [SerializeField] private EnemyFovStats fovPatrollingState;
-
-    [Header("Chase State")] [SerializeField]
-    private EnemyMovementStats chasingStats;
-
-    [SerializeField] private EnemyFovStats fovChaseState;
-
+    [SerializeField]
+    private float findingPointDistance;
     public float maxNavMeshCheckDistance = 5f;
 
     private EnemyMovement enemyMovement;
     private FieldOfView fov;
+
+    [Header("patrolling state settings")]
+    [SerializeField]
+    private EnemyMovementStats patrollingMovementStats;
+    [SerializeField]
+    private EnemyFovStats patrollingFovStats;
+
+    [Header("chasing state settings")]
+    [SerializeField]
+    private EnemyMovementStats chasingMovementStats;
+    [SerializeField]
+    private EnemyFovStats chasingFovStats;
+
+    [Header("alarmed state settings")]
+    [SerializeField]
+    private EnemyMovementStats alarmedMovementStats;
+    [SerializeField]
+    private EnemyFovStats alarmedFovStats;
+    [SerializeField]
+    private EnemyAlarmedStats alarmedStateStats = new EnemyAlarmedStats();
+
 
     private void Awake()
     {
@@ -42,15 +50,47 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
     {
         EnsureOnNavMesh(); // Sprawdzenie i ustawienie postaci na NavMeshu
 
-        _enemyPatrollingState = new EnemyPatrollingState(fov, fovPatrollingState, enemyMovement, patrollingMoveStats,
-            patrollingStats, findingPointDistance);
-        _enemyChasingState = new EnemyChasingState(fov, fovPatrollingState, enemyMovement, chasingStats);
+        _enemyPatrollingState =
+            new EnemyPatrollingState(enemyMovement, patrollingMovementStats, fov, patrollingFovStats,
+                alarmedStateStats);
+        _enemyChasingState =
+            new EnemyChasingState(enemyMovement, chasingMovementStats, fov, chasingFovStats, alarmedStateStats);
+        _enemyAlarmedState =
+            new EnemyAlarmedState(enemyMovement, alarmedMovementStats, fov, alarmedFovStats, alarmedStateStats);
 
+        state.Add(E_EnemyState.Alarmed, _enemyAlarmedState);
         state.Add(E_EnemyState.Patrol, _enemyPatrollingState);
         state.Add(E_EnemyState.Chase, _enemyChasingState);
 
         currentState = _enemyPatrollingState;
         base.Start();
+    }
+
+    public override void Update()
+    {
+        Debug.Log(currentState);
+        E_EnemyState nextStateKey = currentState.GetNextState();
+        if (!isTransitioningState && nextStateKey.Equals(currentState.stateKey))
+        {
+            currentState.UpdateState();
+        }
+        else if (!isTransitioningState)
+        {
+            TransitionToState(nextStateKey);
+        }
+
+        if (Input.GetMouseButtonDown(0)) // Sprawdza, czy kliknięto lewym przyciskiem myszy
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Tworzy promień z pozycji kamery
+            if (Physics.Raycast(ray, out RaycastHit hit)) // Sprawdza, czy promień trafił w coś
+            {
+                var HitPoint = hit.point; // Zapisuje pozycję trafienia
+                Debug.Log($"Trafienie w: {HitPoint}");
+
+                alarmedStateStats.IsAlarmed = true;
+                alarmedStateStats.AlarmedPosition = HitPoint;
+            }
+        }
     }
 
     private void EnsureOnNavMesh()
@@ -65,21 +105,9 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
             Debug.LogError("Enemy could not find NavMesh near its spawn position!", this);
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        if (currentState == _enemyPatrollingState && !patrollingStats.RandomPointPatroll)
-        {
-            foreach (var points in patrollingStats.PatrolPoints)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(points, 0.4f);
-            }
-        }
-    }
 }
 
-[Serializable]
+/*[Serializable]
 public class EnemyMovementStats
 {
     public float MaxSpeed;
@@ -88,17 +116,6 @@ public class EnemyMovementStats
     public float DelayBettwenDistanceCheck;
     public float StoppingDistance;
     public float ChangeDestinationPointDistance;
-}
-
-[Serializable]
-public class EnemyFovStats
-{
-    public float ViewRadius;
-    public float ViewAngle;
-    public float FindingDelay;
-
-    public LayerMask TargetLayer;
-    public LayerMask ObstacleLayer;
 }
 
 [Serializable]
@@ -144,7 +161,7 @@ public class EnemyPatrollingStats
             }
         }
     }
-    
+
     public void UpdatePatrolPoints()
     {
         PatrolPoints.Clear(); // Czyścimy starą listę
@@ -216,7 +233,7 @@ public class EnemyPatrollingStats
         }
         Debug.Log("currPoint: " + currIndex);
         isChanged = true;
-        currentPatrolPoint = PatrolPoints[currIndex];*/
+        currentPatrolPoint = PatrolPoints[currIndex];#1#
     }
 
     public Vector3 GetNextPatrollingPoint()
@@ -254,7 +271,6 @@ public class EnemyPatrollingStats
 
         currentPatrolPoint = PatrolPoints[currentPatrolPointIndex];
         return currentPatrolPoint;
-
     }
 
     public Vector3 GetCurrentPatrollingPoint()
@@ -280,3 +296,11 @@ public class EnemyPatrollingStats
         return closestPoint;
     }
 }
+[Serializable]
+public class EnemyAlarmedStats
+{
+    public int SmallPatrolCount = 3; // Ile razy przeciwnik patroluje po dotarciu
+    public float SmallPatrolRadius = 2.0f; // Promień małego patrolowania
+    public Vector3 AlarmedPlacePostion;
+    public bool IsAlarmed;
+}*/
