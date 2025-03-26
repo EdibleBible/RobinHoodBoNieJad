@@ -22,7 +22,7 @@ public class EnemyMovement : MonoBehaviour
     public bool RandomPatroll = true;
     public List<Transform> Waypoints;
     public int CurrentWaypoint = 0;
-    
+
     public void PathFind()
     {
         ClearPath();
@@ -42,6 +42,8 @@ public class EnemyMovement : MonoBehaviour
 
             destinations.Enqueue(Waypoints[CurrentWaypoint].position);
             CurrentWaypoint++;
+            if (CurrentWaypoint == Waypoints.Count)
+                CurrentWaypoint = 0;
             destinations.Enqueue(Waypoints[CurrentWaypoint].position);
             CurrentWaypoint++;
         }
@@ -51,7 +53,7 @@ public class EnemyMovement : MonoBehaviour
     {
         return destinations.Count;
     }
-    
+
     public void SetUpParameters(EnemyMovementStats stats)
     {
         Agent.speed = stats.MaxSpeed;
@@ -66,6 +68,7 @@ public class EnemyMovement : MonoBehaviour
         {
             point = transform.position;
         }
+
         Vector3 randomDirection = Random.insideUnitSphere * radius;
         randomDirection += point;
         NavMeshHit hit;
@@ -83,9 +86,9 @@ public class EnemyMovement : MonoBehaviour
         nextDestination = destinations.Dequeue();
         SetEnemyDestination(nextDestination);
 
-        if(!withAddNewWaypoint)
+        if (!withAddNewWaypoint)
             return;
-        
+
         if (RandomPatroll)
         {
             Vector3 firstDestination = destinations.Peek();
@@ -118,7 +121,7 @@ public class EnemyMovement : MonoBehaviour
 
         Agent.SetDestination(destination);
 
-        if (_chekingDistance) 
+        if (_chekingDistance)
             StartCheckingDistance(0.5f);
     }
 

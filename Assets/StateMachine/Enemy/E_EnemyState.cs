@@ -8,3 +8,9 @@ public enum E_EnemyState
     FollowChase,
     Alarmed
 }
+
+public enum E_CageEnemyState
+{
+    LookAround,
+    Trigger
+}

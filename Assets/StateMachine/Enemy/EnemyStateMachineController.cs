@@ -36,8 +36,7 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
     private EnemyMovementStats alarmedMovementStats;
     [SerializeField]
     private EnemyFovStats alarmedFovStats;
-    [SerializeField]
-    private EnemyAlarmedStats alarmedStateStats = new EnemyAlarmedStats();
+    public EnemyAlarmedStats alarmedStateStats = new EnemyAlarmedStats();
 
 
     private void Awake()
@@ -68,7 +67,6 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 
     public override void Update()
     {
-        Debug.Log(currentState);
         E_EnemyState nextStateKey = currentState.GetNextState();
         if (!isTransitioningState && nextStateKey.Equals(currentState.stateKey))
         {
