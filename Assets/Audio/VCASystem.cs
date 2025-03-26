@@ -17,6 +17,10 @@ public class VCASystem : MonoBehaviour
 
     private void Start()
     {
+
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+
         // Pobranie VCA z FMOD
         masterVCA = RuntimeManager.GetVCA("vca:/MasterVolume");
         musicVCA = RuntimeManager.GetVCA("vca:/MusicVolume");
