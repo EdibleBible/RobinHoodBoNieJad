@@ -15,6 +15,9 @@ public class FieldOfView : MonoBehaviour
     private List<Transform> visibleTargets = new List<Transform>();
     private Coroutine startedCoroutine;
 
+    [Header("Gizmos Settings")]
+    [SerializeField] private bool showFOVGizmos = true; // Czy rysować Gizmo dla FOV
+
     public List<Transform> GetVisibleTargets()
     {
         return visibleTargets;
@@ -64,11 +67,12 @@ public class FieldOfView : MonoBehaviour
         for (int i = 0; i < targetsInViewRadius.Length; i++)
         {
             Transform target = targetsInViewRadius[i].transform;
-            Vector3 dirTotarget = (target.position - transform.position).normalized;
-            if (Vector3.Angle(fieldOfViewCaster.forward, dirTotarget) < viewAngle / 2) ;
+            Vector3 dirToTarget = (target.position - fieldOfViewCaster.position).normalized;
+
+            if (Vector3.Angle(fieldOfViewCaster.forward, dirToTarget) < viewAngle / 2)
             {
                 float distanceToTarget = Vector3.Distance(fieldOfViewCaster.position, target.position);
-                if (!Physics.Raycast(fieldOfViewCaster.position, dirTotarget, distanceToTarget, obstacleMask))
+                if (!Physics.Raycast(fieldOfViewCaster.position, dirToTarget, distanceToTarget, obstacleMask))
                 {
                     visibleTargets.Add(target);
                 }
@@ -107,5 +111,41 @@ public class FieldOfView : MonoBehaviour
             return (true, visibleTargets[0].gameObject);
         }
     }
-    
+
+    public Vector3 GetTargePosition(int targetIndex)
+    {
+        return visibleTargets[targetIndex].position;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!showFOVGizmos || fieldOfViewCaster == null) return;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(fieldOfViewCaster.position, viewRadius); // Rysowanie okręgu zasięgu widzenia
+
+        Vector3 leftBoundary = DirFromAngle(-viewAngle / 2, false) * viewRadius;
+        Vector3 rightBoundary = DirFromAngle(viewAngle / 2, false) * viewRadius;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(fieldOfViewCaster.position, fieldOfViewCaster.position + leftBoundary);
+        Gizmos.DrawLine(fieldOfViewCaster.position, fieldOfViewCaster.position + rightBoundary);
+
+        Gizmos.color = Color.red;
+        foreach (Transform target in visibleTargets)
+        {
+            Gizmos.DrawSphere(target.position, 0.2f); // Oznaczenie widocznych celów
+        }
+    }
+}
+
+[Serializable]
+public class EnemyFovStats
+{
+    public float ViewRadius;
+    public float ViewAngle;
+    public float FindingDelay;
+
+    public LayerMask TargetLayer;
+    public LayerMask ObstacleLayer;
 }

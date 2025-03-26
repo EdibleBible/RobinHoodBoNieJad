@@ -2,101 +2,75 @@ using UnityEngine;
 
 public class EnemyPatrollingState : BaseState<E_EnemyState>
 {
+    private EnemyMovement movement;
+    private EnemyMovementStats movementStats;
+
     private FieldOfView fov;
     private EnemyFovStats fovStats;
-    private EnemyMovement enemyMovement;
-    private EnemyMovementStats movementStats;
-    private EnemyPatrollingStats patrollingStats;
-    private Coroutine waitCoroutine;
-    private float findingPointDistance;
 
+    private EnemyAlarmedStats alarmedStats;
 
-    public EnemyPatrollingState(FieldOfView _fov, EnemyFovStats _fovStats, EnemyMovement _enemyMovement,
-        EnemyMovementStats _movementStats, EnemyPatrollingStats _patrollingStats,
-        float _findingPointDistance) : base(E_EnemyState.Patrol)
+    public EnemyPatrollingState(EnemyMovement _movement, EnemyMovementStats _movementStats, FieldOfView _fov,
+        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats) : base(E_EnemyState.Patrol)
     {
+        movement = _movement;
+        movementStats = _movementStats;
         fov = _fov;
         fovStats = _fovStats;
-
-        enemyMovement = _enemyMovement;
-        movementStats = _movementStats;
-        findingPointDistance = _findingPointDistance;
-        patrollingStats = _patrollingStats;
-        if (!patrollingStats.UseCreatedPath)
-            patrollingStats.CreatePatrolPoint(_fov.transform.position);
-        else
-            patrollingStats.UpdatePatrolPoints();
+        alarmedStats = _alarmedStats;
     }
 
     public override void EnterState()
     {
+        movement.SetUpParameters(movementStats);
+        movement.PathFind();
         fov.SetUpStats(fovStats);
-        fov.ResetFindingTargets(fovStats.FindingDelay);
+        fov.StartFindingTargets(fovStats.FindingDelay);
+        movement.OnDestinationReached += OnReachDestination;
+        movement.OnStopLookingAround += OnStopLookingAround;
 
-        enemyMovement.SetUpSpeed(movementStats.MaxSpeed, movementStats.Acceleration,
-            movementStats.AngularSpeed, movementStats.StoppingDistance);
-        enemyMovement.ResetCheckingDistance(movementStats.DelayBettwenDistanceCheck);
-
-        if (patrollingStats.RandomPointPatroll)
-        {
-            Vector3 randomPoint;
-            do
-                randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
-            while (!enemyMovement.IsPointOnNavMesh(randomPoint));
-
-            enemyMovement.SetDestination(randomPoint);
-        }
-        else
-        {
-            enemyMovement.SetDestination(patrollingStats.GetNearestPoint(fov.transform.position));
-        }
-
-        enemyMovement.UpdateMoveAnimation(enemyMovement.GetNormalizedSpeed());
+        movement.GoToNextPoint();
     }
 
     public override void ExitState()
     {
-        enemyMovement.StopCheckingDistance();
+        movement.OnDestinationReached -= OnReachDestination;
+        movement.OnStopLookingAround -= OnStopLookingAround;
         fov.StopFindingTargets();
+        movement.StopLookingAround();
+        movement.StopCheckingDistance();
     }
 
     public override void UpdateState()
     {
-        if (enemyMovement.GetDistanceToDestination() <= movementStats.ChangeDestinationPointDistance)
-        {
-            if (patrollingStats.RandomPointPatroll)
-            {
-                Vector3 randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
-                enemyMovement.ResetDestination();
-
-                if (!enemyMovement.IsPointOnNavMesh(randomPoint))
-                    randomPoint = enemyMovement.FindRandomPointOnNavMesh(findingPointDistance);
-
-                enemyMovement.SetDestination(randomPoint);
-            }
-            else 
-            {
-                enemyMovement.RunCoroutine(patrollingStats.GetNextPatrollingPoint(), 3);
-            }
-        }
-
-        enemyMovement.UpdateMoveAnimation(enemyMovement.GetNormalizedSpeed());
-        
-        if (enemyMovement.GetNormalizedSpeed() > 0.1)
-        {
-            enemyMovement.StopLookingCoroutine();
-            enemyMovement.SetupLookAround(false);
-        }
-        
+        movement.UpdateMoveAnimation(movement.Agent.velocity.magnitude);
     }
 
     public override E_EnemyState GetNextState()
     {
+        if (alarmedStats.IsAlarmed)
+            return E_EnemyState.Alarmed;
+
         if (fov.GetVisibleTargets().Count > 0)
+        {
             return E_EnemyState.Chase;
-        else
-            return stateKey;
+        }
+
+        return E_EnemyState.Patrol;
     }
+
+    private void OnReachDestination()
+    {
+        Debug.Log("Reach destination");
+        movement.StartLookingAround(movementStats.LookingAroundTime);
+    }
+
+    private void OnStopLookingAround()
+    {
+        Debug.Log("Stop looking around");
+        movement.GoToNextPoint();
+    }
+
 
     public override void OnTriggerEnterState(Collider other)
     {

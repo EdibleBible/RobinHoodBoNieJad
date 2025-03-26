@@ -5,16 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a51f96f-091d-43a5-b6e0-cde1761f74c6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/CageEnemyAnimationController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CageEnemyAnimationController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CageEnemyLookAroundState.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CageEnemyLookAroundState.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CageEnemyTriggerState.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CageEnemyTriggerState.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.RobinHoodBoNieJad/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RobinHoodBoNieJad/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Fonts/BLACC___ SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Fonts/BLACC___ SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Fonts/Gamaliel SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Fonts/Gamaliel SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/MenuButtonLobby.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/MenuButtonLobby.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/EnemyAnimationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyAnimationController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameElementTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameElementTest.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Object/PlessurePlateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Object/PlessurePlateController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/GameObject.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/GameObject.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/PickableObject.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/PickableObject.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/Plessure Plate.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/Plessure Plate.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Kosmo Stuff/Kosmo TESTY.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Kosmo Stuff/Kosmo TESTY.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Enemy/EnemyFovStat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Enemy/EnemyFovStat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Enemy/EnemyMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Enemy/EnemyMovement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Enemy/FieldOfView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Enemy/FieldOfView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StateMachine/Enemy/E_EnemyState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StateMachine/Enemy/E_EnemyState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StateMachine/Enemy/EnemyStateMachineController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StateMachine/Enemy/EnemyStateMachineController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +48,8 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6524f18ff747462d8847618bfcedbe402ac00/10/66ade320/RaycastHit.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ed969b0e627d471da4848289f9c322df46ae00/09/56cf3a99/List`1.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ed969b0e627d471da4848289f9c322df46ae00/3f/aa9c8bb9/IntPtr.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/AlarmedTest.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/CageEnemyLookAroundState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/FieldOfViewEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/RoomGanerateSettingEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/EnemyAnimationController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -87,20 +94,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Attach to Unity Editor.Attach to Unity Editor.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merge-with-art",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$PROJECT_DIR$/../Builds/05.02.2025 x2\RobbinGraves.exe" />
@@ -197,6 +204,8 @@
       <workItem from="1741556139405" duration="7117000" />
       <workItem from="1741624337088" duration="40458000" />
       <workItem from="1742168382850" duration="3796000" />
+      <workItem from="1742311284717" duration="10420000" />
+      <workItem from="1742930100185" duration="12203000" />
     </task>
     <servers />
   </component>

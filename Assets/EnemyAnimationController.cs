@@ -9,7 +9,7 @@ public class EnemyAnimationController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-
+    
     public void UpdateWalkParameters(float speed)
     {
         animator.SetFloat("Speed", speed);

@@ -10,11 +10,6 @@ public abstract class BaseState<EState> where EState : Enum
         stateKey = key;
     }
 
-    protected BaseState()
-    {
-        throw new NotImplementedException();
-    }
-
     public EState stateKey { get; private set; }
     public abstract void EnterState();
     public abstract void ExitState();
