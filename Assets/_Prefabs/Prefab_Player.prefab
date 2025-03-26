@@ -1302,6 +1302,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gravity: -9.81
+  playerStatsController: {fileID: 0}
 --- !u!114 &9189777617893726996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1314,16 +1315,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5aaddac9d7dc2c479db06badd9b3441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
-  debugLookPoint: {fileID: 4406761968856972510}
-  lookPointOffset: {x: 0, y: 0, z: 0}
-  objectLayer:
-    serializedVersion: 2
-    m_Bits: 192
-  rotationSpeed: 90
-  angleToRotateThresholdStay: 45
-  angleToRotateThresholdMoveForward: 15
-  angleToRotateThresholdMoveBackward: 0
+  virtualCamera: {fileID: 0}
+  mouseSensitivityX: 100
+  mouseSensitivityY: 100
+  invertY: 0
+  minPitch: -90
+  maxPitch: 90
+  playerRotationSpeed: 720
+  angleThreshold: 5
+  rotationSmoothTime: 0.1
+  crouchOffset: {x: 0, y: -0.5, z: 0}
+  crouchTransitionTime: 0.3
 --- !u!114 &6290916183467294935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1361,14 +1363,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 516b756906ac05b42a2600f233a455a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 0}
   dropPointTransform: {fileID: 2018566085612201870}
-  playerInventory: {fileID: 11400000, guid: ee22af26dd4fe004495d00302392eb3a, type: 2}
+  PlayerInventory: {fileID: 0}
   InventorySetUpEvent: {fileID: 11400000, guid: f89e93adceec4c64e9a894ffddd12c69,
     type: 2}
   DropItemEvent: {fileID: 11400000, guid: c2918741b223d44438e502359238e56f, type: 2}
   PickupItemEvent: {fileID: 11400000, guid: 6045bf7c4f68699458f87755699e6252, type: 2}
   InventoryUpdateSelectedItemEvent: {fileID: 11400000, guid: c7decfd095c514b4f80aa39dbc2380fa,
     type: 2}
+  PlayerStatsController: {fileID: 0}
   CurrSelectedItem:
     ItemType: 0
     ItemName: 
@@ -1377,6 +1381,8 @@ MonoBehaviour:
     ItemValue: 0
     ItemIcon: {fileID: 0}
     ItemPrefab: {fileID: 0}
+    statToChange: []
+    CollectibleId: 0
 --- !u!114 &6662169019535611020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1401,21 +1407,21 @@ MonoBehaviour:
       Data2: 1255220306
       Data3: 1880998017
       Data4: 869925656
-    Path: event:/PlayerFootsteps
+    Path: event:/Player/PlayerFootsteps
   runStepSound:
     Guid:
       Data1: -316335545
       Data2: 1182667393
       Data3: 1555598477
       Data4: 660492040
-    Path: event:/PlayerRunning
+    Path: event:/Player/PlayerRunning
   crouchStepSound:
     Guid:
       Data1: -310207697
       Data2: 1138274044
       Data3: 1520931752
       Data4: 1705262199
-    Path: event:/PlayerCrouch
+    Path: event:/Player/PlayerCrouch
   DEBUG: 1
 --- !u!114 &8667969494564770948
 MonoBehaviour:
@@ -1431,12 +1437,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBase: {fileID: 1109717592782625126}
   raycasterTransform: {fileID: 7900387749798599474}
+  holdPositionTransform: {fileID: 0}
   interactionDistance: 0.4
   sphereRadius: 0.1
   interactableLayer:
     serializedVersion: 2
     m_Bits: 2147483648
   interactionKey: 99
+  interactionStopKey: 0
   dropKey: 113
 --- !u!114 &3529988420471910963
 MonoBehaviour:

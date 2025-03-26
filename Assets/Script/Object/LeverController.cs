@@ -61,9 +61,9 @@ public class LeverController : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        if(gameobjectToInteract == null)
+        if (gameobjectToInteract == null)
             return;
-        
+
         if (gameobjectToInteract.TryGetComponent<IInteractable>(out IInteractable iInteractable))
         {
             objectToInteract = iInteractable;
@@ -95,13 +95,13 @@ public class LeverController : MonoBehaviour, IInteractable
             }
             CanInteract = false;
         }
-        
+
         if (objectToInteract != null)
         {
             objectToInteract.IsBlocked = false;
             objectToInteract.Interact(player);
         }
-        
+
         animator.SetTrigger("Interact");
         IsUsed = !IsUsed;
         PlayLeverSound(); // Odtwarzanie d�wi�ku d�wigni
@@ -114,7 +114,8 @@ public class LeverController : MonoBehaviour, IInteractable
         {
             RuntimeManager.AttachInstanceToGameObject(leverSoundInstance, soundSource);
         }
-        leverSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
+        //leverSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
+        leverSoundInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject.transform));
         leverSoundInstance.setVolume(0.3f);
         leverSoundInstance.start();
         leverSoundInstance.release();
@@ -122,17 +123,17 @@ public class LeverController : MonoBehaviour, IInteractable
 
     public void ShowUI()
     {
-        if(IsBlocked || !CanInteract)
+        if (IsBlocked || !CanInteract)
             return;
-        
+
         ShowUIEvent.Raise(this, (true, InteractMessage, false));
     }
 
     public void HideUI()
     {
-        if(IsBlocked || !CanInteract)
+        if (IsBlocked || !CanInteract)
             return;
-        
+
         ShowUIEvent.Raise(this, (false, "", false));
     }
 }

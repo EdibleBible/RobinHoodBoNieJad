@@ -236,9 +236,11 @@ public class DoorController : MonoBehaviour, IInteractable
         doorSoundInstance.setVolume(volume);
 
         // Ustawienie dźwięku jako 2D
-        doorSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
-        doorSoundInstance.setProperty(EVENT_PROPERTY.MINIMUM_DISTANCE, 1.0f);
-        doorSoundInstance.setProperty(EVENT_PROPERTY.MAXIMUM_DISTANCE, 15.0f);
+        //doorSoundInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
+        //doorSoundInstance.setProperty(EVENT_PROPERTY.MINIMUM_DISTANCE, 1.0f);
+        //doorSoundInstance.setProperty(EVENT_PROPERTY.MAXIMUM_DISTANCE, 15.0f);
+
+        doorSoundInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject.transform));
 
         // Uruchomienie dźwięku
         doorSoundInstance.start();
