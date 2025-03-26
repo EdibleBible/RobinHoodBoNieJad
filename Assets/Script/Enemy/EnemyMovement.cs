@@ -8,51 +8,72 @@ using Random = UnityEngine.Random;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [Header("Enemy Walk Setting")]
-    [SerializeField]
-    private NavMeshAgent agent;
+    public NavMeshAgent Agent;
+    public EnemyAnimationController AnimationController;
+    private Queue<Vector3> destinations = new();
+    private Vector3 nextDestination;
+    public event Action OnDestinationReached;
+    public event Action OnStopLookingAround;
 
-    [SerializeField] private Vector3 currWalkPosition;
-    private EnemyAnimationController animatorController;
-    private float distanceToDestination;
-    private Coroutine checkDistanceCoroutine;
-    private Coroutine waitCoroutine;
-    private bool isCoroutineRunning = false;
+    private Coroutine lookingAroundCoroutine;
+    private Coroutine checkingDistanceCoroutine;
 
-    private void Awake()
+    [Header("Settings")]
+    public bool RandomPatroll = true;
+    public List<Transform> Waypoints;
+    public int CurrentWaypoint = 0;
+
+    public void PathFind()
     {
-        // Pobranie lub przypisanie komponentu NavMeshAgent
-        if (agent == null)
+        ClearPath();
+        if (RandomPatroll)
         {
-            agent = GetComponent<NavMeshAgent>();
+            var randomPosition = FindRandomPointAroundPoint(transform.position, 10f);
+            destinations.Enqueue(randomPosition);
+            destinations.Enqueue(FindRandomPointAroundPoint(randomPosition, 10f));
         }
-
-        if (agent == null)
+        else
         {
-            Debug.LogError("NavMeshAgent nie został przypisany ani znaleziony w obiekcie!");
-        }
+            if (Waypoints.Count < 2)
+            {
+                Debug.LogWarning("You need 2 or more waypoints");
+                return;
+            }
 
-        if (animatorController == null)
-        {
-            animatorController = GetComponent<EnemyAnimationController>();
+            destinations.Enqueue(Waypoints[CurrentWaypoint].position);
+            CurrentWaypoint++;
+            if (CurrentWaypoint == Waypoints.Count)
+                CurrentWaypoint = 0;
+            destinations.Enqueue(Waypoints[CurrentWaypoint].position);
+            CurrentWaypoint++;
         }
     }
 
-    public void SetUpSpeed(float _speed, float _accelerationTime, float _angularSpeed, float _stoppingDistance)
+    public int GetDestinationCount()
     {
-        agent.speed = _speed;
-        agent.acceleration = _accelerationTime;
-        agent.angularSpeed = _angularSpeed;
-        agent.stoppingDistance = _stoppingDistance;
+        return destinations.Count;
     }
 
-    public Vector3 FindRandomPointOnNavMesh(float _FindingPointDistance)
+    public void SetUpParameters(EnemyMovementStats stats)
     {
-        Vector3 randomDirection = Random.insideUnitSphere * _FindingPointDistance;
-        randomDirection += transform.position;
+        Agent.speed = stats.MaxSpeed;
+        Agent.angularSpeed = stats.AngularSpeed;
+        Agent.acceleration = stats.Acceleration;
+        Agent.stoppingDistance = stats.StoppingDistance;
+    }
+
+    public Vector3 FindRandomPointAroundPoint(Vector3 point, float radius)
+    {
+        if (point == Vector3.zero)
+        {
+            point = transform.position;
+        }
+
+        Vector3 randomDirection = Random.insideUnitSphere * radius;
+        randomDirection += point;
         NavMeshHit hit;
         Vector3 finalPosition = Vector3.zero;
-        if (NavMesh.SamplePosition(randomDirection, out hit, _FindingPointDistance, 1))
+        if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1))
         {
             finalPosition = hit.position;
         }
@@ -60,127 +81,123 @@ public class EnemyMovement : MonoBehaviour
         return finalPosition;
     }
 
-    public bool IsPointOnNavMesh(Vector3 _point, float _range = 1.0f)
+    public void GoToNextPoint(bool withAddNewWaypoint = true)
     {
-        NavMeshHit hit;
-        // Sample the nearest point on the NavMesh
-        if (NavMesh.SamplePosition(_point, out hit, _range, NavMesh.AllAreas))
+        nextDestination = destinations.Dequeue();
+        SetEnemyDestination(nextDestination);
+
+        if (!withAddNewWaypoint)
+            return;
+
+        if (RandomPatroll)
         {
-            // Check if the sampled point is within the specified range
-            float distance = Vector3.Distance(_point, hit.position);
-            return distance <= _range;
+            Vector3 firstDestination = destinations.Peek();
+            destinations.Enqueue(FindRandomPointAroundPoint(firstDestination, 10f));
+        }
+        else
+        {
+            if (CurrentWaypoint >= Waypoints.Count - 1)
+            {
+                CurrentWaypoint = 0;
+                destinations.Enqueue(Waypoints[CurrentWaypoint].position);
+            }
+            else
+            {
+                CurrentWaypoint++;
+                destinations.Enqueue(Waypoints[CurrentWaypoint].position);
+            }
+        }
+    }
+
+    public void AddWaypoint(Vector3 position)
+    {
+        destinations.Enqueue(position);
+    }
+
+    public void SetEnemyDestination(Vector3 destination, bool _chekingDistance = true)
+    {
+        if (_chekingDistance)
+            StopCheckingDistance();
+
+        Agent.SetDestination(destination);
+
+        if (_chekingDistance)
+            StartCheckingDistance(0.5f);
+    }
+
+    public void StartLookingAround(float waitingTime)
+    {
+        AnimationController.SetLookAround(true);
+        lookingAroundCoroutine = StartCoroutine(LookingAroundCoroutine(waitingTime));
+    }
+
+    public void StopLookingAround()
+    {
+        if (lookingAroundCoroutine != null)
+        {
+            StopCoroutine(lookingAroundCoroutine);
         }
 
-        return false; // Point is not on the NavMesh
+        AnimationController.SetLookAround(false);
+        OnStopLookingAround?.Invoke();
     }
 
-    public void RunCoroutine(Vector3 nextPoint, float _waitTime)
+    public IEnumerator LookingAroundCoroutine(float time)
     {
-        if (isCoroutineRunning)
-            return; // Ignorujemy kolejne wywołania, jeśli korutyna już działa
-
-        waitCoroutine = StartCoroutine(WaitToFindingNewPoint(nextPoint, _waitTime));
-    }
-
-    public void SetupLookAround(bool isLookingAround)
-    {
-        animatorController.SetLookAround(isLookingAround); // Start animacji "rozglądania się"
-        isCoroutineRunning = false;
-    }
-
-    private IEnumerator WaitToFindingNewPoint(Vector3 nextPoint, float _waitTime)
-    {
-        isCoroutineRunning = true;
-        animatorController.SetLookAround(true);
-
         float elapsedTime = 0f;
-        while (elapsedTime < _waitTime)
+        while (elapsedTime < time)
         {
-            Debug.Log($"Pozostały czas do zmiany punktu: {_waitTime - elapsedTime:F2} s");
-            yield return new WaitForSeconds(1f); // Aktualizuj co sekundę
+            yield return new WaitForSeconds(0.5f); // Aktualizuj co sekundę
             elapsedTime += 1f;
         }
 
-        SetDestination(nextPoint);
-        ResetDestination();
-
-        isCoroutineRunning = false;
+        StopLookingAround();
     }
 
-
-    public void SetDestination(Vector3 _position)
+    public void StartCheckingDistance(float waitingTime)
     {
-        currWalkPosition = _position;
-        agent.SetDestination(_position);
+        checkingDistanceCoroutine = StartCoroutine(CheckDistanceCoroutine(waitingTime));
     }
 
-    public float ResetDestination()
+    public void StopCheckingDistance()
     {
-        distanceToDestination = agent.remainingDistance;
-        return distanceToDestination;
+        if (checkingDistanceCoroutine != null)
+        {
+            StopCoroutine(checkingDistanceCoroutine);
+        }
     }
 
-    public IEnumerator CheckDistance(float _delayInSec)
+    public IEnumerator CheckDistanceCoroutine(float time)
     {
         while (true)
         {
-            yield return new WaitForSeconds(_delayInSec);
-            distanceToDestination = agent.remainingDistance;
-            Debug.LogWarning("Check distance. Value is: " + distanceToDestination);
+            yield return new WaitForSeconds(time);
+            var distanceToDestination = Agent.remainingDistance;
+            if (distanceToDestination <= Agent.stoppingDistance)
+            {
+                OnDestinationReached?.Invoke();
+                yield break;
+            }
         }
     }
 
     public void UpdateMoveAnimation(float _speed)
     {
-        animatorController.UpdateWalkParameters(_speed);
+        AnimationController.UpdateWalkParameters(_speed);
     }
 
-    public void SetDistance()
+    public void ClearPath()
     {
-        distanceToDestination = agent.remainingDistance;
+        destinations = new Queue<Vector3>();
     }
+}
 
-    public float GetDistanceToDestination()
-    {
-        return distanceToDestination;
-    }
-
-    public void ResetCheckingDistance(float _delayInSec)
-    {
-        if (checkDistanceCoroutine != null)
-            StopCoroutine(checkDistanceCoroutine);
-        checkDistanceCoroutine = null;
-        checkDistanceCoroutine = StartCoroutine(CheckDistance(_delayInSec));
-    }
-
-    public void StopCheckingDistance()
-    {
-        if (checkDistanceCoroutine != null)
-            StopCoroutine(checkDistanceCoroutine);
-    }
-
-    public float GetNormalizedSpeed()
-    {
-        if (agent == null || agent.speed <= 0) return 0f;
-
-        float currentSpeed = agent.velocity.magnitude;
-        return Mathf.Clamp01(currentSpeed / agent.speed);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(currWalkPosition, 0.1f);
-    }
-
-    public void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-            Destroy(other.gameObject);
-    }
-
-    public void StopLookingCoroutine()
-    {
-        StopCoroutine(waitCoroutine);
-    }
+[Serializable]
+public class EnemyMovementStats
+{
+    public float MaxSpeed;
+    public float Acceleration;
+    public float AngularSpeed;
+    public float StoppingDistance;
+    public float LookingAroundTime;
 }

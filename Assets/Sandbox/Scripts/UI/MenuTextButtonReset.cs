@@ -6,6 +6,7 @@ public class MenuTextButtonReset : MonoBehaviour
     public SOInventory inventory;
     public SOStore store;
     public GameObject storeBackpack;
+    public SOStats stats;
 
     public void Reset()
     {
@@ -17,5 +18,13 @@ public class MenuTextButtonReset : MonoBehaviour
         store.storeItems.Clear();
         store.storeItems.Add(storeBackpack.GetComponent<ItemModifier>());
         SceneManager.LoadScene(0);
+        stats.playerSpeed = 1;
+        stats.playerRotationSpeed = 360;
+        stats.scoreLevel = 0;
+        stats.levelSuccess = false;
+        stats.scoreTotal = 0;
+        stats.lobbyVisit = 0;
+        stats.taxPaid = false;
+        stats.inventorySize = 3;
     }
 }

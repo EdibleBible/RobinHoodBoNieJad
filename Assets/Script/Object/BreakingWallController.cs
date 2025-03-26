@@ -82,23 +82,29 @@ public class BreakingWallController : MonoBehaviour, IInteractable
 
     public void PlayWallSound(float volume = 0.2f)
     {
-        BreakSound = RuntimeManager.CreateInstance(wallEvent);
-
-        if (soundSource != null)
+        // Jeœli istnieje instancja dŸwiêku, zatrzymaj j¹ przed stworzeniem nowej
+        if (BreakSound.isValid())
         {
-            BreakSound.set3DAttributes(RuntimeUtils.To3DAttributes(soundSource.position));
-        }
-        else
-        {
-            BreakSound.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            BreakSound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            BreakSound.release();
         }
 
-        BreakSound.setParameterByName("Volume", volume);
+        // Tworzenie nowej instancji dŸwiêku
+        BreakSound = FMODUnity.RuntimeManager.CreateInstance(wallEvent);
+
+        // Ustawienie g³oœnoœci
+        BreakSound.setVolume(volume);
+
+        BreakSound.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject.transform));
+
+        // Uruchomienie dŸwiêku
         BreakSound.start();
         BreakSound.release();
     }
 
-    public void PlayWallAnimation()
+
+
+        public void PlayWallAnimation()
     {
         doorAnimator.SetTrigger("Interact");
     }

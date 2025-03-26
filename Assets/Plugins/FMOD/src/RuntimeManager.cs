@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
+using FMODUnity;
 
 #if UNITY_URP_EXIST
 using UnityEngine.Rendering.Universal;

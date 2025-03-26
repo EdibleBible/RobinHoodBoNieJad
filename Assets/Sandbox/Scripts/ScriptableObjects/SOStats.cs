@@ -9,4 +9,6 @@ public class SOStats : ScriptableObject
     public int scoreLevel;
     public bool levelSuccess;
     public int scoreTotal;
+    public int lobbyVisit;
+    public bool taxPaid;
 }

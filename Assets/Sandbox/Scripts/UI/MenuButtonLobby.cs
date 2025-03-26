@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using FMODUnity;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class MenuButtonLobby : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class MenuButtonLobby : MonoBehaviour
     private bool isReadyToContinue = false;
     [SerializeField] private List<GameObject> objToOff = new List<GameObject>();
     public SOInventory inventory;
+    public SOStats stats;
+    public GameObject dialogTaxes;
+    public GameObject dialogGameOver;
+    public MenuLobbyTaxes taxScript;
 
     private void Awake()
     {
@@ -49,8 +54,33 @@ public class MenuButtonLobby : MonoBehaviour
         lobbyObject.SetActive(false);
     }
 
+    public void StartButton()
+    {
+        if (stats.taxPaid)
+        {
+            stats.taxPaid = false;
+            StartGame();
+        } else
+        {
+            dialogTaxes.SetActive(true);
+        }
+    }
+
+    public void StartButtonConfirm()
+    {
+        float taxPunishment = 1.2f;
+        if (stats.scoreTotal < taxScript.taxAmount * taxPunishment)
+        {
+            dialogGameOver.SetActive(true);
+        } else
+        {
+            StartGame();
+        }
+    }
+
     public void StartGame()
     {
+        stats.lobbyVisit += 1;
         inventory.ScoreBackup = inventory.CurrInvenoryScore;
         StartCoroutine(LoadGameWithFade(2, "Lobby"));
     }

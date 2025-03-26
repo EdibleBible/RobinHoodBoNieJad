@@ -5,5 +5,12 @@ public enum E_EnemyState
     Idle,
     Patrol,
     Chase,
-    FollowChase
+    FollowChase,
+    Alarmed
+}
+
+public enum E_CageEnemyState
+{
+    LookAround,
+    Trigger
 }
