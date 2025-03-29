@@ -35,7 +35,7 @@ public class GameEventListener : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError(
-                $"Error in {this.name} GameEventListener: {e.Message} Game Event Name: {gameEvent.name} sender: {sender} data: {data}");
+                $"Error in {this.gameObject.name} GameEventListener: {e.Message} Game Event Name: {gameEvent.name} sender: {sender} data: {data}");
         }
     }
 }

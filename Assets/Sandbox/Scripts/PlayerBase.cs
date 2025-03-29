@@ -13,7 +13,7 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private GameEvent DropItemEvent;
     [SerializeField] private GameEvent PickupItemEvent;
     [SerializeField] private GameEvent InventoryUpdateSelectedItemEvent;
-    private int currentSelectedItem = 0;
+    public int currentSelectedItem = 0;
 
     public SOPlayerStatsController PlayerStatsController;
     
@@ -23,9 +23,8 @@ public class PlayerBase : MonoBehaviour
     {
         PlayerInventory.ClearInventory();
         PlayerInventory.SetUpInventory();
-        ResetInventory();
-        
         PlayerStatsController.SetPlayerBaseModifiers();
+        ResetInventory();
         InventoryUpdateSelectedItemEvent?.Raise(this, (0,0));
 
     }

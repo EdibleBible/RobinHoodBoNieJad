@@ -64,13 +64,9 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
     {
         if (!playerInteracting)
         {
-            Debug.Log("Player is not interacting");
             base.Update();
         }
-        else
-        {
-            Debug.unityLogger.Log("Player interacting");
-        }
+
     }
 
     public void SeePlayerInteracting(bool isInteracting)

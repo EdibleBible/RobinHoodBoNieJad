@@ -13,27 +13,65 @@ public class InventoryUI : MonoBehaviour
     
     public void SetUpInventory(Component sender, object data)
     {
-        foreach (Transform child in itemSlotParent)
+        if (sender is PlayerBase playerBase && data is SOInventory inventoryData)
         {
-            Destroy(child.gameObject);
-        }
+            Debug.Log($"inventory size: {inventoryData.CurrInventorySize}");
+            List<ItemSlotSavedData> savedItemSlots = new List<ItemSlotSavedData>();
+            for (int i = 0; i < itemSlots.Count; i++)
+            {
+                savedItemSlots.Add(new ItemSlotSavedData(itemSlots[i].SlotId,itemSlots[i].AssignedItem, itemSlots[i].IsSelected));
+            }
 
-        itemSlots.Clear(); // Resetujemy listę slotów
-
-        if (sender is PlayerBase && data is SOInventory inventoryData)
-        {
+            foreach (Transform child in itemSlotParent)
+            {
+                Destroy(child.gameObject);
+            }
+            
+            itemSlots.Clear();
+            
             for (int i = 0; i < inventoryData.CurrInventorySize; i++)
             {
                 var slot = Instantiate(itemSlotPrefab, itemSlotParent);
-                slot.SetUpSlot(i, null, i == 0);
+                slot.SetUpSlot(i, null, i == playerBase.currentSelectedItem);
                 itemSlots.Add(slot);
             }
+            
+            int minCount = Mathf.Min(itemSlots.Count, savedItemSlots.Count);
+            for (int i = 0; i < minCount; i++)
+            {
+                Debug.Log($"saved slot: {i}");
+                itemSlots[i].SetUpSlot(savedItemSlots[i].SlotId, savedItemSlots[i].AssignedItem, savedItemSlots[i].IsSelected);
+            }
         }
+
     }
 
     public void AddItemToUI(Component sender, object data)
     {
-        if (data is ItemData itemData && sender is PlayerBase playerBase)
+        if (sender is PlayerBase playerBase && data is ItemData itemData)
+        {
+            if (itemData.ItemSize == 0)
+            {
+                return;
+            }
+            
+            var firstEmptySlot = itemSlots.FirstOrDefault(x => x.AssignedItem == null);
+            if (firstEmptySlot != null)
+            {
+                firstEmptySlot.AssignItem(itemData, false);
+            }
+            if (firstEmptySlot.IsSelected)
+            {
+                playerBase.CurrSelectedItem = firstEmptySlot.AssignedItem;
+            }
+            
+            Debug.Log("AddItemToUI");
+        }
+        else
+        {
+            Debug.LogWarning("sender is null");
+        }
+        /*if (data is ItemData itemData && sender is PlayerBase playerBase)
         {
             if (itemData.ItemSize == 0)
             {
@@ -77,7 +115,7 @@ public class InventoryUI : MonoBehaviour
                     playerBase.CurrSelectedItem = selectedSlot.AssignedItem;
                 }
             }
-        }
+        }*/
     }
 
     public void RemoveItemFromUI(Component sender, object data)
@@ -131,5 +169,19 @@ public class InventoryUI : MonoBehaviour
             itemSlots[currSelected].SelectSlot();
             playerBase.CurrSelectedItem = itemSlots[currSelected].AssignedItem;
         }
+    }
+}
+
+public struct ItemSlotSavedData
+{
+    public int SlotId;
+    public ItemData AssignedItem;
+    public bool IsSelected;
+
+    public ItemSlotSavedData(int slotId, ItemData assignedItem, bool isSelected)
+    {
+        SlotId = slotId;
+        AssignedItem = assignedItem;
+        IsSelected = isSelected;
     }
 }
