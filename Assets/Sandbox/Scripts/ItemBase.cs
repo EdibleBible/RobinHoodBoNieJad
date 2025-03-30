@@ -74,6 +74,10 @@ public class ItemBase : MonoBehaviour, IInteractable
             {
                 playerBase.ResetInventory();
             }
+            if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Stamina))
+            {
+                playerBase.ResetStamina();
+            }
             IsUsed = true;
             Destroy(gameObject);
         }

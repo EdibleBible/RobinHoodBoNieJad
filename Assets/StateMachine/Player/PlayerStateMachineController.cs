@@ -8,27 +8,41 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
     PlayerCrouchState _playerCrouchState;
     PlayerDoorInteraction _playerDoorInteraction;
 
-    [Header("Walk State")] [SerializeField]
+    [Header("Walk State")]
+    [SerializeField]
     float walkSpeed;
 
-    [SerializeField] float walkAcceleration;
-    [SerializeField] float walkDeceleration;
+    [SerializeField]
+    float walkAcceleration;
+    [SerializeField]
+    float walkDeceleration;
 
-    [Header("Crouch State")] [SerializeField]
+    [Header("Crouch State")]
+    [SerializeField]
     float crouchSpeed;
 
-    [SerializeField] float crouchAcceleration;
-    [SerializeField] float crouchDeceleration;
-    [SerializeField] Transform lookAtTarget;
-    [SerializeField] Transform followTarget;
-    [SerializeField] Vector3 cameraOffset;
+    [SerializeField]
+    float crouchAcceleration;
+    [SerializeField]
+    float crouchDeceleration;
+    [SerializeField]
+    Transform lookAtTarget;
+    [SerializeField]
+    Transform followTarget;
+    [SerializeField]
+    Vector3 cameraOffset;
 
-    [Header("Run State")] [SerializeField] float runSpeed;
-    [SerializeField] float runAcceleration;
-    [SerializeField] float runDeceleration;
+    [Header("Run State")]
+    [SerializeField]
+    float runSpeed;
+    [SerializeField]
+    float runAcceleration;
+    [SerializeField]
+    float runDeceleration;
 
     private PlayerWalk playerWalk;
     private PlayerRotation playerRotation;
+    private PlayerStaminaSystem playerStamina;
     private PlayerAnimatorController playerAnimatorController;
 
     private bool playerInteracting = false;
@@ -38,12 +52,13 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
         playerWalk = gameObject.GetComponent<PlayerWalk>();
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
         playerRotation = GetComponent<PlayerRotation>();
+        playerStamina = GetComponent<PlayerStaminaSystem>();
 
         _playerWalkState = new PlayerWalkState(walkSpeed, walkAcceleration, walkDeceleration, playerWalk,
-            playerAnimatorController, playerRotation);
+            playerAnimatorController, playerRotation,playerStamina);
 
-        _playerRunningState = new PlayerRunningState(runSpeed, runAcceleration, runDeceleration, playerWalk,
-            playerAnimatorController, playerRotation);
+        _playerRunningState = new PlayerRunningState(runSpeed, 0.3f, runAcceleration, runDeceleration, playerWalk,
+            playerAnimatorController, playerRotation, playerStamina);
 
         _playerCrouchState = new PlayerCrouchState(crouchSpeed, crouchAcceleration, crouchDeceleration, playerWalk,
             playerAnimatorController, playerRotation, lookAtTarget, followTarget, cameraOffset);
@@ -66,7 +81,6 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
         {
             base.Update();
         }
-
     }
 
     public void SeePlayerInteracting(bool isInteracting)

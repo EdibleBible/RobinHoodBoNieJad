@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Script.ScriptableObjects;
 using Unity.Mathematics;
@@ -19,6 +20,12 @@ public class PlayerBase : MonoBehaviour
     public SOPlayerStatsController PlayerStatsController;
     
     [HideInInspector] public ItemData CurrSelectedItem = null;
+    private PlayerStaminaSystem playerStaminaSystem;
+
+    private void Awake()
+    {
+        playerStaminaSystem = GetComponent<PlayerStaminaSystem>();
+    }
 
     public void Start()
     {
@@ -79,6 +86,10 @@ public class PlayerBase : MonoBehaviour
             {
                 ResetInventory();
             }
+            if (CurrSelectedItem.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Stamina))
+            {
+                ResetStamina();
+            }
             DropItemEvent?.Raise(this, currentSelectedItem);
         }
     }
@@ -94,5 +105,9 @@ public class PlayerBase : MonoBehaviour
         PlayerInventory.CalculateItemsSlotsCount();
         InventorySetUpEvent?.Raise(this, PlayerInventory);
     }
-    
+
+    public void ResetStamina()
+    {
+        playerStaminaSystem.SetUpStamina();
+    }
 }

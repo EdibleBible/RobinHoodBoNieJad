@@ -9,8 +9,11 @@ public class PlayerWalkState : BaseState<E_PlayerState>
 
     public PlayerRotation PLayerRotation;
     public PlayerAnimatorController PlayerAnimatorController { get; set; }
+    public PlayerStaminaSystem PlayerStamina { get; set; }
     
-    public PlayerWalkState(float movementSpeed,float accelerationTime, float decelerationTime, PlayerWalk playerWalk, PlayerAnimatorController playerAnimatorController, PlayerRotation playerRotation) : base(E_PlayerState.Walk)
+    public PlayerWalkState(float movementSpeed, float accelerationTime, float decelerationTime, PlayerWalk playerWalk,
+        PlayerAnimatorController playerAnimatorController, PlayerRotation playerRotation,
+        PlayerStaminaSystem playerStamina) : base(E_PlayerState.Walk)
     {
         MovementSpeed = movementSpeed;
         AccelerationTime = accelerationTime;
@@ -18,6 +21,7 @@ public class PlayerWalkState : BaseState<E_PlayerState>
         PlayerWalk = playerWalk;
         PLayerRotation = playerRotation;
         PlayerAnimatorController = playerAnimatorController;
+        PlayerStamina = playerStamina;
     }
     
     public override void EnterState()
@@ -45,7 +49,7 @@ public class PlayerWalkState : BaseState<E_PlayerState>
 
     public override E_PlayerState GetNextState()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && PlayerStamina.currentStamina > 0.1)
         {
             return E_PlayerState.Running;
         }

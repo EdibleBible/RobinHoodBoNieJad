@@ -51,12 +51,10 @@ public class DecalsDoorController : DoorController
 
     private void Awake()
     {
-        Debug.Log("Awake started - Initializing the puzzle");
         DetectSideWalls();
 
         if (!addWallOnAwake)
         {
-            Debug.Log("addWallOnAwake is false, skipping wall detection");
             return;
         }
 
@@ -70,14 +68,12 @@ public class DecalsDoorController : DoorController
             }
         }
 
-        Debug.Log($"Total walls detected: {allWalls.Count}");
 
         for (int i = 0; i < doorsSideWalls.Count; i++)
         {
             allWalls.Remove(doorsSideWalls[i]);
         }
 
-        Debug.Log($"Remaining walls after removing door-side walls: {allWalls.Count}");
 
         SpawnLever();
         SelectRandomLevers(CorrectLeverCount);
@@ -87,7 +83,6 @@ public class DecalsDoorController : DoorController
 
     public void DetectSideWalls()
     {
-        Debug.Log("Detecting side walls...");
 
         // Obliczamy połowę rozmiaru pudełka – wymagany parametr dla Physics.OverlapBox
         Vector3 halfExtents = detectWallSize * 0.5f;
@@ -104,15 +99,12 @@ public class DecalsDoorController : DoorController
             }
         }
 
-        Debug.Log($"Total side walls detected: {doorsSideWalls.Count}");
     }
 
     public void SpawnLever()
     {
-        Debug.Log("Spawning levers...");
         if (doorsSideWalls.Count == 0 || leverDecalSprite.Count < leverCount)
         {
-            Debug.LogError($"Not enough walls or decals to spawn levers {doorsSideWalls.Count} detected and {leverDecalSprite.Count} detected");
             return;
         }
 
@@ -140,18 +132,13 @@ public class DecalsDoorController : DoorController
             availableIndices.Remove(randomIndex);
             leverDecalObj.GetComponent<DecalProjector>().material = leverDecalSprite[randomIndex];
             spawnedLevers.Add(leverObj.GetComponent<IInteractable>(), (leverDecalSprite[randomIndex], false));
-
-            Debug.Log(
-                $"Lever {i} spawned at {leverObj.transform.position} with decal {leverDecalSprite[randomIndex].name}");
         }
     }
 
     void SelectRandomLevers(int count)
     {
-        Debug.Log($"Selecting {count} correct levers...");
         if (spawnedLevers.Count < count)
         {
-            Debug.LogError("Not enough levers to select the correct ones");
             return;
         }
 
@@ -169,34 +156,28 @@ public class DecalsDoorController : DoorController
             selectedLevers.Add(selectedLever);
             availableLevers.RemoveAt(randomIndex);
 
-            Debug.Log($"Lever {selectedLever} set as a correct one");
         }
     }
 
     bool CheckIfCorrectLeversUsed()
     {
-        Debug.Log("Checking if correct levers were used...");
         foreach (var kvp in spawnedLevers)
         {
             IInteractable lever = kvp.Key;
             bool isActive = kvp.Value.isActive;
 
-            Debug.Log($"Checking lever {lever} - Active: {isActive}, Used: {lever.IsUsed}");
 
             if (isActive && !lever.IsUsed)
             {
-                Debug.LogWarning("A required lever was not used!");
                 return false;
             }
 
             if (!isActive && lever.IsUsed)
             {
-                Debug.LogWarning("An incorrect lever was used!");
                 return false;
             }
         }
 
-        Debug.Log("All levers were used correctly!");
         return true;
     }
 
