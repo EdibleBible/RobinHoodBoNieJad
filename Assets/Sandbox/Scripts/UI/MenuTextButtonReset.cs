@@ -16,14 +16,13 @@ public class MenuTextButtonReset : MonoBehaviour
         inventory.BaseInventorySize = 3;
         inventory.CalculateItemsSlotsCount();
         store.storeItems.Clear();
-        store.storeItems.Add(storeBackpack.GetComponent<ItemModifier>());
         SceneManager.LoadScene(0);
         stats.playerSpeed = 1;
         stats.playerRotationSpeed = 360;
         stats.scoreLevel = 0;
         stats.levelSuccess = false;
         stats.scoreTotal = 0;
-        stats.lobbyVisit = 0;
+        stats.lobbyVisit = 1;
         stats.taxPaid = false;
         stats.inventorySize = 3;
     }

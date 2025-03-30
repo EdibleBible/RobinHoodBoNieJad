@@ -13,4 +13,39 @@ MonoBehaviour:
   m_Name: SOStore
   m_EditorClassIdentifier: 
   storeItems:
-  - {fileID: 6054668290053079341, guid: da86f17de2027804386b8e80c4c0b9b5, type: 3}
+  - ItemType: 3
+    ItemName: Backpack
+    ItemDescription: Backpack Description
+    ItemSize: 0
+    ItemValue: 500
+    ItemIcon: {fileID: 21300000, guid: 267b4ca732a770c4288cfe8f1fb2e493, type: 3}
+    ItemPrefab: {fileID: 1466800322429633386, guid: 7594ff08f3791014b8c01c1ea7c3fd42,
+      type: 3}
+    statToChange:
+    - ModifierType: 2
+      Additive: 2
+      Multiplicative: 1
+    CollectibleId: 0
+  - ItemType: 8
+    ItemName: FastShoes
+    ItemDescription: FastShoes Description
+    ItemSize: 1
+    ItemValue: 0
+    ItemIcon: {fileID: 21300000, guid: 5286dcc84a4b4c543b81b3494321edd2, type: 3}
+    ItemPrefab: {fileID: 1466800322429633386, guid: d7c060a3a82c53a4abd5331b172c9a71,
+      type: 3}
+    statToChange: []
+    CollectibleId: 0
+  storeEntries:
+  - keyVisit: 1
+    tradeDuration: 0
+    itemPrefab: {fileID: 1466800322429633386, guid: 2c8854546cbad644fb96b4a7b3ec7dd4,
+      type: 3}
+  - keyVisit: 2
+    tradeDuration: 0
+    itemPrefab: {fileID: 1466800322429633386, guid: bf7902d43523d924d8379d0f6ffcbebd,
+      type: 3}
+  - keyVisit: 4
+    tradeDuration: 0
+    itemPrefab: {fileID: 1466800322429633386, guid: d5c3888ea5cedf8419719867b595e7f3,
+      type: 3}

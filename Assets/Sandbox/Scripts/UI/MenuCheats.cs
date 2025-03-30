@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -190,6 +191,7 @@ public class MenuCheats : MonoBehaviour
             GameObject addedItem = Instantiate(itemDictionary[inputItem]);
             ItemData addedItemData = addedItem.GetComponent<ItemBase>().ItemData;
             playerInventory.ItemsInInventory.Add(addedItemData);
+            Destroy(addedItem);
         }
     }
 
