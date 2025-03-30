@@ -21,6 +21,11 @@ public class PlayerQuestSystem : MonoBehaviour
         SetUpQuestEvent?.Raise(this, playerCurrentQuests);
     }
 
+    private void Update()
+    {
+        Debug.Log($"is quest complete? {IsQuestComplete()}");
+    }
+
     public void AddItemToQuest(Component sender, object data)
     {
         if (data is ItemData itemBase && sender is PlayerBase playerBase)
@@ -45,5 +50,10 @@ public class PlayerQuestSystem : MonoBehaviour
                 UpdateQuestValueEvent?.Raise(this, (itemBase.ItemType ,playerCurrentQuests.RequireItems[itemBase.ItemType]));
             }
         }
+    }
+
+    public bool IsQuestComplete()
+    {
+        return playerCurrentQuests.RequireItems.All(item => item.Value.CurrentAmount >= item.Value.RequiredAmount);
     }
 }
