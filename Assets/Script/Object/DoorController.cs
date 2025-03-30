@@ -79,31 +79,38 @@ public class DoorController : MonoBehaviour, IInteractable
     public bool IsUsed { get; set; } = false;
     public Tween isDoorOpenTween;
 
-
     public virtual void Interact(Transform player)
     {
+        Debug.Log($"Interact called - IsBlocked: {IsBlocked}, CanInteract: {CanInteract}, isDoorOpenTween: {isDoorOpenTween}, IsUsed: {IsUsed}");
+
         if (IsBlocked)
         {
             ShowUIEvent.Raise(this, (true, BlockedMessage, true));
             return;
         }
 
-        if (isDoorOpenTween != null || !CanInteract)
+        if (!CanInteract)
         {
+            Debug.Log("Cannot interact, CanInteract is false.");
             return;
         }
 
+        if (isDoorOpenTween != null)
+        {
+            Debug.Log("Stopping current animation.");
+            isDoorOpenTween.Kill();
+            isDoorOpenTween = null;
+        }
 
         InteractEvent.Raise(this, null);
 
         if (!IsUsed)
         {
+            IsUsed = true;
             CheckPlayerPosition();
             PlayDoorSound("Open");
 
-            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" +
-                      endLeftDoorOpenPosition);
-
+            Debug.Log("Opening doors.");
 
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(endLeftDoorOpenPosition, openTime)
                 .SetEase(openCurve);
@@ -115,18 +122,17 @@ public class DoorController : MonoBehaviour, IInteractable
                 .Join(rightDoorTween)
                 .OnComplete(() =>
                 {
+                    Debug.Log("Doors opened completely.");
                     isDoorOpenTween = null;
-                    IsUsed = true;
                     if (!TwoSideInteraction) CanInteract = false;
                 });
         }
         else
         {
+            IsUsed = false;
             PlayDoorSound("Close");
 
-            Debug.Log("endRightDoorOpenPosition" + endRightDoorOpenPosition + "endLeftDoorOpenPosition" +
-                      endLeftDoorOpenPosition);
-
+            Debug.Log("Closing doors.");
 
             Tween leftDoorTween = doorPivotLeft.transform.DOLocalRotate(leftDoorClosePosition, closeTime)
                 .SetEase(closeCurve);
@@ -138,12 +144,11 @@ public class DoorController : MonoBehaviour, IInteractable
                 .Join(rightDoorTween)
                 .OnComplete(() =>
                 {
+                    Debug.Log("Doors closed completely.");
                     isDoorOpenTween = null;
-                    IsUsed = false;
                 });
         }
     }
-
     public void CheckPlayerPosition()
     {
         // Ustawienia BoxCast
