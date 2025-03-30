@@ -2,6 +2,7 @@ using System.Linq;
 using Script.ScriptableObjects;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerBase : MonoBehaviour
 {

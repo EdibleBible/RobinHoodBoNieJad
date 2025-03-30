@@ -113,7 +113,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8245901855004692460}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
@@ -168,8 +168,11 @@ MonoBehaviour:
   BaseSize: {x: 1, y: 1, z: 1}
   InteractSize: {x: 1.5, y: 1.5, z: 1.5}
   PickupOffset: {x: 0, y: -0.95, z: 0.4}
-  statsToChange: []
-  statsControll: {fileID: 0}
+  statsToChange:
+  - ModifierType: 1
+    Additive: 0
+    Multiplicative: -0.5
+  statsControll: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e, type: 2}
 --- !u!65 &7522293093632875491
 BoxCollider:
   m_ObjectHideFlags: 0
