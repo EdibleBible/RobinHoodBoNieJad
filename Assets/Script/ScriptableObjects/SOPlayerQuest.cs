@@ -15,6 +15,18 @@ public class SOPlayerQuest : ScriptableObject
             item.Value.CurrentAmount = 0;
         }
     }
+
+    public bool IsQuestComplete()
+    {
+        foreach (var item in RequireItems)
+        {
+            if (item.Value.CurrentAmount < item.Value.RequiredAmount)
+            {
+                return false; // Jeśli którykolwiek przedmiot nie spełnia wymagań, zadanie nie jest ukończone
+            }
+        }
+        return true; // Wszystkie przedmioty spełniają wymagania
+    }
 }
 
 [Serializable]
