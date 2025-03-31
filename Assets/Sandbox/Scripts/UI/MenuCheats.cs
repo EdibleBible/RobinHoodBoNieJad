@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class MenuCheats : MonoBehaviour
 {
@@ -17,12 +21,28 @@ public class MenuCheats : MonoBehaviour
     public static event GetPlayerEvent GetPlayerBase;
     private PlayerBase player;
     private bool hasPlayer;
+    public SOInventory playerInventory;
+    public SOStats playerStats;
+    public List<CheatsItems> itemList = new();
+    private Dictionary<string, GameObject> itemDictionary = new();
+    public GameObject helpMenu;
 
     private void Start()
     {
         cheatsAction = globalInputActions.FindAction("CheatConsole");
         cheatsAction.Enable();
         cheatsAction.performed += ToggleCheats;
+    }
+
+    private void OnEnable()
+    {
+        foreach (var pair in itemList)
+        {
+            if (!itemDictionary.ContainsKey(pair.key))
+            {
+                itemDictionary.Add(pair.key, pair.prefab);
+            }
+        }
     }
 
     private void OnDisable()
@@ -51,7 +71,7 @@ public class MenuCheats : MonoBehaviour
             inputBG.enabled = true;
             inputField.ActivateInputField();
         }
-        else { inputBG.enabled = false; inputField.text = "";}
+        else { inputBG.enabled = false; inputField.text = ""; helpMenu.SetActive(false); }
     }
 
     private void Update()
@@ -68,11 +88,32 @@ public class MenuCheats : MonoBehaviour
     {
         switch (input[0].ToLower())
         {
+            case "help":
+                helpMenu.SetActive(true);
+                inputField.ActivateInputField();
+                break;
             case "scene":
                 CheatScene(input);
                 break;
             case "level":
-                CheatLevel();
+                //CheatLevel();
+                break;
+            case "additem":
+                AddItem(input[1].ToLower());
+                break;
+            case "money":
+                playerInventory.CurrInvenoryScore = ParseInput(input[1]);
+                playerStats.scoreTotal = ParseInput(input[1]);
+                break;
+            case "inventorysize":
+                playerInventory.BaseInventorySize = ParseInput(input[1]);
+                playerStats.inventorySize = ParseInput(input[1]);
+                break;
+            case "visit":
+                playerStats.lobbyVisit = (ParseInput(input[1]) - 1);
+                break;
+            case "paytax":
+                PayTax(input);
                 break;
         }
     }
@@ -142,4 +183,36 @@ public class MenuCheats : MonoBehaviour
 
         }
     }
+
+    public void AddItem(string inputItem)
+    {
+        if (itemDictionary.ContainsKey(inputItem))
+        {
+            GameObject addedItem = Instantiate(itemDictionary[inputItem]);
+            ItemData addedItemData = addedItem.GetComponent<ItemBase>().ItemData;
+            playerInventory.ItemsInInventory.Add(addedItemData);
+            Destroy(addedItem);
+        }
+    }
+
+    public int ParseInput(string input)
+    {
+        if (int.TryParse(input, out int parsedInt))
+        {
+            return parsedInt;
+        }
+        return -1;
+    }
+
+    public void PayTax(string[] input)
+    {
+        if (input.Length == 0 || input[1] == "true") { playerStats.taxPaid = true; }
+        else { playerStats.taxPaid = false; };
+    }
+}
+
+[Serializable] public class CheatsItems
+{
+    public string key;
+    public GameObject prefab;
 }

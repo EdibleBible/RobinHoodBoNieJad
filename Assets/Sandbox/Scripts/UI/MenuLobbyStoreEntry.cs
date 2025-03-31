@@ -10,11 +10,11 @@ public class MenuLobbyStoreEntry : MonoBehaviour
     public int entryIndex;
     public MenuLobbyStore lobbyStore;
 
-    public void LoadItem(ItemModifier item)
+    public void LoadItem(ItemData item)
     {
-        itemIcon.sprite = item.Icon;
-        itemName.text = item.Name;
-        itemValueText.text = item.Value.ToString();
+        itemIcon.sprite = item.ItemIcon;
+        itemName.text = item.ItemName;
+        itemValueText.text = item.ItemValue.ToString();
     }
 
     public void Buy()

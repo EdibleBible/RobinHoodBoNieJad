@@ -169,11 +169,18 @@ public enum ItemType
     CollectibleBox,
 
 
-    //Useable
+    //Usable
     Key,
     Hammer,
     SteelShoes,
     FastShoes,
     Forklift,
-    Potion
+    Potion,
+    Unused1,
+    Unused2,
+    Unused3,
+    Unused4,
+    Unused5,
+    Unused6,
+    MoneyBag //Unusable
 }
