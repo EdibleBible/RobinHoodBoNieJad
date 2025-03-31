@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FMOD.Studio;
 using FMODUnity;
-using NUnit.Framework;
 using Script.ScriptableObjects;
 using UnityEngine;
 
@@ -18,21 +16,51 @@ public class SlowingGlueController : MonoBehaviour, IInteractable, IStatChangeab
 
     public List<StatParameters> statToChange;
 
-    [Header("FMOD")] [SerializeField] private EventReference pressSoundEvent;
-    [SerializeField] private EventReference releaseSoundEvent;
+    [Header("FMOD")]
+    [SerializeField] private EventReference pressSoundEvent;  // D�wi�k wej�cia w paj�czyn�
+    [SerializeField] private EventReference releaseSoundEvent; // D�wi�k wyj�cia z paj�czyny
+    [SerializeField] private EventReference webMovementEvent;  // D�wi�k poruszania si� w paj�czynie
     [SerializeField] private Transform soundSource;
+
     private EventInstance pressSoundInstance;
     private EventInstance releaseSoundInstance;
+    private EventInstance webMovementInstance;
 
+    private bool playerInWeb = false;
+    private Rigidbody playerRb;
+    private bool isPlaying = false;
 
     public void StartSlowingGlue(SOPlayerStatsController statToControll)
     {
         AddModifier(statToControll);
+
+        // Odtwórz dźwięk wejścia do pajęczyny
+        pressSoundInstance = RuntimeManager.CreateInstance(pressSoundEvent);
+        RuntimeManager.AttachInstanceToGameObject(pressSoundInstance, soundSource);
+        pressSoundInstance.start();
+
+        // Inicjalizuj dźwięk ruchu w pajęczynie (ale nie uruchamiaj jeszcze)
+        webMovementInstance = RuntimeManager.CreateInstance(webMovementEvent);
+        RuntimeManager.AttachInstanceToGameObject(webMovementInstance, soundSource);
+
+        // Logowanie stanu początkowego parametru Movement
+        Debug.Log("Initial Movement value: 0");
+        webMovementInstance.setParameterByName("Movement", 0f); // Możesz ustawić początkowy stan jako 0
     }
+
 
     public void StopSlowingGlue(SOPlayerStatsController statToControll)
     {
         RemoveModifier(statToControll);
+
+        // Odtw�rz d�wi�k wyj�cia z paj�czyny
+        releaseSoundInstance = RuntimeManager.CreateInstance(releaseSoundEvent);
+        RuntimeManager.AttachInstanceToGameObject(releaseSoundInstance, soundSource);
+        releaseSoundInstance.start();
+
+        // Zatrzymaj d�wi�k ruchu w paj�czynie
+        webMovementInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        isPlaying = false;
     }
 
     public void AddModifier(SOPlayerStatsController statToControll)
@@ -65,55 +93,63 @@ public class SlowingGlueController : MonoBehaviour, IInteractable, IStatChangeab
         }
     }
 
-    public void OnTriggerStay(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (!other.TryGetComponent<PlayerBase>(out PlayerBase playerBase))
+            return;
+
+        playerInWeb = true;
+        playerRb = other.GetComponent<Rigidbody>();
+
+        StartSlowingGlue(playerBase.PlayerStatsController);
+    }
+
+    public void OnTriggerStay(Collider other)
+    {
+        if (!playerInWeb || !other.CompareTag("Player"))
+            return;
+
+
+        CharacterController controller = other.GetComponent<CharacterController>();
+
+        if (controller == null)
         {
+            Debug.LogError("Brak CharacterController na obiekcie gracza!");
             return;
         }
-        
-        if (!playerBase.PlayerInventory.ItemsInInventory.Any(x => x.ItemType == ItemType.FastShoes))
-            StartSlowingGlue(playerBase.PlayerStatsController);
-        else
+
+        float movement = controller.velocity.magnitude > 0.1f ? 1f : 0f;
+
+
+        Debug.Log("Movement: " + movement);
+        webMovementInstance.setParameterByName("Movement", movement);
+
+        if (movement > 0 && !isPlaying)
         {
-            if (ChangedStats)
-            {
-                RemoveModifier(playerBase.PlayerStatsController);
-            }
+            Debug.Log("Starting web movement sound.");
+            webMovementInstance.start();
+            isPlaying = true;
+        }
+        else if (movement == 0 && isPlaying)
+        {
+            Debug.Log("Stopping web movement sound.");
+            webMovementInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            isPlaying = false;
         }
     }
 
     public void OnTriggerExit(Collider other)
     {
-        
-        if (other.TryGetComponent<PlayerBase>(out PlayerBase playerBase))
-        {
-            StopSlowingGlue(playerBase.PlayerStatsController);
-        }
-        else
-        {
-            Debug.Log(other.gameObject.name);
-        }
+        if (!other.TryGetComponent<PlayerBase>(out PlayerBase playerBase))
+            return;
+
+        StopSlowingGlue(playerBase.PlayerStatsController);
+        playerInWeb = false;
     }
 
-    private void PlayGlueSound()
-    {
-    }
-
-    public void Interact(Transform player)
-    {
-        //empty
-    }
-
-    public void ShowUI()
-    {
-        //empty
-    }
-
-    public void HideUI()
-    {
-        //empty
-    }
+    public void Interact(Transform player) { }
+    public void ShowUI() { }
+    public void HideUI() { }
 
     [HideInInspector] public GameEvent ShowUIEvent { get; set; }
     [HideInInspector] public GameEvent InteractEvent { get; set; }
