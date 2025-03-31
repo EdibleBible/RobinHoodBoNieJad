@@ -4801,52 +4801,77 @@ PrefabInstance:
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: pressSoundEvent.Path
-      value: event:/Doors_single
+      value: event:/SpiderWebPress
+      objectReference: {fileID: 0}
+    - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
+        type: 3}
+      propertyPath: webMovementEvent.Path
+      value: event:/SpiderWebInteraction
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: releaseSoundEvent.Path
-      value: event:/Doors_single
+      value: event:/SpiderWebRelease
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: pressSoundEvent.Guid.Data1
-      value: 632322657
+      value: 490185585
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: pressSoundEvent.Guid.Data2
-      value: 1333173212
+      value: 1291326859
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: pressSoundEvent.Guid.Data3
-      value: -2070573669
+      value: -1039051088
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: pressSoundEvent.Guid.Data4
-      value: -1421739515
+      value: -1806951928
+      objectReference: {fileID: 0}
+    - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
+        type: 3}
+      propertyPath: webMovementEvent.Guid.Data1
+      value: 1189598964
+      objectReference: {fileID: 0}
+    - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
+        type: 3}
+      propertyPath: webMovementEvent.Guid.Data2
+      value: 1167380601
+      objectReference: {fileID: 0}
+    - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
+        type: 3}
+      propertyPath: webMovementEvent.Guid.Data3
+      value: 1699324843
+      objectReference: {fileID: 0}
+    - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
+        type: 3}
+      propertyPath: webMovementEvent.Guid.Data4
+      value: 2065760705
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: releaseSoundEvent.Guid.Data1
-      value: 632322657
+      value: 89958599
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: releaseSoundEvent.Guid.Data2
-      value: 1333173212
+      value: 1340780243
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: releaseSoundEvent.Guid.Data3
-      value: -2070573669
+      value: 640050067
       objectReference: {fileID: 0}
     - target: {fileID: 5385577834949831230, guid: 1fc816dffbf984d44bfb223b4b80b6b6,
         type: 3}
       propertyPath: releaseSoundEvent.Guid.Data4
-      value: -1421739515
+      value: -428882547
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7227,6 +7252,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5477176899353178476, guid: 0f72d58333ca7e94da88b43c8d51a667,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5635414541033452361, guid: 0f72d58333ca7e94da88b43c8d51a667,
         type: 3}
       propertyPath: m_Name
@@ -7350,6 +7380,56 @@ PrefabInstance:
       propertyPath: gameobjectToInteract
       value: 
       objectReference: {fileID: 1499218449}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: pressSoundEvent.Path
+      value: event:/PressurePlate
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: releaseSoundEvent.Path
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: pressSoundEvent.Guid.Data1
+      value: -1724590152
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: pressSoundEvent.Guid.Data2
+      value: 1122559523
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: pressSoundEvent.Guid.Data3
+      value: 1130654897
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: pressSoundEvent.Guid.Data4
+      value: 1361157437
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: releaseSoundEvent.Guid.Data1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: releaseSoundEvent.Guid.Data2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: releaseSoundEvent.Guid.Data3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335326924907233329, guid: 8ac574cc3f012044987cde153ef9771b,
+        type: 3}
+      propertyPath: releaseSoundEvent.Guid.Data4
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4684341428137624439, guid: 8ac574cc3f012044987cde153ef9771b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8863,6 +8943,11 @@ PrefabInstance:
     - target: {fileID: 2045519627051464627, guid: 95d46b8a382e6b3499671d9c6e03746c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2921395871604747844, guid: 95d46b8a382e6b3499671d9c6e03746c,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7147923249885614035, guid: 95d46b8a382e6b3499671d9c6e03746c,
