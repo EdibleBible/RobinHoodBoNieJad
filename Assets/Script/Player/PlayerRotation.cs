@@ -6,24 +6,36 @@ using DG.Tweening; // DOTween
 public class PlayerRotation : MonoBehaviour
 {
     [Header("Ustawienia Cinemachine")]
-    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField]
+    private CinemachineVirtualCamera virtualCamera;
 
     [Header("Ustawienia obrotu kamery")]
-    [SerializeField] private float mouseSensitivityX = 100f;
-    [SerializeField] private float mouseSensitivityY = 100f;
-    [SerializeField] private bool invertY = false;
-    [SerializeField] private float minPitch = -90f;
-    [SerializeField] private float maxPitch = 90f;
+    [SerializeField]
+    private float mouseSensitivityX = 100f;
+    [SerializeField]
+    private float mouseSensitivityY = 100f;
+    [SerializeField]
+    private bool invertY = false;
+    [SerializeField]
+    private float minPitch = -90f;
+    [SerializeField]
+    private float maxPitch = 90f;
 
     [Header("Ustawienia obrotu gracza")]
-    [SerializeField] private float playerRotationSpeed = 720f;
-    [SerializeField] private float angleThreshold = 5f;
-    [SerializeField] private float rotationSmoothTime = 0.1f;
+    [SerializeField]
+    private float playerRotationSpeed = 720f;
+    [SerializeField]
+    private float angleThreshold = 5f;
+    [SerializeField]
+    private float rotationSmoothTime = 0.1f;
 
     [Header("Ustawienia kamery kucania")]
-    [SerializeField] private Vector3 crouchOffset = new Vector3(0, -0.5f, 0);
-    [SerializeField] private float crouchTransitionTime = 0.3f;
+    [SerializeField]
+    private Vector3 crouchOffset = new Vector3(0, -0.5f, 0);
+    [SerializeField]
+    private float crouchTransitionTime = 0.3f;
 
+    [SerializeField]
     private Transform camTransform;
     private float pitch = 0f;
     private float yaw = 0f;
@@ -32,15 +44,12 @@ public class PlayerRotation : MonoBehaviour
     private Vector3 originalCamLocalPos;
     private Tween cameraTween;
 
-    private void Awake()
+    private void Start()
     {
         if (virtualCamera == null)
         {
             virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
         }
-
-        camTransform = Camera.main.transform;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -69,7 +78,8 @@ public class PlayerRotation : MonoBehaviour
 
         if (angleDifference > angleThreshold)
         {
-            float smoothedYaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, yaw, ref currentYawVelocity, rotationSmoothTime);
+            float smoothedYaw =
+                Mathf.SmoothDampAngle(transform.eulerAngles.y, yaw, ref currentYawVelocity, rotationSmoothTime);
             transform.rotation = Quaternion.Euler(0f, smoothedYaw, 0f);
         }
         else
@@ -94,6 +104,6 @@ public class PlayerRotation : MonoBehaviour
         if (camTransform.localPosition == targetPos) return;
 
         cameraTween = camTransform.DOLocalMove(targetPos, crouchTransitionTime)
-                                  .SetEase(Ease.OutSine);
+            .SetEase(Ease.OutSine);
     }
 }
