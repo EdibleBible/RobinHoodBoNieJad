@@ -682,7 +682,7 @@ GameObject:
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -696,7 +696,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.07, y: 0.85, z: -1.27}
-  m_LocalScale: {x: 0.75000006, y: 0.75000006, z: 0.75000006}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 959190293348684288}
@@ -714,10 +714,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b2677dc92849849a8b410ffc612321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Agent: {fileID: 0}
-  AnimationController: {fileID: 0}
+  Agent: {fileID: 6257333795837363401}
+  AnimationController: {fileID: 8524611368905361129}
   RandomPatroll: 1
-  Waypoints: []
+  Waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   CurrentWaypoint: 0
 --- !u!114 &5533938673021600224
 MonoBehaviour:
@@ -749,57 +756,57 @@ MonoBehaviour:
   findingPointDistance: 1
   maxNavMeshCheckDistance: 5
   patrollingMovementStats:
-    MaxSpeed: 0
-    Acceleration: 0
-    AngularSpeed: 0
-    StoppingDistance: 0
-    LookingAroundTime: 0
+    MaxSpeed: 2
+    Acceleration: 1
+    AngularSpeed: 720
+    StoppingDistance: 0.5
+    LookingAroundTime: 5
   patrollingFovStats:
-    ViewRadius: 0
-    ViewAngle: 0
-    FindingDelay: 0
+    ViewRadius: 2
+    ViewAngle: 75
+    FindingDelay: 0.5
     TargetLayer:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 2691188160
   chasingMovementStats:
-    MaxSpeed: 0
-    Acceleration: 0
-    AngularSpeed: 0
-    StoppingDistance: 0
-    LookingAroundTime: 0
+    MaxSpeed: 3
+    Acceleration: 1
+    AngularSpeed: 720
+    StoppingDistance: 0.1
+    LookingAroundTime: 7
   chasingFovStats:
-    ViewRadius: 0
-    ViewAngle: 0
-    FindingDelay: 0
+    ViewRadius: 2
+    ViewAngle: 360
+    FindingDelay: 0.1
     TargetLayer:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 2691188160
   alarmedMovementStats:
-    MaxSpeed: 0
-    Acceleration: 0
-    AngularSpeed: 0
-    StoppingDistance: 0
-    LookingAroundTime: 0
+    MaxSpeed: 4
+    Acceleration: 1
+    AngularSpeed: 720
+    StoppingDistance: 0.2
+    LookingAroundTime: 3
   alarmedFovStats:
-    ViewRadius: 0
-    ViewAngle: 0
-    FindingDelay: 0
+    ViewRadius: 2
+    ViewAngle: 75
+    FindingDelay: 0.3
     TargetLayer:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 2691188160
   alarmedStateStats:
     IsAlarmed: 0
     AlarmedPosition: {x: 0, y: 0, z: 0}
-    SmallPatrollCounter: 0
+    SmallPatrollCounter: 5
 --- !u!195 &6257333795837363401
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -808,9 +815,9 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5952023668469632104}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: -334000983
   m_Radius: 0.3
-  m_Speed: 0.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 80

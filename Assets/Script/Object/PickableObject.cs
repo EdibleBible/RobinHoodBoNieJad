@@ -150,7 +150,6 @@ public class PickableObject : MonoBehaviour, IInteractable, IInteractableStop, I
 
     public void ChangeSize(Vector3 newSize)
     {
-        transform.localScale = newSize;
     }
 
     public void ShowUI()

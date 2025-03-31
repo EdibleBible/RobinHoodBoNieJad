@@ -129,7 +129,7 @@ public class PressurePlateController : MonoBehaviour, IInteractable
 
     private bool IsValidObject(GameObject obj)
     {
-        return obj.GetComponent<PlayerBase>() != null || obj.GetComponent<PickableObject>() != null;
+        return obj.GetComponent<PlayerBase>() != null || obj.GetComponent<PickableObject>() != null || obj.transform.parent.GetComponent<PickableObject>();
     }
 
     private void ActivatePlate()

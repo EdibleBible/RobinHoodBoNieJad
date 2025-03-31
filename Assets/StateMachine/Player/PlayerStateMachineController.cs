@@ -40,10 +40,10 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
     [SerializeField]
     float runDeceleration;
 
-    private PlayerWalk playerWalk;
-    private PlayerRotation playerRotation;
-    private PlayerStaminaSystem playerStamina;
-    private PlayerAnimatorController playerAnimatorController;
+    [HideInInspector] public PlayerWalk playerWalk;
+    [HideInInspector] public PlayerRotation playerRotation;
+    [HideInInspector] public PlayerStaminaSystem playerStamina;
+    [HideInInspector] public PlayerAnimatorController playerAnimatorController;
 
     private bool playerInteracting = false;
 

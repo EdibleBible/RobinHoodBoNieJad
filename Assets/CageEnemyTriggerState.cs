@@ -39,8 +39,6 @@ public class CageEnemyTriggerState : BaseState<E_CageEnemyState>
 
     public override E_CageEnemyState GetNextState()
     {
-        Debug.Log(fov.GetVisibleTargets().Count + " Count");
-
         if (!animationController.IsEnrage && fov.GetVisibleTargets().Count == 0)
             return E_CageEnemyState.LookAround;
 

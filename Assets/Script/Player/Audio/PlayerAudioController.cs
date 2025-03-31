@@ -1,79 +1,60 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
-using UnityEngine.Rendering;
 
 public class PlayerAudioController : MonoBehaviour
 {
+    [SerializeField] private Animator animator;
+    [SerializeField] private PlayerStateMachineController playerStateMachine;
+    
     [SerializeField] private Transform leftFootRaycast;
     [SerializeField] private Transform rightFootRaycast;
     [SerializeField] private float rayDistance;
     [SerializeField] private LayerMask groundLayerMask;
-
+    
     [SerializeField] private EventReference walkStepSound;
     [SerializeField] private EventReference runStepSound;
     [SerializeField] private EventReference crouchStepSound;
-
-    private PlayerStateMachineController playerStateMachine;
-
-    private bool canCheck;
-
-    public bool DEBUG;
-
-    private void Awake()
-    {
-        playerStateMachine = GetComponent<PlayerStateMachineController>();
-    }
-
-    /*private void Start()
-    {
-        StartCoroutine(CanCheck());
-    }
-
-    private IEnumerator CanCheck()
-    {
-        yield return new WaitForSeconds(1f);
-        canCheck = true;
-    }*/
-
-    private bool leftFootOnGround = true;
-    private bool rightFootOnGround = true;
-    void Update()
-    {
-        /*if(!canCheck)
-            return;*/
-        
-        CheckFootContact(leftFootRaycast, ref leftFootOnGround);
-        CheckFootContact(rightFootRaycast, ref rightFootOnGround);
-    }
     
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            PlayFootstepSound(transform.position);
-        }
-    }
+    private bool leftFootOnGround;
+    private bool rightFootOnGround;
+    private bool leftFootLifted;
+    private bool rightFootLifted;
     
-    private void CheckFootContact(Transform foot, ref bool isFootOnGround)
+    private float lastStepTime = 0f;
+    [SerializeField] private float stepCooldown = 0.2f;
+    
+    private void Update()
+    {
+        CheckFootContact(leftFootRaycast, ref leftFootOnGround, ref leftFootLifted);
+        CheckFootContact(rightFootRaycast, ref rightFootOnGround, ref rightFootLifted);
+    }
+
+    private void CheckFootContact(Transform foot, ref bool isFootOnGround, ref bool footLifted)
     {
         RaycastHit hit;
         bool hitGround = Physics.Raycast(foot.position, Vector3.down, out hit, rayDistance, groundLayerMask);
 
-        if (hitGround && !isFootOnGround)
+        if (hitGround)
         {
-            // Stopa dotknęła ziemi, odtwarzamy dźwięk
-            PlayFootstepSound(hit.point);
+            if (!isFootOnGround && footLifted && Time.time >= lastStepTime + stepCooldown)
+            {
+                PlayFootstepSound(hit.point);
+                lastStepTime = Time.time;
+                footLifted = false;
+            }
             isFootOnGround = true;
         }
-        else if (!hitGround)
+        else
         {
-            // Stopa jest w powietrzu
+            if (isFootOnGround)
+            {
+                footLifted = true;
+            }
             isFootOnGround = false;
         }
     }
+
     private void PlayFootstepSound(Vector3 position)
     {
         switch (playerStateMachine.currentState.stateKey)
@@ -92,10 +73,12 @@ public class PlayerAudioController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (DEBUG)
-        {
-            Gizmos.DrawRay(leftFootRaycast.position, Vector3.down * rayDistance);
-            Gizmos.DrawRay(rightFootRaycast.position, Vector3.down * rayDistance);
-        }
+        if (animator == null)
+            return;
+
+        Gizmos.color = leftFootOnGround ? Color.red : Color.white;
+        Gizmos.DrawRay(leftFootRaycast.position, Vector3.down * rayDistance);
+        Gizmos.color = rightFootOnGround ? Color.red : Color.white;
+        Gizmos.DrawRay(rightFootRaycast.position, Vector3.down * rayDistance);
     }
 }

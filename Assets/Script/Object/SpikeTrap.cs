@@ -26,10 +26,10 @@ public class SpikeTrap : MonoBehaviour
     private void ActivateTrapLoop()
     {
         Sequence trapSequence = DOTween.Sequence();
-        trapSequence.AppendCallback(() => PlaySound(spikeUpSound)) // DŸwiêk przy wysuwaniu
+        trapSequence.AppendCallback(() => PlaySound(spikeUpSound))
             .Append(spikeTransform.DOLocalMove(extendedPosition, extendDuration).SetEase(Ease.OutQuad))
             .AppendInterval(delayBetweenCycles)
-            .AppendCallback(() => PlaySound(spikeDownSound)) // DŸwiêk przy chowaniu
+            .AppendCallback(() => PlaySound(spikeDownSound))
             .Append(spikeTransform.DOLocalMove(retractedPosition, retractDuration).SetEase(Ease.InQuad))
             .AppendInterval(delayBetweenCycles)
             .SetLoops(-1);

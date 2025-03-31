@@ -42,7 +42,7 @@ public class PlayerRunningState : BaseState<E_PlayerState>
         float velocityX = transform.InverseTransformDirection(velocity).x;
         float velocityZ = transform.InverseTransformDirection(velocity).z;
 
-        if (velocity.magnitude > 0)
+        if (velocity.magnitude > 0 && PlayerStaminaSystem != null)
         {
             PlayerStaminaSystem.UseStamina(UsedStaminaInRun);
         }
@@ -55,22 +55,41 @@ public class PlayerRunningState : BaseState<E_PlayerState>
 
     public override E_PlayerState GetNextState()
     {
-        if (PlayerStaminaSystem.currentStamina <= 0.1)
+        if (PlayerStaminaSystem != null)
         {
-            return E_PlayerState.Walk;
-        }
-        else if (Input.GetKey(KeyCode.LeftShift) && PlayerStaminaSystem.currentStamina > 0.1)
-        {
-            return E_PlayerState.Running;
-        }
-        else if (Input.GetKey(KeyCode.LeftControl))
-        {
-            return E_PlayerState.Crouching;
+            if (PlayerStaminaSystem.currentStamina <= 0.1)
+            {
+                return E_PlayerState.Walk;
+            }
+            else if (Input.GetKey(KeyCode.LeftShift) && PlayerStaminaSystem.currentStamina > 0.1)
+            {
+                return E_PlayerState.Running;
+            }
+            else if (Input.GetKey(KeyCode.LeftControl))
+            {
+                return E_PlayerState.Crouching;
+            }
+            else
+            {
+                return E_PlayerState.Walk;
+            }
         }
         else
         {
-            return E_PlayerState.Walk;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                return E_PlayerState.Running;
+            }
+            else if (Input.GetKey(KeyCode.LeftControl))
+            {
+                return E_PlayerState.Crouching;
+            }
+            else
+            {
+                return E_PlayerState.Walk;
+            }
         }
+
     }
 
     public override void OnTriggerEnterState(Collider other)

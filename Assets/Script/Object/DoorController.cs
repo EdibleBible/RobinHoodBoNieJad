@@ -15,7 +15,14 @@ public class DoorController : MonoBehaviour, IInteractable
 
     public bool twoSideInteraction;
     public bool CanInteract { get; set; } = true;
-    public bool IsBlocked { get; set; }
+    public bool IsBlocked
+    {
+        get => isBlocked;
+        set => isBlocked = value;
+    }
+
+    public bool isBlocked;
+
 
     [Header("Open Setting")]
     [SerializeField]

@@ -32,8 +32,6 @@ public class PlayerStaminaSystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log($"Stamina: {currentStamina}");
-        Debug.Log($"Max Stamina: {maxStamina}");
         if (Input.GetKeyDown(KeyCode.Space))
         {
             UseStamina(20);
@@ -56,7 +54,6 @@ public class PlayerStaminaSystem : MonoBehaviour
         if (resetCurrStamina)
             currentStamina = maxStamina;
 
-        Debug.Log($"Set up stamina of {maxStamina} and {oldmaxStamina}");
         changeMaxStaminaEvent.Raise(this, (maxStamina, oldmaxStamina));
         changeStaminaEvent.Raise(this, (maxStamina, currentStamina));
     }

@@ -17,13 +17,8 @@ public class StaminaUIHandler : MonoBehaviour
     {
         if (data is (float maxStamina, float currentStamina) && sender is PlayerStaminaSystem staminaSystem)
         {
-            Debug.Log(staminaSlider.value);
             staminaSlider.maxValue = maxStamina;
             staminaSlider.value = currentStamina;
-        }
-        else
-        {
-            Debug.LogWarning("Stamina not set");
         }
     }
 
@@ -36,10 +31,6 @@ public class StaminaUIHandler : MonoBehaviour
             staminaBar.sizeDelta = new Vector2(newWidth, staminaBar.sizeDelta.y);
             originalWidth = newWidth;
 
-        }
-        else
-        {
-            Debug.LogWarning("Stamina to resize not set");
         }
     }
 }

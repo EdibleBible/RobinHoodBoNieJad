@@ -368,6 +368,7 @@ Transform:
   m_Children:
   - {fileID: 2642472744313898306}
   - {fileID: 871410849181897453}
+  - {fileID: 3005871868402051040}
   - {fileID: 4297344630921044351}
   - {fileID: 3545312093902355430}
   m_Father: {fileID: 3430918339214819539}
@@ -568,6 +569,9 @@ GameObject:
   - component: {fileID: 8113649257942700985}
   - component: {fileID: 3268685135292580376}
   - component: {fileID: 5214302005297228325}
+  - component: {fileID: 3221228464094827770}
+  - component: {fileID: 7694123276973396943}
+  - component: {fileID: 7095968699822764382}
   m_Layer: 0
   m_Name: Cage_enemy 1
   m_TagString: Untagged
@@ -661,8 +665,69 @@ MonoBehaviour:
       m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 524416
+      m_Bits: 2691188160
 --- !u!114 &5214302005297228325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6205452112712627132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9309d224c9bf45adb1334a2437d0119f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsEnrage: 0
+--- !u!114 &3221228464094827770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6205452112712627132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca731cec8695c0641a270307235ea3c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fieldOfViewCaster: {fileID: 3005871868402051040}
+  showFOVGizmos: 1
+--- !u!114 &7694123276973396943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6205452112712627132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b1cecad1da3414ea889d7c2d669a7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTransitioningState: 0
+  lookAroundAnimationSpeed: 1
+  fovLookAroundStat:
+    ViewRadius: 5
+    ViewAngle: 75
+    FindingDelay: 0.1
+    TargetLayer:
+      serializedVersion: 2
+      m_Bits: 262144
+    ObstacleLayer:
+      serializedVersion: 2
+      m_Bits: 524416
+  fovTriggerStat:
+    ViewRadius: 5
+    ViewAngle: 145
+    FindingDelay: 0.001
+    TargetLayer:
+      serializedVersion: 2
+      m_Bits: 262144
+    ObstacleLayer:
+      serializedVersion: 2
+      m_Bits: 524416
+--- !u!114 &7095968699822764382
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -804,6 +869,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000005813781, y: 0.019201422, z: 0.000012447126}
     m_Extent: {x: 0.0048709125, y: 0.019035986, z: 0.0048186323}
   m_DirtyAABB: 0
+--- !u!1 &7534196272399150946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3005871868402051040}
+  m_Layer: 0
+  m_Name: SkullFov
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3005871868402051040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7534196272399150946}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.6580194, z: 0, w: 0.75300103}
+  m_LocalPosition: {x: -0.00267, y: 0.00077, z: 0.00036}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8510443178036667008}
+  m_LocalEulerAnglesHint: {x: 0, y: -82.298, z: 0}
 --- !u!1 &8639488117583954611
 GameObject:
   m_ObjectHideFlags: 0
