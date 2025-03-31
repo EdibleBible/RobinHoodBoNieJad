@@ -2178,9 +2178,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4415128317858253344}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.985, y: 0.099999905, z: 1.119}
-  m_LocalScale: {x: 0.62877, y: 0.62877, z: 0.62877}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4475526144541113294}
@@ -2338,13 +2338,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: C - to destroy wall
   blockedMessage: you need hamer to destroy wall
-  doorsEvent:
+  wallEvent:
     Guid:
-      Data1: 632322657
-      Data2: 1333173212
-      Data3: -2070573669
-      Data4: -1421739515
-    Path: event:/Doors_single
+      Data1: 1366015379
+      Data2: 1100775812
+      Data3: -482328189
+      Data4: -316255454
+    Path: event:/WallDestroy
   soundSource: {fileID: 4268425584815530330}
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
