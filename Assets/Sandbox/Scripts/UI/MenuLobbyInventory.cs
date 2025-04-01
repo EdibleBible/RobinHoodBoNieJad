@@ -5,6 +5,7 @@ using UnityEngine;
 public class MenuLobbyInventory : MonoBehaviour
 {
     public SOInventory inventory;
+    public SOStats stats;
     public List<MenuLobbyInventoryEntry> entryList = new();
     public List<ItemData> itemList = new();
     public int inventoryPage;
@@ -13,7 +14,7 @@ public class MenuLobbyInventory : MonoBehaviour
     public Transform panel2;
     private int pagesCount;
     public TMP_Text pagesText;
-    public TMP_Text coinsText;
+    //public TMP_Text coinsText;
     [SerializeField] private List<ShopCellController> shopCellControllers = new();
 
     private void OnEnable()
@@ -23,7 +24,7 @@ public class MenuLobbyInventory : MonoBehaviour
         {
             ReloadInventory();
         }
-        coinsText.text = inventory.CurrInvenoryScore.ToString();
+        //coinsText.text = inventory.CurrInvenoryScore.ToString();
         pagesText.text = (inventoryPage + 1).ToString() + "/" + (pagesCount + 1).ToString();
     }
 
@@ -73,7 +74,8 @@ public class MenuLobbyInventory : MonoBehaviour
     {
         ItemData item = itemList[index];
         inventory.CurrInvenoryScore += item.ItemValue;
-        coinsText.text = inventory.CurrInvenoryScore.ToString();
+        stats.scoreTotal += (int)item.ItemValue;
+        //coinsText.text = inventory.CurrInvenoryScore.ToString();
         itemList.RemoveAt(index);
         IndexInventory();
         if (index + 1 == itemList.Count && index != 0)

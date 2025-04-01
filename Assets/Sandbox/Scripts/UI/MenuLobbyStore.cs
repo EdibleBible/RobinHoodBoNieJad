@@ -14,36 +14,24 @@ public class MenuLobbyStore : MonoBehaviour
     public Transform panel2;
     private int pagesCount;
     public TMP_Text pagesText;
-    public TMP_Text coinsText;
     public SOStats playerStats;
     public SOInventory playerInventory;
 
     [SerializeField] private List<ShopCellController> shopCellControllers = new();
-    
-    private void OnEnable()
-    {
-        IndexInventory();
-        if (itemList != null)
-        {
-            ReloadInventory();
-        }
-        coinsText.text = inventory.CurrInvenoryScore.ToString();
-        pagesText.text = (inventoryPage + 1).ToString() + "/" + (pagesCount + 1).ToString();
-    }
 
-    private void IndexInventory()
+    private void Awake()
     {
         int maxVisit = 1;
         int visit = playerStats.lobbyVisit;
-        foreach (StoreEntry entry in store.storeEntries)
+        foreach (StoreEntry entry in store.storeEntries) //Finds last visit # of an offer
         {
-            if (entry.keyVisit > maxVisit) {  maxVisit = entry.keyVisit; }
+            if (entry.keyVisit > maxVisit) { maxVisit = entry.keyVisit; }
         }
-        if (playerStats.lobbyVisit > maxVisit)
+        if (playerStats.lobbyVisit > maxVisit) //Loops the # of visit to cycle offers
         {
             visit = playerStats.lobbyVisit % maxVisit;
         }
-        foreach (StoreEntry entry in store.storeEntries)
+        foreach (StoreEntry entry in store.storeEntries)  //Finds the current looped cycle
         {
             if (entry.keyVisit == visit)
             {
@@ -52,6 +40,20 @@ public class MenuLobbyStore : MonoBehaviour
                 Destroy(newObject);
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        IndexInventory();
+        if (itemList != null)
+        {
+            ReloadInventory();
+        }
+        pagesText.text = (inventoryPage + 1).ToString() + "/" + (pagesCount + 1).ToString();
+    }
+
+    private void IndexInventory()
+    {
         itemList = store.storeItems;
         pagesCount = Mathf.FloorToInt(itemList.Count / 10);
     }
@@ -98,7 +100,7 @@ public class MenuLobbyStore : MonoBehaviour
         }
         playerInventory.AddItemToInventory(item);
         inventory.CurrInvenoryScore -= item.ItemValue;
-        coinsText.text = inventory.CurrInvenoryScore.ToString();
+        playerStats.scoreTotal += (int)item.ItemValue;
         itemList.RemoveAt(index);
         IndexInventory();
         if (index + 1 == itemList.Count && index != 0)
