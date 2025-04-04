@@ -1,98 +1,84 @@
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
-public class GameEventListenerMethodFinder : EditorWindow
+public class MethodFinderEditor : EditorWindow
 {
-    private string methodName = "";
-    private List<GameEventListener> foundListeners = new List<GameEventListener>();
-    private Dictionary<GameEventListener, List<Component>> relatedComponents = new Dictionary<GameEventListener, List<Component>>();
+    private string methodNameToFind = "";
+    private List<GameObject> foundObjects = new List<GameObject>();
 
-    [MenuItem("Tools/Find GameEvent Listeners by Method")]
+    [MenuItem("Window/Method Finder")]
     public static void ShowWindow()
     {
-        GetWindow<GameEventListenerMethodFinder>("GameEvent Listener Finder");
+        GetWindow<MethodFinderEditor>("Method Finder");
     }
 
-    private void OnGUI()
+    void OnGUI()
     {
-        GUILayout.Label("Find GameEvent Listeners by Method", EditorStyles.boldLabel);
-        methodName = EditorGUILayout.TextField("Method Name:", methodName);
+        GUILayout.Label("Find Method References in Scene", EditorStyles.boldLabel);
+        
+        methodNameToFind = EditorGUILayout.TextField("Method Name", methodNameToFind);
 
-        if (GUILayout.Button("Find Listeners") && !string.IsNullOrEmpty(methodName))
+        if (GUILayout.Button("Find References"))
         {
-            FindListenersByMethod();
+            FindMethodReferences();
         }
 
-        if (foundListeners.Count > 0)
+        GUILayout.Space(10);
+
+        if (foundObjects.Count > 0)
         {
-            GUILayout.Label("Found Listeners:", EditorStyles.boldLabel);
-            foreach (var listener in foundListeners)
+            GUILayout.Label($"Found {foundObjects.Count} GameObject(s):", EditorStyles.boldLabel);
+            foreach (var obj in foundObjects)
             {
-                EditorGUILayout.ObjectField(listener.gameObject.name, listener, typeof(GameEventListener), true);
-                if (relatedComponents.ContainsKey(listener))
+                if (GUILayout.Button(obj.name, EditorStyles.linkLabel))
                 {
-                    GUILayout.Label("Related Components:");
-                    foreach (var component in relatedComponents[listener])
+                    Selection.activeGameObject = obj;
+                }
+            }
+        }
+        else if (!string.IsNullOrEmpty(methodNameToFind))
+        {
+            GUILayout.Label("No references found.", EditorStyles.miniLabel);
+        }
+    }
+
+    void FindMethodReferences()
+    {
+        foundObjects.Clear();
+        foreach (var go in FindObjectsOfType<GameObject>(true)) // Przeszukuje wszystkie obiekty, także nieaktywne
+        {
+            foreach (var component in go.GetComponents<MonoBehaviour>())
+            {
+                if (component == null) continue;
+
+                foreach (var field in component.GetType().GetFields())
+                {
+                    if (typeof(UnityEventBase).IsAssignableFrom(field.FieldType))
                     {
-                        EditorGUILayout.ObjectField(component.gameObject.name, component, typeof(Component), true);
+                        UnityEventBase unityEvent = field.GetValue(component) as UnityEventBase;
+                        if (unityEvent != null && HasMethodReference(unityEvent, methodNameToFind))
+                        {
+                            foundObjects.Add(go);
+                        }
                     }
                 }
             }
         }
-        else if (!string.IsNullOrEmpty(methodName))
-        {
-            GUILayout.Label("No listeners found using the specified method.");
-        }
+
+        Repaint(); // Odświeża okno edytora
     }
 
-    private void FindListenersByMethod()
+    private bool HasMethodReference(UnityEventBase unityEvent, string methodName)
     {
-        foundListeners.Clear();
-        relatedComponents.Clear();
-        GameEventListener[] listeners = FindObjectsOfType<GameEventListener>();
-        
-        foreach (var listener in listeners)
+        int count = unityEvent.GetPersistentEventCount();
+        for (int i = 0; i < count; i++)
         {
-            int eventCount = listener.response.GetPersistentEventCount();
-            for (int i = 0; i < eventCount; i++)
-            {
-                Object target = listener.response.GetPersistentTarget(i);
-                string method = listener.response.GetPersistentMethodName(i);
-                
-                if (method == methodName)
-                {
-                    foundListeners.Add(listener);
-                    FindRelatedComponents(listener);
-                    break;
-                }
-            }
+            if (unityEvent.GetPersistentMethodName(i) == methodName)
+                return true;
         }
-    }
-
-    private void FindRelatedComponents(GameEventListener listener)
-    {
-        List<Component> components = new List<Component>();
-        Component[] allComponents = FindObjectsOfType<Component>();
-
-        foreach (var component in allComponents)
-        {
-            SerializedObject serializedObject = new SerializedObject(component);
-            SerializedProperty prop = serializedObject.GetIterator();
-            while (prop.NextVisible(true))
-            {
-                if (prop.propertyType == SerializedPropertyType.ObjectReference && prop.objectReferenceValue == listener.gameEvent)
-                {
-                    components.Add(component);
-                    break;
-                }
-            }
-        }
-
-        if (components.Count > 0)
-        {
-            relatedComponents[listener] = components;
-        }
+        return false;
     }
 }

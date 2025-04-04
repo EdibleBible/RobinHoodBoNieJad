@@ -2163,7 +2163,6 @@ GameObject:
   - component: {fileID: 3996706572711975471}
   - component: {fileID: 9200464065515765565}
   - component: {fileID: 5157401999714535732}
-  - component: {fileID: 4866932903440105861}
   m_Layer: 31
   m_Name: breakingWall WithMesh
   m_TagString: Untagged
@@ -2352,22 +2351,6 @@ MonoBehaviour:
   doorsModel: {fileID: 0}
   doorCollider: {fileID: 1393970277074240269}
   doorAnimator: {fileID: 9200464065515765565}
---- !u!208 &4866932903440105861
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4415128317858253344}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.1, y: 1, z: 1}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1, z: -0.5}
-  m_TimeToStationary: 0.5
 --- !u!1 &4478230278523747944
 GameObject:
   m_ObjectHideFlags: 0
@@ -4735,7 +4718,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

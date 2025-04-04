@@ -302,7 +302,6 @@ GameObject:
   - component: {fileID: 4557374751376709222}
   - component: {fileID: 1783864906644179005}
   - component: {fileID: 3904259532809305190}
-  - component: {fileID: 6528286620305427295}
   m_Layer: 31
   m_Name: Doors
   m_TagString: Untagged
@@ -439,22 +438,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.096513316, y: 1.8097156, z: 0.61207765}
   m_Center: {x: 0.038954765, y: 0.90524524, z: 0.0013602376}
---- !u!208 &6528286620305427295
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3779888550490983644}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.3, y: 0.5, z: 0.75}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &4317476360769838413
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,7 +624,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -892,7 +875,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

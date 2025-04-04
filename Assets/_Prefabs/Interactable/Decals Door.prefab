@@ -100,7 +100,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -237,7 +237,6 @@ GameObject:
   - component: {fileID: 8091605466015259210}
   - component: {fileID: 6579972088661490464}
   - component: {fileID: 686638623980344768}
-  - component: {fileID: 8555007290264268930}
   m_Layer: 31
   m_Name: Decals Door
   m_TagString: Untagged
@@ -387,7 +386,7 @@ MonoBehaviour:
   leverCount: 5
   CorrectLeverCount: 4
   leverSpawnGap: 0.2
-  leverSpawnOffset: {x: 0.06, y: 1.1, z: -0.4}
+  leverSpawnOffset: {x: 0.2, y: 1.1, z: -0.4}
   leverSize: {x: 0.4, y: 0.4, z: 0.4}
   leverDecalPrefab: {fileID: 2631412033356855321, guid: c0237ecceccbbcf4b8483c24ad5cb1a6,
     type: 3}
@@ -407,22 +406,6 @@ MonoBehaviour:
   randomUpDownSpawnRange: 0.65
   randomRightLeftSpawnRange: 0.4
   spawnDirection: 2
---- !u!208 &8555007290264268930
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7164111713143576039}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.3, y: 0.5, z: 0.75}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &7344642858870048952
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,7 +506,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
