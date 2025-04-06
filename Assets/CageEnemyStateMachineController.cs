@@ -40,7 +40,6 @@ public class CageEnemyStateMachineController : StateManager<E_CageEnemyState>
 
     public override void Update()
     {
-        Debug.Log(currentState);
         E_CageEnemyState nextStateKey = currentState.GetNextState();
         if (!isTransitioningState && nextStateKey.Equals(currentState.stateKey))
         {

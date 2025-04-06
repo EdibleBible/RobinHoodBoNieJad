@@ -61,13 +61,11 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
 
     private void OnReachDestination()
     {
-        Debug.Log("Reach destination");
         movement.StartLookingAround(movementStats.LookingAroundTime);
     }
 
     private void OnStopLookingAround()
     {
-        Debug.Log("Stop looking around");
         movement.GoToNextPoint();
     }
 

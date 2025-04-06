@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4335326924907233329}
   - component: {fileID: 3605337816437439591}
   - component: {fileID: 695983046423425064}
+  - component: {fileID: 2167099313177096859}
   m_Layer: 0
   m_Name: Pressure_Plate_button
   m_TagString: Untagged
@@ -109,18 +110,18 @@ MonoBehaviour:
   twoSidesInteraction: 1
   pressSoundEvent:
     Guid:
-      Data1: 1240555235
-      Data2: 1131719540
-      Data3: -1011865682
-      Data4: -902833222
-    Path: event:/Doors_single 2
+      Data1: -1724590152
+      Data2: 1122559523
+      Data3: 1130654897
+      Data4: 1361157437
+    Path: event:/PressurePlate
   releaseSoundEvent:
     Guid:
-      Data1: 1240555235
-      Data2: 1131719540
-      Data3: -1011865682
-      Data4: -902833222
-    Path: event:/Doors_single 2
+      Data1: -1724590152
+      Data2: 1122559523
+      Data3: 1130654897
+      Data4: 1361157437
+    Path: event:/PressurePlate
   soundSource: {fileID: 6166950390000104176}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
 --- !u!64 &3605337816437439591
@@ -142,7 +143,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5424736570415231434, guid: e0a719bc146861e4f84bbdfaf1b47f03, type: 3}
 --- !u!135 &695983046423425064
@@ -160,12 +161,39 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.23760931
-  m_Center: {x: 0, y: -0.07, z: 0}
+  m_Radius: 0.26861238
+  m_Center: {x: 0, y: -0.038996927, z: 0}
+--- !u!54 &2167099313177096859
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849135116915464613}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1405024164261580307
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +218,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1405024164261580307}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.959, y: 0.133, z: 5.123}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

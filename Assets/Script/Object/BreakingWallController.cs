@@ -20,7 +20,7 @@ public class BreakingWallController : MonoBehaviour, IInteractable
     }
 
     public string blockedMessage;
-    public bool IsUsed { get; set; }
+    public bool IsUsed { get; set; } = false;
 
     [Header("FMOD")] public EventReference wallEvent;
     public Transform soundSource;
@@ -51,11 +51,9 @@ public class BreakingWallController : MonoBehaviour, IInteractable
         {
             return;
         }
-
         PlayerBase playerBase = player.GetComponent<PlayerBase>();
         if (playerBase.PlayerInventory.ItemsInInventory.Any(x => x.ItemType == ItemType.Hammer))
         {
-            Debug.Log("used ");
 
             PlayWallSound();
             PlayWallAnimation();
@@ -66,12 +64,13 @@ public class BreakingWallController : MonoBehaviour, IInteractable
         else
         {
             ShowUIEvent.Raise(this, (true, BlockedMessage, true));
-            Debug.Log("cant use hammer");
         }
     }
 
     public virtual void ShowUI()
     {
+        if(IsUsed)
+            return;
         ShowUIEvent.Raise(this, (true, InteractMessage, false));
     }
 
@@ -82,22 +81,22 @@ public class BreakingWallController : MonoBehaviour, IInteractable
 
     public void PlayWallSound(float volume = 0.2f)
     {
-        // Jeœli istnieje instancja dŸwiêku, zatrzymaj j¹ przed stworzeniem nowej
+        // Jeï¿½li istnieje instancja dï¿½wiï¿½ku, zatrzymaj jï¿½ przed stworzeniem nowej
         if (BreakSound.isValid())
         {
             BreakSound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             BreakSound.release();
         }
 
-        // Tworzenie nowej instancji dŸwiêku
+        // Tworzenie nowej instancji dï¿½wiï¿½ku
         BreakSound = FMODUnity.RuntimeManager.CreateInstance(wallEvent);
 
-        // Ustawienie g³oœnoœci
+        // Ustawienie gï¿½oï¿½noï¿½ci
         BreakSound.setVolume(volume);
 
         BreakSound.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject.transform));
 
-        // Uruchomienie dŸwiêku
+        // Uruchomienie dï¿½wiï¿½ku
         BreakSound.start();
         BreakSound.release();
     }

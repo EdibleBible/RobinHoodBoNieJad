@@ -74,6 +74,10 @@ public class ItemBase : MonoBehaviour, IInteractable
             {
                 playerBase.ResetInventory();
             }
+            if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Stamina))
+            {
+                playerBase.ResetStamina();
+            }
             IsUsed = true;
             Destroy(gameObject);
         }
@@ -165,11 +169,18 @@ public enum ItemType
     CollectibleBox,
 
 
-    //Useable
+    //Usable
     Key,
     Hammer,
     SteelShoes,
     FastShoes,
     Forklift,
-    Potion
+    Potion,
+    Unused1,
+    Unused2,
+    Unused3,
+    Unused4,
+    Unused5,
+    Unused6,
+    MoneyBag //Unusable
 }

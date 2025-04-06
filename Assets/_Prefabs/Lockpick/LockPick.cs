@@ -2,15 +2,18 @@
 
 public class LockPick : MonoBehaviour
 {
-    [SerializeField] private Canvas screenCoverCanvas;
-    [HideInInspector] public Camera cam;
+    [SerializeField]
+    private Canvas screenCoverCanvas;
+    [HideInInspector]
+    public Camera cam;
     public Transform innerLock;
     public Transform pickPosition;
 
     public float maxAngle = 90;
     public float lockSpeed = 10;
 
-    [Range(1, 25)] public float lockRange = 10;
+    [Range(1, 25)]
+    public float lockRange = 10;
     public float sensitivity = 2;
 
     private float eulerAngle;
@@ -23,7 +26,8 @@ public class LockPick : MonoBehaviour
 
     private ILockPick objectToLockPick = null;
     private PlayerStateMachineController playerStateMachine;
-    [SerializeField] private KeyCode rotateButton;
+    [SerializeField]
+    private KeyCode rotateButton;
 
     void Start()
     {
@@ -39,16 +43,19 @@ public class LockPick : MonoBehaviour
 
     void Update()
     {
-        transform.position = pickPosition.position;
+        if (cam == null)
+            return;
 
+        transform.localPosition = pickPosition.localPosition;
         if (movePick)
         {
+            Vector3 right = cam.transform.right;
             float mouseDelta = Input.GetAxis("Mouse X") * sensitivity;
-            eulerAngle += mouseDelta;
+            eulerAngle += mouseDelta * Mathf.Sign(Vector3.Dot(right, -cam.transform.right));
             eulerAngle = Mathf.Clamp(eulerAngle, -maxAngle, maxAngle);
 
             Quaternion rotateTo = Quaternion.AngleAxis(eulerAngle, Vector3.forward);
-            transform.rotation = rotateTo;
+            transform.localRotation = rotateTo;
         }
 
         if (Input.GetKeyDown(rotateButton))
@@ -87,7 +94,7 @@ public class LockPick : MonoBehaviour
             }
         }
     }
-    
+
     public void SetObjectToLockPick(ILockPick objectToLockPick)
     {
         this.objectToLockPick = objectToLockPick;

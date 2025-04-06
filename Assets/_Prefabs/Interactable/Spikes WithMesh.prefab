@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 2045519627051464627}
   - component: {fileID: 2921395871604747844}
   - component: {fileID: 2488061579794834783}
+  - component: {fileID: 8251456168879774}
   m_Layer: 0
   m_Name: Spikes WithMesh
   m_TagString: Untagged
@@ -193,6 +194,20 @@ MonoBehaviour:
   extendDuration: 0.5
   retractDuration: 0.7
   delayBetweenCycles: 3
+  spikeUpSound:
+    Guid:
+      Data1: -302134566
+      Data2: 1122895960
+      Data3: 121805243
+      Data4: 481836600
+    Path: event:/SpikesUp
+  spikeDownSound:
+    Guid:
+      Data1: 760136040
+      Data2: 1245361632
+      Data3: 1644185272
+      Data4: -1628948219
+    Path: event:/SpikesDown
 --- !u!54 &2488061579794834783
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -220,6 +235,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!208 &8251456168879774
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147923249885614035}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 0.1, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.07, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7726996655464169314
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +296,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -374,7 +405,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

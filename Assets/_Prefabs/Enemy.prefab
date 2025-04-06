@@ -677,10 +677,12 @@ GameObject:
   - component: {fileID: 8524611368905361129}
   - component: {fileID: 6677410963108605311}
   - component: {fileID: 2869906792892896835}
+  - component: {fileID: -4688763643345713134}
+  - component: {fileID: 4731252628123211844}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -694,7 +696,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.07, y: 0.85, z: -1.27}
-  m_LocalScale: {x: 0.75000006, y: 0.75000006, z: 0.75000006}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 959190293348684288}
@@ -712,8 +714,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b2677dc92849849a8b410ffc612321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 6257333795837363401}
-  currWalkPosition: {x: 0, y: 0, z: 0}
+  Agent: {fileID: 6257333795837363401}
+  AnimationController: {fileID: 8524611368905361129}
+  RandomPatroll: 1
+  Waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  CurrentWaypoint: 0
 --- !u!114 &5533938673021600224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727,6 +739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fieldOfViewCaster: {fileID: 3282493892773456200}
+  showFOVGizmos: 1
 --- !u!114 &7996228261843818391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -741,53 +754,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTransitioningState: 0
   findingPointDistance: 1
-  idleStats:
-    MaxSpeed: 0
-    Acceleration: 0
-    AngularSpeed: 0
-    DelayBettwenDistanceCheck: 0
-    StoppingDistance: 0
-    ChangeDestinationPointDistance: 0
-  patrollingStats:
-    MaxPatrolPoints: 5
-    PatrolPoints: []
-    PatrolTransforms:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    MinDistanceBetweenPatrolPoints: 3
-    MaxDistanceBetweenPatrolPoints: 10
-    RandomPointPatroll: 0
-    UseCreatedPath: 1
-    LoopPatrolPoints: 0
-  patrollingMoveStats:
+  maxNavMeshCheckDistance: 5
+  patrollingMovementStats:
     MaxSpeed: 2
     Acceleration: 1
     AngularSpeed: 720
-    DelayBettwenDistanceCheck: 1
     StoppingDistance: 0.5
-    ChangeDestinationPointDistance: 0.5
-  fovPatrollingState:
-    ViewRadius: 5
+    LookingAroundTime: 5
+  patrollingFovStats:
+    ViewRadius: 2
     ViewAngle: 75
-    FindingDelay: 0.4
+    FindingDelay: 0.5
     TargetLayer:
       serializedVersion: 2
       m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 524288
-  chasingStats:
-    MaxSpeed: 2.5
-    Acceleration: 1.3
+      m_Bits: 2691188160
+  chasingMovementStats:
+    MaxSpeed: 3
+    Acceleration: 1
     AngularSpeed: 720
-    DelayBettwenDistanceCheck: 0.1
     StoppingDistance: 0.1
-    ChangeDestinationPointDistance: 0.1
-  fovChaseState:
-    ViewRadius: 8
+    LookingAroundTime: 7
+  chasingFovStats:
+    ViewRadius: 2
     ViewAngle: 360
     FindingDelay: 0.1
     TargetLayer:
@@ -795,8 +786,27 @@ MonoBehaviour:
       m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 0
-  maxNavMeshCheckDistance: 5
+      m_Bits: 2691188160
+  alarmedMovementStats:
+    MaxSpeed: 4
+    Acceleration: 1
+    AngularSpeed: 720
+    StoppingDistance: 0.2
+    LookingAroundTime: 3
+  alarmedFovStats:
+    ViewRadius: 2
+    ViewAngle: 75
+    FindingDelay: 0.3
+    TargetLayer:
+      serializedVersion: 2
+      m_Bits: 262144
+    ObstacleLayer:
+      serializedVersion: 2
+      m_Bits: 2691188160
+  alarmedStateStats:
+    IsAlarmed: 0
+    AlarmedPosition: {x: 0, y: 0, z: 0}
+    SmallPatrollCounter: 5
 --- !u!195 &6257333795837363401
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -805,9 +815,9 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5952023668469632104}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: -334000983
   m_Radius: 0.3
-  m_Speed: 0.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 80
@@ -897,16 +907,49 @@ MonoBehaviour:
       Data4: 328040256
     Path: event:/Enemy/EnemyBreathe
   Event: 
-  EventPlayTrigger: 0
+  EventPlayTrigger: 1
   EventStopTrigger: 0
-  AllowFadeout: 1
+  AllowFadeout: 0
   TriggerOnce: 0
   Preload: 0
   NonRigidbodyVelocity: 0
   Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  OverrideAttenuation: 1
+  OverrideMinDistance: 3
+  OverrideMaxDistance: 7
+--- !u!114 &-4688763643345713134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5952023668469632104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797693d40706fee4ebf53d4761fe634c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4731252628123211844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5952023668469632104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d63616086bee04db51e3093d27d960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySound:
+    Guid:
+      Data1: 370836881
+      Data2: 1124376184
+      Data3: -710971980
+      Data4: 130863477
+    Path: event:/Enemy/EnemySound
+  minDelay: 1
+  maxDelay: 4
 --- !u!1 &6065041032441795194
 GameObject:
   m_ObjectHideFlags: 0

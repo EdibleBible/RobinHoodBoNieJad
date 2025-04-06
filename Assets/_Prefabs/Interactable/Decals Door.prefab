@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8292389786832624829}
   - component: {fileID: 9152314385484637974}
   - component: {fileID: 1991288198799950956}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Doors_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3587571017834502265}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 1101143666441658562}
   - component: {fileID: 4975220375517910034}
   - component: {fileID: 1576921407839572196}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,9 +252,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7164111713143576039}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.57424116, y: -0.501, z: 0.005}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3587571017834502265}
@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   twoSideInteraction: 0
+  isBlocked: 0
   openTime: 1
   openCurve:
     serializedVersion: 2
@@ -375,14 +376,17 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
-  detectWallSize: {x: 0.45, y: 1, z: 0.2}
-  detectWallCenter: {x: 0, y: 0.65, z: 0}
+  wallDecalLayer:
+    serializedVersion: 2
+    m_Bits: 536870912
+  detectWallSize: {x: 1, y: 1, z: 3}
+  detectWallCenter: {x: 0, y: 0.5, z: 0}
   leverPrefab: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
     type: 3}
   leverCount: 5
   CorrectLeverCount: 4
   leverSpawnGap: 0.2
-  leverSpawnOffset: {x: 0.06, y: 1.1, z: -0.4}
+  leverSpawnOffset: {x: 0.2, y: 1.1, z: -0.4}
   leverSize: {x: 0.4, y: 0.4, z: 0.4}
   leverDecalPrefab: {fileID: 2631412033356855321, guid: c0237ecceccbbcf4b8483c24ad5cb1a6,
     type: 3}
@@ -399,7 +403,7 @@ MonoBehaviour:
   leverDecalSize: {x: 0.7, y: 0.7, z: 0.7}
   wallDecalOffset: {x: 0.1, y: 1, z: 0}
   wallDistanceDecal: 0.05
-  randomUpDownSpawnRange: 0.75
+  randomUpDownSpawnRange: 0.65
   randomRightLeftSpawnRange: 0.4
   spawnDirection: 2
 --- !u!1 &7344642858870048952
@@ -414,7 +418,7 @@ GameObject:
   - component: {fileID: 985094943622320484}
   - component: {fileID: 5852319780610055143}
   - component: {fileID: 3471259245224733684}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Doors_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -502,7 +506,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -521,7 +525,7 @@ GameObject:
   - component: {fileID: 7108855322055485117}
   - component: {fileID: 1483593013052827883}
   - component: {fileID: 8748563166708896903}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: doors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -536,7 +540,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8121211099832234575}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.154, y: 0, z: -0.002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -544,7 +548,7 @@ Transform:
   - {fileID: 986765277397248215}
   - {fileID: 3888172159407110220}
   m_Father: {fileID: 3587571017834502265}
-  m_LocalEulerAnglesHint: {x: -9000, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1483593013052827883
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -606,6 +610,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8091605466015259210}
     m_Modifications:
+    - target: {fileID: 15176582071293857, guid: cf016b1bcadd75f4a8a22996868502fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 176812873095697685, guid: cf016b1bcadd75f4a8a22996868502fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     - target: {fileID: 6104967500014366283, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -656,10 +670,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6623128284814306099, guid: cf016b1bcadd75f4a8a22996868502fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     - target: {fileID: 6913838190866035953, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
       propertyPath: m_Name
       value: Doors_columns Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6913838190866035953, guid: cf016b1bcadd75f4a8a22996868502fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

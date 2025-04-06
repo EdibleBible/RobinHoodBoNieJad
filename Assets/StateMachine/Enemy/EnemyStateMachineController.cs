@@ -83,8 +83,6 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
             if (Physics.Raycast(ray, out RaycastHit hit)) // Sprawdza, czy promień trafił w coś
             {
                 var HitPoint = hit.point; // Zapisuje pozycję trafienia
-                Debug.Log($"Trafienie w: {HitPoint}");
-
                 alarmedStateStats.IsAlarmed = true;
                 alarmedStateStats.AlarmedPosition = HitPoint;
             }

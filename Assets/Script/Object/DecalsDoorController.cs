@@ -10,32 +10,52 @@ using Random = UnityEngine.Random;
 
 public class DecalsDoorController : DoorController
 {
-    [SerializeField] private bool addWallOnAwake = false;
-    [SerializeField] private LayerMask wallLayer;
+    [SerializeField]
+    private bool addWallOnAwake = false;
+    [SerializeField]
+    private LayerMask wallLayer;
+    [SerializeField]
+    private LayerMask wallDecalLayer;
 
     private List<Transform> doorsSideWalls = new List<Transform>();
-    [SerializeField] private Vector3 detectWallSize = new Vector3(0.5f, 0.5f, 0.5f);
+    [SerializeField]
+    private Vector3 detectWallSize = new Vector3(0.5f, 0.5f, 0.5f);
     private Vector3 detectWallSizeCollider;
-    [SerializeField] private Vector3 detectWallCenter = new Vector3(0.5f, 0.5f, 0.5f);
+    [SerializeField]
+    private Vector3 detectWallCenter = new Vector3(0.5f, 0.5f, 0.5f);
 
-    [SerializeField] private GameObject leverPrefab;
-    [SerializeField] private int leverCount;
-    [SerializeField] private int CorrectLeverCount;
-    [SerializeField] private float leverSpawnGap;
-    [SerializeField] private Vector3 leverSpawnOffset;
-    [SerializeField] private Vector3 leverSize;
+    [SerializeField]
+    private GameObject leverPrefab;
+    [SerializeField]
+    private int leverCount;
+    [SerializeField]
+    private int CorrectLeverCount;
+    [SerializeField]
+    private float leverSpawnGap;
+    [SerializeField]
+    private Vector3 leverSpawnOffset;
+    [SerializeField]
+    private Vector3 leverSize;
 
     private Dictionary<IInteractable, (Material material, bool isActive)> spawnedLevers
         = new Dictionary<IInteractable, (Material, bool)>();
 
-    [SerializeField] private GameObject leverDecalPrefab;
-    [SerializeField] private List<Material> leverDecalSprite = new List<Material>();
-    [SerializeField] private Vector3 leverDecalOffset;
-    [SerializeField] private Vector3 leverDecalSize;
-    [SerializeField] private Vector3 wallDecalOffset;
-    [SerializeField] private float wallDistanceDecal;
-    [SerializeField] private float randomUpDownSpawnRange;
-    [SerializeField] private float randomRightLeftSpawnRange;
+    [SerializeField]
+    private GameObject leverDecalPrefab;
+    [SerializeField]
+    private List<Material> leverDecalSprite = new List<Material>();
+    [SerializeField]
+    private Vector3 leverDecalOffset;
+    [SerializeField]
+    private Vector3 leverDecalSize;
+    [SerializeField]
+    private Vector3 wallDecalOffset;
+    [SerializeField]
+    private float wallDistanceDecal;
+    [SerializeField]
+    private float randomUpDownSpawnRange;
+    [SerializeField]
+    private float randomRightLeftSpawnRange;
     private List<Transform> allWalls = new List<Transform>();
 
     public enum LeverSpawnDirection
@@ -47,16 +67,15 @@ public class DecalsDoorController : DoorController
         WallUp
     }
 
-    [SerializeField] private LeverSpawnDirection spawnDirection;
+    [SerializeField]
+    private LeverSpawnDirection spawnDirection;
 
     private void Awake()
     {
-        Debug.Log("Awake started - Initializing the puzzle");
         DetectSideWalls();
 
         if (!addWallOnAwake)
         {
-            Debug.Log("addWallOnAwake is false, skipping wall detection");
             return;
         }
 
@@ -64,20 +83,19 @@ public class DecalsDoorController : DoorController
 
         foreach (GameObject obj in FindObjectsOfType<GameObject>())
         {
-            if ((wallLayer.value & (1 << obj.layer)) != 0)
+            if (((1 << obj.layer) & wallDecalLayer.value) !=
+                0) // Sprawdza czy obiekt ma warstwę pasującą do wallDecalLayer
             {
                 allWalls.Add(obj.transform);
             }
         }
 
-        Debug.Log($"Total walls detected: {allWalls.Count}");
 
         for (int i = 0; i < doorsSideWalls.Count; i++)
         {
             allWalls.Remove(doorsSideWalls[i]);
         }
 
-        Debug.Log($"Remaining walls after removing door-side walls: {allWalls.Count}");
 
         SpawnLever();
         SelectRandomLevers(CorrectLeverCount);
@@ -85,34 +103,53 @@ public class DecalsDoorController : DoorController
         SpawnCorrectDecals();
     }
 
+    private void OnValidate()
+    {
+        if (!Application.isPlaying)
+        {
+            RefreshAllWalls();
+        }
+    }
+
+    private void RefreshAllWalls()
+    {
+        allWalls.Clear();
+
+        foreach (GameObject obj in FindObjectsOfType<GameObject>())
+        {
+            if (((1 << obj.layer) & wallDecalLayer.value) !=
+                0) // Sprawdza czy obiekt ma warstwę pasującą do wallDecalLayer
+            {
+                allWalls.Add(obj.transform);
+            }
+        }
+
+        foreach (var sideWall in doorsSideWalls)
+        {
+            allWalls.Remove(sideWall);
+        }
+    }
+
+
     public void DetectSideWalls()
     {
-        Debug.Log("Detecting side walls...");
-
         // Obliczamy połowę rozmiaru pudełka – wymagany parametr dla Physics.OverlapBox
         Vector3 halfExtents = detectWallSize * 0.5f;
 
         // Używamy rotacji obiektu, aby pudełko obracało się razem z nim
-        Collider[] colliders = Physics.OverlapBox(transform.position + detectWallCenter, halfExtents, transform.rotation, wallLayer);
+        Collider[] colliders = Physics.OverlapBox(transform.position + detectWallCenter, halfExtents,
+            transform.rotation, wallLayer);
 
         foreach (Collider col in colliders)
         {
-            // Jeśli rotacja ściany pasuje do rotacji obiektu, dodajemy ją do listy
-            if (col.transform.rotation == transform.rotation)
-            {
-                doorsSideWalls.Add(col.transform);
-            }
+            doorsSideWalls.Add(col.transform);
         }
-
-        Debug.Log($"Total side walls detected: {doorsSideWalls.Count}");
     }
 
     public void SpawnLever()
     {
-        Debug.Log("Spawning levers...");
         if (doorsSideWalls.Count == 0 || leverDecalSprite.Count < leverCount)
         {
-            Debug.LogError($"Not enough walls or decals to spawn levers {doorsSideWalls.Count} detected and {leverDecalSprite.Count} detected");
             return;
         }
 
@@ -140,18 +177,13 @@ public class DecalsDoorController : DoorController
             availableIndices.Remove(randomIndex);
             leverDecalObj.GetComponent<DecalProjector>().material = leverDecalSprite[randomIndex];
             spawnedLevers.Add(leverObj.GetComponent<IInteractable>(), (leverDecalSprite[randomIndex], false));
-
-            Debug.Log(
-                $"Lever {i} spawned at {leverObj.transform.position} with decal {leverDecalSprite[randomIndex].name}");
         }
     }
 
     void SelectRandomLevers(int count)
     {
-        Debug.Log($"Selecting {count} correct levers...");
         if (spawnedLevers.Count < count)
         {
-            Debug.LogError("Not enough levers to select the correct ones");
             return;
         }
 
@@ -168,35 +200,28 @@ public class DecalsDoorController : DoorController
             spawnedLevers[selectedLever] = copy;
             selectedLevers.Add(selectedLever);
             availableLevers.RemoveAt(randomIndex);
-
-            Debug.Log($"Lever {selectedLever} set as a correct one");
         }
     }
 
     bool CheckIfCorrectLeversUsed()
     {
-        Debug.Log("Checking if correct levers were used...");
         foreach (var kvp in spawnedLevers)
         {
             IInteractable lever = kvp.Key;
             bool isActive = kvp.Value.isActive;
 
-            Debug.Log($"Checking lever {lever} - Active: {isActive}, Used: {lever.IsUsed}");
 
             if (isActive && !lever.IsUsed)
             {
-                Debug.LogWarning("A required lever was not used!");
                 return false;
             }
 
             if (!isActive && lever.IsUsed)
             {
-                Debug.LogWarning("An incorrect lever was used!");
                 return false;
             }
         }
 
-        Debug.Log("All levers were used correctly!");
         return true;
     }
 
@@ -219,13 +244,34 @@ public class DecalsDoorController : DoorController
         Vector3 halfExtents = detectWallSize * 0.5f;
 
         // Ustawiamy macierz transformacji dla gizmo, aby rysować z odpowiednią pozycją i rotacją
-        Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position + detectWallCenter, transform.rotation, Vector3.one);
+        Matrix4x4 rotationMatrix =
+            Matrix4x4.TRS(transform.position + detectWallCenter, transform.rotation, Vector3.one);
         Gizmos.matrix = rotationMatrix;
 
         Gizmos.color = Color.red;
         // Rysujemy pudełko – tutaj podajemy pełny rozmiar, bo Gizmos.DrawWireCube oczekuje rozmiaru pudełka, nie half extents
         Gizmos.DrawWireCube(Vector3.zero, detectWallSize);
+        Gizmos.matrix = Matrix4x4.identity;
+
+        Gizmos.color = Color.green;
+        foreach (var wall in allWalls)
+        {
+            // Obliczenie pozycji decalu z offsetem
+            Vector3 decalPosition = wall.position + wall.rotation * wallDecalOffset;
+
+            // Zastosowanie macierzy transformacji (obrót i przesunięcie dla Gizmo)
+            rotationMatrix = Matrix4x4.TRS(decalPosition, wall.rotation, Vector3.one);
+            Gizmos.matrix = rotationMatrix;
+
+            // Rysowanie Gizmo z rotacją ściany
+            Gizmos.DrawWireCube(Vector3.zero,
+                new Vector3(0, randomUpDownSpawnRange * 2, randomRightLeftSpawnRange * 2));
+        }
+
+        // Resetowanie macierzy, żeby inne Gizmo nie były obrócone
+        Gizmos.matrix = Matrix4x4.identity;
     }
+
 
     public override void Interact(Transform player)
     {

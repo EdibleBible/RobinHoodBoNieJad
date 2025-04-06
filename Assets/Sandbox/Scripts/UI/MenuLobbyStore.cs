@@ -7,17 +7,41 @@ public class MenuLobbyStore : MonoBehaviour
     public SOStore store;
     public SOInventory inventory;
     public List<MenuLobbyStoreEntry> entryList = new();
-    public List<ItemModifier> itemList = new();
+    public List<ItemData> itemList = new();
     public int inventoryPage;
     public GameObject entryPrefab;
     public Transform panel1;
     public Transform panel2;
     private int pagesCount;
     public TMP_Text pagesText;
-    public TMP_Text coinsText;
+    public SOStats playerStats;
+    public SOInventory playerInventory;
 
     [SerializeField] private List<ShopCellController> shopCellControllers = new();
-    
+
+    private void Awake()
+    {
+        int maxVisit = 1;
+        int visit = playerStats.lobbyVisit;
+        foreach (StoreEntry entry in store.storeEntries) //Finds last visit # of an offer
+        {
+            if (entry.keyVisit > maxVisit) { maxVisit = entry.keyVisit; }
+        }
+        if (playerStats.lobbyVisit > maxVisit) //Loops the # of visit to cycle offers
+        {
+            visit = playerStats.lobbyVisit % maxVisit;
+        }
+        foreach (StoreEntry entry in store.storeEntries)  //Finds the current looped cycle
+        {
+            if (entry.keyVisit == visit)
+            {
+                GameObject newObject = Instantiate(entry.itemPrefab);
+                store.storeItems.Add(newObject.GetComponent<ItemBase>().ItemData);
+                Destroy(newObject);
+            }
+        }
+    }
+
     private void OnEnable()
     {
         IndexInventory();
@@ -25,7 +49,6 @@ public class MenuLobbyStore : MonoBehaviour
         {
             ReloadInventory();
         }
-        coinsText.text = inventory.CurrInvenoryScore.ToString();
         pagesText.text = (inventoryPage + 1).ToString() + "/" + (pagesCount + 1).ToString();
     }
 
@@ -69,18 +92,15 @@ public class MenuLobbyStore : MonoBehaviour
 
     public void Buy(int index)
     {
-        ItemModifier item = itemList[index];
-        if (inventory.CurrInvenoryScore < item.Value)
+        ItemData item = itemList[index];
+        if (inventory.CurrInvenoryScore < item.ItemValue)
         {
             Debug.Log("d0pa");
             return;
         }
-        inventory.CurrInvenoryScore -= item.Value;
-        coinsText.text = inventory.CurrInvenoryScore.ToString();
-        if (item.playerInventorySize > 0)
-        {
-            inventory.CurrInventorySize += item.playerInventorySize;
-        }
+        playerInventory.AddItemToInventory(item);
+        inventory.CurrInvenoryScore -= item.ItemValue;
+        playerStats.scoreTotal += (int)item.ItemValue;
         itemList.RemoveAt(index);
         IndexInventory();
         if (index + 1 == itemList.Count && index != 0)

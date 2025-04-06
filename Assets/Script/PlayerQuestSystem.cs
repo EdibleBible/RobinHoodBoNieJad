@@ -46,4 +46,9 @@ public class PlayerQuestSystem : MonoBehaviour
             }
         }
     }
+
+    public bool IsQuestComplete()
+    {
+        return playerCurrentQuests.RequireItems.All(item => item.Value.CurrentAmount >= item.Value.RequiredAmount);
+    }
 }

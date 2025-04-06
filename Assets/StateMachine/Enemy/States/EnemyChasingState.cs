@@ -71,6 +71,10 @@ public class EnemyChasingState : BaseState<E_EnemyState>
 
     public override void OnTriggerEnterState(Collider other)
     {
+        if (other.TryGetComponent(out GameoverController gameOver))
+        {
+            gameOver.LoseGame();
+        }
     }
 
     public override void OnTriggerStayState(Collider other)
