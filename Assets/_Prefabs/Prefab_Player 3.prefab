@@ -3137,6 +3137,7 @@ GameObject:
   - component: {fileID: 8251187775975614695}
   - component: {fileID: 904172345308137541}
   - component: {fileID: 2853485081122743952}
+  - component: {fileID: -7925518734325822260}
   m_Layer: 18
   m_Name: Prefab_Player 3
   m_TagString: Player
@@ -3439,7 +3440,9 @@ MonoBehaviour:
       Data3: 1520931752
       Data4: 1705262199
     Path: event:/Player/PlayerCrouch
-  stepCooldown: 0.3
+  walkStepCooldown: 0.2
+  runStepCooldown: 0.2
+  crouchStepCooldown: 0.2
 --- !u!114 &5035666294450861521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3595,6 +3598,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.18883842, y: 0.08143272, z: 0.18504003}
   m_Center: {x: 0.004525866, y: -0.32178062, z: 0.003919623}
+--- !u!114 &-7925518734325822260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7201175182104095283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &7240092849718364260
 GameObject:
   m_ObjectHideFlags: 0

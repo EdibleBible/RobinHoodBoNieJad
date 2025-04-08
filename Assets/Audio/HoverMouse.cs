@@ -2,23 +2,37 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using FMODUnity;
 using FMOD.Studio;
+using System;
 
 public class HoverMouse : MonoBehaviour, IPointerEnterHandler
 {
     [SerializeField] private string hoverEvent = "event:/MouseUIHover";
-    private EventInstance hoverInstance;
-
-    // Globalna referencja do ostatniego dŸwiêku
     private static EventInstance lastHoverInstance;
+    private static bool isHoverSoundPlaying = false;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        StopLastHoverSound(); // Zatrzymuje poprzedni dŸwiêk przed nowym
+        if (isHoverSoundPlaying || string.IsNullOrEmpty(hoverEvent)) return;
 
-        hoverInstance = RuntimeManager.CreateInstance(hoverEvent);
-        hoverInstance.start();
+        lastHoverInstance = RuntimeManager.CreateInstance(hoverEvent);
+        lastHoverInstance.start();
+        lastHoverInstance.release(); // auto-cleanup
+        isHoverSoundPlaying = true;
 
-        lastHoverInstance = hoverInstance; // Ustawiamy nowy dŸwiêk jako aktywny
+        lastHoverInstance.setCallback((FMOD.Studio.EVENT_CALLBACK_TYPE type, IntPtr inst, IntPtr param) =>
+        {
+            if (type == FMOD.Studio.EVENT_CALLBACK_TYPE.STOPPED)
+            {
+                isHoverSoundPlaying = false;
+            }
+
+            return FMOD.RESULT.OK;
+        });
+    }
+
+    public static void OnSceneChange()
+    {
+        StopLastHoverSound();
     }
 
     private static void StopLastHoverSound()
@@ -27,11 +41,7 @@ public class HoverMouse : MonoBehaviour, IPointerEnterHandler
         {
             lastHoverInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
             lastHoverInstance.release();
+            isHoverSoundPlaying = false;
         }
-    }
-
-    public static void OnSceneChange()
-    {
-        StopLastHoverSound(); // Zatrzymuje dŸwiêk przy przejœciu na inny canvas
     }
 }

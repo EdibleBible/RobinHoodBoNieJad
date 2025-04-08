@@ -22,9 +22,16 @@ public class MusicManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        // W razie gdyby scena Lobby by³a uruchamiana jako pierwsza
+        Scene currentScene = SceneManager.GetActiveScene();
+        HandleSceneMusic(currentScene.name);
+    }
+
     void StartMusic()
     {
-        if (!musicInstance.isValid()) // Unikamy podwójnego uruchamiania
+        if (!musicInstance.isValid())
         {
             musicInstance = RuntimeManager.CreateInstance("event:/MusicLobby");
             musicInstance.start();
@@ -42,22 +49,18 @@ public class MusicManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "MainMenu")
-        {
-            StopMusic(); // Wy³¹cz muzykê w MainMenu
-        }
-        else if (scene.name == "Lobby")
-        {
-            StartMusic(); // W³¹cz muzykê w Lobby
-        }
+        HandleSceneMusic(scene.name);
+    }
 
-        if (scene.name == "Diorama")
+    void HandleSceneMusic(string sceneName)
+    {
+        if (sceneName == "Lobby")
         {
-            StopMusic(); // Wy³¹cz muzykê w MainMenu
+            StartMusic();
         }
-        else if (scene.name == "Lobby")
+        else
         {
-            StartMusic(); // W³¹cz muzykê w Lobby
+            StopMusic(); // W ka¿dej innej scenie muzyka znika
         }
     }
 }
