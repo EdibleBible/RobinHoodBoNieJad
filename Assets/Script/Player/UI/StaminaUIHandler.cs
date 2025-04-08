@@ -27,10 +27,9 @@ public class StaminaUIHandler : MonoBehaviour
         if (data is (float newMaxStamina, float oldMaxStamina) && sender is PlayerStaminaSystem staminaSystem)
         {
             float scaleFactor = newMaxStamina / oldMaxStamina;
-            float newWidth = Mathf.Max(originalWidth * scaleFactor, minBarWidth); // Zapewnienie minimalnej szerokości
+            float newWidth = Mathf.Max(originalWidth * scaleFactor, minBarWidth);
             staminaBar.sizeDelta = new Vector2(newWidth, staminaBar.sizeDelta.y);
             originalWidth = newWidth;
-
         }
     }
 }

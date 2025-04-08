@@ -22,7 +22,9 @@ namespace Script.ScriptableObjects
             if (PlayerStats.Where(x => x.ModifiersType == modifiersType).ToList().Count == 0)
                 return null;
 
-            return PlayerStats.Where(x => x.ModifiersType == modifiersType).FirstOrDefault();
+            var tempolaryStatModifiers = PlayerStats.Where(x => x.ModifiersType == modifiersType).FirstOrDefault();
+            tempolaryStatModifiers.Multiplicative = Mathf.Max(tempolaryStatModifiers.Multiplicative, 0.1f);
+            return tempolaryStatModifiers;
         }
 
         public void SetModifier(float additiveValue, float multiplicativeValue, E_ModifiersType modifiersType)

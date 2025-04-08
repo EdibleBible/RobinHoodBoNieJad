@@ -26,10 +26,6 @@ public class EnemyChasingState : BaseState<E_EnemyState>
         movement.SetUpParameters(movementStats);
         fov.SetUpStats(fovStats);
         fov.StartFindingTargets(fovStats.FindingDelay);
-        movement.OnDestinationReached += OnReachDestination;
-        movement.OnStopLookingAround += OnStopLookingAround;
-
-        movement.GoToNextPoint();
     }
 
     public override void ExitState()
@@ -37,11 +33,13 @@ public class EnemyChasingState : BaseState<E_EnemyState>
         movement.OnDestinationReached -= OnReachDestination;
         movement.OnStopLookingAround -= OnStopLookingAround;
         fov.StopFindingTargets();
-        movement.StopLookingAround();
-        movement.StopCheckingDistance();
     }
 
     public override void UpdateState()
+    {
+    }
+
+    public override void FixedUpdateState()
     {
         movement.SetEnemyDestination(fov.GetVisibleTargets()[0].transform.position, false);
         movement.UpdateMoveAnimation(movement.Agent.velocity.magnitude);

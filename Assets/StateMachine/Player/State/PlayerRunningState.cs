@@ -36,6 +36,9 @@ public class PlayerRunningState : BaseState<E_PlayerState>
     public override void UpdateState()
     {
         PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime, out float x, out float y);
+
+        PlayerRotation.UpdateRotation();
+        
         var velocity = PlayerWalk.GetCharacterVelocity();
         Transform transform = PlayerWalk.GetTransform();
 
@@ -47,10 +50,15 @@ public class PlayerRunningState : BaseState<E_PlayerState>
             PlayerStaminaSystem.UseStamina(UsedStaminaInRun);
         }
 
-        PlayerRotation.UpdateRotation();
+        PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);
 
         PlayerAnimatorController.UpdateWalkParameters(x, y);
-        PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);
+    }
+
+    public override void FixedUpdateState()
+    {
+
+
     }
 
     public override E_PlayerState GetNextState()

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,7 +12,7 @@ public class EnemyMovement : MonoBehaviour
 {
     public NavMeshAgent Agent;
     public EnemyAnimationController AnimationController;
-    private Queue<Vector3> destinations = new();
+    [HideInInspector] public Queue<Vector3> destinations = new();
     private Vector3 nextDestination;
     public event Action OnDestinationReached;
     public event Action OnStopLookingAround;
@@ -18,10 +20,15 @@ public class EnemyMovement : MonoBehaviour
     private Coroutine lookingAroundCoroutine;
     private Coroutine checkingDistanceCoroutine;
 
-    [Header("Settings")]
-    public bool RandomPatroll = true;
+    [Header("Settings")] public bool RandomPatroll = true;
     public List<Transform> Waypoints;
     public int CurrentWaypoint = 0;
+
+    [Header("Door Detection")] public LayerMask IntractableLayer;
+    public GameObject Model;
+    public Vector3 HiddenScale;
+    public Vector3 NormalScale;
+    public float ScaleDuration;
 
     public void PathFind()
     {
@@ -40,9 +47,12 @@ public class EnemyMovement : MonoBehaviour
                 return;
             }
 
+            if (CurrentWaypoint >= Waypoints.Count)
+                CurrentWaypoint = 0;
+            
             destinations.Enqueue(Waypoints[CurrentWaypoint].position);
             CurrentWaypoint++;
-            if (CurrentWaypoint == Waypoints.Count)
+            if (CurrentWaypoint >= Waypoints.Count)
                 CurrentWaypoint = 0;
             destinations.Enqueue(Waypoints[CurrentWaypoint].position);
             CurrentWaypoint++;
@@ -96,15 +106,15 @@ public class EnemyMovement : MonoBehaviour
         }
         else
         {
-            if (CurrentWaypoint >= Waypoints.Count - 1)
+            if (CurrentWaypoint > Waypoints.Count - 1)
             {
                 CurrentWaypoint = 0;
                 destinations.Enqueue(Waypoints[CurrentWaypoint].position);
             }
             else
             {
-                CurrentWaypoint++;
                 destinations.Enqueue(Waypoints[CurrentWaypoint].position);
+                CurrentWaypoint++;
             }
         }
     }
@@ -117,12 +127,16 @@ public class EnemyMovement : MonoBehaviour
     public void SetEnemyDestination(Vector3 destination, bool _chekingDistance = true)
     {
         if (_chekingDistance)
+        {
             StopCheckingDistance();
+        }
 
         Agent.SetDestination(destination);
 
         if (_chekingDistance)
+        {
             StartCheckingDistance(0.5f);
+        }
     }
 
     public void StartLookingAround(float waitingTime)
@@ -190,6 +204,153 @@ public class EnemyMovement : MonoBehaviour
     {
         destinations = new Queue<Vector3>();
     }
+
+    public bool CheckObjectIsOnAgentPath(GameObject objectToCheck)
+    {
+        if (Agent == null || Agent.path == null || Agent.path.corners.Length < 2)
+            return false;
+
+        for (int i = 0; i < Agent.path.corners.Length - 1; i++)
+        {
+            Vector3 from = Agent.path.corners[i];
+            Vector3 to = Agent.path.corners[i + 1];
+            Vector3 direction = (to - from).normalized;
+            float distance = Vector3.Distance(from, to);
+            RaycastHit[] hits = Physics.RaycastAll(from, direction, distance, IntractableLayer);
+            foreach (var hit in hits)
+            {
+                if (ComponentUtils.TryGetComponentInParent(hit.collider.gameObject, out DoorController door))
+                {
+                    if (door.gameObject == objectToCheck)
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        
+        return false;
+    }
+
+    /*
+    private void CheckPathForClosedDoors()
+    {
+        if (Agent.path == null || Agent.path.corners.Length < 2)
+            return;
+
+        for (int i = 0; i < Agent.path.corners.Length - 1; i++)
+        {
+            Vector3 from = Agent.path.corners[i];
+            Vector3 to = Agent.path.corners[i + 1];
+            Vector3 direction = (to - from).normalized;
+            float distance = Vector3.Distance(from, to);
+            RaycastHit[] hits = Physics.RaycastAll(from, direction, distance, interactableLayers);
+            foreach (var hit in hits)
+            {
+                if (ComponentUtils.TryGetComponentInParent(hit.collider.gameObject, out DoorController door))
+                {
+                    if (!processedDoors.Contains(door))
+                    {
+                        processedDoors.Add(door);
+                    }
+                }
+            }
+        }
+    }
+
+    public void StartCheckingDoors()
+    {
+        if (doorDetectionCoroutine != null)
+            StopCoroutine(doorDetectionCoroutine);
+
+        doorDetectionCoroutine = StartCoroutine(CheckDoorsOnPathCoroutine());
+    }
+
+    public void StopCheckingDoors()
+    {
+        if (doorDetectionCoroutine != null)
+            StopCoroutine(doorDetectionCoroutine);
+    }
+    */
+
+    public bool IsObjectOnPathAndNearby(float raycastDistance)
+    {
+        if (Agent.path == null || Agent.path.corners.Length < 2)
+        {
+            return false;
+        }
+
+        Vector3
+            rayOrigin = Agent.transform.position +
+                        Vector3.up * 0.5f;
+        Vector3 rayDirection = Agent.transform.forward;
+
+        if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, raycastDistance, IntractableLayer))
+        {
+            if (ComponentUtils.TryGetComponentInParent(hit.collider.gameObject, out DoorController door))
+            {
+                if (CheckObjectIsOnAgentPath(door.gameObject))
+                {
+                    Debug.DrawRay(rayOrigin, rayDirection * raycastDistance, Color.green);
+                    return true;
+                }
+                else
+                {
+                    Debug.DrawRay(rayOrigin, rayDirection * raycastDistance, Color.yellow);
+                    return false;
+                }
+            }
+            else
+            {
+                Debug.DrawRay(rayOrigin, rayDirection * raycastDistance, Color.blue);
+                return false;
+            }
+        }
+        else
+        {
+            Debug.DrawRay(rayOrigin, rayDirection * raycastDistance, Color.red);
+            return false;
+        }
+    }
+
+
+    private float DistancePointToLineSegment(Vector3 point, Vector3 a, Vector3 b)
+    {
+        Vector3 ab = b - a;
+        Vector3 ap = point - a;
+
+        float magnitudeAB = ab.sqrMagnitude;
+        if (magnitudeAB == 0f) return Vector3.Distance(point, a);
+
+        float dot = Vector3.Dot(ap, ab);
+        float t = Mathf.Clamp01(dot / magnitudeAB);
+        Vector3 closestPoint = a + t * ab;
+
+        return Vector3.Distance(point, closestPoint);
+    }
+
+    private void Update()
+    {
+        bool anyDoorRelevant;
+
+
+        if (IsObjectOnPathAndNearby(2))
+        {
+            anyDoorRelevant = true;
+        }
+        else
+        {
+            anyDoorRelevant = false;
+        }
+
+
+        if (Model != null)
+        {
+            Vector3 targetScale = anyDoorRelevant ? HiddenScale : NormalScale;
+            Model.transform.DOScale(targetScale, ScaleDuration).SetEase(Ease.InOutSine);
+        }
+    }
 }
 
 [Serializable]
@@ -200,4 +361,13 @@ public class EnemyMovementStats
     public float AngularSpeed;
     public float StoppingDistance;
     public float LookingAroundTime;
+}
+
+public static class ComponentUtils
+{
+    public static bool TryGetComponentInParent<T>(this GameObject obj, out T component) where T : Component
+    {
+        component = obj.GetComponentInParent<T>();
+        return component != null;
+    }
 }

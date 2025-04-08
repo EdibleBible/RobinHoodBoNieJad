@@ -48,7 +48,6 @@ public class PlayerWalk : MonoBehaviour
 
         moveDirection = new Vector3(horizontal, 0, vertical);
         inputMagnitude = Mathf.Clamp01(moveDirection.magnitude);
-
         speed = (speed + playerStatsController.GetSOPlayerStats(E_ModifiersType.PlayerSpeed).Additive) *
                 playerStatsController.GetSOPlayerStats(E_ModifiersType.PlayerSpeed).Multiplicative;
 

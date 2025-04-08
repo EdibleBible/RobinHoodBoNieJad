@@ -50,6 +50,9 @@ public class PlayerStaminaSystem : MonoBehaviour
         maxStamina = (baseMaxStamina +
                       (int)Math.Floor(playerStatsController.GetSOPlayerStats(E_ModifiersType.Stamina).Additive)) *
                      (int)Math.Floor(playerStatsController.GetSOPlayerStats(E_ModifiersType.Stamina).Multiplicative);
+        
+        if(oldmaxStamina == 0)
+            oldmaxStamina = maxStamina;
 
         if (resetCurrStamina)
             currentStamina = maxStamina;
@@ -62,7 +65,7 @@ public class PlayerStaminaSystem : MonoBehaviour
     {
         if (currentStamina >= amount)
         {
-            currentStamina -= amount;
+            currentStamina -= amount * Time.deltaTime;
             if (regenCoroutine != null)
             {
                 StopCoroutine(regenCoroutine);

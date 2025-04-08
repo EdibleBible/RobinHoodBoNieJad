@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 public class PlayerBase : MonoBehaviour
 {
     public Camera camera;
-    
+
     [SerializeField] private Transform dropPointTransform;
     public SOInventory PlayerInventory;
     [SerializeField] private GameEvent InventorySetUpEvent;
@@ -18,13 +18,15 @@ public class PlayerBase : MonoBehaviour
     public int currentSelectedItem = 0;
 
     public SOPlayerStatsController PlayerStatsController;
-    
+
     [HideInInspector] public ItemData CurrSelectedItem = null;
     private PlayerStaminaSystem playerStaminaSystem;
+    private PlayerTorchSystem playerTorchSystem;
 
     private void Awake()
     {
         playerStaminaSystem = GetComponent<PlayerStaminaSystem>();
+        playerTorchSystem = GetComponent<PlayerTorchSystem>();
     }
 
     public void Start()
@@ -33,8 +35,7 @@ public class PlayerBase : MonoBehaviour
         PlayerInventory.SetUpInventory();
         PlayerStatsController.SetPlayerBaseModifiers();
         ResetInventory();
-        InventoryUpdateSelectedItemEvent?.Raise(this, (0,0));
-
+        InventoryUpdateSelectedItemEvent?.Raise(this, (0, 0));
     }
 
     private void Update()
@@ -86,10 +87,17 @@ public class PlayerBase : MonoBehaviour
             {
                 ResetInventory();
             }
+
             if (CurrSelectedItem.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Stamina))
             {
                 ResetStamina();
             }
+
+            if (CurrSelectedItem.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Fuel))
+            {
+                ResetFuel();
+            }
+
             DropItemEvent?.Raise(this, currentSelectedItem);
         }
     }
@@ -109,5 +117,10 @@ public class PlayerBase : MonoBehaviour
     public void ResetStamina()
     {
         playerStaminaSystem.SetUpStamina();
+    }
+
+    public void ResetFuel()
+    {
+        playerTorchSystem.SetupTorchFuel();
     }
 }

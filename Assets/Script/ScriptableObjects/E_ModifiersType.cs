@@ -6,5 +6,6 @@ namespace Script.ScriptableObjects
         PlayerSpeed,
         Inventory,
         Acceleration,
+        Fuel
     }
 }

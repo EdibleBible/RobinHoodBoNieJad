@@ -47,6 +47,10 @@ public class PlayerWalkState : BaseState<E_PlayerState>
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);
     }
 
+    public override void FixedUpdateState()
+    {
+    }
+
     public override E_PlayerState GetNextState()
     {
         if (PlayerStamina != null)

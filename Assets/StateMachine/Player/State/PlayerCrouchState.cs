@@ -53,7 +53,10 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
     public override void UpdateState()
     {
         PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime, out float x, out float y);
+    }
 
+    public override void FixedUpdateState()
+    {
         Vector3 velocity = PlayerWalk.GetCharacterVelocity();
         Transform transform = PlayerWalk.GetTransform();
 

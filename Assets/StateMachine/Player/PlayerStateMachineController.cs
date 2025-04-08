@@ -8,37 +8,25 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
     PlayerCrouchState _playerCrouchState;
     PlayerDoorInteraction _playerDoorInteraction;
 
-    [Header("Walk State")]
-    [SerializeField]
+    [Header("Walk State")] [SerializeField]
     float walkSpeed;
 
-    [SerializeField]
-    float walkAcceleration;
-    [SerializeField]
-    float walkDeceleration;
+    [SerializeField] float walkAcceleration;
+    [SerializeField] float walkDeceleration;
 
-    [Header("Crouch State")]
-    [SerializeField]
+    [Header("Crouch State")] [SerializeField]
     float crouchSpeed;
 
-    [SerializeField]
-    float crouchAcceleration;
-    [SerializeField]
-    float crouchDeceleration;
-    [SerializeField]
-    Transform lookAtTarget;
-    [SerializeField]
-    Transform followTarget;
-    [SerializeField]
-    Vector3 cameraOffset;
+    [SerializeField] float crouchAcceleration;
+    [SerializeField] float crouchDeceleration;
+    [SerializeField] Transform lookAtTarget;
+    [SerializeField] Transform followTarget;
+    [SerializeField] Vector3 cameraOffset;
 
-    [Header("Run State")]
-    [SerializeField]
-    float runSpeed;
-    [SerializeField]
-    float runAcceleration;
-    [SerializeField]
-    float runDeceleration;
+    [Header("Run State")] [SerializeField] float runSpeed;
+    [SerializeField] float staminaUseInRun;
+    [SerializeField] float runAcceleration;
+    [SerializeField] float runDeceleration;
 
     [HideInInspector] public PlayerWalk playerWalk;
     [HideInInspector] public PlayerRotation playerRotation;
@@ -55,9 +43,10 @@ public class PlayerStateMachineController : StateManager<E_PlayerState>
         playerStamina = GetComponent<PlayerStaminaSystem>();
 
         _playerWalkState = new PlayerWalkState(walkSpeed, walkAcceleration, walkDeceleration, playerWalk,
-            playerAnimatorController, playerRotation,playerStamina);
+            playerAnimatorController, playerRotation, playerStamina);
 
-        _playerRunningState = new PlayerRunningState(runSpeed, 0.3f, runAcceleration, runDeceleration, playerWalk,
+        _playerRunningState = new PlayerRunningState(runSpeed, staminaUseInRun, runAcceleration, runDeceleration,
+            playerWalk,
             playerAnimatorController, playerRotation, playerStamina);
 
         _playerCrouchState = new PlayerCrouchState(crouchSpeed, crouchAcceleration, crouchDeceleration, playerWalk,

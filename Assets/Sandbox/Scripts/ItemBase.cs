@@ -49,7 +49,7 @@ public class ItemBase : MonoBehaviour, IInteractable
     [SerializeField] private string blockedMessage;
     private IStatChangeable statChangeableImplementation;
 
-    public void Interact(Transform player)
+    public virtual void Interact(Transform player)
     {
         if (!CanInteract || IsBlocked)
         {
@@ -77,6 +77,10 @@ public class ItemBase : MonoBehaviour, IInteractable
             if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Stamina))
             {
                 playerBase.ResetStamina();
+            }
+            if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Fuel))
+            {
+                playerBase.ResetFuel();
             }
             IsUsed = true;
             Destroy(gameObject);
