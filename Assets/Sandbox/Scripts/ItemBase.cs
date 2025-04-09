@@ -68,6 +68,7 @@ public class ItemBase : MonoBehaviour, IInteractable
 
         if (playerBase.PickUp(ItemData))
         {
+            GetComponent<PickupSounds>().PlayPickupSound();
             InteractEvent.Raise(this, null);
             ItemData.AddModifier(playerBase.PlayerStatsController);
             if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Inventory))
