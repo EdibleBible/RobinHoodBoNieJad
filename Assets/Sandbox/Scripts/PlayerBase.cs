@@ -78,7 +78,7 @@ public class PlayerBase : MonoBehaviour
     {
         if (CurrSelectedItem != null)
         {
-            var obj = Instantiate(CurrSelectedItem.ItemPrefab, dropPointTransform.position, quaternion.identity);
+            var obj = Instantiate(CurrSelectedItem.ItemPrefab);
 
             DropSound dropSound = obj.GetComponent<DropSound>();
             if (dropSound == null)
@@ -87,21 +87,23 @@ public class PlayerBase : MonoBehaviour
             }
             else
             {
-               // dropSound.materialTypeDrop = (DropSound.MaterialTypeDrop)GetDropMaterialParameter(CurrSelectedItem.ItemType);
-                
+                // dropSound.materialTypeDrop = (DropSound.MaterialTypeDrop)GetDropMaterialParameter(CurrSelectedItem.ItemType);
+
                 dropSound.PlayDropSound();
             }
 
-
+            obj.transform.position = dropPointTransform.position;
             obj.transform.rotation = quaternion.identity;
             PlayerInventory.RemoveItemFromInventory(CurrSelectedItem);
             CurrSelectedItem.RemoveModifier(PlayerStatsController);
 
             if (CurrSelectedItem.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Inventory))
+            {
                 ResetInventory();
             }
 
             if (CurrSelectedItem.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Stamina))
+            {
                 ResetStamina();
             }
 
