@@ -807,6 +807,20 @@ MonoBehaviour:
     IsAlarmed: 0
     AlarmedPosition: {x: 0, y: 0, z: 0}
     SmallPatrollCounter: 5
+  noticePlayerEvent:
+    Guid:
+      Data1: -528759655
+      Data2: 1171776032
+      Data3: 92544162
+      Data4: -1044613675
+    Path: event:/Enemy/EnemySeePlr
+  footstepsLoopEvent:
+    Guid:
+      Data1: -511740179
+      Data2: 1246377818
+      Data3: -861547878
+      Data4: -384888321
+    Path: event:/Enemy/EnemyChase
 --- !u!195 &6257333795837363401
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -936,7 +950,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5952023668469632104}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2d63616086bee04db51e3093d27d960, type: 3}
   m_Name: 
