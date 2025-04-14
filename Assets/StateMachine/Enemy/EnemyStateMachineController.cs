@@ -101,6 +101,7 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 
         if (nextStateKey == E_EnemyState.Chase)
         {
+            Debug.Log("Przechodzę do stanu CHASE – uruchamiam kroki");
             StartFootsteps();
         }
         else
