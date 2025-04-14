@@ -19,7 +19,7 @@ public class CageEnemyStateMachineController : StateManager<E_CageEnemyState>
     [SerializeField] private EnemyFovStats fovTriggerStat;
 
     [Header("FMOD settings")]
-    [SerializeField] private string alertLoopEventPath = "event:/Enemy/AlertLoop";
+    [SerializeField] private string alertLoopEventPath = "event:/Enemy/SkullCage";
 
     private EventInstance alertLoopInstance;
     private bool isAlertLoopPlaying = false;
