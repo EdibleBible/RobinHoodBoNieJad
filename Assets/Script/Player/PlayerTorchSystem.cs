@@ -21,11 +21,6 @@ public class PlayerTorchSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(keyToToogleTorch) && currentTorchFuel > 0)
-        {
-            ToogleTorch(!isTorchOn);
-        }
-
         if (isTorchOn)
             UseFueal(torchFuelUse);
 
@@ -78,4 +73,10 @@ public class PlayerTorchSystem : MonoBehaviour
     {
         isTorchOn = toogleTo;
     }
+    
+    public void ToogleTorch()
+    {
+        isTorchOn = !isTorchOn;
+    }
+
 }

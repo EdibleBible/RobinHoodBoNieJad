@@ -24,21 +24,35 @@ public class PlayerBase : MonoBehaviour
     private PlayerStaminaSystem playerStaminaSystem;
     private PlayerTorchSystem playerTorchSystem;
     private PlayerWalk playerWalk;
-    
-    PlayerInput playerInput;
+    private PlayerInteractionController playerInteractionController;
+
+    private PlayerControll PlayerInputActions => InputManager.Instance.PlayerInputActions;
 
     private void Awake()
     {
         playerStaminaSystem = GetComponent<PlayerStaminaSystem>();
         playerTorchSystem = GetComponent<PlayerTorchSystem>();
         playerWalk = GetComponent<PlayerWalk>();
+        playerInteractionController = GetComponent<PlayerInteractionController>();
 
-        PlayerControll playerInputActions = new PlayerControll();
-        playerInputActions.Player.Enable();
+        // Input Hook
+        PlayerInputActions.Player.Movement.performed += Movement_Performed;
+        PlayerInputActions.Player.Movement.canceled += Movement_Canceled;
 
-        
-        playerInputActions.Player.Movement.performed += Movement_Performed;
-        playerInputActions.Player.Movement.canceled += Movement_Canceled;
+        PlayerInputActions.Player.Interaction.performed += OnInteraction_Performed;
+        PlayerInputActions.Player.CancelInteraction.performed += OnCancellInteraction_Performed;
+
+        PlayerInputActions.Player.Sprint.performed += OnSprint_Performed;
+        PlayerInputActions.Player.Sprint.canceled += OnSprint_Canceled;
+
+        PlayerInputActions.Player.Crouch.performed += OnCrouch_Performed;
+        PlayerInputActions.Player.Crouch.canceled += OnCrouch_Canceled;
+
+        PlayerInputActions.Player.ToogleTorch.performed += ToogleTorch_Performed;
+
+        PlayerInputActions.Player.DropInventory.performed += OnDropItem_Performed;
+
+        PlayerInputActions.Player.ChangeItemPositive.performed += OnChangeIntem_Performed;
     }
 
     public void Start()
@@ -48,20 +62,6 @@ public class PlayerBase : MonoBehaviour
         PlayerStatsController.SetPlayerBaseModifiers();
         ResetInventory();
         InventoryUpdateSelectedItemEvent?.Raise(this, (0, 0));
-    }
-
-    private void Update()
-    {
-        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-
-        if (scrollInput > 0f)
-        {
-            UpdateSelectedSlot(-1); // Scroll w górę
-        }
-        else if (scrollInput < 0f)
-        {
-            UpdateSelectedSlot(1); // Scroll w dół
-        }
     }
 
     private void UpdateSelectedSlot(int direction)
@@ -135,50 +135,72 @@ public class PlayerBase : MonoBehaviour
     {
         playerTorchSystem.SetupTorchFuel();
     }
-    
+
     public void Movement_Performed(InputAction.CallbackContext context)
     {
         var parameters = context.ReadValue<Vector2>();
         playerWalk.SetAxisMovement(parameters);
     }
-    
+
     public void Movement_Canceled(InputAction.CallbackContext context)
     {
         playerWalk.SetAxisMovement(Vector2.zero);
     }
-    
-    public void OnCrouch_Performed(InputAction.CallbackContext context)
-    {
-        
-    }
-
-    public void OnSprint_Performed(InputAction.CallbackContext context)
-    {
-        
-    }
-
-    public void ToogleTorch_Performed(InputAction.CallbackContext context)
-    {
-        
-    }
 
     public void OnInteraction_Performed(InputAction.CallbackContext context)
     {
-        
+        Debug.Log("Interaction performed");
+        playerInteractionController.Interact();
     }
 
     public void OnCancellInteraction_Performed(InputAction.CallbackContext context)
     {
-        
+        Debug.Log("Cancell Interaction performed");
+        playerInteractionController.StopInteracting();
+    }
+
+    public void OnCrouch_Performed(InputAction.CallbackContext context)
+    {
+        playerWalk.Crouching = true;
+    }
+
+    public void OnCrouch_Canceled(InputAction.CallbackContext context)
+    {
+        playerWalk.Crouching = false;
+    }
+
+    public void OnSprint_Performed(InputAction.CallbackContext context)
+    {
+        playerWalk.Sprinting = true;
+    }
+
+    private void OnSprint_Canceled(InputAction.CallbackContext obj)
+    {
+        playerWalk.Sprinting = false;
+    }
+
+    public void ToogleTorch_Performed(InputAction.CallbackContext context)
+    {
+        playerTorchSystem.ToogleTorch();
     }
 
     public void OnDropItem_Performed(InputAction.CallbackContext context)
     {
-        
+        DropItem();
     }
 
     public void OnChangeIntem_Performed(InputAction.CallbackContext context)
     {
-        
+        float axis = context.ReadValue<float>();
+
+
+        if (axis > 0f)
+        {
+            UpdateSelectedSlot(-1); // Scroll w górę
+        }
+        else if (axis < 0f)
+        {
+            UpdateSelectedSlot(1); // Scroll w dół
+        }
     }
 }

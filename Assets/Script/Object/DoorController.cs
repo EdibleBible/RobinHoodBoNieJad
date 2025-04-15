@@ -261,7 +261,8 @@ public class DoorController : MonoBehaviour, IInteractable
 
     public virtual void ShowUI()
     {
-        ShowUIEvent.Raise(this, (true, InteractMessage, false));
+        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", interactMessage);
+        ShowUIEvent.Raise(this, (true, textToShow, false));
     }
 
     public virtual void HideUI()

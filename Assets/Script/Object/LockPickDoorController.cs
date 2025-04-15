@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class LockPickDoorController : DoorController, ILockPick
+public class LockPickDoorController : DoorController, ILockPick, IInteractableStop
 {
     public bool IsInteracting { get; set; }
     public bool IsLocked
@@ -29,11 +29,6 @@ public class LockPickDoorController : DoorController, ILockPick
         get => lockPickScale;
         set => lockPickScale = value;
     }
-    public KeyCode CancelLockPickingKeyCode
-    {
-        get => cancelLockPickingKeyCode;
-        set => cancelLockPickingKeyCode = value;
-    }
 
     public bool IsLockPicking { get; set; }
     public GameObject SpawnedObject { get; set; }
@@ -41,7 +36,6 @@ public class LockPickDoorController : DoorController, ILockPick
     public PlayerStateMachineController StateMachineController { get; set; }
 
     public bool isLocked;
-    public KeyCode cancelLockPickingKeyCode;
 
     public GameObject lockPickPrefab;
     public Transform lockPickCameraTransform;
@@ -132,15 +126,9 @@ public class LockPickDoorController : DoorController, ILockPick
         ShowUI();
     }
 
-
-    private void Update()
+    public void ShowStopUI()
     {
-        if (Input.GetKeyDown(CancelLockPickingKeyCode) && IsLockPicking)
-        {
-            StopInteracting();
-        }
     }
-
 
     public void StopInteracting()
     {
@@ -177,7 +165,6 @@ public interface ILockPick
     public GameObject SpawnedObject { get; set; }
     public LockPick spawnedLockPick { get; set; }
     public PlayerStateMachineController StateMachineController { get; set; }
-    public KeyCode CancelLockPickingKeyCode { get; set; }
     public Vector3 LockPickPositionOffset { get; set; }
     public Vector3 LockPickScale { get; set; }
 

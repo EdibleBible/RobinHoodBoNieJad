@@ -53,10 +53,6 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
     public override void UpdateState()
     {
         PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime, out float x, out float y);
-    }
-
-    public override void FixedUpdateState()
-    {
         Vector3 velocity = PlayerWalk.GetCharacterVelocity();
         Transform transform = PlayerWalk.GetTransform();
 
@@ -68,9 +64,13 @@ public class PlayerCrouchState : BaseState<E_PlayerState>
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, true);
     }
 
+    public override void FixedUpdateState()
+    {
+    }
+
     public override E_PlayerState GetNextState()
     {
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (PlayerWalk.Crouching)
         {
             return E_PlayerState.Crouching;
         }

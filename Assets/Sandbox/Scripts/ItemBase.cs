@@ -93,7 +93,8 @@ public class ItemBase : MonoBehaviour, IInteractable
 
     public void ShowUI()
     {
-        ShowUIEvent.Raise(this, (true, InteractMessage, false));
+        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", interactMessage);
+        ShowUIEvent.Raise(this, (true, textToShow, false));   
     }
 
     public void HideUI()

@@ -69,11 +69,11 @@ public class PlayerRunningState : BaseState<E_PlayerState>
             {
                 return E_PlayerState.Walk;
             }
-            else if (Input.GetKey(KeyCode.LeftShift) && PlayerStaminaSystem.currentStamina > 0.1)
+            else if (PlayerWalk.Sprinting && PlayerStaminaSystem.currentStamina > 0.1)
             {
                 return E_PlayerState.Running;
             }
-            else if (Input.GetKey(KeyCode.LeftControl))
+            else if (PlayerWalk.Crouching)
             {
                 return E_PlayerState.Crouching;
             }
@@ -84,11 +84,11 @@ public class PlayerRunningState : BaseState<E_PlayerState>
         }
         else
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (PlayerWalk.Sprinting)
             {
                 return E_PlayerState.Running;
             }
-            else if (Input.GetKey(KeyCode.LeftControl))
+            else if (PlayerWalk.Crouching)
             {
                 return E_PlayerState.Crouching;
             }

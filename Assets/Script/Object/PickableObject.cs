@@ -156,7 +156,9 @@ public class PickableObject : MonoBehaviour, IInteractable, IInteractableStop, I
     {
         if (!CanInteract)
             return;
-        ShowUIEvent.Raise(this, (true, "Pickup", false));
+        
+        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", interactMessage);
+        ShowUIEvent.Raise(this, (true, textToShow, false));
     }
 
     public void ShowStopUI()
@@ -164,7 +166,8 @@ public class PickableObject : MonoBehaviour, IInteractable, IInteractableStop, I
         if (!CanInteract)
             return;
 
-        ShowUIEvent.Raise(this, (true, "Drop", false));
+        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", "Drop");
+        ShowUIEvent.Raise(this, (true, textToShow, false));
     }
 
     public void HideUI()

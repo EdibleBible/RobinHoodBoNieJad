@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6426086039725163077}
@@ -76,11 +76,11 @@ MonoBehaviour:
   rb: {fileID: 4765337940768105308}
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: c -PickUpItem
+  interactMessage: Pick up
   blockMessage: CHUJ
-  BaseSize: {x: 1, y: 1, z: 1}
-  InteractSize: {x: 1.5, y: 1.5, z: 1.5}
-  PickupOffset: {x: 0, y: -1.4, z: 0.4}
+  BaseSize: {x: 2, y: 2, z: 2}
+  InteractSize: {x: 2, y: 2, z: 2}
+  PickupOffset: {x: 0, y: -1.2, z: 0.5}
   statsToChange:
   - ModifierType: 1
     Additive: 0

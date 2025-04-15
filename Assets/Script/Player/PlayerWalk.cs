@@ -27,6 +27,9 @@ public class PlayerWalk : MonoBehaviour
     
     private float horizontalMovement = 0f;
     private float verticalMovement = 0f;
+
+    [HideInInspector] public bool Sprinting;
+    [HideInInspector] public bool Crouching;
     public void SetMotion(bool option)
     {
         stopMotion = option;

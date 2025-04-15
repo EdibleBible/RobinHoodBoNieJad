@@ -968,8 +968,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315485355640814265}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13690679, y: 0.42765313, z: -0.06570402, w: 0.8910962}
-  m_LocalPosition: {x: -0.12308502, y: 0.60399973, z: -0.40876746}
+  m_LocalRotation: {x: 0.018625734, y: 0.85845375, z: -0.031253647, w: 0.511599}
+  m_LocalPosition: {x: -0.4204948, y: 0.60399985, z: -0.09734608}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1429,8 +1429,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2156941212593449579}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15876967, y: 0.40748408, z: -0.07217295, w: 0.89640397}
-  m_LocalPosition: {x: -0.11613083, y: 0.60399973, z: -0.41062903}
+  m_LocalRotation: {x: 0.02816856, y: 0.8564478, z: -0.046997998, w: 0.5133176}
+  m_LocalPosition: {x: -0.41979447, y: 0.60399985, z: -0.10036732}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2003,8 +2003,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3235623125312029733}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.121616215, y: 0.425652, z: -0.05785165, w: 0.894809}
-  m_LocalPosition: {x: -0.12191391, y: 0.60399973, z: -0.4090898}
+  m_LocalRotation: {x: 0.009618726, y: 0.8566824, z: -0.015984645, w: 0.5155068}
+  m_LocalPosition: {x: -0.41929096, y: 0.60399985, z: -0.10247828}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3122,6 +3122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2905201200214775698}
+  - component: {fileID: 7184439155095111606}
   - component: {fileID: 9048742732469344225}
   - component: {fileID: 756757014678366011}
   - component: {fileID: 3530353201659169001}
@@ -3134,7 +3135,6 @@ GameObject:
   - component: {fileID: 819879934237358458}
   - component: {fileID: 330543895836874210}
   - component: {fileID: 831400367798172120}
-  - component: {fileID: 8251187775975614695}
   - component: {fileID: 904172345308137541}
   - component: {fileID: 2853485081122743952}
   - component: {fileID: 2950070948464917231}
@@ -3168,6 +3168,18 @@ Transform:
   - {fileID: 8871433830355554072}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7184439155095111606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7201175182104095283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4954d8bf103908141972f61a58595e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!143 &9048742732469344225
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3313,6 +3325,8 @@ MonoBehaviour:
   gravity: -9.81
   playerStatsController: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e,
     type: 2}
+  Sprinting: 0
+  Crouching: 0
 --- !u!114 &6528128390038536212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3334,7 +3348,7 @@ MonoBehaviour:
   playerRotationSpeed: 900
   angleThreshold: 0
   rotationSmoothTime: 0.1
-  crouchOffset: {x: 0.1, y: -0.7, z: 0}
+  crouchOffset: {x: 0.3, y: -0.5, z: 0.2}
   crouchTransitionTime: 0.3
   camTransform: {fileID: 8871433830355554072}
 --- !u!114 &4155218188726546476
@@ -3465,9 +3479,6 @@ MonoBehaviour:
   interactableLayer:
     serializedVersion: 2
     m_Bits: 2147483648
-  interactionKey: 99
-  interactionStopKey: 101
-  dropKey: 113
 --- !u!114 &819879934237358458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3529,18 +3540,6 @@ MonoBehaviour:
   response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8251187775975614695}
-        m_TargetAssemblyTypeName: NextDropItemTutorialTrigger, Assembly-CSharp
-        m_MethodName: CheckInteractEvent
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 819879934237358458}
         m_TargetAssemblyTypeName: PlayerQuestSystem, Assembly-CSharp
         m_MethodName: RemoveItemFromQuest
@@ -3553,18 +3552,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8251187775975614695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7201175182104095283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7baddba43c0445446bd90a6514d7ad97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &904172345308137541
 MonoBehaviour:
   m_ObjectHideFlags: 0
