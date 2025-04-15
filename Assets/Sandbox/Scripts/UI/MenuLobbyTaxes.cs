@@ -17,15 +17,12 @@ public class MenuLobbyTaxes : MonoBehaviour
     private void Awake()
     {
         taxAmount = GetTaxAmount();
-    }
-
-    private void OnEnable()
-    {
         if (taxAmount > SOStats.scoreTotal)
         {
             buttonPay.interactable = false;
             textHad.color = Color.red;
-        } else
+        }
+        else
         {
             buttonPay.interactable = true;
             textHad.color = Color.white;

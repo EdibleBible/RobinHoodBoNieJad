@@ -91,10 +91,24 @@ public class PlayerBase : MonoBehaviour
         if (CurrSelectedItem != null)
         {
             var obj = Instantiate(CurrSelectedItem.ItemPrefab);
+
+            DropSound dropSound = obj.GetComponent<DropSound>();
+            if (dropSound == null)
+            {
+                Debug.LogError("DropSound component not found on the instantiated object: " + obj.name);
+            }
+            else
+            {
+                // dropSound.materialTypeDrop = (DropSound.MaterialTypeDrop)GetDropMaterialParameter(CurrSelectedItem.ItemType);
+
+                dropSound.PlayDropSound();
+            }
+
             obj.transform.position = dropPointTransform.position;
             obj.transform.rotation = quaternion.identity;
             PlayerInventory.RemoveItemFromInventory(CurrSelectedItem);
             CurrSelectedItem.RemoveModifier(PlayerStatsController);
+
             if (CurrSelectedItem.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Inventory))
             {
                 ResetInventory();
@@ -113,6 +127,7 @@ public class PlayerBase : MonoBehaviour
             DropItemEvent?.Raise(this, currentSelectedItem);
         }
     }
+
 
     public void RemoveItemFromInventory(ItemData itemToRemove)
     {
@@ -203,4 +218,27 @@ public class PlayerBase : MonoBehaviour
             UpdateSelectedSlot(1); // Scroll w dół
         }
     }
+    private void PlayDropSound(ItemType itemType)
+    {
+        var instance = FMODUnity.RuntimeManager.CreateInstance("event:/ItemDrop");
+        instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(dropPointTransform.position));
+        instance.setParameterByName("MaterialTypeDrop", GetDropMaterialParameter(itemType));
+        instance.start();
+        instance.release();
+    }
+
+    private int GetDropMaterialParameter(ItemType itemType)
+    {
+        return itemType switch
+        {
+            ItemType.SteelShoes => 0, // Cloth
+            ItemType.CollectibleVase => 1, // Porcelain
+            ItemType.CollectibleBox => 2, // Wood
+            ItemType.CollectibleGoblet => 3, // Glass
+            ItemType.Hammer => 4,
+            ItemType.Key => 5,
+            _ => 0
+        };
+    }
+
 }

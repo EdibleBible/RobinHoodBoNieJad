@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7837832141298137616}
   - component: {fileID: 4682806924880142275}
   - component: {fileID: 8493894080864111287}
+  - component: {fileID: -809841520883533310}
+  - component: {fileID: 3578587854123127885}
   m_Layer: 31
   m_Name: Forklif
   m_TagString: Item
@@ -88,6 +90,46 @@ MonoBehaviour:
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   interactMessage: Pick up Forklif
   blockedMessage: Item Is Blocked
+--- !u!114 &-809841520883533310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466800322429633386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6103eeb49ac3b224eb825bf30fe86ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupEvent:
+    Guid:
+      Data1: 2030476855
+      Data2: 1266737211
+      Data3: 1755879343
+      Data4: -388646872
+    Path: event:/ItemPickup
+  materialType: 0
+--- !u!114 &3578587854123127885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466800322429633386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eae99d2f7b6d644af5c67a87017c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropSoundEvent:
+    Guid:
+      Data1: -272142723
+      Data2: 1261083701
+      Data3: 1214003093
+      Data4: 1603500910
+    Path: event:/ItemDrop
+  materialType: 0
 --- !u!1001 &8064819820957891725
 PrefabInstance:
   m_ObjectHideFlags: 0
