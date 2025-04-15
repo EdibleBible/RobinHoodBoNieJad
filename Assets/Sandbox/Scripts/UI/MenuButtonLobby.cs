@@ -27,6 +27,10 @@ public class MenuButtonLobby : MonoBehaviour
 
     private void Awake()
     {
+        foreach (ItemData itemData in inventory.ItemsInInventory)
+        {
+            inventory.InventoryLobby.Add(itemData);
+        }
         inventory.CurrInvenoryScore += inventory.ScoreBackup;
         inventory.ScoreBackup = 0;
         Cursor.visible = true;
