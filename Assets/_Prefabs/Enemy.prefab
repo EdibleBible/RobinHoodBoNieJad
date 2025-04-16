@@ -726,6 +726,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   CurrentWaypoint: 0
+  IntractableLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  Model: {fileID: 0}
+  HiddenScale: {x: 0, y: 0, z: 0}
+  NormalScale: {x: 0, y: 0, z: 0}
+  ScaleDuration: 0
 --- !u!114 &5533938673021600224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -755,6 +762,13 @@ MonoBehaviour:
   isTransitioningState: 0
   findingPointDistance: 1
   maxNavMeshCheckDistance: 5
+  enemyAttack:
+    Guid:
+      Data1: -528759655
+      Data2: 1171776032
+      Data3: 92544162
+      Data4: -1044613675
+    Path: event:/Enemy/EnemySeePlr
   patrollingMovementStats:
     MaxSpeed: 2
     Acceleration: 1

@@ -1,8 +1,25 @@
 using System;
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
+
 
 public class LockPickDoorController : DoorController, ILockPick
 {
+    [SerializeField] private EventReference lockpickSuccessSound;
+    [SerializeField] private EventReference lockpickManipulationSound;
+
+    [SerializeField] private EventReference lockpickRotationSound;
+
+    private EventInstance rotationSoundInstance;
+    private bool isRotationSoundPlaying = false;
+
+
+    private EventInstance manipulationSoundInstance;
+    private bool isManipulatingSoundPlaying = false;
+    private float mouseMoveThreshold = 0.05f;
+
+
     public bool IsInteracting { get; set; }
     public bool IsLocked
     {
@@ -127,11 +144,26 @@ public class LockPickDoorController : DoorController, ILockPick
         StateMachineController.SeePlayerInteracting(true);
         IsLockPicking = true;
 
+        // Start sound instance for manipulation
+        manipulationSoundInstance = RuntimeManager.CreateInstance(lockpickManipulationSound);
+        RuntimeManager.AttachInstanceToGameObject(manipulationSoundInstance, transform, GetComponent<Rigidbody>());
+        manipulationSoundInstance.start();
+        manipulationSoundInstance.setPaused(true); // Start paused, unpause when moving
+
+        // Start sound instance for rotation
+        rotationSoundInstance = RuntimeManager.CreateInstance(lockpickRotationSound);
+        RuntimeManager.AttachInstanceToGameObject(rotationSoundInstance, transform, GetComponent<Rigidbody>());
+        rotationSoundInstance.start();
+        rotationSoundInstance.setPaused(true); // Start paused, unpause when holding LPM
+
         // Aktualizacja interfejsu użytkownika
         HideUI();
         ShowUI();
     }
 
+
+    private float currentPadlockOpeningValue = 0f;
+    [SerializeField] private float padlockSmoothingSpeed = 5f;
 
     private void Update()
     {
@@ -139,7 +171,56 @@ public class LockPickDoorController : DoorController, ILockPick
         {
             StopInteracting();
         }
+
+        if (IsLockPicking)
+        {
+            Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+            // Obsługa dźwięku manipulacji (ruchy)
+            if (mouseDelta.magnitude > mouseMoveThreshold)
+            {
+                if (!isManipulatingSoundPlaying)
+                {
+                    manipulationSoundInstance.setPaused(false);
+                    isManipulatingSoundPlaying = true;
+                }
+            }
+            else
+            {
+                if (isManipulatingSoundPlaying)
+                {
+                    manipulationSoundInstance.setPaused(true);
+                    isManipulatingSoundPlaying = false;
+                }
+            }
+        }
+
+        // Obsługa dźwięku obracania zamka (PadlockOpening)
+        float targetPadlockValue = Input.GetMouseButton(0) ? 1f : 0f;
+        currentPadlockOpeningValue = Mathf.Lerp(currentPadlockOpeningValue, targetPadlockValue, Time.deltaTime * padlockSmoothingSpeed);
+        manipulationSoundInstance.setParameterByName("PadlockOpening", currentPadlockOpeningValue);
+
+        // Obsługa osobnego dźwięku obracania zamka (loop, LPM)
+        if (Input.GetMouseButton(0))
+        {
+            if (!isRotationSoundPlaying)
+            {
+                rotationSoundInstance.setPaused(false);
+                isRotationSoundPlaying = true;
+            }
+        }
+        else
+        {
+            if (isRotationSoundPlaying)
+            {
+                rotationSoundInstance.setPaused(true);
+                isRotationSoundPlaying = false;
+            }
+        }
+
     }
+
+
 
 
     public void StopInteracting()
@@ -150,10 +231,24 @@ public class LockPickDoorController : DoorController, ILockPick
         Destroy(SpawnedObject);
         StateMachineController.SeePlayerInteracting(false);
         IsLockPicking = false;
+
+        if (manipulationSoundInstance.isValid())
+        {
+            manipulationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            manipulationSoundInstance.release();
+        }
+
+        if (rotationSoundInstance.isValid())
+        {
+            rotationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            rotationSoundInstance.release();
+        }
+
     }
 
     public void UnlockLock()
     {
+        RuntimeManager.PlayOneShot(lockpickSuccessSound, transform.position);
         IsLocked = false;
         InteractMessage = ChnagedInteractMessage;
         HideUI();
