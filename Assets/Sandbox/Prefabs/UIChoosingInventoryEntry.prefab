@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2829609835416784471}
   - component: {fileID: 6212804969810015966}
+  - component: {fileID: 7826677662385452166}
   m_Layer: 5
   m_Name: UIChoosingInventoryEntry
   m_TagString: Untagged
@@ -81,7 +82,37 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6086693071563142460}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7826677662385452166}
+        m_TargetAssemblyTypeName: LobbyInventoryChooseEntry, Assembly-CSharp
+        m_MethodName: SelectButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7826677662385452166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104238673863282037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35a6ff7bfc3c04449846677a8b51a829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 1643018146664749477}
+  frame: {fileID: 6086693071563142460}
+  index: 0
+  isSelected: 0
+  button: {fileID: 6212804969810015966}
+  parent: {fileID: 0}
 --- !u!1 &3627120173193280576
 GameObject:
   m_ObjectHideFlags: 0
