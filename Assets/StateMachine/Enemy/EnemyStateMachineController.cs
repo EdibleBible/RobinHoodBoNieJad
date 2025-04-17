@@ -20,6 +20,8 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
     private EnemyMovement enemyMovement;
     private FieldOfView fov;
 
+    public EventReference enemyAttack;
+
     [Header("patrolling state settings")]
     [SerializeField]
     private EnemyMovementStats patrollingMovementStats;
@@ -63,7 +65,7 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
             new EnemyPatrollingState(enemyMovement, patrollingMovementStats, fov, patrollingFovStats,
                 alarmedStateStats);
         _enemyChasingState =
-            new EnemyChasingState(enemyMovement, chasingMovementStats, fov, chasingFovStats, alarmedStateStats);
+            new EnemyChasingState(enemyMovement, chasingMovementStats, fov, chasingFovStats, alarmedStateStats,enemyAttack);
         _enemyAlarmedState =
             new EnemyAlarmedState(enemyMovement, alarmedMovementStats, fov, alarmedFovStats, alarmedStateStats);
 
@@ -101,6 +103,7 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 
         if (nextStateKey == E_EnemyState.Chase)
         {
+            Debug.Log("Przechodzę do stanu CHASE – uruchamiam kroki");
             StartFootsteps();
         }
         else

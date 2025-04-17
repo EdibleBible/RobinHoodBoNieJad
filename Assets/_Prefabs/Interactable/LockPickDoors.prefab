@@ -760,6 +760,27 @@ MonoBehaviour:
   blockedMessage: c- Wypierdalaj
   isDebug: 0
   debugKey: 99
+  lockpickSuccessSound:
+    Guid:
+      Data1: -1141443492
+      Data2: 1270751830
+      Data3: -747713914
+      Data4: -1923429375
+    Path: event:/Lockpicking/SuccessSound
+  lockpickManipulationSound:
+    Guid:
+      Data1: 420126760
+      Data2: 1318426005
+      Data3: -1121064280
+      Data4: -503142320
+    Path: event:/Lockpicking/LockpickMove
+  lockpickRotationSound:
+    Guid:
+      Data1: 1844197914
+      Data2: 1127456184
+      Data3: -556782416
+      Data4: 1428845047
+    Path: event:/Lockpicking/PadlockOpening
   isLocked: 1
   lockPickPrefab: {fileID: 7096650957654641465, guid: 5a1271ddc2fe4b14aa59b269860ee41c,
     type: 3}
@@ -768,6 +789,7 @@ MonoBehaviour:
   lockPickScale: {x: 0.12, y: 0.12, z: 0.12}
   lockPickSpawnDistance: 0.05
   ChnagedInteractMessage: c - Opne door
+  padlockSmoothingSpeed: 5
 --- !u!1 &7165238132464714824
 GameObject:
   m_ObjectHideFlags: 0

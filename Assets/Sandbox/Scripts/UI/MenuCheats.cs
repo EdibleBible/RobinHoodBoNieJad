@@ -112,6 +112,9 @@ public class MenuCheats : MonoBehaviour
             case "paytax":
                 PayTax(input);
                 break;
+            case "clearinventory":
+                ClearInventory(input);
+                break;
         }
     }
 
@@ -205,6 +208,16 @@ public class MenuCheats : MonoBehaviour
     {
         if (input.Length == 0 || input[1] == "true") { playerStats.taxPaid = true; }
         else { playerStats.taxPaid = false; };
+    }
+
+    public void ClearInventory(string[] input)
+    {
+        if (input.Length != 1 && input[1] == "1")
+        {
+            playerInventory.ItemsInInventory.Clear();
+            return;
+        }
+        playerInventory.InventoryLobby.Clear();
     }
 }
 

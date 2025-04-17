@@ -164,6 +164,7 @@ public class ItemData : IStatChangeable
         }
     }
     public int CollectibleId;
+    public bool ProceedToDungeon;
 }
 
 public enum ItemType

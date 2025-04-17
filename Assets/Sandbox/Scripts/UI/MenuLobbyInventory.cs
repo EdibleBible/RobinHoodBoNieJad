@@ -30,7 +30,7 @@ public class MenuLobbyInventory : MonoBehaviour
 
     private void IndexInventory()
     {
-        itemList = inventory.ItemsInInventory;
+        itemList = inventory.InventoryLobby;
         pagesCount = Mathf.FloorToInt(itemList.Count / 10);
     }
 

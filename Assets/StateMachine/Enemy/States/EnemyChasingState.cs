@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using FMODUnity;
+
 
 public class EnemyChasingState : BaseState<E_EnemyState>
 {
@@ -11,14 +13,18 @@ public class EnemyChasingState : BaseState<E_EnemyState>
 
     private EnemyAlarmedStats alarmedStats;
 
+    private EventReference enemyattack;
+
+
     public EnemyChasingState(EnemyMovement _movement, EnemyMovementStats _movementStats, FieldOfView _fov,
-        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats) : base(E_EnemyState.Chase)
+        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats, EventReference _enemyattack) : base(E_EnemyState.Chase)
     {
         movement = _movement;
         movementStats = _movementStats;
         fov = _fov;
         fovStats = _fovStats;
         alarmedStats = _alarmedStats;
+        enemyattack = _enemyattack;
     }
 
     public override void EnterState()
@@ -71,6 +77,7 @@ public class EnemyChasingState : BaseState<E_EnemyState>
     {
         if (other.TryGetComponent(out GameoverController gameOver))
         {
+            RuntimeManager.PlayOneShot(enemyattack, movement.transform.position);
             gameOver.LoseGame();
         }
     }
