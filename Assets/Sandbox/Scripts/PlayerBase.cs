@@ -28,7 +28,7 @@ public class PlayerBase : MonoBehaviour
 
     private PlayerControll PlayerInputActions => InputManager.Instance.PlayerInputActions;
 
-    private void Awake()
+    private void Start()
     {
         playerStaminaSystem = GetComponent<PlayerStaminaSystem>();
         playerTorchSystem = GetComponent<PlayerTorchSystem>();
@@ -53,10 +53,7 @@ public class PlayerBase : MonoBehaviour
         PlayerInputActions.Player.DropInventory.performed += OnDropItem_Performed;
 
         PlayerInputActions.Player.ChangeItemPositive.performed += OnChangeIntem_Performed;
-    }
-
-    public void Start()
-    {
+        
         PlayerInventory.ClearInventory();
         PlayerInventory.SetUpInventory();
         PlayerStatsController.SetPlayerBaseModifiers();
@@ -153,6 +150,7 @@ public class PlayerBase : MonoBehaviour
 
     public void Movement_Performed(InputAction.CallbackContext context)
     {
+        Debug.Log("Chuj");
         var parameters = context.ReadValue<Vector2>();
         playerWalk.SetAxisMovement(parameters);
     }

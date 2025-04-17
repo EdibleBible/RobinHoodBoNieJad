@@ -6,20 +6,14 @@ using UnityEngine.Serialization;
 
 public class PlayerStaminaSystem : MonoBehaviour
 {
-    [SerializeField]
-    private float baseMaxStamina;
+    [SerializeField] private float baseMaxStamina;
     private float maxStamina;
-    [SerializeField]
-    private float staminaRegenRate = 10f;
-    [SerializeField]
-    private float regenDelay = 2f;
-    [SerializeField]
-    private SOPlayerStatsController playerStatsController;
+    [SerializeField] private float staminaRegenRate = 10f;
+    [SerializeField] private float regenDelay = 2f;
+    [SerializeField] private SOPlayerStatsController playerStatsController;
 
-    [SerializeField]
-    private GameEvent changeStaminaEvent;
-    [SerializeField]
-    private GameEvent changeMaxStaminaEvent;
+    [SerializeField] private GameEvent changeStaminaEvent;
+    [SerializeField] private GameEvent changeMaxStaminaEvent;
 
     public float currentStamina;
     private bool isRegenerating;
@@ -50,8 +44,8 @@ public class PlayerStaminaSystem : MonoBehaviour
         maxStamina = (baseMaxStamina +
                       (int)Math.Floor(playerStatsController.GetSOPlayerStats(E_ModifiersType.Stamina).Additive)) *
                      (int)Math.Floor(playerStatsController.GetSOPlayerStats(E_ModifiersType.Stamina).Multiplicative);
-        
-        if(oldmaxStamina == 0)
+
+        if (oldmaxStamina == 0)
             oldmaxStamina = maxStamina;
 
         if (resetCurrStamina)
@@ -63,17 +57,15 @@ public class PlayerStaminaSystem : MonoBehaviour
 
     public void UseStamina(float amount)
     {
-        if (currentStamina >= amount)
+        currentStamina -= amount * Time.deltaTime;
+        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+        if (regenCoroutine != null)
         {
-            currentStamina -= amount * Time.deltaTime;
-            if (regenCoroutine != null)
-            {
-                StopCoroutine(regenCoroutine);
-            }
-
-            changeStaminaEvent.Raise(this, (maxStamina, currentStamina));
-            regenCoroutine = StartCoroutine(RegenerateStamina());
+            StopCoroutine(regenCoroutine);
         }
+
+        changeStaminaEvent.Raise(this, (maxStamina, currentStamina));
+        regenCoroutine = StartCoroutine(RegenerateStamina());
     }
 
     public void ResetMaxStamina(float newMaxStamina)

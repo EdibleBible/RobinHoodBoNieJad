@@ -968,8 +968,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315485355640814265}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.018625734, y: 0.85845375, z: -0.031253647, w: 0.511599}
-  m_LocalPosition: {x: -0.4204948, y: 0.60399985, z: -0.09734608}
+  m_LocalRotation: {x: 0.009137643, y: 0.92987514, z: -0.023150172, w: 0.3670325}
+  m_LocalPosition: {x: -0.41448975, y: 0.60399985, z: 0.11260055}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1429,8 +1429,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2156941212593449579}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.02816856, y: 0.8564478, z: -0.046997998, w: 0.5133176}
-  m_LocalPosition: {x: -0.41979447, y: 0.60399985, z: -0.10036732}
+  m_LocalRotation: {x: 0.014171928, y: 0.9395847, z: -0.039190363, w: 0.33977047}
+  m_LocalPosition: {x: -0.4015503, y: 0.60399985, z: 0.15050147}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2003,8 +2003,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3235623125312029733}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009618726, y: 0.8566824, z: -0.015984645, w: 0.5155068}
-  m_LocalPosition: {x: -0.41929096, y: 0.60399985, z: -0.10247828}
+  m_LocalRotation: {x: 0.0038797697, y: 0.91154623, z: -0.00860298, w: 0.41108948}
+  m_LocalPosition: {x: -0.42763138, y: 0.60399985, z: 0.04908298}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3202,7 +3202,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.32
   m_SlopeLimit: 45
-  m_StepOffset: 0.05
+  m_StepOffset: 0.1
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -3416,6 +3416,7 @@ MonoBehaviour:
     ItemPrefab: {fileID: 0}
     statToChange: []
     CollectibleId: 0
+    ProceedToDungeon: 0
 --- !u!114 &7236619838201767703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3638,7 +3639,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7201175182104095283}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
   m_Name: 
