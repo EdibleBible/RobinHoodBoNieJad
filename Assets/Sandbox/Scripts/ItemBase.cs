@@ -169,25 +169,38 @@ public class ItemData : IStatChangeable
 
 public enum ItemType
 {
-    Debug,
-    CollectibleVase,
-    CollectibleGoblet,
-    Backpack, //Usable
-    CollectibleBox,
+    //DEBUG 0 - 9
+    Debug = 0,
+    
+    //Collectible 10 - 99
+    CollectibleVase = 10,
+    CollectibleGoblet = 11,
+    CollectibleBox = 12,
+    
+    //Usable 100 - 200
+    Backpack = 100, 
+    Key = 101,
+    Hammer = 102,
+    SteelShoes = 103,
+    FastShoes = 104,
+    Forklift = 105,
+    Potion = 106, 
+    Unused1 = 107,
+    Unused2 = 108,
+    Unused3 = 109,
+    Unused4 = 110,
+    Unused5 = 111,
+    Unused6 = 112,
+    MoneyBag = 113
+}
 
-
-    //Usable
-    Key,
-    Hammer,
-    SteelShoes,
-    FastShoes,
-    Forklift,
-    Potion,
-    Unused1,
-    Unused2,
-    Unused3,
-    Unused4,
-    Unused5,
-    Unused6,
-    MoneyBag //Unusable
+public static class ItemTypeHelper
+{
+    public static List<ItemType> GetCollectibles()
+    {
+        return Enum.GetValues(typeof(ItemType))
+            .Cast<ItemType>()
+            .Where(i => (int)i >= 10 && (int)i < 100)
+            .ToList();
+    }
 }
