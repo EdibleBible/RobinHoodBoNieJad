@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8493894080864111287}
   - component: {fileID: -5692350511674163358}
   - component: {fileID: -892745331456639235}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: FastShoes
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -86,6 +86,7 @@ MonoBehaviour:
       type: 3}
     statToChange: []
     CollectibleId: 0
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   interactMessage: Pick up FastShoes
@@ -129,7 +130,7 @@ MonoBehaviour:
       Data3: 1214003093
       Data4: 1603500910
     Path: event:/ItemDrop
-  materialType: 0
+  itemSoundType: 0
 --- !u!1001 &7257850407552790378
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,7 +217,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f27c3a6aa568e724990572b8e841b54a,
         type: 3}
       propertyPath: m_Layer
-      value: 31
+      value: 23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

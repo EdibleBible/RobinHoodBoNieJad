@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7577896081097222916}
   - component: {fileID: -945779739317530405}
   - component: {fileID: -998148783349154028}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: Key
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -87,6 +87,7 @@ MonoBehaviour:
       type: 3}
     statToChange: []
     CollectibleId: 0
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   interactMessage: Pick up Key
@@ -169,6 +170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Candle_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6630375654688184054, guid: c79d59d66358e0f45a098f4b8a82f8be,
+        type: 3}
+      propertyPath: m_Layer
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 6670234744341657123, guid: c79d59d66358e0f45a098f4b8a82f8be,
         type: 3}

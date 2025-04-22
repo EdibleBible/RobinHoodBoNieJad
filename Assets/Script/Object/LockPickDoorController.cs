@@ -18,8 +18,8 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
     private EventInstance manipulationSoundInstance;
     private bool isManipulatingSoundPlaying = false;
     private float mouseMoveThreshold = 0.05f;
-
-
+    private Camera lockpickCamera;
+    
     public bool IsInteracting { get; set; }
     public bool IsLocked
     {
@@ -119,7 +119,10 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
         // Pobranie pozycji kamery i kierunku, w którym patrzy gracz
         Transform cameraTransform = playerBase.camera.transform;
         Vector3 spawnPosition = cameraTransform.position + cameraTransform.forward * lockPickSpawnDistance;
-
+        
+        lockpickCamera = playerBase.LockpickCamera;
+        playerBase.LockpickCamera.gameObject.SetActive(true);
+        
         // Instancja lockpicka i poprawne ustawienie transformacji
         SpawnedObject = Instantiate(lockPickPrefab, spawnPosition, cameraTransform.rotation);
         SpawnedObject.transform.localScale = lockPickScale;
@@ -224,7 +227,8 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
         Destroy(SpawnedObject);
         StateMachineController.SeePlayerInteracting(false);
         IsLockPicking = false;
-
+        lockpickCamera.gameObject.SetActive(false);
+        
         if (manipulationSoundInstance.isValid())
         {
             manipulationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -236,7 +240,8 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
             rotationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             rotationSoundInstance.release();
         }
-
+        
+        
     }
 
     public void UnlockLock()

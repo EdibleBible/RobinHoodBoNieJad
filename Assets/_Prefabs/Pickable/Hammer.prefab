@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8493894080864111287}
   - component: {fileID: 8503541429857420060}
   - component: {fileID: -1313387217253539379}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: Hammer
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -86,6 +86,7 @@ MonoBehaviour:
       type: 3}
     statToChange: []
     CollectibleId: 0
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   interactMessage: Pick up Hammer
@@ -216,7 +217,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7a5f13918d481114aa961ea2676fdeb7,
         type: 3}
       propertyPath: m_Layer
-      value: 31
+      value: 23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -170,6 +170,8 @@ public class InventoryUI : MonoBehaviour
             playerBase.CurrSelectedItem = itemSlots[currSelected].AssignedItem;
         }
     }
+    
+    
 }
 
 public struct ItemSlotSavedData

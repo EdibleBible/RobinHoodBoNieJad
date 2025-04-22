@@ -9,6 +9,7 @@ using UnityEngine.Rendering;
 public class PlayerBase : MonoBehaviour
 {
     public Camera camera;
+    public Camera LockpickCamera;
 
     [SerializeField] private Transform dropPointTransform;
     public SOInventory PlayerInventory;

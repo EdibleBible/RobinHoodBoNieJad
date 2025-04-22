@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7577896081097222916}
   - component: {fileID: 7519389293855721674}
   - component: {fileID: 3195146628785005690}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: SpeedDown 1
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -90,6 +90,7 @@ MonoBehaviour:
       Additive: -0.2
       Multiplicative: -0.2
     CollectibleId: 0
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
   interactMessage: Pick up Slow Potion
@@ -166,6 +167,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 1f3ab9073fa6aed4bbec9d3a54b89a27, type: 3}
       propertyPath: m_Name
       value: Bottle_05
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 1f3ab9073fa6aed4bbec9d3a54b89a27, type: 3}
+      propertyPath: m_Layer
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1f3ab9073fa6aed4bbec9d3a54b89a27, type: 3}
       propertyPath: m_LocalPosition.x
