@@ -272,7 +272,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7419948573280424226
 Transform:
   m_ObjectHideFlags: 0
@@ -281,12 +281,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328050513887079913}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.4999983, y: -0.4999985, z: 0.5000015, w: 0.50000167}
-  m_LocalPosition: {x: 0.01, y: 0.111, z: 0.001}
-  m_LocalScale: {x: 3.3333323, y: 3.3333328, z: 3.3333328}
+  m_LocalRotation: {x: 0.5000002, y: -0.5000001, z: 0.49999958, w: -0.5000002}
+  m_LocalPosition: {x: 0, y: 0.094, z: -0.206}
+  m_LocalScale: {x: 3.3333328, y: 3.3333325, z: 3.3333335}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1843316222342524083}
+  m_Father: {fileID: 3213509828616751629}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &6712689530021436710
 Light:
@@ -968,8 +968,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315485355640814265}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.013533725, y: 0.8939759, z: -0.027061122, w: 0.4470925}
-  m_LocalPosition: {x: -0.43099976, y: 0.60399985, z: -0.0040114075}
+  m_LocalRotation: {x: -0.014741991, y: 0.88501525, z: -0.028089227, w: -0.46448007}
+  m_LocalPosition: {x: 0.4082253, y: 0.60399985, z: -0.029505506}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1429,8 +1429,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2156941212593449579}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.021664996, y: 0.8933296, z: -0.043318387, w: 0.4467845}
-  m_LocalPosition: {x: -0.43099785, y: 0.60399985, z: -0.0040307194}
+  m_LocalRotation: {x: -0.023188222, y: 0.8843578, z: -0.04418256, w: -0.4641352}
+  m_LocalPosition: {x: 0.4082253, y: 0.60399985, z: -0.029505745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1549,6 +1549,7 @@ Transform:
   - {fileID: 7289244347415550253}
   - {fileID: 8496250547433325797}
   - {fileID: 3946545625925379618}
+  - {fileID: 7419948573280424226}
   m_Father: {fileID: 4939731393322522775}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2441178225085424543
@@ -1975,7 +1976,6 @@ Transform:
   - {fileID: 8308942750361751332}
   - {fileID: 4967607268465748938}
   - {fileID: 3827963418760702553}
-  - {fileID: 7419948573280424226}
   m_Father: {fileID: 253104119706830210}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3235623125312029733
@@ -2003,8 +2003,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3235623125312029733}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.005425264, y: 0.8942742, z: -0.010845235, w: 0.44735524}
-  m_LocalPosition: {x: -0.43099976, y: 0.60399985, z: -0.004007116}
+  m_LocalRotation: {x: -0.0063132225, y: 0.8853792, z: -0.012029145, w: -0.46467108}
+  m_LocalPosition: {x: 0.4082253, y: 0.60399985, z: -0.029505506}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3495,11 +3495,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ddb861454cb364c8b23dd2b817b089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCurrentQuests: {fileID: 11400000, guid: c3b16186e7d633e44940c373ed5cd147,
-    type: 2}
+  allQuest: {fileID: 11400000, guid: 832e88d975024ff48a8c6da5bf202023, type: 2}
   SetUpQuestEvent: {fileID: 11400000, guid: d10e3a7165e00644c846c12292c99922, type: 2}
   UpdateQuestValueEvent: {fileID: 11400000, guid: 0e6af5a9891917c429f64148b5095a1e,
     type: 2}
+  Debug: 1
 --- !u!114 &330543895836874210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3631,9 +3631,9 @@ MonoBehaviour:
     type: 2}
   changeMaxTorchFuelEvent: {fileID: 11400000, guid: 148b7869f4aaa2444b3cf783d6bef146,
     type: 2}
-  keyToToogleTorch: 116
   torchFuelUse: 5
   currentTorchFuel: 0
+  torchObject: {fileID: 328050513887079913}
 --- !u!114 &-7925518734325822260
 MonoBehaviour:
   m_ObjectHideFlags: 0

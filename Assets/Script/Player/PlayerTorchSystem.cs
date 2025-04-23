@@ -9,19 +9,22 @@ public class PlayerTorchSystem : MonoBehaviour
     [SerializeField] private SOPlayerStatsController playerStatsController;
     [SerializeField] private GameEvent changeTorchFuelEvent;
     [SerializeField] private GameEvent changeMaxTorchFuelEvent;
-    [SerializeField] private KeyCode keyToToogleTorch;
     private bool isTorchOn = false;
     [SerializeField] private float torchFuelUse;
     [HideInInspector] public float currentTorchFuel;
+    private PlayerAnimatorController playerAnimatorController;
 
+    [SerializeField] private GameObject torchObject;
     private void Start()
     {
         SetupTorchFuel(true);
+        playerAnimatorController = GetComponent<PlayerAnimatorController>();
+        
     }
 
     private void Update()
     {
-        if (isTorchOn)
+        if (isTorchOn && torchObject.activeInHierarchy)
             UseFueal(torchFuelUse);
 
         if (currentTorchFuel <= 0)
@@ -72,11 +75,28 @@ public class PlayerTorchSystem : MonoBehaviour
     public void ToogleTorch(bool toogleTo)
     {
         isTorchOn = toogleTo;
+        if(!isTorchOn)
+            StopGlowingTorch();
     }
     
     public void ToogleTorch()
     {
         isTorchOn = !isTorchOn;
+        if(!isTorchOn)
+            StopGlowingTorch();
+        
+        playerAnimatorController.ToogleTorch(isTorchOn);
+        
+
     }
 
+    public void StartGlowingTorch()
+    {
+        torchObject.SetActive(true);
+    }
+
+    public void StopGlowingTorch()
+    {
+        torchObject.SetActive(false);
+    }
 }
