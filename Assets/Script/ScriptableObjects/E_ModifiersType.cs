@@ -6,6 +6,10 @@ namespace Script.ScriptableObjects
         PlayerSpeed,
         Inventory,
         Acceleration,
-        Fuel
+        Fuel,
+        
+        SpecialSenseGhostAmount,
+        SpecialSenseRange,
+        SpecialSenseUseAmount
     }
 }

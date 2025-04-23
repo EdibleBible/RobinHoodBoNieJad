@@ -107,6 +107,15 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SpecialSense"",
+                    ""type"": ""Button"",
+                    ""id"": ""c73b5f77-698a-4da4-b881-6454afaa50ba"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -296,6 +305,17 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
                     ""action"": ""ChangeItemPositive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39e043fa-1f67-49b5-be60-dec5fef0343b"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpecialSense"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -330,6 +350,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         m_Player_DropInventory = m_Player.FindAction("DropInventory", throwIfNotFound: true);
         m_Player_UseInventory = m_Player.FindAction("UseInventory", throwIfNotFound: true);
         m_Player_ChangeItemPositive = m_Player.FindAction("ChangeItemPositive", throwIfNotFound: true);
+        m_Player_SpecialSense = m_Player.FindAction("SpecialSense", throwIfNotFound: true);
     }
 
     ~@PlayerControll()
@@ -405,6 +426,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_DropInventory;
     private readonly InputAction m_Player_UseInventory;
     private readonly InputAction m_Player_ChangeItemPositive;
+    private readonly InputAction m_Player_SpecialSense;
     public struct PlayerActions
     {
         private @PlayerControll m_Wrapper;
@@ -418,6 +440,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         public InputAction @DropInventory => m_Wrapper.m_Player_DropInventory;
         public InputAction @UseInventory => m_Wrapper.m_Player_UseInventory;
         public InputAction @ChangeItemPositive => m_Wrapper.m_Player_ChangeItemPositive;
+        public InputAction @SpecialSense => m_Wrapper.m_Player_SpecialSense;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -454,6 +477,9 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
             @ChangeItemPositive.started += instance.OnChangeItemPositive;
             @ChangeItemPositive.performed += instance.OnChangeItemPositive;
             @ChangeItemPositive.canceled += instance.OnChangeItemPositive;
+            @SpecialSense.started += instance.OnSpecialSense;
+            @SpecialSense.performed += instance.OnSpecialSense;
+            @SpecialSense.canceled += instance.OnSpecialSense;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -485,6 +511,9 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
             @ChangeItemPositive.started -= instance.OnChangeItemPositive;
             @ChangeItemPositive.performed -= instance.OnChangeItemPositive;
             @ChangeItemPositive.canceled -= instance.OnChangeItemPositive;
+            @SpecialSense.started -= instance.OnSpecialSense;
+            @SpecialSense.performed -= instance.OnSpecialSense;
+            @SpecialSense.canceled -= instance.OnSpecialSense;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -522,5 +551,6 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         void OnDropInventory(InputAction.CallbackContext context);
         void OnUseInventory(InputAction.CallbackContext context);
         void OnChangeItemPositive(InputAction.CallbackContext context);
+        void OnSpecialSense(InputAction.CallbackContext context);
     }
 }

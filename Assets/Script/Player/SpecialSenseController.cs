@@ -2,17 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Script.ScriptableObjects;
 using UnityEngine;
 
 public class SpecialSenseController : MonoBehaviour
 {
-    [SerializeField] private float maxRadius = 10f;
+    private float maxRadius;
+    [SerializeField] private float baseMaxRadius = 5;
     [SerializeField] private float expandSpeed = 10f;
     [SerializeField] private LayerMask detectionLayers;
     [SerializeField] private LayerMask OccludedInteractionLayer;
 
     [SerializeField] private float highlightDuration = 2f;
-    [SerializeField] private KeyCode highlightKey = KeyCode.E;
 
     [Header("Line Renderer Settings")]
     [SerializeField] private LineRenderer lineRendererPrefab;
@@ -26,14 +27,54 @@ public class SpecialSenseController : MonoBehaviour
     private float currentRadius = 0f;
     private Vector3 pulsePosition;
 
-    void Update()
+    [SerializeField] private SOPlayerStatsController statsController;
+
+    [SerializeField] private int baseMaxLinesPerPulse = 3;
+    private int maxLinesPerPulse;
+
+    [SerializeField] private int baseSpecialSenseUseCount = 2;
+    private int specialSenseUseCount;
+
+    private bool isCooldown = false;
+
+    private void Start()
     {
-        if (Input.GetKeyDown(highlightKey))
+        SetupSpecialSense();
+    }
+
+    public void SetupSpecialSense()
+    {
+        maxLinesPerPulse = (baseMaxLinesPerPulse +
+                            (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseGhostAmount).Additive)) *
+                           (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseGhostAmount).Multiplicative);
+
+        maxRadius = (baseMaxRadius +
+                     (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseRange).Additive)) *
+                    (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseRange).Multiplicative);
+
+        specialSenseUseCount = (baseSpecialSenseUseCount +
+                                (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Additive)) *
+                               (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Multiplicative);
+    }
+
+    public void TryUseSpecialSense()
+    {
+        if (isCooldown)
         {
-            pulsePosition = transform.position;
-            if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
-            pulseCoroutine = StartCoroutine(PulseDetection());
+            Debug.Log("Zmysł specjalny jest w trakcie odnowienia.");
+            return;
         }
+
+        if (specialSenseUseCount <= 0)
+        {
+            Debug.Log("Brak dostępnych użyć specjalnego zmysłu.");
+            return;
+        }
+
+        specialSenseUseCount--;
+        pulsePosition = transform.position;
+        if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
+        pulseCoroutine = StartCoroutine(PulseDetection());
     }
 
     private IEnumerator PulseDetection()
@@ -41,13 +82,18 @@ public class SpecialSenseController : MonoBehaviour
         currentRadius = 0f;
         ClearHighlights();
 
-        while (currentRadius < maxRadius)
+        int linesSpawned = 0;
+
+        while (currentRadius < maxRadius && linesSpawned < maxLinesPerPulse)
         {
             currentRadius += expandSpeed * Time.deltaTime;
             Collider[] hits = Physics.OverlapSphere(pulsePosition, currentRadius, detectionLayers);
 
             foreach (var hit in hits)
             {
+                if (linesSpawned >= maxLinesPerPulse)
+                    break;
+
                 GameObject obj = hit.gameObject;
                 Transform root = obj.transform.root;
                 GameObject rootObj = root.gameObject;
@@ -71,6 +117,7 @@ public class SpecialSenseController : MonoBehaviour
                 Debug.Log(rootObj.name);
                 activeHighlights.Add(rootObj, rootObj.layer);
                 StartCoroutine(AnimateLineToTarget(rootObj));
+                linesSpawned++;
             }
 
             yield return null;
@@ -78,6 +125,8 @@ public class SpecialSenseController : MonoBehaviour
 
         yield return new WaitForSeconds(highlightDuration);
         yield return StartCoroutine(ClearHighlightsStepByStep());
+
+        StartCoroutine(StartCooldown());
     }
 
     private IEnumerator AnimateLineToTarget(GameObject target)
@@ -141,6 +190,14 @@ public class SpecialSenseController : MonoBehaviour
         }
 
         activeHighlights.Clear();
+    }
+
+    private IEnumerator StartCooldown()
+    {
+        isCooldown = true;
+        yield return new WaitForSeconds(5f);
+        isCooldown = false;
+        Debug.Log("Zmysł specjalny gotowy do ponownego użycia.");
     }
 
     private void ClearHighlights()

@@ -26,6 +26,7 @@ public class PlayerBase : MonoBehaviour
     private PlayerTorchSystem playerTorchSystem;
     private PlayerWalk playerWalk;
     private PlayerInteractionController playerInteractionController;
+    private SpecialSenseController specialSenseController;
 
     private PlayerControll PlayerInputActions => InputManager.Instance.PlayerInputActions;
 
@@ -35,6 +36,8 @@ public class PlayerBase : MonoBehaviour
         playerTorchSystem = GetComponent<PlayerTorchSystem>();
         playerWalk = GetComponent<PlayerWalk>();
         playerInteractionController = GetComponent<PlayerInteractionController>();
+        specialSenseController = GetComponent<SpecialSenseController>();
+        
 
         // Input Hook
         PlayerInputActions.Player.Movement.performed += Movement_Performed;
@@ -54,6 +57,8 @@ public class PlayerBase : MonoBehaviour
         PlayerInputActions.Player.DropInventory.performed += OnDropItem_Performed;
 
         PlayerInputActions.Player.ChangeItemPositive.performed += OnChangeIntem_Performed;
+
+        PlayerInputActions.Player.SpecialSense.performed += OnSpecialSense_Performed;
         
         PlayerInventory.ClearInventory();
         PlayerInventory.SetUpInventory();
@@ -61,6 +66,7 @@ public class PlayerBase : MonoBehaviour
         ResetInventory();
         InventoryUpdateSelectedItemEvent?.Raise(this, (0, 0));
     }
+
 
     private void UpdateSelectedSlot(int direction)
     {
@@ -177,6 +183,12 @@ public class PlayerBase : MonoBehaviour
     {
         playerWalk.Crouching = true;
     }
+    
+    private void OnSpecialSense_Performed(InputAction.CallbackContext obj)
+    {
+        specialSenseController.TryUseSpecialSense();
+    }
+
 
     public void OnCrouch_Canceled(InputAction.CallbackContext context)
     {
