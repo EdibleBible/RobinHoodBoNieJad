@@ -30,6 +30,11 @@ public class PlayerBase : MonoBehaviour
 
     private PlayerControll PlayerInputActions => InputManager.Instance.PlayerInputActions;
 
+    private void Awake()
+    {
+        PlayerStatsController.SetPlayerBaseModifiers();
+    }
+
     private void Start()
     {
         playerStaminaSystem = GetComponent<PlayerStaminaSystem>();
@@ -62,7 +67,6 @@ public class PlayerBase : MonoBehaviour
         
         PlayerInventory.ClearInventory();
         PlayerInventory.SetUpInventory();
-        PlayerStatsController.SetPlayerBaseModifiers();
         ResetInventory();
         InventoryUpdateSelectedItemEvent?.Raise(this, (0, 0));
     }
