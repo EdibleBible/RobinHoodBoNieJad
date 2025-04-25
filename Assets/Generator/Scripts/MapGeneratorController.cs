@@ -36,7 +36,7 @@ public class MapGeneratorController : MonoBehaviour
         var randimInt = new System.Random().Next(1000, 9999);
         wallSeed = (uint)randimInt;
         random = new Unity.Mathematics.Random(wallSeed);
-        levelData.levelSeed = (int)wallSeed;
+        levelData.LevelSeedInt = (int)wallSeed;
         return wallSeed;
     }
 
@@ -46,7 +46,7 @@ public class MapGeneratorController : MonoBehaviour
             RandimizeSeed();
 
         GenerateGrid(wallSeed);
-        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, (uint)levelData.levelSeed,RoomParent);
+        RoomGanerateSetting.CreateRoomsOnGrid(MainInfoGrid, (uint)levelData.LevelSeedInt,RoomParent);
         
         DebugGridMesh();
     }
