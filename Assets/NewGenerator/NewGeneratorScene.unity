@@ -166,8 +166,8 @@ MonoBehaviour:
   GridParameters:
     IsRandomized: 1
     GridSize: {x: 3, y: 3}
-    MaxGridSize: {x: 25, y: 25}
-    MinGridSize: {x: 10, y: 10}
+    MaxGridSize: {x: 35, y: 35}
+    MinGridSize: {x: 15, y: 15}
     CellSize: 2
     materials:
       _serializedList:
@@ -180,8 +180,8 @@ MonoBehaviour:
   RoomGeneratorSettings:
     roomParent: {fileID: 1180300059}
     MaxRoomSize: {x: 5, y: 5}
-    MinRoomSize: {x: 5, y: 5}
-    RoomCount: 5
+    MinRoomSize: {x: 1, y: 1}
+    RoomCount: 8
     MinRoomDistance: 1
     MaxRoomDistance: 2
     MaxAttempts: 100000
@@ -189,7 +189,14 @@ MonoBehaviour:
     WallPassLayer:
       serializedVersion: 2
       m_Bits: 256
+    UseAdditionalEdges: 1
+    ChanceToSelectEdge: 30
+    AdditionSelectedEdges: 3
   levelData: {fileID: 11400000, guid: 38228541c82fd9249aa4ddc009af7fbe, type: 2}
+  AllPoints: []
+  AllEdges: []
+  SelectedEdges: []
+  Hallwaycell: []
 --- !u!1 &1180300058
 GameObject:
   m_ObjectHideFlags: 0

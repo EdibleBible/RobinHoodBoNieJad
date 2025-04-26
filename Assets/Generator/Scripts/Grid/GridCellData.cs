@@ -15,10 +15,17 @@ public class GridCellData
     public Dictionary<E_GridCellReferenceType,GridCellData> neighbors = new Dictionary<E_GridCellReferenceType, GridCellData>();
     public GridCellData AxisCell { get; }
     public bool IsRoomCorner;
-    
+    public int RoomID { get; private set; } = -1;
+
     public void SetAxisCell(GridCellData end)
     {
         throw new NotImplementedException();
+    }
+
+    public void SetRoomID(int roomId)
+    {
+        Debug.Log($"Set Cell to room ID: {roomId}");
+        RoomID = roomId;
     }
     
     public void SetCellSize(Vector2 size)

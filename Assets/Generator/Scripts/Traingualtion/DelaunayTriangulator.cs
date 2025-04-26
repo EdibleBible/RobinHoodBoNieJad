@@ -34,7 +34,7 @@ public class DelaunayTriangulator
         return points;
     }
 
-    public IEnumerable<Triangle> BowyerWatson(Dictionary<Room, Point> points)
+    public IEnumerable<Triangle> BowyerWatson(Dictionary<NewRoom, Point> points)
     {
         // Utwórz mapowanie z punktu na pomieszczenie
         var pointToRoom = points.ToDictionary(p => p.Value, p => p.Key);
@@ -77,18 +77,18 @@ public class DelaunayTriangulator
         foreach (var triangle in triangulation)
         {
             // Wyciągamy unikalne pomieszczenia powiązane z wierzchołkami trójkąta
-            HashSet<Room> triangleRooms = new HashSet<Room>();
+            HashSet<NewRoom> triangleRooms = new HashSet<NewRoom>();
             foreach (var vertex in triangle.Vertices)
             {
-                if (pointToRoom.TryGetValue(vertex, out Room room))
+                if (pointToRoom.TryGetValue(vertex, out NewRoom room))
                     triangleRooms.Add(room);
             }
 
             // Jeśli trójkąt zawiera wierzchołki z więcej niż jednego pomieszczenia,
             // sprawdzamy czy którakolwiek para pomieszczeń jest ze sobą w kontakcie.
             bool valid = true;
-            Room[] roomArray = triangleRooms.ToArray();
-            for (int i = 0; i < roomArray.Length && valid; i++)
+            NewRoom[] roomArray = triangleRooms.ToArray();
+            /*for (int i = 0; i < roomArray.Length && valid; i++)
             {
                 for (int j = i + 1; j < roomArray.Length; j++)
                 {
@@ -104,7 +104,7 @@ public class DelaunayTriangulator
                         }
                     }
                 }
-            }
+            }*/
 
             if (valid)
                 filteredTriangles.Add(triangle);
