@@ -40,7 +40,6 @@ public class Pathfinding
 
         if (startNode == null || endNode == null)
         {
-            // Invalid Path
             return null;
         }
 

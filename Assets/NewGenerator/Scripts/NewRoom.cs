@@ -12,6 +12,8 @@ public class NewRoom
     public int XAxisSize;
     public int YAxisSize;
     public Transform RoomParent;
+    public bool IsSpawn;
+    public GameObject SpawnedRoomObject;
 
     public Vector3 Centroid = new Vector3(0, 0, 0);
 
@@ -22,8 +24,8 @@ public class NewRoom
 
         foreach (var cell in CellInRoom)
         {
-            float centerX = cell.Coordinate.x * _cellSize + _cellSize / 2f;
-            float centerY = cell.Coordinate.y * _cellSize + _cellSize / 2f;
+            float centerX = cell.Coordinate.x * _cellSize;
+            float centerY = cell.Coordinate.y * _cellSize;
 
             totalX += centerX;
             totalY += centerY;
@@ -39,7 +41,12 @@ public class NewRoom
 
     public void SpawnPrefabs(int wallPassLayerInt)
     {
-        GameObject[] prefabs = Resources.LoadAll<GameObject>($"RoomsPrefab/{YAxisSize}x{XAxisSize}");
+        GameObject[] prefabs;
+        if (!IsSpawn)
+            prefabs = Resources.LoadAll<GameObject>($"RoomsPrefab/{YAxisSize}x{XAxisSize}");
+        else
+            prefabs = Resources.LoadAll<GameObject>($"RoomsSpawnPrefab/{YAxisSize}x{XAxisSize}");
+        
         if (prefabs.Length > 0)
         {
             // Wylosuj jeden
@@ -47,30 +54,20 @@ public class NewRoom
             GameObject selectedPrefab = prefabs[randomIndex];
 
             // Instantiate go np. w (0, 0, 0) z domyślną rotacją
-            var obj = GameObject.Instantiate(selectedPrefab, GetRoomCentroid(), Quaternion.identity, RoomParent);
-            obj.transform.position = Centroid;
-
+             var obj = GameObject.Instantiate(selectedPrefab, GetRoomCentroid(), Quaternion.identity, RoomParent);
+            SpawnedRoomObject = obj;
+            
             GeneratorRoomData roomData = obj.GetComponent<GeneratorRoomData>();
             Transform[] selectedFloors =
                 roomData.AllFloors.Where(x => x.gameObject.layer == wallPassLayerInt).ToArray();
 
             foreach (var cell in CellInRoom)
             {
-                if (selectedFloors.Any(x => x.position.x - 1 == cell.Position.x && x.position.z - 1 == cell.Position.z))
+                if (selectedFloors.Any(x => x.position.x == cell.Position.x && x.position.z == cell.Position.z))
                 {
                     cell.GridCellType = E_GridCellType.Pass;
                 }
             }
-            /*foreach (var floor in selectedFloors)
-            {
-                selectedCells.AddRange(CellInRoom
-                    .Where(x => x.Position.x == floor.position.x && x.Position.y == floor.position.y).ToList());
-            }
-
-            foreach (var cell in selectedCells)
-            {
-                cell.GridCellType = E_GridCellType.Pass;
-            }*/
         }
         else
         {
@@ -89,5 +86,33 @@ public class NewRoom
 
         Debug.LogWarning("LayerMask contains multiple layers, using the first found.");
         return 0;
+    }
+
+    public List<GridCellData> GetPassGridCell()
+    {
+        List<GridCellData> passCells = new List<GridCellData>();
+        foreach (var cell in CellInRoom)
+        {
+            if (cell.GridCellType == E_GridCellType.Pass)
+            {
+                passCells.Add(cell);
+            }
+        }
+
+        return passCells;
+    }
+
+    public void SetInteractableObjectNullParent()
+    {
+        if (SpawnedRoomObject == null)
+            return;
+
+        foreach (Transform child in SpawnedRoomObject.transform)
+        {
+            if (child.TryGetComponent<IInteractable>(out var interactable))
+            {
+                child.SetParent(null);
+            }
+        }
     }
 }

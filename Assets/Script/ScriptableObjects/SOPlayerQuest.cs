@@ -9,7 +9,13 @@ using Random = UnityEngine.Random;
 public class SOPlayerQuest : ScriptableObject
 {
     public QuestDifficulty Difficulty;
-    public SerializedDictionary<ItemType, QuestAmountData> RequireItems = new SerializedDictionary<ItemType, QuestAmountData>();
+    public string Description;
+    public string ShortDescription;
+
+    public SerializedDictionary<ItemType, QuestAmountData> RequireItems =
+        new SerializedDictionary<ItemType, QuestAmountData>();
+
+    public SerializedDictionary<ItemType, int> SpawnedItems = new SerializedDictionary<ItemType, int>();
 
     public void Reset()
     {
@@ -25,23 +31,25 @@ public class SOPlayerQuest : ScriptableObject
         {
             if (item.Value.CurrentAmount < item.Value.RequiredAmount)
             {
-                return false; // Jeśli którykolwiek przedmiot nie spełnia wymagań, zadanie nie jest ukończone
+                return false;
             }
         }
 
-        return true; // Wszystkie przedmioty spełniają wymagania
+        return true;
     }
-    
+
     public void RandomizeQuest(QuestDifficulty difficulty)
     {
         Difficulty = difficulty;
         RequireItems.Clear();
+
+        ShortDescription = $"New Quest {Difficulty}";
+
         
         int itemAmount = 0;
         int itemRequiredAmountMin = 0;
         int itemRequiredAmountMax = 0;
         List<ItemType> avaibleCollection = ItemTypeHelper.GetCollectibles();
-
 
         switch (Difficulty)
         {
@@ -72,14 +80,28 @@ public class SOPlayerQuest : ScriptableObject
 
         for (int i = 0; i < itemAmount; i++)
         {
-            if(avaibleCollection.Count <= 0)
+            if (avaibleCollection.Count <= 0)
                 break;
-            
+
             ItemType itemType = avaibleCollection[Random.Range(0, avaibleCollection.Count)];
             avaibleCollection.Remove(itemType);
-            
-            RequireItems.Add(itemType,new QuestAmountData(0,Random.Range(itemRequiredAmountMin, itemRequiredAmountMax)));
+
+            RequireItems.Add(itemType,
+                new QuestAmountData(0, Random.Range(itemRequiredAmountMin, itemRequiredAmountMax)));
         }
+        
+        
+        Description = $"New Quest {Difficulty}";
+
+        foreach (var item in RequireItems)
+        {
+            Description += $"\n{item.Key} Amount: {item.Value.RequiredAmount}\n";
+        }
+    }
+
+    public void ResetSpawnedItem()
+    {
+        SpawnedItems.Clear();
     }
 }
 

@@ -12,9 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3648dcccd4821274dae0086834387bb9, type: 3}
   m_Name: PlayerTutorialQuest
   m_EditorClassIdentifier: 
+  Difficulty: 1
   RequireItems:
     _serializedList:
-    - Key: 2
+    - Key: 10
       Value:
-        CurrentAmount: 1
-        RequiredAmount: 1
+        CurrentAmount: 0
+        RequiredAmount: 3
+    - Key: 11
+      Value:
+        CurrentAmount: 0
+        RequiredAmount: 3
+    - Key: 12
+      Value:
+        CurrentAmount: 0
+        RequiredAmount: 3
+    - Key: 113
+      Value:
+        CurrentAmount: 0
+        RequiredAmount: 3
+  SpawnedItems:
+    _serializedList: []

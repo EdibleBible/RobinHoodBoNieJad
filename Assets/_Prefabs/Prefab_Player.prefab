@@ -1303,6 +1303,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   gravity: -9.81
   playerStatsController: {fileID: 0}
+  Sprinting: 0
+  Crouching: 0
 --- !u!114 &9189777617893726996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1326,6 +1328,7 @@ MonoBehaviour:
   rotationSmoothTime: 0.1
   crouchOffset: {x: 0, y: -0.5, z: 0}
   crouchTransitionTime: 0.3
+  camTransform: {fileID: 0}
 --- !u!114 &6290916183467294935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1349,8 +1352,13 @@ MonoBehaviour:
   followTarget: {fileID: 5532667995133521476}
   cameraOffset: {x: 0, y: 0.8, z: 0}
   runSpeed: 2
+  staminaUseInRun: 0
   runAcceleration: 1.7
   runDeceleration: 1
+  playerWalk: {fileID: 0}
+  playerRotation: {fileID: 0}
+  playerStamina: {fileID: 0}
+  playerAnimatorController: {fileID: 0}
 --- !u!114 &1109717592782625126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1364,6 +1372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
+  LockpickCamera: {fileID: 0}
   dropPointTransform: {fileID: 2018566085612201870}
   PlayerInventory: {fileID: 0}
   InventorySetUpEvent: {fileID: 11400000, guid: f89e93adceec4c64e9a894ffddd12c69,
@@ -1372,6 +1381,7 @@ MonoBehaviour:
   PickupItemEvent: {fileID: 11400000, guid: 6045bf7c4f68699458f87755699e6252, type: 2}
   InventoryUpdateSelectedItemEvent: {fileID: 11400000, guid: c7decfd095c514b4f80aa39dbc2380fa,
     type: 2}
+  currentSelectedItem: 0
   PlayerStatsController: {fileID: 0}
   CurrSelectedItem:
     ItemType: 0
@@ -1383,6 +1393,7 @@ MonoBehaviour:
     ItemPrefab: {fileID: 0}
     statToChange: []
     CollectibleId: 0
+    ProceedToDungeon: 0
 --- !u!114 &6662169019535611020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1395,6 +1406,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f65f570f674e449bf3a10526eb9e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  playerStateMachine: {fileID: 0}
   leftFootRaycast: {fileID: 284514626918455900}
   rightFootRaycast: {fileID: 4048875509888590323}
   rayDistance: 0.03
@@ -1422,7 +1435,9 @@ MonoBehaviour:
       Data3: 1520931752
       Data4: 1705262199
     Path: event:/Player/PlayerCrouch
-  DEBUG: 1
+  walkStepCooldown: 0.2
+  runStepCooldown: 0.2
+  crouchStepCooldown: 0.2
 --- !u!114 &8667969494564770948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1442,10 +1457,7 @@ MonoBehaviour:
   sphereRadius: 0.1
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 2147483648
-  interactionKey: 99
-  interactionStopKey: 0
-  dropKey: 113
+    m_Bits: 0
 --- !u!114 &3529988420471910963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1566,11 +1578,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ddb861454cb364c8b23dd2b817b089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCurrentQuests: {fileID: 11400000, guid: c3b16186e7d633e44940c373ed5cd147,
-    type: 2}
+  allQuest: {fileID: 0}
   SetUpQuestEvent: {fileID: 11400000, guid: d10e3a7165e00644c846c12292c99922, type: 2}
   UpdateQuestValueEvent: {fileID: 11400000, guid: 0e6af5a9891917c429f64148b5095a1e,
     type: 2}
+  Debug: 0
 --- !u!114 &2110244052743842011
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ public struct RoomGeneratorSettings
     public bool UseAdditionalEdges;
     public float ChanceToSelectEdge;
     public int AdditionSelectedEdges;
+    public LayerMask DetectObjectInCellLayerMask;
 
 
     public void CreateRoomOnGrid(Grid<GridCellData> createdGrid, SOLevel levelSeed)
@@ -50,16 +51,26 @@ public struct RoomGeneratorSettings
 
         AllCreatedRooms = createdRooms;
 
+        SelectSpawn();
+
+        
         for (int i = 0; i < AllCreatedRooms.Count; i++)
         {
-            Debug.Log($"Set Room IO : {i}");
+            AllCreatedRooms[i].SpawnPrefabs(LayerMaskToLayer(WallPassLayer));
+            
             AllCreatedRooms[i].RoomID = i;
             foreach (var cell in AllCreatedRooms[i].CellInRoom)
             {
                 cell.SetRoomID(i);
             }
         }
-        
+
+    }
+
+    private void SelectSpawn()
+    {
+        int randomIndex = UnityEngine.Random.Range(0, AllCreatedRooms.Count);
+        AllCreatedRooms[randomIndex].IsSpawn = true;
     }
 
     private NewRoom GenerateRoom(ref Random random, Grid<GridCellData> createdGrid)
@@ -93,7 +104,6 @@ public struct RoomGeneratorSettings
         room.YAxisSize = height;
         room.RoomParent = roomParent;
         room.CalculateRoomCentroid(createdGrid.GetCellSize());
-        room.SpawnPrefabs(LayerMaskToLayer(WallPassLayer));
         return room;
     }
 

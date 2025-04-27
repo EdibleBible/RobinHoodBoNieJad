@@ -28,6 +28,13 @@ public class PlayerQuestSystem : MonoBehaviour
                 UnityEngine.Debug.Log($"item name {VARIABLE.Key} amount {VARIABLE.Value}");
             }
         }
+        else
+        {
+            if (GameController.Instance != null)
+            {
+                allQuest = GameController.Instance.AllPlayerQuest;
+            }
+        }
         
         allQuest.CurrentSelectedQuest.Reset();
     }

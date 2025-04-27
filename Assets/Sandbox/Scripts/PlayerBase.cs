@@ -161,7 +161,6 @@ public class PlayerBase : MonoBehaviour
 
     public void Movement_Performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Chuj");
         var parameters = context.ReadValue<Vector2>();
         playerWalk.SetAxisMovement(parameters);
     }
@@ -173,13 +172,11 @@ public class PlayerBase : MonoBehaviour
 
     public void OnInteraction_Performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Interaction performed");
         playerInteractionController.Interact();
     }
 
     public void OnCancellInteraction_Performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Cancell Interaction performed");
         playerInteractionController.StopInteracting();
     }
 

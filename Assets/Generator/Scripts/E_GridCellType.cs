@@ -6,6 +6,7 @@ public enum E_GridCellType
     RoomBorder,
     RoomCorner,
     RoomInside,
+    Hallway,
     HallwayBorder,
     HallwayCorner,
     HallwayInside,

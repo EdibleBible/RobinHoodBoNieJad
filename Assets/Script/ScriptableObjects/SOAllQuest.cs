@@ -27,10 +27,9 @@ public class SOAllQuest : ScriptableObject
 
         if (questCompleted)
         {
-            
             if (randomRange >= 6 && currentQuestDifficulty != QuestDifficulty.VeryHard)
             {
-                newDifficulty = currentQuestDifficulty++;
+                newDifficulty = currentQuestDifficulty + 1;
             }
             else
             {
@@ -41,17 +40,28 @@ public class SOAllQuest : ScriptableObject
         {
             if (randomRange >= 7 && currentQuestDifficulty != QuestDifficulty.easy)
             {
-                newDifficulty = currentQuestDifficulty--;
+                newDifficulty = currentQuestDifficulty - 1;
             }
             else
             {
                 newDifficulty = currentQuestDifficulty;
             }
         }
-        
+    
         randomizedQuests[randomizedQuests.IndexOf(quest)].RandomizeQuest(newDifficulty);
     }
 
+
+    public void LoadAllQuest()
+    {
+        
+    }
+
+    public void SaveAllQuest()
+    {
+        
+    }
+        
     public void SelectQuest(SOPlayerQuest quest)
     {
         CurrentSelectedQuest = quest;
