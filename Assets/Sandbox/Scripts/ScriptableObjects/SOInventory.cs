@@ -19,6 +19,9 @@ public class SOInventory : ScriptableObject
     public int BaseInventorySize;
     public int CurrInventorySize;
     public List<ItemType> CollectedItemTypes;
+    public int CollectedGoblets;
+    public int CollectedVases;
+    public int CollectedBooks;
 
     public void CalculateItemsSlotsCount()
     {
@@ -104,4 +107,56 @@ public class SOInventory : ScriptableObject
 
         return load;
     }
+
+    public void CollectGoblet(int id)
+    {
+        CollectedGoblets |= 1 << (id - 1);
+    }
+
+    public void CollectVase(int id)
+    {
+        CollectedVases |= 1 << (id - 1);
+    }
+
+    public void CollectBook(int id)
+    {
+        CollectedBooks |= 1 << (id - 1);
+    }
+
+    public bool IsCollectedGoblet(int id)
+    {
+        return (CollectedGoblets & (1 << (id - 1))) != 0;
+    }
+
+    public bool IsCollectedVase(int id)
+    {
+        return (CollectedVases & (1 << (id - 1))) != 0;
+    }
+
+    public bool IsCollectedBook(int id)
+    {
+        return (CollectedBooks & (1 << (id - 1))) != 0;
+    }
+
+    public void UncollectGoblet(int id)
+    {
+        CollectedGoblets &= ~(1 << (id - 1));
+    }
+
+    public void UncollectVase(int id)
+    {
+        CollectedVases &= ~(1 << (id - 1));
+    }
+
+    public void UncollectBook(int id)
+    {
+        CollectedBooks &= ~(1 << (id - 1));
+    }
+    public void ResetCollections()
+    {
+        CollectedGoblets = 0;
+        CollectedVases = 0;
+        CollectedBooks = 0;
+    }
+
 }
