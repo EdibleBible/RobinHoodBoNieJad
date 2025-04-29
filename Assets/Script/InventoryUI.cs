@@ -8,9 +8,36 @@ public class InventoryUI : MonoBehaviour
     private List<ItemSlot> itemSlots = new List<ItemSlot>();
     [SerializeField] private ItemSlot itemSlotPrefab;
     [SerializeField] private Transform itemSlotParent;
-    
+
     [SerializeField] private GameEvent DropItemEvent;
-    
+
+    public void InitializeInventoryUI(Component sender, object data)
+    {
+        if (sender is PlayerBase playerBase && data is SOInventory inventoryData)
+        {
+            inventoryData.SetUpInventory();
+
+            foreach (Transform child in itemSlotParent)
+            {
+                Destroy(child.gameObject);
+            }
+
+            itemSlots.Clear();
+
+            for (int i = 0; i < inventoryData.CurrInventorySize; i++)
+            {
+                var slot = Instantiate(itemSlotPrefab, itemSlotParent);
+                slot.SetUpSlot(i, null, i == playerBase.currentSelectedItem);
+                itemSlots.Add(slot);
+            }
+
+            foreach (var item in inventoryData.ItemsInInventory)
+            {
+                AddItemToUI(playerBase, item);
+            }
+        }
+    }
+
     public void SetUpInventory(Component sender, object data)
     {
         if (sender is PlayerBase playerBase && data is SOInventory inventoryData)
@@ -19,31 +46,32 @@ public class InventoryUI : MonoBehaviour
             List<ItemSlotSavedData> savedItemSlots = new List<ItemSlotSavedData>();
             for (int i = 0; i < itemSlots.Count; i++)
             {
-                savedItemSlots.Add(new ItemSlotSavedData(itemSlots[i].SlotId,itemSlots[i].AssignedItem, itemSlots[i].IsSelected));
+                savedItemSlots.Add(new ItemSlotSavedData(itemSlots[i].SlotId, itemSlots[i].AssignedItem,
+                    itemSlots[i].IsSelected));
             }
 
             foreach (Transform child in itemSlotParent)
             {
                 Destroy(child.gameObject);
             }
-            
+
             itemSlots.Clear();
-            
+
             for (int i = 0; i < inventoryData.CurrInventorySize; i++)
             {
                 var slot = Instantiate(itemSlotPrefab, itemSlotParent);
                 slot.SetUpSlot(i, null, i == playerBase.currentSelectedItem);
                 itemSlots.Add(slot);
             }
-            
+
             int minCount = Mathf.Min(itemSlots.Count, savedItemSlots.Count);
             for (int i = 0; i < minCount; i++)
             {
                 Debug.Log($"saved slot: {i}");
-                itemSlots[i].SetUpSlot(savedItemSlots[i].SlotId, savedItemSlots[i].AssignedItem, savedItemSlots[i].IsSelected);
+                itemSlots[i].SetUpSlot(savedItemSlots[i].SlotId, savedItemSlots[i].AssignedItem,
+                    savedItemSlots[i].IsSelected);
             }
         }
-
     }
 
     public void AddItemToUI(Component sender, object data)
@@ -54,68 +82,45 @@ public class InventoryUI : MonoBehaviour
             {
                 return;
             }
-            
+
             var firstEmptySlot = itemSlots.FirstOrDefault(x => x.AssignedItem == null);
-            if (firstEmptySlot != null)
+            if (itemData.ItemSize == 1)
             {
-                firstEmptySlot.AssignItem(itemData, false);
+                if (firstEmptySlot != null)
+                {
+                    firstEmptySlot.AssignItem(itemData, false);
+                }
             }
+            else
+            {
+                for (int i = 0; i < itemData.ItemSize; i++)
+                {
+                    if (i == 0)
+                    {
+                        if (firstEmptySlot != null)
+                        {
+                            firstEmptySlot.AssignItem(itemData, false);
+                        }
+
+                        continue;
+                    }
+
+                    firstEmptySlot = itemSlots.FirstOrDefault(x => x.AssignedItem == null);
+                    firstEmptySlot.AssignItem(itemData, true);
+                }
+            }
+
             if (firstEmptySlot.IsSelected)
             {
                 playerBase.CurrSelectedItem = firstEmptySlot.AssignedItem;
             }
-            
+
             Debug.Log("AddItemToUI");
         }
         else
         {
             Debug.LogWarning("sender is null");
         }
-        /*if (data is ItemData itemData && sender is PlayerBase playerBase)
-        {
-            if (itemData.ItemSize == 0)
-            {
-                return;
-            }
-            else if (itemData.ItemSize == 1)
-            {
-                var firstEmptySlot = itemSlots.FirstOrDefault(x => x.AssignedItem == null);
-                if (firstEmptySlot != null)
-                {
-                    firstEmptySlot.AssignItem(itemData, false);
-                }
-
-                if (firstEmptySlot.IsSelected)
-                {
-                    playerBase.CurrSelectedItem = firstEmptySlot.AssignedItem;
-                }
-            }
-            else
-            {
-                List<ItemSlot> requiredSlot = new List<ItemSlot>();
-                for (int i = 0; i < itemData.ItemSize; i++)
-                {
-                    requiredSlot.Add(itemSlots.FirstOrDefault(x =>
-                        x.AssignedItem == null && !requiredSlot.Contains(x)));
-                }
-
-                for (int i = 0; i < requiredSlot.Count; i++)
-                {
-                    if (i == 0)
-                        requiredSlot[i].AssignItem(itemData, false);
-                    else
-                    {
-                        requiredSlot[i].AssignItem(itemData, true);
-                    }
-                }
-
-                var selectedSlot = requiredSlot.Where(x => x.IsSelected).FirstOrDefault();
-                if (selectedSlot != null)
-                {
-                    playerBase.CurrSelectedItem = selectedSlot.AssignedItem;
-                }
-            }
-        }*/
     }
 
     public void RemoveItemFromUI(Component sender, object data)
@@ -123,7 +128,7 @@ public class InventoryUI : MonoBehaviour
         if (data is int slotToDropIndex && sender is PlayerBase playerBase)
         {
             var item = itemSlots[slotToDropIndex].AssignedItem;
-            DropItemEvent.Raise(this,itemSlots[slotToDropIndex].AssignedItem);
+            DropItemEvent.Raise(this, itemSlots[slotToDropIndex].AssignedItem);
             if (item.ItemSize == 1)
             {
                 itemSlots[slotToDropIndex].RemoveAssignedItem();
@@ -137,9 +142,8 @@ public class InventoryUI : MonoBehaviour
                     slot.RemoveAssignedItem();
                 }
             }
-            
         }
-        else if(data is ItemData itemData && sender is PlayerBase basePlayer)
+        else if (data is ItemData itemData && sender is PlayerBase basePlayer)
         {
             var itemSlot = itemSlots.FirstOrDefault(x => x.AssignedItem == itemData);
             if (itemSlot.AssignedItem.ItemSize == 1)
@@ -168,10 +172,13 @@ public class InventoryUI : MonoBehaviour
             itemSlots[prevSelected].DeselectSlot();
             itemSlots[currSelected].SelectSlot();
             playerBase.CurrSelectedItem = itemSlots[currSelected].AssignedItem;
+            Debug.Log($"Curr select item: {playerBase.CurrSelectedItem.ReturnData()}");
         }
     }
-    
-    
+
+    private void Awake()
+    {
+    }
 }
 
 public struct ItemSlotSavedData

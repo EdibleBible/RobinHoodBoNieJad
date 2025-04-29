@@ -10,7 +10,7 @@ public class SOInventory : ScriptableObject
 {
     public SOPlayerStatsController PlayerStatsController;
 
-    [HideInInspector] public int CurrInventoryLoad;
+    public int CurrInventoryLoad;
 
     public List<ItemData> ItemsInInventory = new List<ItemData>();
     public List<ItemData> InventoryLobby = new List<ItemData>();
@@ -22,7 +22,7 @@ public class SOInventory : ScriptableObject
     public int CollectedGoblets;
     public int CollectedVases;
     public int CollectedBooks;
-
+    
     public void CalculateItemsSlotsCount()
     {
         CurrInventorySize =
@@ -34,18 +34,25 @@ public class SOInventory : ScriptableObject
     public void ClearInventory()
     {
         CurrInvenoryScore = 0;
-        InventoryLobby.Clear();
+        ItemsInInventory.Clear();
         CurrInventoryLoad = 0;
     }
 
     public void SetUpInventory()
     {
         CurrInvenoryScore = CalculateInvenoryScore();
+        CurrInventoryLoad = 0;
+        
+        foreach (var item in ItemsInInventory)
+        {
+            CurrInventoryLoad += item.ItemSize;
+        }
     }
 
     public bool AddItemToInventory(ItemData item)
     {
-        int tempoleryInventoryLoad = CurrInventoryLoad + item.ItemSize;
+        int tempoleryInventoryLoad = CurrInventoryLoad;
+        tempoleryInventoryLoad += item.ItemSize;
 
         if (tempoleryInventoryLoad > CurrInventorySize)
         {
@@ -53,7 +60,7 @@ public class SOInventory : ScriptableObject
             return false;
         }
 
-        InventoryLobby.Add(item);
+        ItemsInInventory.Add(item);
         CurrInvenoryScore = CurrInventoryLoad;
         CurrInventoryLoad = tempoleryInventoryLoad;
         return true;
@@ -61,13 +68,14 @@ public class SOInventory : ScriptableObject
 
     public bool RemoveItemFromInventory(ItemData item)
     {
-        if (!InventoryLobby.Contains(item))
+        Debug.Log($"RemoveItemFromInventory: {item.ReturnData()}");
+        if (!ItemsInInventory.Contains(item))
         {
             Debug.Log("Item is not in inventory");
             return false;
         }
 
-        InventoryLobby.Remove(item);
+        ItemsInInventory.Remove(item);
         CurrInvenoryScore = CalculateInvenoryScore();
         CurrInventoryLoad -= item.ItemSize;
         Debug.Log(CurrInventoryLoad);
@@ -77,7 +85,7 @@ public class SOInventory : ScriptableObject
     public float CalculateInvenoryScore()
     {
         float score = 0;
-        foreach (var item in InventoryLobby)
+        foreach (var item in ItemsInInventory)
         {
             if (item != null)
                 score += item.ItemValue;

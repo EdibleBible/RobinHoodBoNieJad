@@ -14,6 +14,7 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private Transform dropPointTransform;
     public SOInventory PlayerInventory;
     [SerializeField] private GameEvent InventorySetUpEvent;
+    [SerializeField] private GameEvent InventoryInitializeEvent;
     [SerializeField] private GameEvent DropItemEvent;
     [SerializeField] private GameEvent PickupItemEvent;
     [SerializeField] private GameEvent InventoryUpdateSelectedItemEvent;
@@ -42,7 +43,7 @@ public class PlayerBase : MonoBehaviour
         playerWalk = GetComponent<PlayerWalk>();
         playerInteractionController = GetComponent<PlayerInteractionController>();
         specialSenseController = GetComponent<SpecialSenseController>();
-        
+
 
         // Input Hook
         PlayerInputActions.Player.Movement.performed += Movement_Performed;
@@ -64,10 +65,8 @@ public class PlayerBase : MonoBehaviour
         PlayerInputActions.Player.ChangeItemPositive.performed += OnChangeIntem_Performed;
 
         PlayerInputActions.Player.SpecialSense.performed += OnSpecialSense_Performed;
-        
-        PlayerInventory.ClearInventory();
-        PlayerInventory.SetUpInventory();
-        ResetInventory();
+
+        ResetInventory(true);
         InventoryUpdateSelectedItemEvent?.Raise(this, (0, 0));
     }
 
@@ -143,10 +142,16 @@ public class PlayerBase : MonoBehaviour
         DropItemEvent?.Raise(this, itemToRemove);
     }
 
-    public void ResetInventory()
+    public void ResetInventory(bool initialize = false)
     {
         PlayerInventory.CalculateItemsSlotsCount();
-        InventorySetUpEvent?.Raise(this, PlayerInventory);
+
+        if (!initialize)
+            InventorySetUpEvent?.Raise(this, PlayerInventory);
+        else
+        {
+            InventoryInitializeEvent?.Raise(this, PlayerInventory);
+        }
     }
 
     public void ResetStamina()
@@ -184,7 +189,7 @@ public class PlayerBase : MonoBehaviour
     {
         playerWalk.Crouching = true;
     }
-    
+
     private void OnSpecialSense_Performed(InputAction.CallbackContext obj)
     {
         specialSenseController.TryUseSpecialSense();
@@ -230,6 +235,7 @@ public class PlayerBase : MonoBehaviour
             UpdateSelectedSlot(1); // Scroll w dół
         }
     }
+
     private void PlayDropSound(ItemType itemType)
     {
         var instance = FMODUnity.RuntimeManager.CreateInstance("event:/ItemDrop");
@@ -252,5 +258,4 @@ public class PlayerBase : MonoBehaviour
             _ => 0
         };
     }
-
 }

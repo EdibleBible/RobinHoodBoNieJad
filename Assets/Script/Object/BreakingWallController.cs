@@ -54,7 +54,6 @@ public class BreakingWallController : MonoBehaviour, IInteractable
         PlayerBase playerBase = player.GetComponent<PlayerBase>();
         if (playerBase.PlayerInventory.ItemsInInventory.Any(x => x.ItemType == ItemType.Hammer))
         {
-
             PlayWallSound();
             PlayWallAnimation();
 

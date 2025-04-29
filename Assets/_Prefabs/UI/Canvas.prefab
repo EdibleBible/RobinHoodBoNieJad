@@ -2655,7 +2655,7 @@ PrefabInstance:
     - target: {fileID: 2443646520554402128, guid: c9c48db6bcc41d9449219145edf4bc65,
         type: 3}
       propertyPath: m_fontSize
-      value: 49.6
+      value: 49.15
       objectReference: {fileID: 0}
     - target: {fileID: 2443646520554402128, guid: c9c48db6bcc41d9449219145edf4bc65,
         type: 3}
@@ -3578,7 +3578,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6054692021276936956, guid: ecf3696ba1b179845846fe457d117d64,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9072832589433360028}
   m_SourcePrefab: {fileID: 100100000, guid: ecf3696ba1b179845846fe457d117d64, type: 3}
 --- !u!224 &1910576176640610729 stripped
 RectTransform:
@@ -3592,3 +3596,37 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4542010122987480458}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7714350000997609334 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6054692021276936956, guid: ecf3696ba1b179845846fe457d117d64,
+    type: 3}
+  m_PrefabInstance: {fileID: 4542010122987480458}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9072832589433360028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7714350000997609334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b288f956189904aa97a5b1f54aae18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: e7fad03cb1d018b4fa19fda381d68247, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6939426348671012697}
+        m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
+        m_MethodName: InitializeInventoryUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

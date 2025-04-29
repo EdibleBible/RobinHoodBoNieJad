@@ -30,6 +30,7 @@ public class GameEventListener : MonoBehaviour
         {
             if (response == null)
                 return;
+            
             response.Invoke(sender, data);
         }
         catch (Exception e)

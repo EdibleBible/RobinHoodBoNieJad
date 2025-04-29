@@ -165,6 +165,18 @@ public class ItemData : IStatChangeable
     }
     public int CollectibleId;
     public bool ProceedToDungeon;
+
+    public string ReturnData()
+    {
+        string returnData = "";
+        returnData += ItemName + ", ";
+        returnData += ItemDescription + ", ";
+        returnData += ItemSize + ", ";
+        returnData += ItemValue + ", ";
+        returnData += ItemIcon.name + ", ";
+        returnData += ItemPrefab.gameObject.name+ ", ";
+        return returnData;
+    }
 }
 
 public enum ItemType

@@ -84,6 +84,7 @@ public class MenuButtonLobby : MonoBehaviour
 
     public void StartGame()
     {
+        
         stats.lobbyVisit += 1;
         inventory.ItemsInInventory.Clear();
         inventory.ItemsInInventory.AddRange(inventory.InventoryLobby);
@@ -93,6 +94,7 @@ public class MenuButtonLobby : MonoBehaviour
 
     private IEnumerator LoadGameWithFade(int gameSceneIndex, string lobbySceneName)
     {
+        GameController.Instance.RandomizeQuest();
         loadingScreen.SetActive(true);
         
         yield return StartCoroutine(Fade(1));
