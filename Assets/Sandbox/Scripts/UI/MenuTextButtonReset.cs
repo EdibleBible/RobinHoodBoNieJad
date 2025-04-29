@@ -25,5 +25,8 @@ public class MenuTextButtonReset : MonoBehaviour
         stats.lobbyVisit = 1;
         stats.taxPaid = false;
         stats.inventorySize = 3;
+        inventory.CollectedGoblets = 0;
+        inventory.CollectedVases = 0;
+        inventory.CollectedBooks = 0;
     }
 }

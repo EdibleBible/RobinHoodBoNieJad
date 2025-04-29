@@ -245,7 +245,7 @@ public class PlayerBase : MonoBehaviour
         {
             ItemType.SteelShoes => 0, // Cloth
             ItemType.CollectibleVase => 1, // Porcelain
-            ItemType.CollectibleBox => 2, // Wood
+            ItemType.CollectibleBook => 2, // Wood
             ItemType.CollectibleGoblet => 3, // Glass
             ItemType.Hammer => 4,
             ItemType.Key => 5,

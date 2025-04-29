@@ -71,5 +71,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c305dabdaed4d4149b4957bb1221a643,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2412616326125190186}
   m_SourcePrefab: {fileID: 100100000, guid: c305dabdaed4d4149b4957bb1221a643, type: 3}
+--- !u!1 &8010609892037617283 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c305dabdaed4d4149b4957bb1221a643,
+    type: 3}
+  m_PrefabInstance: {fileID: 7199582969653943250}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2412616326125190186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8010609892037617283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f693b2442337e2643ab16292e5fe2511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemData:
+    ItemType: 11
+    ItemName: Copper Silver Goblet
+    ItemDescription: GobletDescription
+    ItemSize: 1
+    ItemValue: 10
+    ItemIcon: {fileID: 21300000, guid: 2cd3a81f7a08dd344b95df343579225a, type: 3}
+    ItemPrefab: {fileID: 8010609892037617283, guid: 29ecf78440b90354c9009430b6675989,
+      type: 3}
+    statToChange: []
+    CollectibleId: 2
+    ProceedToDungeon: 0
+  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
+  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
+  interactMessage: Pick up Goblet
+  blockedMessage: Item Is Blocked

@@ -175,7 +175,7 @@ public enum ItemType
     //Collectible 10 - 99
     CollectibleVase = 10,
     CollectibleGoblet = 11,
-    CollectibleBox = 12,
+    CollectibleBook = 12,
     
     //Usable 100 - 200
     Backpack = 100, 
