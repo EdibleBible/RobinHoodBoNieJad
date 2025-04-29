@@ -49,7 +49,7 @@ public class ItemBase : MonoBehaviour, IInteractable
     [SerializeField] private string blockedMessage;
     private IStatChangeable statChangeableImplementation;
 
-    public void Interact(Transform player)
+    public virtual void Interact(Transform player)
     {
         if (!CanInteract || IsBlocked)
         {
@@ -68,6 +68,7 @@ public class ItemBase : MonoBehaviour, IInteractable
 
         if (playerBase.PickUp(ItemData))
         {
+            GetComponent<PickupSounds>().PlayPickupSound();
             InteractEvent.Raise(this, null);
             ItemData.AddModifier(playerBase.PlayerStatsController);
             if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Inventory))
@@ -77,6 +78,10 @@ public class ItemBase : MonoBehaviour, IInteractable
             if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Stamina))
             {
                 playerBase.ResetStamina();
+            }
+            if (ItemData.StatsToChange.Any(x => x.ModifierType == E_ModifiersType.Fuel))
+            {
+                playerBase.ResetFuel();
             }
             IsUsed = true;
             Destroy(gameObject);
@@ -89,7 +94,8 @@ public class ItemBase : MonoBehaviour, IInteractable
 
     public void ShowUI()
     {
-        ShowUIEvent.Raise(this, (true, InteractMessage, false));
+        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", interactMessage);
+        ShowUIEvent.Raise(this, (true, textToShow, false));   
     }
 
     public void HideUI()
@@ -158,29 +164,43 @@ public class ItemData : IStatChangeable
         }
     }
     public int CollectibleId;
+    public bool ProceedToDungeon;
 }
 
 public enum ItemType
 {
-    Debug,
-    CollectibleVase,
-    CollectibleGoblet,
-    Backpack, //Usable
-    CollectibleBox,
+    //DEBUG 0 - 9
+    Debug = 0,
+    
+    //Collectible 10 - 99
+    CollectibleVase = 10,
+    CollectibleGoblet = 11,
+    CollectibleBox = 12,
+    
+    //Usable 100 - 200
+    Backpack = 100, 
+    Key = 101,
+    Hammer = 102,
+    SteelShoes = 103,
+    FastShoes = 104,
+    Forklift = 105,
+    Potion = 106, 
+    Unused1 = 107,
+    Unused2 = 108,
+    Unused3 = 109,
+    Unused4 = 110,
+    Unused5 = 111,
+    Unused6 = 112,
+    MoneyBag = 113
+}
 
-
-    //Usable
-    Key,
-    Hammer,
-    SteelShoes,
-    FastShoes,
-    Forklift,
-    Potion,
-    Unused1,
-    Unused2,
-    Unused3,
-    Unused4,
-    Unused5,
-    Unused6,
-    MoneyBag //Unusable
+public static class ItemTypeHelper
+{
+    public static List<ItemType> GetCollectibles()
+    {
+        return Enum.GetValues(typeof(ItemType))
+            .Cast<ItemType>()
+            .Where(i => (int)i >= 10 && (int)i < 100)
+            .ToList();
+    }
 }

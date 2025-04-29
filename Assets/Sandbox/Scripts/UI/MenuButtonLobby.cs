@@ -27,6 +27,10 @@ public class MenuButtonLobby : MonoBehaviour
 
     private void Awake()
     {
+        foreach (ItemData itemData in inventory.ItemsInInventory)
+        {
+            inventory.InventoryLobby.Add(itemData);
+        }
         inventory.CurrInvenoryScore += inventory.ScoreBackup;
         inventory.ScoreBackup = 0;
         Cursor.visible = true;
@@ -81,6 +85,8 @@ public class MenuButtonLobby : MonoBehaviour
     public void StartGame()
     {
         stats.lobbyVisit += 1;
+        inventory.ItemsInInventory.Clear();
+        inventory.ItemsInInventory.AddRange(inventory.InventoryLobby);
         inventory.ScoreBackup = inventory.CurrInvenoryScore;
         StartCoroutine(LoadGameWithFade(2, "Lobby"));
     }

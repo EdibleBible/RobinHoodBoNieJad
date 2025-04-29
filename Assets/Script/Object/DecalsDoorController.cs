@@ -16,6 +16,8 @@ public class DecalsDoorController : DoorController
     private LayerMask wallLayer;
     [SerializeField]
     private LayerMask wallDecalLayer;
+    [SerializeField]
+    private LayerMask decalLayer;
 
     private List<Transform> doorsSideWalls = new List<Transform>();
     [SerializeField]
@@ -345,6 +347,22 @@ public class DecalsDoorController : DoorController
             Vector3 decalPositionOffset = Vector3.zero + newOffset;
             leverDecalObj.transform.localPosition = decalPositionOffset;
             leverDecalObj.GetComponent<DecalProjector>().material = lever.Value;
+
+            SetLayerRecursively(leverDecalObj, decalLayer); // <-- Ustawianie warstwy
+        }
+    }
+
+    private void SetLayerRecursively(GameObject obj, LayerMask newLayer)
+    {
+        if (obj == null) return;
+        
+        int myNewLayer = LayerMask.NameToLayer("Decal");
+        obj.layer = myNewLayer;
+
+        foreach (Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            SetLayerRecursively(child.gameObject, newLayer);
         }
     }
 }

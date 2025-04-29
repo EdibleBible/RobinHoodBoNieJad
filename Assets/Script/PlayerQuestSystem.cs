@@ -7,30 +7,53 @@ using UnityEngine.Rendering;
 
 public class PlayerQuestSystem : MonoBehaviour
 {
-    [SerializeField] private SOPlayerQuest playerCurrentQuests;
+    [SerializeField] private SOAllQuest allQuest;
     [SerializeField] private GameEvent SetUpQuestEvent;
     [SerializeField] private GameEvent UpdateQuestValueEvent;
 
+    [SerializeField] private bool Debug;
+
     private void Awake()
     {
-        playerCurrentQuests.Reset();
+        if (allQuest == null)
+            return;
+
+        if (Debug)
+        {
+            allQuest.RandomizeAllQuests();
+            allQuest.CurrentSelectedQuest = allQuest.randomizedQuests[0];
+
+            foreach (var VARIABLE in allQuest.CurrentSelectedQuest.RequireItems)
+            {
+                UnityEngine.Debug.Log($"item name {VARIABLE.Key} amount {VARIABLE.Value}");
+            }
+        }
+        
+        allQuest.CurrentSelectedQuest.Reset();
     }
 
     private void Start()
     {
-        SetUpQuestEvent?.Raise(this, playerCurrentQuests);
+        SetUpQuestEvent?.Raise(this, allQuest.CurrentSelectedQuest);
+    }
+
+    public void SetUpQuest(SOAllQuest quest)
+    {
+        allQuest = quest;
+        allQuest.CurrentSelectedQuest.Reset();
+        SetUpQuestEvent?.Raise(this, allQuest.CurrentSelectedQuest);
     }
 
     public void AddItemToQuest(Component sender, object data)
     {
         if (data is ItemData itemBase && sender is PlayerBase playerBase)
         {
-
-            if (playerCurrentQuests.RequireItems.ContainsKey(itemBase.ItemType))
+            if (allQuest.CurrentSelectedQuest.RequireItems.ContainsKey(itemBase.ItemType))
             {
-                playerCurrentQuests.RequireItems[itemBase.ItemType].CurrentAmount++;
-                var value = playerCurrentQuests.RequireItems[itemBase.ItemType];
-                UpdateQuestValueEvent?.Raise(this, (itemBase.ItemType ,playerCurrentQuests.RequireItems[itemBase.ItemType]));
+                allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType].CurrentAmount++;
+                var value = allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType];
+                UpdateQuestValueEvent?.Raise(this,
+                    (itemBase.ItemType, allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType]));
             }
         }
     }
@@ -39,16 +62,18 @@ public class PlayerQuestSystem : MonoBehaviour
     {
         if (data is ItemData itemBase)
         {
-            if (playerCurrentQuests.RequireItems.ContainsKey(itemBase.ItemType))
+            if (allQuest.CurrentSelectedQuest.RequireItems.ContainsKey(itemBase.ItemType))
             {
-                playerCurrentQuests.RequireItems[itemBase.ItemType].CurrentAmount--;
-                UpdateQuestValueEvent?.Raise(this, (itemBase.ItemType ,playerCurrentQuests.RequireItems[itemBase.ItemType]));
+                allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType].CurrentAmount--;
+                UpdateQuestValueEvent?.Raise(this,
+                    (itemBase.ItemType, allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType]));
             }
         }
     }
 
     public bool IsQuestComplete()
     {
-        return playerCurrentQuests.RequireItems.All(item => item.Value.CurrentAmount >= item.Value.RequiredAmount);
+        return allQuest.CurrentSelectedQuest.RequireItems.All(item =>
+            item.Value.CurrentAmount >= item.Value.RequiredAmount);
     }
 }

@@ -36,6 +36,9 @@ public class PlayerRunningState : BaseState<E_PlayerState>
     public override void UpdateState()
     {
         PlayerWalk.Movement(MovementSpeed, AccelerationTime, DecelerationTime, out float x, out float y);
+
+        PlayerRotation.UpdateRotation();
+        
         var velocity = PlayerWalk.GetCharacterVelocity();
         Transform transform = PlayerWalk.GetTransform();
 
@@ -47,10 +50,15 @@ public class PlayerRunningState : BaseState<E_PlayerState>
             PlayerStaminaSystem.UseStamina(UsedStaminaInRun);
         }
 
-        PlayerRotation.UpdateRotation();
+        PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);
 
         PlayerAnimatorController.UpdateWalkParameters(x, y);
-        PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);
+    }
+
+    public override void FixedUpdateState()
+    {
+
+
     }
 
     public override E_PlayerState GetNextState()
@@ -61,11 +69,11 @@ public class PlayerRunningState : BaseState<E_PlayerState>
             {
                 return E_PlayerState.Walk;
             }
-            else if (Input.GetKey(KeyCode.LeftShift) && PlayerStaminaSystem.currentStamina > 0.1)
+            else if (PlayerWalk.Sprinting && PlayerStaminaSystem.currentStamina > 0.1)
             {
                 return E_PlayerState.Running;
             }
-            else if (Input.GetKey(KeyCode.LeftControl))
+            else if (PlayerWalk.Crouching)
             {
                 return E_PlayerState.Crouching;
             }
@@ -76,11 +84,11 @@ public class PlayerRunningState : BaseState<E_PlayerState>
         }
         else
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (PlayerWalk.Sprinting)
             {
                 return E_PlayerState.Running;
             }
-            else if (Input.GetKey(KeyCode.LeftControl))
+            else if (PlayerWalk.Crouching)
             {
                 return E_PlayerState.Crouching;
             }

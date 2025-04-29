@@ -9,6 +9,7 @@ public class GameoverController : MonoBehaviour
     public void LoseGame()
     {
         _inventory.ClearInventory();
+        Debug.Log("Lose game");
         LoseGameEvent?.Raise(this,null);
     }
 }

@@ -28,14 +28,12 @@ public class PlayerDoorInteraction : BaseState<E_PlayerState>
         
     }
 
+    public override void FixedUpdateState()
+    {
+    }
+
     public override E_PlayerState GetNextState()
     {
-        /*if (PlayerAnimatorController)
-        {
-            return E_PlayerState.OpenDoorInteraction;
-        }
-        else
-        {*/
             if (Input.GetKey(KeyCode.LeftControl))
             {
                 return E_PlayerState.Crouching;
@@ -44,9 +42,6 @@ public class PlayerDoorInteraction : BaseState<E_PlayerState>
             {
                 return E_PlayerState.Walk;
             }
-        /*
-        }
-    */
     }
 
     public override void OnTriggerEnterState(Collider other)

@@ -13,72 +13,123 @@ public class SOPlayerStatsControllerEditor : Editor
         playerStatsProperty = serializedObject.FindProperty("PlayerStats");
     }
 
-    public override void OnInspectorGUI()
+public override void OnInspectorGUI()
+{
+    serializedObject.Update();
+    SOPlayerStatsController statsController = (SOPlayerStatsController)target;
+
+    List<E_ModifiersType> existingTypes = new List<E_ModifiersType>();
+
+    EditorGUILayout.LabelField("★ Aktualne Modyfikatory Gracza", EditorStyles.boldLabel);
+    EditorGUILayout.Space();
+
+    for (int i = 0; i < playerStatsProperty.arraySize; i++)
     {
-        serializedObject.Update();
-        SOPlayerStatsController statsController = (SOPlayerStatsController)target;
+        SerializedProperty statProperty = playerStatsProperty.GetArrayElementAtIndex(i);
+        SerializedProperty modifierTypeProperty = statProperty.FindPropertyRelative("ModifiersType");
+        SerializedProperty additiveProperty = statProperty.FindPropertyRelative("Additive");
+        SerializedProperty multiplicativeProperty = statProperty.FindPropertyRelative("Multiplicative");
 
-        List<E_ModifiersType> existingTypes = new List<E_ModifiersType>();
+        E_ModifiersType modifierType = (E_ModifiersType)modifierTypeProperty.enumValueIndex;
 
-        for (int i = 0; i < playerStatsProperty.arraySize; i++)
+        if (existingTypes.Contains(modifierType))
         {
-            SerializedProperty statProperty = playerStatsProperty.GetArrayElementAtIndex(i);
-            SerializedProperty modifierTypeProperty = statProperty.FindPropertyRelative("ModifiersType");
-            SerializedProperty additiveProperty = statProperty.FindPropertyRelative("Additive");
-            SerializedProperty multiplicativeProperty = statProperty.FindPropertyRelative("Multiplicative");
-
-            E_ModifiersType modifierType = (E_ModifiersType)modifierTypeProperty.enumValueIndex;
-
-            // Sprawdzamy, czy enum już wystąpił
-            if (existingTypes.Contains(modifierType))
-            {
-                EditorGUILayout.HelpBox($"Stat '{modifierType}' już istnieje! Usuń duplikat.", MessageType.Warning);
-            }
-            else
-            {
-                existingTypes.Add(modifierType);
-            }
-
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.PropertyField(modifierTypeProperty, new GUIContent("Typ modyfikatora"));
-
-            if (GUILayout.Button("Usuń", GUILayout.Width(60)))
-            {
-                playerStatsProperty.DeleteArrayElementAtIndex(i);
-                break;
-            }
-
-            EditorGUILayout.EndHorizontal();
-
-            // Edycja wartości
-            EditorGUILayout.LabelField($"Modyfikator: {modifierType}", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(additiveProperty, new GUIContent("Additive"));
-            EditorGUILayout.PropertyField(multiplicativeProperty, new GUIContent("Multiplicative"));
-
-            // Przycisk Reset
-            if (GUILayout.Button("Reset", GUILayout.Width(100)))
-            {
-                additiveProperty.floatValue = 0;
-                multiplicativeProperty.floatValue = 1;
-            }
-
-            EditorGUILayout.EndVertical();
+            EditorGUILayout.HelpBox($"Stat '{modifierType}' już istnieje! Usuń duplikat.", MessageType.Warning);
+        }
+        else
+        {
+            existingTypes.Add(modifierType);
         }
 
-        // Dodawanie nowego statystyk modyfikatora
-        EditorGUILayout.Space();
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        EditorGUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Dodaj nowy stat"))
+        EditorGUILayout.PropertyField(modifierTypeProperty, new GUIContent("Typ modyfikatora"));
+
+        if (GUILayout.Button("Usuń", GUILayout.Width(60)))
         {
-            playerStatsProperty.arraySize++;
-            SerializedProperty newElement = playerStatsProperty.GetArrayElementAtIndex(playerStatsProperty.arraySize - 1);
-            newElement.FindPropertyRelative("ModifiersType").enumValueIndex = 0; // Domyślny enum
-            newElement.FindPropertyRelative("Additive").floatValue = 0;
-            newElement.FindPropertyRelative("Multiplicative").floatValue = 1;
+            playerStatsProperty.DeleteArrayElementAtIndex(i);
+            break;
         }
 
-        serializedObject.ApplyModifiedProperties();
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.LabelField($"Modyfikator: {modifierType}", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(additiveProperty, new GUIContent("Additive"));
+        EditorGUILayout.PropertyField(multiplicativeProperty, new GUIContent("Multiplicative"));
+
+        if (GUILayout.Button("Reset", GUILayout.Width(100)))
+        {
+            additiveProperty.floatValue = 0;
+            multiplicativeProperty.floatValue = 1;
+        }
+
+        EditorGUILayout.EndVertical();
     }
+
+    if (GUILayout.Button("Dodaj nowy stat"))
+    {
+        playerStatsProperty.arraySize++;
+        SerializedProperty newElement = playerStatsProperty.GetArrayElementAtIndex(playerStatsProperty.arraySize - 1);
+        newElement.FindPropertyRelative("ModifiersType").enumValueIndex = 0;
+        newElement.FindPropertyRelative("Additive").floatValue = 0;
+        newElement.FindPropertyRelative("Multiplicative").floatValue = 1;
+    }
+
+    // ====== PlayerBaseModifiers ======
+    SerializedProperty baseModifiersProperty = serializedObject.FindProperty("PlayerBaseModifiers");
+
+    EditorGUILayout.Space(20);
+    EditorGUILayout.LabelField("★ Bazowe Wartości (PlayerBaseModifiers)", EditorStyles.boldLabel);
+    EditorGUILayout.Space();
+
+    for (int i = 0; i < baseModifiersProperty.arraySize; i++)
+    {
+        SerializedProperty baseProperty = baseModifiersProperty.GetArrayElementAtIndex(i);
+        SerializedProperty baseType = baseProperty.FindPropertyRelative("ModifiersType");
+        SerializedProperty baseAdd = baseProperty.FindPropertyRelative("Additive");
+        SerializedProperty baseMult = baseProperty.FindPropertyRelative("Multiplicative");
+
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        EditorGUILayout.BeginHorizontal();
+
+        EditorGUILayout.PropertyField(baseType, new GUIContent("Typ modyfikatora"));
+
+        if (GUILayout.Button("Usuń", GUILayout.Width(60)))
+        {
+            baseModifiersProperty.DeleteArrayElementAtIndex(i);
+            break;
+        }
+
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.PropertyField(baseAdd, new GUIContent("Additive"));
+        EditorGUILayout.PropertyField(baseMult, new GUIContent("Multiplicative"));
+
+        if (GUILayout.Button("Reset", GUILayout.Width(100)))
+        {
+            baseAdd.floatValue = 0;
+            baseMult.floatValue = 1;
+        }
+
+        EditorGUILayout.EndVertical();
+    }
+
+    if (GUILayout.Button("Dodaj bazowy stat"))
+    {
+        baseModifiersProperty.arraySize++;
+        SerializedProperty newBase = baseModifiersProperty.GetArrayElementAtIndex(baseModifiersProperty.arraySize - 1);
+        newBase.FindPropertyRelative("ModifiersType").enumValueIndex = 0;
+        newBase.FindPropertyRelative("Additive").floatValue = 0;
+        newBase.FindPropertyRelative("Multiplicative").floatValue = 1;
+    }
+
+    EditorGUILayout.Space(10);
+    if (GUILayout.Button("Resetuj wszystkie bazowe modyfikatory"))
+    {
+        statsController.ClearPlayerBaseModifiers();
+    }
+
+    serializedObject.ApplyModifiedProperties();
+}
 }

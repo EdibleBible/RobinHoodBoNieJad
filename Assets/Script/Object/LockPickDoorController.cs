@@ -1,8 +1,25 @@
 using System;
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
 
-public class LockPickDoorController : DoorController, ILockPick
+
+public class LockPickDoorController : DoorController, ILockPick, IInteractableStop
 {
+    [SerializeField] private EventReference lockpickSuccessSound;
+    [SerializeField] private EventReference lockpickManipulationSound;
+
+    [SerializeField] private EventReference lockpickRotationSound;
+
+    private EventInstance rotationSoundInstance;
+    private bool isRotationSoundPlaying = false;
+
+
+    private EventInstance manipulationSoundInstance;
+    private bool isManipulatingSoundPlaying = false;
+    private float mouseMoveThreshold = 0.05f;
+    private Camera lockpickCamera;
+    
     public bool IsInteracting { get; set; }
     public bool IsLocked
     {
@@ -29,11 +46,6 @@ public class LockPickDoorController : DoorController, ILockPick
         get => lockPickScale;
         set => lockPickScale = value;
     }
-    public KeyCode CancelLockPickingKeyCode
-    {
-        get => cancelLockPickingKeyCode;
-        set => cancelLockPickingKeyCode = value;
-    }
 
     public bool IsLockPicking { get; set; }
     public GameObject SpawnedObject { get; set; }
@@ -41,7 +53,6 @@ public class LockPickDoorController : DoorController, ILockPick
     public PlayerStateMachineController StateMachineController { get; set; }
 
     public bool isLocked;
-    public KeyCode cancelLockPickingKeyCode;
 
     public GameObject lockPickPrefab;
     public Transform lockPickCameraTransform;
@@ -108,7 +119,10 @@ public class LockPickDoorController : DoorController, ILockPick
         // Pobranie pozycji kamery i kierunku, w którym patrzy gracz
         Transform cameraTransform = playerBase.camera.transform;
         Vector3 spawnPosition = cameraTransform.position + cameraTransform.forward * lockPickSpawnDistance;
-
+        
+        lockpickCamera = playerBase.LockpickCamera;
+        playerBase.LockpickCamera.gameObject.SetActive(true);
+        
         // Instancja lockpicka i poprawne ustawienie transformacji
         SpawnedObject = Instantiate(lockPickPrefab, spawnPosition, cameraTransform.rotation);
         SpawnedObject.transform.localScale = lockPickScale;
@@ -127,19 +141,82 @@ public class LockPickDoorController : DoorController, ILockPick
         StateMachineController.SeePlayerInteracting(true);
         IsLockPicking = true;
 
+        // Start sound instance for manipulation
+        manipulationSoundInstance = RuntimeManager.CreateInstance(lockpickManipulationSound);
+        RuntimeManager.AttachInstanceToGameObject(manipulationSoundInstance, transform, GetComponent<Rigidbody>());
+        manipulationSoundInstance.start();
+        manipulationSoundInstance.setPaused(true); // Start paused, unpause when moving
+
+        // Start sound instance for rotation
+        rotationSoundInstance = RuntimeManager.CreateInstance(lockpickRotationSound);
+        RuntimeManager.AttachInstanceToGameObject(rotationSoundInstance, transform, GetComponent<Rigidbody>());
+        rotationSoundInstance.start();
+        rotationSoundInstance.setPaused(true); // Start paused, unpause when holding LPM
+
         // Aktualizacja interfejsu użytkownika
         HideUI();
         ShowUI();
     }
 
+    public void ShowStopUI()
+    {
+    }
+
+
+    private float currentPadlockOpeningValue = 0f;
+    [SerializeField] private float padlockSmoothingSpeed = 5f;
 
     private void Update()
     {
-        if (Input.GetKeyDown(CancelLockPickingKeyCode) && IsLockPicking)
+        if (IsLockPicking)
         {
-            StopInteracting();
+            Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+            // Obsługa dźwięku manipulacji (ruchy)
+            if (mouseDelta.magnitude > mouseMoveThreshold)
+            {
+                if (!isManipulatingSoundPlaying)
+                {
+                    manipulationSoundInstance.setPaused(false);
+                    isManipulatingSoundPlaying = true;
+                }
+            }
+            else
+            {
+                if (isManipulatingSoundPlaying)
+                {
+                    manipulationSoundInstance.setPaused(true);
+                    isManipulatingSoundPlaying = false;
+                }
+            }
         }
+
+        // Obsługa dźwięku obracania zamka (PadlockOpening)
+        float targetPadlockValue = Input.GetMouseButton(0) ? 1f : 0f;
+        currentPadlockOpeningValue = Mathf.Lerp(currentPadlockOpeningValue, targetPadlockValue, Time.deltaTime * padlockSmoothingSpeed);
+        manipulationSoundInstance.setParameterByName("PadlockOpening", currentPadlockOpeningValue);
+
+        // Obsługa osobnego dźwięku obracania zamka (loop, LPM)
+        if (Input.GetMouseButton(0))
+        {
+            if (!isRotationSoundPlaying)
+            {
+                rotationSoundInstance.setPaused(false);
+                isRotationSoundPlaying = true;
+            }
+        }
+        else
+        {
+            if (isRotationSoundPlaying)
+            {
+                rotationSoundInstance.setPaused(true);
+                isRotationSoundPlaying = false;
+            }
+        }
+
     }
+
+
 
 
     public void StopInteracting()
@@ -150,10 +227,26 @@ public class LockPickDoorController : DoorController, ILockPick
         Destroy(SpawnedObject);
         StateMachineController.SeePlayerInteracting(false);
         IsLockPicking = false;
+        lockpickCamera.gameObject.SetActive(false);
+        
+        if (manipulationSoundInstance.isValid())
+        {
+            manipulationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            manipulationSoundInstance.release();
+        }
+
+        if (rotationSoundInstance.isValid())
+        {
+            rotationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            rotationSoundInstance.release();
+        }
+        
+        
     }
 
     public void UnlockLock()
     {
+        RuntimeManager.PlayOneShot(lockpickSuccessSound, transform.position);
         IsLocked = false;
         InteractMessage = ChnagedInteractMessage;
         HideUI();
@@ -177,7 +270,6 @@ public interface ILockPick
     public GameObject SpawnedObject { get; set; }
     public LockPick spawnedLockPick { get; set; }
     public PlayerStateMachineController StateMachineController { get; set; }
-    public KeyCode CancelLockPickingKeyCode { get; set; }
     public Vector3 LockPickPositionOffset { get; set; }
     public Vector3 LockPickScale { get; set; }
 

@@ -126,7 +126,9 @@ public class LeverController : MonoBehaviour, IInteractable
         if (IsBlocked || !CanInteract)
             return;
 
-        ShowUIEvent.Raise(this, (true, InteractMessage, false));
+        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", interactMessage);
+        ShowUIEvent.Raise(this, (true, textToShow, false));
+        
     }
 
     public void HideUI()

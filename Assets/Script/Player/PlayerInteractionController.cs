@@ -10,9 +10,6 @@ public class PlayerInteractionController : MonoBehaviour
     [SerializeField] private float interactionDistance;
     [SerializeField] private float sphereRadius;
     [SerializeField] private LayerMask interactableLayer;
-    [SerializeField] private KeyCode interactionKey;
-    [SerializeField] private KeyCode interactionStopKey;
-    [SerializeField] private KeyCode dropKey;
     private IInteractable currentInteractable;
     private RaycastHit hitInfo;
 
@@ -44,25 +41,26 @@ public class PlayerInteractionController : MonoBehaviour
             currentInteractable.HideUI();
             currentInteractable = null;
         }
+    }
 
-        if (currentInteractable != null && Input.GetKeyDown(interactionKey))
+    public void Interact()
+    {
+        if (currentInteractable != null)
         {
             Debug.Log("Interacted with " + currentInteractable);
             currentInteractable.Interact(transform);
         }
-        
-        if (currentInteractable != null && currentInteractable is IInteractableStop stop && Input.GetKeyDown(interactionStopKey))
+    }
+
+    public void StopInteracting()
+    {
+        if (currentInteractable != null && currentInteractable is IInteractableStop stop)
         {
             Debug.Log("Interacted with " + currentInteractable);
             stop.StopInteracting();
         }
-
-        if (Input.GetKeyDown(dropKey))
-        {
-            playerBase.DropItem();
-        }
     }
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = hitInfo.collider == null ? Color.red : Color.green;

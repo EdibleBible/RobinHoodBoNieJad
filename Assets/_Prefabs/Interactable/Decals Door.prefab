@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8292389786832624829}
   - component: {fileID: 9152314385484637974}
   - component: {fileID: 1991288198799950956}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: Doors_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3587571017834502265}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 8091605466015259210}
   - component: {fileID: 6579972088661490464}
   - component: {fileID: 686638623980344768}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: Decals Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,7 +254,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.57424116, y: -0.501, z: 0.005}
-  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
+  m_LocalScale: {x: 1.7000005, y: 1.7, z: 1.7000005}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3587571017834502265}
@@ -368,7 +368,7 @@ MonoBehaviour:
   soundSource: {fileID: 1101143666441658562}
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: C - Open door
+  interactMessage: Open door
   blockedMessage: DOOR IS BLOCKED
   isDebug: 0
   debugKey: 99
@@ -379,6 +379,9 @@ MonoBehaviour:
   wallDecalLayer:
     serializedVersion: 2
     m_Bits: 536870912
+  decalLayer:
+    serializedVersion: 2
+    m_Bits: 268435456
   detectWallSize: {x: 1, y: 1, z: 3}
   detectWallCenter: {x: 0, y: 0.5, z: 0}
   leverPrefab: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
@@ -418,7 +421,7 @@ GameObject:
   - component: {fileID: 985094943622320484}
   - component: {fileID: 5852319780610055143}
   - component: {fileID: 3471259245224733684}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: Doors_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,9 +526,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7108855322055485117}
-  - component: {fileID: 1483593013052827883}
-  - component: {fileID: 8748563166708896903}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: doors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -549,59 +550,6 @@ Transform:
   - {fileID: 3888172159407110220}
   m_Father: {fileID: 3587571017834502265}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1483593013052827883
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8121211099832234575}
-  m_Mesh: {fileID: 0}
---- !u!23 &8748563166708896903
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8121211099832234575}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: ee9922118c55ba5469be7ba70b0519a7, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1001 &3330823978608812384
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -613,12 +561,12 @@ PrefabInstance:
     - target: {fileID: 15176582071293857, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
       propertyPath: m_Layer
-      value: 31
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 176812873095697685, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
       propertyPath: m_Layer
-      value: 31
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6104967500014366283, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
@@ -673,7 +621,7 @@ PrefabInstance:
     - target: {fileID: 6623128284814306099, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
       propertyPath: m_Layer
-      value: 31
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6913838190866035953, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
@@ -683,7 +631,7 @@ PrefabInstance:
     - target: {fileID: 6913838190866035953, guid: cf016b1bcadd75f4a8a22996868502fb,
         type: 3}
       propertyPath: m_Layer
-      value: 31
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

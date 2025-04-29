@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4508676144679486463}
   - component: {fileID: 4765337940768105308}
   - component: {fileID: 6113899827976468255}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: PickableObject
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6426086039725163077}
@@ -76,15 +76,15 @@ MonoBehaviour:
   rb: {fileID: 4765337940768105308}
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: c -PickUpItem
+  interactMessage: Pick up
   blockMessage: CHUJ
-  BaseSize: {x: 1, y: 1, z: 1}
-  InteractSize: {x: 1.5, y: 1.5, z: 1.5}
-  PickupOffset: {x: 0, y: -1.4, z: 0.4}
+  BaseSize: {x: 2, y: 2, z: 2}
+  InteractSize: {x: 2, y: 2, z: 2}
+  PickupOffset: {x: 0, y: -1.2, z: 0.5}
   statsToChange:
   - ModifierType: 1
     Additive: 0
-    Multiplicative: -0.5
+    Multiplicative: -0.4
   statsControll: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e, type: 2}
 --- !u!1001 &7003503446897560925
 PrefabInstance:
@@ -98,6 +98,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Heavy_Item
+      objectReference: {fileID: 0}
+    - target: {fileID: 3698769068880795042, guid: e2ad7edd5de41bc4b8ab5a6454a2b564,
+        type: 3}
+      propertyPath: m_Layer
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 4044085627198099224, guid: e2ad7edd5de41bc4b8ab5a6454a2b564,
         type: 3}

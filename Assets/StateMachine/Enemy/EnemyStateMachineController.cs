@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using FMODUnity;
 
 public class EnemyStateMachineController : StateManager<E_EnemyState>
 {
@@ -18,6 +19,8 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 
     private EnemyMovement enemyMovement;
     private FieldOfView fov;
+
+    public EventReference enemyAttack;
 
     [Header("patrolling state settings")]
     [SerializeField]
@@ -38,6 +41,15 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
     private EnemyFovStats alarmedFovStats;
     public EnemyAlarmedStats alarmedStateStats = new EnemyAlarmedStats();
 
+    [Header("Audio")]
+    [SerializeField] private EventReference noticePlayerEvent;
+    private bool hasPlayedNoticeSound = false;
+
+    [SerializeField] private EventReference footstepsLoopEvent;
+    private FMOD.Studio.EventInstance footstepsInstance;
+    private bool isFootstepsPlaying = false;
+
+
 
     private void Awake()
     {
@@ -53,7 +65,7 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
             new EnemyPatrollingState(enemyMovement, patrollingMovementStats, fov, patrollingFovStats,
                 alarmedStateStats);
         _enemyChasingState =
-            new EnemyChasingState(enemyMovement, chasingMovementStats, fov, chasingFovStats, alarmedStateStats);
+            new EnemyChasingState(enemyMovement, chasingMovementStats, fov, chasingFovStats, alarmedStateStats,enemyAttack);
         _enemyAlarmedState =
             new EnemyAlarmedState(enemyMovement, alarmedMovementStats, fov, alarmedFovStats, alarmedStateStats);
 
@@ -74,8 +86,31 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
         }
         else if (!isTransitioningState)
         {
+            // Sprawdzenie, czy to pierwszy raz zauważono gracza
+            if (!hasPlayedNoticeSound && (nextStateKey == E_EnemyState.Alarmed || nextStateKey == E_EnemyState.Chase))
+            {
+                RuntimeManager.PlayOneShot(noticePlayerEvent, transform.position);
+                hasPlayedNoticeSound = true;
+            }
+
+            if (nextStateKey == E_EnemyState.Patrol)
+            {
+                hasPlayedNoticeSound = false;
+            }
+
             TransitionToState(nextStateKey);
         }
+
+        if (nextStateKey == E_EnemyState.Chase)
+        {
+            Debug.Log("Przechodzę do stanu CHASE – uruchamiam kroki");
+            StartFootsteps();
+        }
+        else
+        {
+            StopFootsteps(); // zatrzymuje, jeśli nie goni
+        }
+
 
         if (Input.GetMouseButtonDown(0)) // Sprawdza, czy kliknięto lewym przyciskiem myszy
         {
@@ -101,6 +136,28 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
             Debug.LogError("Enemy could not find NavMesh near its spawn position!", this);
         }
     }
+
+    private void StartFootsteps()
+    {
+        if (!isFootstepsPlaying)
+        {
+            footstepsInstance = RuntimeManager.CreateInstance(footstepsLoopEvent);
+            RuntimeManager.AttachInstanceToGameObject(footstepsInstance, transform, GetComponent<Rigidbody>());
+            footstepsInstance.start();
+            isFootstepsPlaying = true;
+        }
+    }
+
+    private void StopFootsteps()
+    {
+        if (isFootstepsPlaying)
+        {
+            footstepsInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            footstepsInstance.release();
+            isFootstepsPlaying = false;
+        }
+    }
+
 }
 
 /*[Serializable]

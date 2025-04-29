@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 4682806924880142275}
   - component: {fileID: 8493894080864111287}
   - component: {fileID: 7577896081097222916}
-  m_Layer: 31
+  - component: {fileID: -8804629156235156549}
+  - component: {fileID: 3828856274665322233}
+  m_Layer: 23
   m_Name: Key 1
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -84,9 +86,11 @@ MonoBehaviour:
     ItemPrefab: {fileID: 1466800322429633386, guid: 4c51b7f4cbc1fd74ab0619baae95d994,
       type: 3}
     statToChange: []
+    CollectibleId: 0
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: C - Pickup Key
+  interactMessage: Pick up Key
   blockedMessage: Item Is Blocked
 --- !u!65 &7577896081097222916
 BoxCollider:
@@ -109,6 +113,46 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.07050252, y: 0.1706765, z: 0.12231541}
   m_Center: {x: -0.012967467, y: 0.074698076, z: -0.0019993782}
+--- !u!114 &-8804629156235156549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466800322429633386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6103eeb49ac3b224eb825bf30fe86ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupEvent:
+    Guid:
+      Data1: 2030476855
+      Data2: 1266737211
+      Data3: 1755879343
+      Data4: -388646872
+    Path: event:/ItemPickup
+  materialType: 5
+--- !u!114 &3828856274665322233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466800322429633386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eae99d2f7b6d644af5c67a87017c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropSoundEvent:
+    Guid:
+      Data1: -272142723
+      Data2: 1261083701
+      Data3: 1214003093
+      Data4: 1603500910
+    Path: event:/ItemDrop
+  itemSoundType: 5
 --- !u!1001 &1927824435281058320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126,6 +170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Candle_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6630375654688184054, guid: c79d59d66358e0f45a098f4b8a82f8be,
+        type: 3}
+      propertyPath: m_Layer
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 6670234744341657123, guid: c79d59d66358e0f45a098f4b8a82f8be,
         type: 3}

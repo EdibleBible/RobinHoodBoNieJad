@@ -18,12 +18,18 @@ public class PlayerWalk : MonoBehaviour
     private Vector3 moveDirection = Vector3.zero;
     private float inputMagnitude;
 
-    [Header("Gravity")] [SerializeField] private float gravity = -9.81f;
+    [Header("Gravity")] 
+    [SerializeField] private float gravity = -9.81f;
     private float verticalVelocity;
 
     private CharacterController characterController;
     [SerializeField] private SOPlayerStatsController playerStatsController;
+    
+    private float horizontalMovement = 0f;
+    private float verticalMovement = 0f;
 
+    [HideInInspector] public bool Sprinting;
+    [HideInInspector] public bool Crouching;
     public void SetMotion(bool option)
     {
         stopMotion = option;
@@ -33,6 +39,12 @@ public class PlayerWalk : MonoBehaviour
         characterController = GetComponent<CharacterController>();
     }
 
+    public void SetAxisMovement(Vector2 axis)
+    {
+        horizontalMovement = axis.x;
+        verticalMovement = axis.y;
+    }
+    
     public void Movement(float speed, float accelerationTime, float decelerationTime, out float xVel, out float yVel)
     {
         if (!stopMotion)
@@ -42,13 +54,9 @@ public class PlayerWalk : MonoBehaviour
             yVel = 0;
             return;
         }
-        // Read Input
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
 
-        moveDirection = new Vector3(horizontal, 0, vertical);
+        moveDirection = new Vector3(horizontalMovement, 0, verticalMovement);
         inputMagnitude = Mathf.Clamp01(moveDirection.magnitude);
-
         speed = (speed + playerStatsController.GetSOPlayerStats(E_ModifiersType.PlayerSpeed).Additive) *
                 playerStatsController.GetSOPlayerStats(E_ModifiersType.PlayerSpeed).Multiplicative;
 

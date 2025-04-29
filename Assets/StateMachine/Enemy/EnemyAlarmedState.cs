@@ -58,6 +58,10 @@ public class EnemyAlarmedState : BaseState<E_EnemyState>
 
     public override void UpdateState()
     {
+    }
+
+    public override void FixedUpdateState()
+    {
         movement.UpdateMoveAnimation(movement.Agent.velocity.magnitude);
     }
 

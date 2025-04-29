@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 1435291883256743847}
   - component: {fileID: 541001074239283689}
   - component: {fileID: 2301467872953823408}
-  m_Layer: 31
+  - component: {fileID: 9072159777986546154}
+  - component: {fileID: -347284751879662618}
+  m_Layer: 23
   m_Name: StaminaPotion
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -88,9 +90,10 @@ MonoBehaviour:
       Additive: 10
       Multiplicative: 0.2
     CollectibleId: 0
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: C - Pickup Key
+  interactMessage: Pick up Stamina potion
   blockedMessage: Item Is Blocked
 --- !u!65 &2301467872953823408
 BoxCollider:
@@ -113,6 +116,46 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.07050252, y: 0.25082073, z: 0.15432549}
   m_Center: {x: -0.012967467, y: 0.12381478, z: -0.0024604797}
+--- !u!114 &9072159777986546154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2150129510511135955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eae99d2f7b6d644af5c67a87017c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropSoundEvent:
+    Guid:
+      Data1: -272142723
+      Data2: 1261083701
+      Data3: 1214003093
+      Data4: 1603500910
+    Path: event:/ItemDrop
+  itemSoundType: 3
+--- !u!114 &-347284751879662618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2150129510511135955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6103eeb49ac3b224eb825bf30fe86ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupEvent:
+    Guid:
+      Data1: 2030476855
+      Data2: 1266737211
+      Data3: 1755879343
+      Data4: -388646872
+    Path: event:/ItemPickup
+  materialType: 3
 --- !u!1 &2475780665656470702
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +167,7 @@ GameObject:
   - component: {fileID: 8282510570988829413}
   - component: {fileID: 3457591417031103198}
   - component: {fileID: 7460002552958119179}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: Bottle_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}

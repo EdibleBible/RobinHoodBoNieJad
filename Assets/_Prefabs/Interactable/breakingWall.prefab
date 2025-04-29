@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 989108771195345000}
   - component: {fileID: 3283941474134384670}
   - component: {fileID: 457620892464480278}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: breakingWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,13 +51,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: C - to destroy wall
   blockedMessage: you need hamer to destroy wall
-  doorsEvent:
+  wallEvent:
     Guid:
-      Data1: 632322657
-      Data2: 1333173212
-      Data3: -2070573669
-      Data4: -1421739515
-    Path: event:/Doors_single
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   soundSource: {fileID: 2964057025131133530}
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
@@ -116,7 +116,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2964057025131133530}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: WallSoundSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3255400100909505841}
   - component: {fileID: 3488847328183289516}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: WallCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 503062133071925129}
   - component: {fileID: 3191285735415350623}
   - component: {fileID: 248537444287161117}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: WallModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

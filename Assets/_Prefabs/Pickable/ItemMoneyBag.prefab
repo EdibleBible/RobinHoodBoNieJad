@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7106055984762591189}
   - component: {fileID: 7408902603693669418}
   - component: {fileID: 8102982962642443126}
-  m_Layer: 10
+  m_Layer: 23
   m_Name: cube
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 2148479248831226959}
   - component: {fileID: 4682806924880142275}
   - component: {fileID: 8493894080864111287}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: ItemMoneyBag
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -192,7 +192,8 @@ MonoBehaviour:
       type: 3}
     statToChange: []
     CollectibleId: 0
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: C - Pick Up Money Bag
+  interactMessage: Pick up Money Bag
   blockedMessage: Item Is Blocked

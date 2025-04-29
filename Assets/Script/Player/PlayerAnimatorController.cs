@@ -38,7 +38,18 @@ public class PlayerAnimatorController : MonoBehaviour
         animator.SetFloat("Velocity X", velocityX);
         animator.SetFloat("Velocity Z", velocityZ);
     }
-    
+
+    public void ToogleTorch(bool isOn)
+    {
+        if (isOn)
+        {
+            animator.SetTrigger("EquipTorch");
+        }
+        else
+        {
+            animator.SetTrigger("HideTorch");
+        }
+    }
     // Feet IK
     
     //DoorOpen and IK

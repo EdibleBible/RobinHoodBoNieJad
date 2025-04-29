@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 547377061462381365}
   - component: {fileID: 3474376603115887760}
   - component: {fileID: 1716856986168354906}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: goblet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,9 @@ GameObject:
   - component: {fileID: 5946085791760680172}
   - component: {fileID: 5954815173573131841}
   - component: {fileID: 4931807967672230577}
-  m_Layer: 31
+  - component: {fileID: 1809315197141603040}
+  - component: {fileID: 1175788280721024616}
+  m_Layer: 23
   m_Name: ItemGoblet 1
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -192,7 +194,48 @@ MonoBehaviour:
       type: 3}
     statToChange: []
     CollectibleId: 11
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: C - Pickup Goblet
+  interactMessage: Pick up Goblet
   blockedMessage: Item Is Blocked
+--- !u!114 &1809315197141603040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7456836574051304791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6103eeb49ac3b224eb825bf30fe86ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupEvent:
+    Guid:
+      Data1: 2030476855
+      Data2: 1266737211
+      Data3: 1755879343
+      Data4: -388646872
+    Path: event:/ItemPickup
+  materialType: 1
+--- !u!114 &1175788280721024616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7456836574051304791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eae99d2f7b6d644af5c67a87017c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropSoundEvent:
+    Guid:
+      Data1: -272142723
+      Data2: 1261083701
+      Data3: 1214003093
+      Data4: 1603500910
+    Path: event:/ItemDrop
+  itemSoundType: 1

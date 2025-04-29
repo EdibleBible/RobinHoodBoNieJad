@@ -37,6 +37,10 @@ public class CageEnemyTriggerState : BaseState<E_CageEnemyState>
     {
     }
 
+    public override void FixedUpdateState()
+    {
+    }
+
     public override E_CageEnemyState GetNextState()
     {
         if (!animationController.IsEnrage && fov.GetVisibleTargets().Count == 0)

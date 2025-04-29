@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 2148479248831226959}
   - component: {fileID: 4682806924880142275}
   - component: {fileID: 8493894080864111287}
-  m_Layer: 31
+  - component: {fileID: 7759299542268334143}
+  - component: {fileID: 5952280898492868967}
+  m_Layer: 23
   m_Name: ItemVase
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -106,10 +108,51 @@ MonoBehaviour:
       type: 3}
     statToChange: []
     CollectibleId: 1
+    ProceedToDungeon: 0
   showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
   interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: C - Pickup Vase
+  interactMessage: Pick up Vase
   blockedMessage: Item Is Blocked
+--- !u!114 &7759299542268334143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466800322429633386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6103eeb49ac3b224eb825bf30fe86ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupEvent:
+    Guid:
+      Data1: 2030476855
+      Data2: 1266737211
+      Data3: 1755879343
+      Data4: -388646872
+    Path: event:/ItemPickup
+  materialType: 1
+--- !u!114 &5952280898492868967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466800322429633386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eae99d2f7b6d644af5c67a87017c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropSoundEvent:
+    Guid:
+      Data1: -272142723
+      Data2: 1261083701
+      Data3: 1214003093
+      Data4: 1603500910
+    Path: event:/ItemDrop
+  itemSoundType: 1
 --- !u!1 &4075737340114704109
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +164,7 @@ GameObject:
   - component: {fileID: 3730173637033282647}
   - component: {fileID: 318601900765889522}
   - component: {fileID: 2562286454646159160}
-  m_Layer: 31
+  m_Layer: 23
   m_Name: vase
   m_TagString: Untagged
   m_Icon: {fileID: 0}

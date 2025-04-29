@@ -15,6 +15,7 @@ public class GameOverUiController : MonoBehaviour
     [SerializeField] private List<GameObject> objToOff = new List<GameObject>();
     public string sceneToLoad;
     public string sceneToUnload;
+    private bool isUSed;
 
     public void Open(GameObject lobbyObject)
     {
@@ -28,7 +29,11 @@ public class GameOverUiController : MonoBehaviour
 
     public void GameOver(Component sender, object data)
     {
-        StartCoroutine(LoadGameWithFade(sceneToLoad,sceneToUnload));
+        if (isUSed == false)
+        {
+            isUSed = true;
+            StartCoroutine(LoadGameWithFade(sceneToLoad, sceneToUnload));
+        }
     }
 
     private IEnumerator LoadGameWithFade(string gameSceneName, string lobbySceneName)
@@ -61,10 +66,10 @@ public class GameOverUiController : MonoBehaviour
             if (isReadyToContinue && Input.GetKeyDown(KeyCode.Space))
             {
                 gameLoadOperation.allowSceneActivation = true;
-                
+
                 // Ustawienie nowej sceny jako aktywnej przed usunięciem starej
                 SceneManager.SetActiveScene(SceneManager.GetSceneAt(0));
-                
+
                 // Poczekaj na aktywację nowej sceny
                 yield return new WaitForSeconds(0.1f);
 

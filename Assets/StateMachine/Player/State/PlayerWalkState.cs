@@ -47,15 +47,19 @@ public class PlayerWalkState : BaseState<E_PlayerState>
         PlayerAnimatorController.UpdateCrouchParameters(velocityX, velocityZ, false);
     }
 
+    public override void FixedUpdateState()
+    {
+    }
+
     public override E_PlayerState GetNextState()
     {
         if (PlayerStamina != null)
         {
-            if (Input.GetKey(KeyCode.LeftShift) && PlayerStamina.currentStamina > 0.1)
+            if (PlayerWalk.Sprinting && PlayerStamina.currentStamina > 0.1)
             {
                 return E_PlayerState.Running;
             }
-            else if (Input.GetKey(KeyCode.LeftControl))
+            else if (PlayerWalk.Crouching)
             {
                 return E_PlayerState.Crouching;
             }

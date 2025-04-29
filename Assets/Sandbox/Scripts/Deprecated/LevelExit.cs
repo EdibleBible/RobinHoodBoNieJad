@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using FMODUnity;
 
 public class LevelExit : MonoBehaviour, IInteractable
 {
@@ -9,7 +10,7 @@ public class LevelExit : MonoBehaviour, IInteractable
     private GameEvent showUIEvent;
     [SerializeField]
     private GameEvent interactEvent;
-    
+
     public GameEvent ShowUIEvent
     {
         get => showUIEvent;
@@ -22,14 +23,14 @@ public class LevelExit : MonoBehaviour, IInteractable
     }
 
     public bool TwoSideInteraction { get; set; } = false;
-    [Header("Callbacks")] 
+    [Header("Callbacks")]
     public string InteractMessage { get => interactMessage; set => interactMessage = value; }
     public string BlockedMessage { get => blockedMessage; set => blockedMessage = value; }
 
     public string interactMessage;
     public string blockedMessage;
     public bool IsUsed { get; set; } = false;
-    
+
 
     public bool CanInteract { get; set; } = true;
     public bool IsBlocked { get; set; } = false;
@@ -39,7 +40,7 @@ public class LevelExit : MonoBehaviour, IInteractable
     private PlayerBase player;
     private bool isPlayer;
     private IInteractable interactableImplementation;
-    
+
     public void Interact(Transform player)
     {
         Debug.Log("Interact");
@@ -53,6 +54,18 @@ public class LevelExit : MonoBehaviour, IInteractable
         if (player != null)
         {
             Debug.Log("exit level");
+            SoundManager.Instance?.StopAllActiveEvents();
+
+            var emitters = FindObjectsByType<FMODUnity.StudioEventEmitter>(FindObjectsSortMode.None);
+            foreach (var emitter in emitters)
+            {
+                if (emitter.IsPlaying())
+                {
+                    emitter.Stop();
+                }
+            }
+
+
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene(1);
@@ -61,7 +74,9 @@ public class LevelExit : MonoBehaviour, IInteractable
 
     public void ShowUI()
     {
-        ShowUIEvent.Raise(this, (true, InteractMessage, false));
+        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", interactMessage);
+        ShowUIEvent.Raise(this, (true, textToShow, false));
+        
     }
 
     public void HideUI()
