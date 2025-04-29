@@ -7,8 +7,8 @@ public class Edge
     public Point Point1 { get; private set; }
     public Point Point2 { get; private set; }
 
-    public Room Point1Room { get; private set; }
-    public Room Point2Room { get; private set; }
+    public NewRoom Point1Room { get; private set; }
+    public NewRoom Point2Room { get; private set; }
 
     public GridCellData EntryGridCell; // cell in room
     public GridCellData ExitGridCell; // cell in room
@@ -21,7 +21,7 @@ public class Edge
         Point2 = point2;
     }
 
-    public void SetEdgeRoom(Room point1Room, Room point2Room)
+    public void SetEdgeRoom(NewRoom point1Room, NewRoom point2Room)
     {
         Point1Room = point1Room;
         Point2Room = point2Room;

@@ -13,7 +13,7 @@ public class ObjectRandomSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        seed = levelData.levelSeed;
+        seed = levelData.LevelSeedInt;
         if (objects.Count != 0)
         {
             int x = (int)(transform.position.x * seedMod);

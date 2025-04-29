@@ -19,7 +19,7 @@ public class Point
     public double Y { get; }
     public HashSet<Triangle> AdjacentTriangles { get; } = new HashSet<Triangle>();
 
-    public Room PointRoom { get; set; }
+    public NewRoom PointRoom { get; set; }
 
     public Point(double x, double y)
     {
@@ -27,7 +27,7 @@ public class Point
         Y = y;
     }
 
-    public void SetPointRoom(Room room)
+    public void SetPointRoom(NewRoom room)
     {
         PointRoom = room;
     }

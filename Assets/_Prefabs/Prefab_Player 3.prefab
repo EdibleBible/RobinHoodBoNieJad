@@ -3499,7 +3499,7 @@ MonoBehaviour:
   SetUpQuestEvent: {fileID: 11400000, guid: d10e3a7165e00644c846c12292c99922, type: 2}
   UpdateQuestValueEvent: {fileID: 11400000, guid: 0e6af5a9891917c429f64148b5095a1e,
     type: 2}
-  Debug: 1
+  Debug: 0
 --- !u!114 &330543895836874210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3660,7 +3660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d0eb997bb1c644eb43f9654802ae29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRadius: 10
+  baseMaxRadius: 5
   expandSpeed: 5
   detectionLayers:
     serializedVersion: 2
@@ -3668,13 +3668,15 @@ MonoBehaviour:
   OccludedInteractionLayer:
     serializedVersion: 2
     m_Bits: 1073741824
-  highlightDuration: 2
-  highlightKey: 118
+  highlightDuration: 1.5
   lineRendererPrefab: {fileID: 5271449135434754415, guid: d501dae7c77306346abe7eb90ba89cdd,
     type: 3}
   lineSpeed: 5
   particlePrefab: {fileID: 5020709707204617874, guid: 72ab1389de7b3d94ca045ce699a00893,
     type: 3}
+  statsController: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e, type: 2}
+  baseMaxLinesPerPulse: 3
+  baseSpecialSenseUseCount: 4
 --- !u!1 &7240092849718364260
 GameObject:
   m_ObjectHideFlags: 0

@@ -171,6 +171,19 @@ namespace CustomGrid
         {
             return height;
         }
+
+        public List<TGridObj> GetAllGridElementList()
+        {
+            List<TGridObj> returnList = new List<TGridObj>();
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    returnList.Add(gridArray[x, y]);
+                }
+            }
+            return returnList;
+        }
     }
 }
 

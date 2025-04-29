@@ -93,10 +93,14 @@ public class SpecialSenseController : MonoBehaviour
             {
                 if (linesSpawned >= maxLinesPerPulse)
                     break;
+                
 
                 GameObject obj = hit.gameObject;
                 Transform root = obj.transform.root;
                 GameObject rootObj = root.gameObject;
+                
+                if(rootObj.TryGetComponent(out DoorController doorController))
+                    continue;
 
                 if (activeHighlights.ContainsKey(rootObj))
                     continue;
