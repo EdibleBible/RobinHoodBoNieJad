@@ -27,13 +27,7 @@ public class InputManager : MonoBehaviour
     {
         PlayerInputActions?.Dispose();
     }
-
-    /// <summary>
-    /// Zwraca nazwę przycisku przypisanego do konkretnej akcji (np. "F" dla Torch).
-    /// </summary>
-    /// <param name="action">InputAction (np. PlayerInputActions.Player.ToogleTorch)</param>
-    /// <param name="bindingIndex">Opcjonalny indeks bindu (domyślnie 0)</param>
-    /// <returns>Wyświetlana nazwa przycisku (np. "F", "E", "Button South")</returns>
+    
     public string GetBindingDisplayString(InputAction action, int bindingIndex = 0)
     {
         if (action == null || bindingIndex < 0 || bindingIndex >= action.bindings.Count)
