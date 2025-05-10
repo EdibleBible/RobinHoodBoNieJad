@@ -7,12 +7,28 @@ public class InputEscMenu : MonoBehaviour
     public InputActionAsset globalInputActions;
     private InputAction escAction;
     public GameObject escapeMenu;
+    public bool isScene3D;
+    public Canvas canvas;
+    public MenuTextButtonHover[] buttons;
+
+    private void AssignButtonSelectors()
+    {
+        foreach (var button in buttons)
+        {
+            if (button != null)
+            {
+                button.canvas = canvas;
+            }
+        }
+    }
 
     private void OnEnable()
     {
+        canvas = this.transform.parent.GetComponent<Canvas>();
         escAction = globalInputActions.FindAction("Esc");
         escAction.Enable();
         escAction.performed += ToggleEsc;
+        AssignButtonSelectors();
     }
 
     private void OnDisable()
@@ -26,14 +42,22 @@ public class InputEscMenu : MonoBehaviour
         if (escapeMenu.activeInHierarchy)
         {
             escapeMenu.SetActive(false);
+            if (isScene3D)
+            {
+                LockMouse(true);
+            }
         }
         else
         {
             escapeMenu.SetActive(true);
+            if (isScene3D)
+            {
+                LockMouse(false);
+            }
         }
     }
 
-    public void ToggleEsc()
+    /*public void ToggleEsc()
     {
         if (escapeMenu.activeInHierarchy)
         {
@@ -43,19 +67,30 @@ public class InputEscMenu : MonoBehaviour
         {
             escapeMenu.SetActive(true);
         }
-    }
+    }*/
 
     public void SceneLobby()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        LockMouse(false);
         SceneManager.LoadScene(1);
     }
 
     public void SceneMenu()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        LockMouse(false);
         SceneManager.LoadScene(0);
+    }
+
+    public void LockMouse(bool toLock)
+    {
+        if (toLock)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        } else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }
