@@ -123,6 +123,24 @@ public class GridCellData
         }
     }
 
+    public List<Transform> FastDetectObjectInCell(LayerMask detectionLayerMask)
+    {
+        List<Transform> returnList = new List<Transform>();
+        
+        Vector3 center = Position;
+        Vector3 halfExtents = new Vector3(CellSize.x / 2f, 5f, CellSize.y / 2f); // 5f wysokości, możesz zmienić
+
+        Collider[] colliders = Physics.OverlapBox(center, halfExtents, Quaternion.identity, detectionLayerMask);
+
+        foreach (var collider in colliders)
+        {
+            GameObject obj = collider.gameObject;
+            returnList.Add(obj.transform);
+        }
+        
+        return returnList;
+    }
+
     public List<Matrix4x4> FlorMatrix4x4(Vector2 segmentSize)
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();

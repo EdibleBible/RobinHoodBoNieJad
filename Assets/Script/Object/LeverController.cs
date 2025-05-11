@@ -6,7 +6,7 @@ using UnityEngine;
 public class LeverController : MonoBehaviour, IInteractable
 {
     [Header("Reference")]
-    [SerializeField] private GameObject gameobjectToInteract;
+    public GameObject gameobjectToInteract;
     private IInteractable objectToInteract;
     [SerializeField] private Animator animator;
 
@@ -58,7 +58,7 @@ public class LeverController : MonoBehaviour, IInteractable
 
     public bool IsUsed { get; set; }
     [SerializeField] private string blockedMessage;
-
+    
     private void Awake()
     {
         if (gameobjectToInteract == null)
@@ -137,5 +137,16 @@ public class LeverController : MonoBehaviour, IInteractable
             return;
 
         ShowUIEvent.Raise(this, (false, "", false));
+    }
+
+    public void SetObjectToInteract(GameObject selectedDoor)
+    {
+        gameobjectToInteract = selectedDoor;
+            
+        if (gameobjectToInteract.TryGetComponent<IInteractable>(out IInteractable iInteractable))
+        {
+            objectToInteract = iInteractable;
+            objectToInteract.IsBlocked = true;
+        }
     }
 }

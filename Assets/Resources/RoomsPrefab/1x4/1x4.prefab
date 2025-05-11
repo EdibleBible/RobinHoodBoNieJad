@@ -95,7 +95,11 @@ MonoBehaviour:
   - {fileID: 8796281240172463172}
   - {fileID: 5962049369789642669}
   - {fileID: 928997709567883297}
-  spawnPoint: {fileID: 0}
+  AllDoors:
+  - {fileID: 4641342907476932323}
+  floorLayers:
+    serializedVersion: 2
+    m_Bits: 320
 --- !u!1001 &3012532964954520
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2578,6 +2582,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bdda2312119b0f46bfe3b61536a3ad1, type: 3}
+--- !u!114 &4641342907476932323 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1783864906644179005, guid: 2bdda2312119b0f46bfe3b61536a3ad1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6388588510613290718}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e3551f6e95137e48868c3267e01366a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7464680469110171832 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4557374751376709222, guid: 2bdda2312119b0f46bfe3b61536a3ad1,

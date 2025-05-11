@@ -9,6 +9,7 @@ public class NewRoom
     public E_RoomType RoomType;
     public int RoomID;
     public List<GridCellData> CellInRoom = new List<GridCellData>();
+    public GeneratorRoomData RoomData;
     public int XAxisSize;
     public int YAxisSize;
     public Transform RoomParent;
@@ -39,7 +40,7 @@ public class NewRoom
         return Centroid;
     }
 
-    public void SpawnPrefabs(int wallPassLayerInt)
+    public void SpawnPrefabs(int wallPassLayerInt, int wallPassSpawnLayerInt)
     {
         GameObject[] prefabs;
         if (!IsSpawn)
@@ -57,9 +58,9 @@ public class NewRoom
              var obj = GameObject.Instantiate(selectedPrefab, GetRoomCentroid(), Quaternion.identity, RoomParent);
             SpawnedRoomObject = obj;
             
-            GeneratorRoomData roomData = obj.GetComponent<GeneratorRoomData>();
+            RoomData = obj.GetComponent<GeneratorRoomData>();
             Transform[] selectedFloors =
-                roomData.AllFloors.Where(x => x.gameObject.layer == wallPassLayerInt).ToArray();
+                RoomData.AllFloors.Where(x => x.gameObject.layer == wallPassLayerInt || x.gameObject.layer == wallPassSpawnLayerInt).ToArray();
 
             foreach (var cell in CellInRoom)
             {
