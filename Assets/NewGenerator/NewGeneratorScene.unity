@@ -278,6 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugGridMeshBool: 0
+  DebugRemoveMesh: 0
   GridParameters:
     IsRandomized: 1
     RandomizeSeed: 1
@@ -289,6 +290,10 @@ MonoBehaviour:
       _serializedList:
       - Key: 0
         Value: {fileID: 2100000, guid: 3b79855850b32c14b89866b1d7b6b3d2, type: 2}
+      - Key: 18
+        Value: {fileID: 2100000, guid: 2f7d756ba82c36f4f875bf921aeaeade, type: 2}
+      - Key: 17
+        Value: {fileID: 2100000, guid: cbb75e60c07bdd1458679bdceb633ad3, type: 2}
       - Key: 16
         Value: {fileID: 2100000, guid: d41a11ed25864914b86285c59bf91726, type: 2}
       - Key: 4
@@ -309,6 +314,9 @@ MonoBehaviour:
     WallPassLayer:
       serializedVersion: 2
       m_Bits: 256
+    WallPassSpawnLayer:
+      serializedVersion: 2
+      m_Bits: 8192
     UseAdditionalEdges: 1
     ChanceToSelectEdge: 100
     AdditionSelectedEdges: 3
@@ -344,6 +352,25 @@ MonoBehaviour:
     - {fileID: 2541086626158824815, guid: 1fc816dffbf984d44bfb223b4b80b6b6, type: 3}
     MaxTrapsCount: 6
     ChanceToSpawn: 50
+  SpawnDoorVariableSettings:
+    AllDoorsOnScene: []
+    BlockedDoorsByLever: []
+    BlockedDoorsByPlate: []
+    BlockedByLeverMax: 10
+    BlockedByPlateMax: 5
+    BlockedByLeverCount: 0
+    BlockedByPlateCount: 0
+    WallLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    LeverPrefab: {fileID: 4022315998262076134, guid: b8453b97dff1c8748b7ab1e23ee897f8,
+      type: 3}
+    LeverSpawnOffset: {x: -0.09, y: 0.8, z: 0}
+    SpawnedLevers: []
+  NavMeshSurfaceSettings:
+    NavMeshSurfaceWalkable: {fileID: 1988603578}
+    EnemyPrefab: {fileID: 5952023668469632104, guid: a417c072737182a459a2ce131a95f2e8,
+      type: 3}
   levelData: {fileID: 11400000, guid: 38228541c82fd9249aa4ddc009af7fbe, type: 2}
   AllPoints: []
   AllEdges: []
@@ -548,6 +575,70 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &1988603577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1988603579}
+  - component: {fileID: 1988603578}
+  m_Layer: 0
+  m_Name: NavmeshSurfenceWalkable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1988603578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988603577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: -334000983
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 604516801
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.13333334
+  m_MinRegionArea: 1
+  m_NavMeshData: {fileID: 23800000, guid: 85510daeb9fd95344bc792e7bd38fac7, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!4 &1988603579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988603577}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.993246, y: 0.81275433, z: 13.625793}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -558,3 +649,4 @@ SceneRoots:
   - {fileID: 1131594008}
   - {fileID: 111753844}
   - {fileID: 63414285}
+  - {fileID: 1988603579}

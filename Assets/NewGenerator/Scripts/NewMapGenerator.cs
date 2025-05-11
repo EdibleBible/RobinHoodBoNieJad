@@ -1,16 +1,78 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CustomGrid;
 using NUnit.Framework;
+using Unity.AI.Navigation;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+
+[Serializable]
+public class NavMeshSurfaceSettings
+{
+    public NavMeshSurface NavMeshSurfaceWalkable;
+    public GameObject EnemyPrefab;
+
+    public void BakeNavMes()
+    {
+        NavMeshSurfaceWalkable.BuildNavMesh();
+    }
+
+    public void SpawnEnemy(MonoBehaviour context, Grid<GridCellData> grid)
+    {
+        context.StartCoroutine(SpawnEnemyCoroutine(grid));
+    }
+
+    private IEnumerator SpawnEnemyCoroutine(Grid<GridCellData> grid)
+    {
+        Vector3 center = new Vector3((grid.GetCellSize() * grid.GetWidth()) / 2, 0,
+            (grid.GetCellSize() * grid.GetHeight()) / 2);
+
+        float mapRadius = Mathf.Max(grid.GetWidth(), grid.GetHeight()) * grid.GetCellSize() / 2f;
+
+        bool found = false;
+        Vector3 spawnPoint = Vector3.zero;
+
+        int areaIndex = NavMesh.GetAreaFromName("Walkable");
+        if (areaIndex < 0)
+        {
+            Debug.LogWarning("NavMesh area 'Walkable' not found.");
+            yield break;
+        }
+
+        int areaMask = 1 << areaIndex;
+
+        while (!found)
+        {
+            Vector3 randomPoint = center + Random.insideUnitSphere * mapRadius;
+            randomPoint.y = center.y;
+
+            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 2.0f, areaMask))
+            {
+                spawnPoint = hit.position;
+                found = true;
+            }
+            else
+            {
+                yield return null; // poczekaj 1 frame i próbuj dalej
+            }
+        }
+
+        GameObject.Instantiate(EnemyPrefab, spawnPoint, Quaternion.identity);
+    }
+}
 
 public class NewMapGenerator : MonoBehaviour
 {
     private Unity.Mathematics.Random random;
     public bool DebugGridMeshBool;
+    public bool DebugRemoveMesh;
+
 
     public CustomGrid.Grid<GridCellData> CreatedGrid;
     public GridParameters GridParameters;
@@ -18,6 +80,8 @@ public class NewMapGenerator : MonoBehaviour
     public MeshGeneratorSettings MeshGeneratorSettings;
     public SpawnPlayerSettings SpawnPlayerSettings;
     public SpawnTrapSettings SpawnTrapSettings;
+    public SpawnDoorVariableSettings SpawnDoorVariableSettings;
+    public NavMeshSurfaceSettings NavMeshSurfaceSettings;
 
 
     public Dictionary<GridCellData, GameObject> allObject = new Dictionary<GridCellData, GameObject>();
@@ -58,8 +122,6 @@ public class NewMapGenerator : MonoBehaviour
 
         GenerateHallway();
 
-        if (DebugGridMeshBool)
-            DebugGridMesh();
 
         ControllSpawners();
 
@@ -68,9 +130,34 @@ public class NewMapGenerator : MonoBehaviour
             room.SetInteractableObjectNullParent();
         }
 
-        SpawnTraps();
-    }
+        SpawnBlockedDoors();
 
+        SpawnTraps();
+
+        SpawnDoorVariableSettings.RandomizeDoors();
+        SpawnDoorVariableSettings.SelectLeverGridCell(MeshGeneratorSettings.GetShuffledHallwayCells());
+        SpawnDoorVariableSettings.AssignLeversToDoors();
+
+        NavMeshSurfaceSettings.BakeNavMes();
+        NavMeshSurfaceSettings.SpawnEnemy(this, CreatedGrid);
+
+
+        if (DebugGridMeshBool)
+            DebugGridMesh();
+
+        if (DebugRemoveMesh)
+        {
+            foreach (Transform child in RoomGeneratorSettings.roomParent)
+            {
+                DestroyImmediate(child.gameObject);
+            }
+
+            foreach (Transform child in MeshGeneratorSettings.MeshesParent)
+            {
+                DestroyImmediate(child.gameObject);
+            }
+        }
+    }
 
 
     private void Update()
@@ -78,22 +165,36 @@ public class NewMapGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
             SpawnPlayer();
     }
-    
+
+    private void SpawnBlockedDoors()
+    {
+        List<GeneratorRoomData> data = new List<GeneratorRoomData>();
+
+        foreach (var room in RoomGeneratorSettings.AllCreatedRooms)
+        {
+            data.Add(room.RoomData);
+        }
+
+        SpawnDoorVariableSettings.FindAllDoorsOnScene(data);
+        SpawnDoorVariableSettings.RandomizeDoorsAmount(levelData.LevelSeedUint);
+    }
+
     private void SpawnTraps()
     {
         int trapsCount = 0;
-        
+
         foreach (var cell in MeshGeneratorSettings.GetShuffledHallwayCells())
         {
             int randomInt = random.NextInt(0, 101);
             if (randomInt < SpawnTrapSettings.ChanceToSpawn)
             {
-                if(trapsCount >= SpawnTrapSettings.MaxTrapsCount)
+                if (trapsCount >= SpawnTrapSettings.MaxTrapsCount)
                     return;
-                
+
                 trapsCount++;
                 int trapIndex = random.NextInt(SpawnTrapSettings.TrapsPrefabs.Count);
                 Instantiate(SpawnTrapSettings.TrapsPrefabs[trapIndex], cell.Position, quaternion.identity);
+                cell.GridCellType = E_GridCellType.HallwayTrap;
             }
         }
     }
@@ -102,10 +203,23 @@ public class NewMapGenerator : MonoBehaviour
     {
         GameObject spawnRoom = RoomGeneratorSettings.AllCreatedRooms.Where(x => x.IsSpawn)
             .Select(x => x.SpawnedRoomObject).FirstOrDefault();
+        GeneratorRoomData roomData = spawnRoom.GetComponent<GeneratorRoomData>();
+
 
         Instantiate(SpawnPlayerSettings.CanvasPrefab);
-        Instantiate(SpawnPlayerSettings.PlayerPrefab, spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
-            Quaternion.identity);
+
+        if (roomData.SpawnPosition == null)
+        {
+            Instantiate(SpawnPlayerSettings.PlayerPrefab,
+                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(SpawnPlayerSettings.PlayerPrefab,
+                roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity);
+        }
     }
 
     private void CreatePathfindingForSelectedEdges()
@@ -370,7 +484,8 @@ public class NewMapGenerator : MonoBehaviour
 
     private void ControllSpawners()
     {
-        List<RandomItemGenerator> spawners = FindObjectsByType<RandomItemGenerator>(FindObjectsSortMode.InstanceID).ToList();
+        List<RandomItemGenerator> spawners =
+            FindObjectsByType<RandomItemGenerator>(FindObjectsSortMode.InstanceID).ToList();
 
         foreach (var spawner in spawners)
         {
@@ -379,6 +494,7 @@ public class NewMapGenerator : MonoBehaviour
             spawner.ControllSpawner();
         }
     }
+
     public void DebugGridMesh()
     {
         if (CreatedGrid == null)

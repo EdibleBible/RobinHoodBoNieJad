@@ -30,6 +30,11 @@ public class EnemyMovement : MonoBehaviour
     public Vector3 NormalScale;
     public float ScaleDuration;
 
+    private void Start()
+    {
+        EnsureAgentOnNavMesh();
+    }
+
     public void PathFind()
     {
         ClearPath();
@@ -49,7 +54,7 @@ public class EnemyMovement : MonoBehaviour
 
             if (CurrentWaypoint >= Waypoints.Count)
                 CurrentWaypoint = 0;
-            
+
             destinations.Enqueue(Waypoints[CurrentWaypoint].position);
             CurrentWaypoint++;
             if (CurrentWaypoint >= Waypoints.Count)
@@ -137,6 +142,11 @@ public class EnemyMovement : MonoBehaviour
         {
             StartCheckingDistance(0.5f);
         }
+        
+        if (stuckCheckCoroutine != null)
+            StopCoroutine(stuckCheckCoroutine);
+
+        stuckCheckCoroutine = StartCoroutine(MonitorStuckState());
     }
 
     public void StartLookingAround(float waitingTime)
@@ -186,6 +196,12 @@ public class EnemyMovement : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(time);
+
+            if (!Agent.isActiveAndEnabled || !Agent.isOnNavMesh)
+            {
+                yield break; // kończymy coroutine, bo agent nie działa poprawnie
+            }
+
             var distanceToDestination = Agent.remainingDistance;
             if (distanceToDestination <= Agent.stoppingDistance)
             {
@@ -194,6 +210,23 @@ public class EnemyMovement : MonoBehaviour
             }
         }
     }
+
+    private void EnsureAgentOnNavMesh()
+    {
+        if (!Agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            {
+                transform.position = hit.position;
+                Debug.Log("Agent moved to nearest NavMesh point.");
+            }
+            else
+            {
+                Debug.LogWarning("No NavMesh nearby! Agent cannot move.");
+            }
+        }
+    }
+
 
     public void UpdateMoveAnimation(float _speed)
     {
@@ -227,52 +260,10 @@ public class EnemyMovement : MonoBehaviour
                     }
                 }
             }
-            
         }
-        
+
         return false;
     }
-
-    /*
-    private void CheckPathForClosedDoors()
-    {
-        if (Agent.path == null || Agent.path.corners.Length < 2)
-            return;
-
-        for (int i = 0; i < Agent.path.corners.Length - 1; i++)
-        {
-            Vector3 from = Agent.path.corners[i];
-            Vector3 to = Agent.path.corners[i + 1];
-            Vector3 direction = (to - from).normalized;
-            float distance = Vector3.Distance(from, to);
-            RaycastHit[] hits = Physics.RaycastAll(from, direction, distance, interactableLayers);
-            foreach (var hit in hits)
-            {
-                if (ComponentUtils.TryGetComponentInParent(hit.collider.gameObject, out DoorController door))
-                {
-                    if (!processedDoors.Contains(door))
-                    {
-                        processedDoors.Add(door);
-                    }
-                }
-            }
-        }
-    }
-
-    public void StartCheckingDoors()
-    {
-        if (doorDetectionCoroutine != null)
-            StopCoroutine(doorDetectionCoroutine);
-
-        doorDetectionCoroutine = StartCoroutine(CheckDoorsOnPathCoroutine());
-    }
-
-    public void StopCheckingDoors()
-    {
-        if (doorDetectionCoroutine != null)
-            StopCoroutine(doorDetectionCoroutine);
-    }
-    */
 
     public bool IsObjectOnPathAndNearby(float raycastDistance)
     {
@@ -329,6 +320,60 @@ public class EnemyMovement : MonoBehaviour
 
         return Vector3.Distance(point, closestPoint);
     }
+
+    private Coroutine stuckCheckCoroutine;
+    private Vector3 lastPosition;
+    private float stuckTimer;
+
+    private IEnumerator MonitorStuckState(float checkInterval = 1f, float stuckTimeThreshold = 3f)
+    {
+        stuckTimer = 0f;
+        lastPosition = transform.position;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(checkInterval);
+
+            float movedDistance = Vector3.Distance(transform.position, lastPosition);
+
+            if (movedDistance < 0.1f) // prawie się nie ruszył
+            {
+                stuckTimer += checkInterval;
+
+                if (stuckTimer >= stuckTimeThreshold)
+                {
+                    Debug.LogWarning("Enemy seems stuck. Resolving...");
+
+                    TryResolveStuck();
+                    yield break;
+                }
+            }
+            else
+            {
+                stuckTimer = 0f;
+            }
+
+            lastPosition = transform.position;
+        }
+    }
+
+    private void TryResolveStuck()
+    {
+        // Próbujemy znaleźć nowy punkt w pobliżu
+        if (NavMesh.SamplePosition(transform.position + Random.insideUnitSphere * 5f, out NavMeshHit hit, 5f,
+                NavMesh.AllAreas))
+        {
+            transform.position = hit.position;
+            Debug.Log("Enemy teleported to nearby NavMesh point.");
+            PathFind();
+            GoToNextPoint();
+        }
+        else
+        {
+            Debug.LogWarning("No NavMesh nearby to resolve stuck.");
+        }
+    }
+
 
     private void Update()
     {
