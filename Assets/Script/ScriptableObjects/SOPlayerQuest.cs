@@ -11,6 +11,7 @@ public class SOPlayerQuest : ScriptableObject
     public QuestDifficulty Difficulty;
     public string Description;
     public string ShortDescription;
+    public string QuestName;
 
     public SerializedDictionary<ItemType, QuestAmountData> RequireItems =
         new SerializedDictionary<ItemType, QuestAmountData>();
@@ -37,15 +38,32 @@ public class SOPlayerQuest : ScriptableObject
 
         return true;
     }
+    
+    public string GetDifficultyAsText(QuestDifficulty difficulty)
+    {
+        switch (difficulty)
+        {
+            case QuestDifficulty.easy:
+                return "Easy";
+            case QuestDifficulty.medium:
+                return "Medium";
+            case QuestDifficulty.Hard:
+                return "Hard";
+            case QuestDifficulty.VeryHard:
+                return "Very Hard";
+            default:
+                return difficulty.ToString();
+        }
+    }
+
 
     public void RandomizeQuest(QuestDifficulty difficulty)
     {
         Difficulty = difficulty;
         RequireItems.Clear();
-
+        QuestName = GenerateRandomQuestName();
         ShortDescription = $"New Quest {Difficulty}";
 
-        
         int itemAmount = 0;
         int itemRequiredAmountMin = 0;
         int itemRequiredAmountMax = 0;
@@ -89,10 +107,8 @@ public class SOPlayerQuest : ScriptableObject
             RequireItems.Add(itemType,
                 new QuestAmountData(0, Random.Range(itemRequiredAmountMin, itemRequiredAmountMax)));
         }
-        
-        
-        Description = $"New Quest {Difficulty}";
 
+        Description = $"{QuestName} ({Difficulty})";
         foreach (var item in RequireItems)
         {
             Description += $"\n{item.Key} Amount: {item.Value.RequiredAmount}\n";
@@ -103,6 +119,21 @@ public class SOPlayerQuest : ScriptableObject
     {
         SpawnedItems.Clear();
     }
+    
+    private static readonly string[] PossibleQuestNames = new[]
+    {
+        "Whispers of the Forgotten Vault",
+        "Echoes Beneath the Tomb",
+        "Relics of the Hollow Depths",
+        "The Collector's Crypt",
+        "Shadows of the Buried Shrine"
+    };
+
+    private string GenerateRandomQuestName()
+    {
+        return PossibleQuestNames[Random.Range(0, PossibleQuestNames.Length)];
+    }
+
 }
 
 [Serializable]

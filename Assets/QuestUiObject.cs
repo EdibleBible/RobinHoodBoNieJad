@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class QuestUiObject : MonoBehaviour
 {
     public SOPlayerQuest SelectedQuest;
-    public TextMeshProUGUI QuestText;
+    public TextMeshProUGUI QuestNameText;
+    public TextMeshProUGUI QuestDescriptionText;
+
     public Button QuestButton;
 
     public GameEvent ShowQuestDescriptionUIEvent;
@@ -15,8 +17,12 @@ public class QuestUiObject : MonoBehaviour
     public void Setup(SOPlayerQuest selectedQuest, UnityAction buttonAction)
     {
         SelectedQuest = selectedQuest;
-        QuestText.text = selectedQuest.ShortDescription;
+        if (QuestNameText != null)
+            QuestNameText.text = selectedQuest.QuestName;
         
+        if (QuestDescriptionText != null)
+            QuestDescriptionText.text = selectedQuest.GetDifficultyAsText(selectedQuest.Difficulty);
+
         QuestButton.onClick.RemoveAllListeners();
         QuestButton.onClick.AddListener(ShowQuestDescription);
         QuestButton.onClick.AddListener(buttonAction);
