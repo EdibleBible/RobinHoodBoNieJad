@@ -2122,7 +2122,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 40.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2209,10 +2209,10 @@ RectTransform:
   - {fileID: 6550731522050725892}
   - {fileID: 5187122274636205639}
   - {fileID: 5552162617075097946}
-  - {fileID: 6110377938788189640}
   - {fileID: 1862292289474608385}
   - {fileID: 1823265541427752384}
-  - {fileID: 5950156766763902733}
+  - {fileID: 6110377938788189640}
+  - {fileID: 5817430534840790652}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2421,8 +2421,8 @@ MonoBehaviour:
   fadeCanvasGroup: {fileID: 8010556487222449971}
   fadeDuration: 0.7
   objToOff: []
-  sceneToLoad: Lobby
-  sceneToUnload: Diorama
+  sceneToLoad: LobbyScene
+  sceneToUnload: NewGeneratorScene
 --- !u!114 &6462611091521082598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2655,7 +2655,7 @@ PrefabInstance:
     - target: {fileID: 2443646520554402128, guid: c9c48db6bcc41d9449219145edf4bc65,
         type: 3}
       propertyPath: m_fontSize
-      value: 55.25
+      value: 44.4
       objectReference: {fileID: 0}
     - target: {fileID: 2443646520554402128, guid: c9c48db6bcc41d9449219145edf4bc65,
         type: 3}
@@ -3118,7 +3118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 3
   m_AspectRatio: 2.2796052
---- !u!1001 &2873199903059406884
+--- !u!1001 &2735714830267824469
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -3129,7 +3129,7 @@ PrefabInstance:
     - target: {fileID: 4362544932703586753, guid: 6740964685213ff44acbe792664263f1,
         type: 3}
       propertyPath: m_Name
-      value: ESC InLobby
+      value: ESC
       objectReference: {fileID: 0}
     - target: {fileID: 8452302240954423081, guid: 6740964685213ff44acbe792664263f1,
         type: 3}
@@ -3236,11 +3236,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6740964685213ff44acbe792664263f1, type: 3}
---- !u!224 &5950156766763902733 stripped
+--- !u!224 &5817430534840790652 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8452302240954423081, guid: 6740964685213ff44acbe792664263f1,
     type: 3}
-  m_PrefabInstance: {fileID: 2873199903059406884}
+  m_PrefabInstance: {fileID: 2735714830267824469}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4542010122987480458
 PrefabInstance:

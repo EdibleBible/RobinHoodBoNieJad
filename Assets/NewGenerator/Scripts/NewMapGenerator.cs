@@ -220,6 +220,9 @@ public class NewMapGenerator : MonoBehaviour
                 roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
         }
+        
+        var controler = GameController.Instance;
+        controler.ToggleFullScreenPass(true);
     }
 
     private void CreatePathfindingForSelectedEdges()

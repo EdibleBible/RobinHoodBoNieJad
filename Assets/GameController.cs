@@ -1,12 +1,19 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class GameController : MonoBehaviour
 {
     [HideInInspector] public static GameController Instance { get; private set; }
-    
+
     public SOAllQuest AllPlayerQuest;
+    public SOInventory PlayerInventory;
+
     public bool DebugMode;
+    public bool DontCleanInventory;
+    
+    public ScriptableRendererFeature fullScreenPassFeature; // Przypisz w Inspectorze
+
 
 
     private void Awake()
@@ -16,7 +23,7 @@ public class GameController : MonoBehaviour
             StartNewGame();
             AllPlayerQuest.CurrentSelectedQuest = AllPlayerQuest.randomizedQuests[0];
         }
-        
+
         // Singleton Init
         if (Instance != null && Instance != this)
         {
@@ -24,11 +31,16 @@ public class GameController : MonoBehaviour
             return;
         }
 
+        ToggleFullScreenPass(false);
+        
         Instance = this;
         DontDestroyOnLoad(gameObject); // zachowuje między scenami
-        
+    }
 
-        
+    public void CleanUpInventory()
+    {
+        if (!DontCleanInventory)
+            PlayerInventory.ClearInventory();
     }
 
     public void StartNewGame()
@@ -46,5 +58,23 @@ public class GameController : MonoBehaviour
     {
         //TODO: metoda tylko do wglądu trzeba ja potem zrobić
         AllPlayerQuest.LoadAllQuest();
+    }
+    
+    public void ToggleFullScreenPass()
+    {
+        if (fullScreenPassFeature != null)
+        {
+            fullScreenPassFeature.SetActive(!fullScreenPassFeature.isActive);
+            Debug.Log("FullScreenPassRendererFeature: " + fullScreenPassFeature.isActive);
+        }
+    }
+    
+    public void ToggleFullScreenPass(bool state)
+    {
+        if (fullScreenPassFeature != null)
+        {
+            fullScreenPassFeature.SetActive(state);
+            Debug.Log("FullScreenPassRendererFeature: " + fullScreenPassFeature.isActive);
+        }
     }
 }

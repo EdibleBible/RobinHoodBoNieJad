@@ -5085,6 +5085,8 @@ MonoBehaviour:
       Data3: -827122548
       Data4: -856028031
     Path: event:/GameOver
+  levelExit: {fileID: 0}
+  gameoverController: {fileID: 0}
 --- !u!1 &326906324
 GameObject:
   m_ObjectHideFlags: 0
@@ -8655,10 +8657,10 @@ RectTransform:
   - {fileID: 1566731791}
   m_Father: {fileID: 924693227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 504.10492, y: -80.55012}
+  m_SizeDelta: {x: 336.06995, y: 161.10023}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &570189359
 MonoBehaviour:
@@ -14387,9 +14389,11 @@ MonoBehaviour:
   - {fileID: 1472526957}
   inventory: {fileID: 11400000, guid: ee22af26dd4fe004495d00302392eb3a, type: 2}
   stats: {fileID: 11400000, guid: cfbb569872faaa3449f3d7ca2b8442af, type: 2}
-  dialogTaxes: {fileID: 1389839426}
+  dialogTaxes: {fileID: 870835839}
   dialogGameOver: {fileID: 323506576}
   taxScript: {fileID: 870835841}
+  questUIController: {fileID: 684167960}
+  SceneIndexToLoad: 4
 --- !u!1 &911519385
 GameObject:
   m_ObjectHideFlags: 0
@@ -14850,10 +14854,10 @@ RectTransform:
   - {fileID: 1352459760}
   m_Father: {fileID: 924693227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 168.03497, y: -80.55012}
+  m_SizeDelta: {x: 336.06995, y: 161.10023}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &928427743
 MonoBehaviour:
@@ -19802,12 +19806,12 @@ RectTransform:
   m_Children:
   - {fileID: 296625754}
   - {fileID: 1389839427}
-  - {fileID: 870835840}
   - {fileID: 684167956}
   - {fileID: 316683020}
   - {fileID: 911519386}
   - {fileID: 6040319611542134864}
   - {fileID: 3879730223084466156}
+  - {fileID: 870835840}
   m_Father: {fileID: 911290330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -27254,8 +27258,20 @@ PrefabInstance:
     - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
         type: 3}
       propertyPath: DebugMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: PlayerInventory
+      value: 
+      objectReference: {fileID: 11400000, guid: ee22af26dd4fe004495d00302392eb3a,
+        type: 2}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: fullScreenPassFeature
+      value: 
+      objectReference: {fileID: 1096604502187038684, guid: c40be3174f62c4acf8c1216858c64956,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32783,7 +32799,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.45
+  m_fontSize: 48.4
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1

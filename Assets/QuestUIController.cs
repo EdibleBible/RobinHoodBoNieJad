@@ -10,9 +10,12 @@ public class QuestUIController : MonoBehaviour
     public GameObject DescriptionPanel;
     public TextMeshProUGUI descriptionText;
     public TextMeshProUGUI nameText;
-
+    
+    private GameController gameController;
+    
     private void OnEnable()
     {
+        gameController = GameController.Instance;
         ShowAllQuests();
     }
 
@@ -42,8 +45,7 @@ public class QuestUIController : MonoBehaviour
             obj.transform.localPosition = Vector3.zero;
         }
     }
-
-
+    
     public void ShowDescriptionPanel()
     {
         FilLDescriptionPanel();
@@ -61,5 +63,10 @@ public class QuestUIController : MonoBehaviour
             descriptionText.text = GameController.Instance.AllPlayerQuest.CurrentSelectedQuest.Description;
         if (nameText != null)
             nameText.text = GameController.Instance.AllPlayerQuest.CurrentSelectedQuest.name;
+    }
+
+    public void StartGame()
+    {
+        gameController.ToggleFullScreenPass(true);
     }
 }
