@@ -54,7 +54,7 @@ public class MusicManager : MonoBehaviour
 
     void HandleSceneMusic(string sceneName)
     {
-        if (sceneName == "Lobby")
+        if (sceneName == "LobbyScene")
         {
             StartMusic();
         }
