@@ -24,6 +24,7 @@ public class MenuButtonLobby : MonoBehaviour
     public GameObject dialogTaxes;
     public GameObject dialogGameOver;
     public MenuLobbyTaxes taxScript;
+    public string LobbySceneName;
     
     public int SceneIndexToLoad;
 
@@ -90,7 +91,7 @@ public class MenuButtonLobby : MonoBehaviour
         inventory.ItemsInInventory.Clear();
         inventory.ItemsInInventory.AddRange(inventory.InventoryLobby);
         inventory.ScoreBackup = inventory.CurrInvenoryScore;
-        StartCoroutine(LoadGameWithFade(SceneIndexToLoad, "Lobby"));
+        StartCoroutine(LoadGameWithFade(SceneIndexToLoad, LobbySceneName));
     }
 
     private IEnumerator LoadGameWithFade(int gameSceneIndex, string lobbySceneName)
