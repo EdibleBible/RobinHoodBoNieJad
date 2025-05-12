@@ -6,7 +6,7 @@ using System;
 
 public class HoverMouse : MonoBehaviour, IPointerEnterHandler
 {
-    [SerializeField] private string hoverEvent = "event:/MouseUIHover";
+    [SerializeField] private string hoverEvent = "event:/MouseUI";
     private static EventInstance lastHoverInstance;
     private static bool isHoverSoundPlaying = false;
 

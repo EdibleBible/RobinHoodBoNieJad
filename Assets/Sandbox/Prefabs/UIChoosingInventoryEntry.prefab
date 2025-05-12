@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2829609835416784471}
   - component: {fileID: 6212804969810015966}
   - component: {fileID: 7826677662385452166}
+  - component: {fileID: 2912904532947920064}
   m_Layer: 5
   m_Name: UIChoosingInventoryEntry
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MonoBehaviour:
   isSelected: 0
   button: {fileID: 6212804969810015966}
   parent: {fileID: 0}
+--- !u!114 &2912904532947920064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104238673863282037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
 --- !u!1 &3627120173193280576
 GameObject:
   m_ObjectHideFlags: 0

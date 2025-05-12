@@ -1,6 +1,9 @@
 using System;
 using Script.ScriptableObjects;
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
+
 
 public class PlayerTorchSystem : MonoBehaviour
 {
@@ -14,12 +17,17 @@ public class PlayerTorchSystem : MonoBehaviour
     [HideInInspector] public float currentTorchFuel;
     private PlayerAnimatorController playerAnimatorController;
 
+    [SerializeField] private EventReference torchSoundEvent;
+    private EventInstance torchSoundInstance;
+
+
     [SerializeField] private GameObject torchObject;
     private void Start()
     {
         SetupTorchFuel(true);
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
-        
+        torchSoundInstance = RuntimeManager.CreateInstance(torchSoundEvent);
+
     }
 
     private void Update()
@@ -75,20 +83,40 @@ public class PlayerTorchSystem : MonoBehaviour
     public void ToogleTorch(bool toogleTo)
     {
         isTorchOn = toogleTo;
-        if(!isTorchOn)
+
+        if (isTorchOn)
+        {
+            StartGlowingTorch();
+            torchSoundInstance.start();
+        }
+        else
+        {
             StopGlowingTorch();
+            torchSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+
+        playerAnimatorController.ToogleTorch(isTorchOn);
     }
-    
+
+
     public void ToogleTorch()
     {
         isTorchOn = !isTorchOn;
-        if(!isTorchOn)
-            StopGlowingTorch();
-        
-        playerAnimatorController.ToogleTorch(isTorchOn);
-        
 
+        if (isTorchOn)
+        {
+            StartGlowingTorch();
+            torchSoundInstance.start();
+        }
+        else
+        {
+            StopGlowingTorch();
+            torchSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+
+        playerAnimatorController.ToogleTorch(isTorchOn);
     }
+
 
     public void StartGlowingTorch()
     {

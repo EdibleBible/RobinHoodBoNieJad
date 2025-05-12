@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
-using FMODUnity;
 using FMOD.Studio;
+using FMODUnity;
 using System;
+using UnityEngine.EventSystems;
+using UnityEngine;
 
 public class ShopsSounds : MonoBehaviour, IPointerEnterHandler
 {
@@ -10,16 +10,18 @@ public class ShopsSounds : MonoBehaviour, IPointerEnterHandler
 
     private static EventInstance sharedInstance;
     private static bool isPlaying = false;
+    private bool hasPlayedOnce = false;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (fmodEvent.IsNull || isPlaying)
+        if (fmodEvent.IsNull || isPlaying || hasPlayedOnce)
             return;
 
         sharedInstance = RuntimeManager.CreateInstance(fmodEvent);
         sharedInstance.start();
-        sharedInstance.release(); // Cleanup after stop
+        sharedInstance.release();
         isPlaying = true;
+        hasPlayedOnce = true;
 
         sharedInstance.setCallback((FMOD.Studio.EVENT_CALLBACK_TYPE type, IntPtr eventInst, IntPtr param) =>
         {

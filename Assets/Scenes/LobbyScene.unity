@@ -4986,7 +4986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverEvent: event:/MouseUIHover
+  hoverEvent: event:/MouseUI
 --- !u!1 &323506576
 GameObject:
   m_ObjectHideFlags: 0
@@ -4998,6 +4998,7 @@ GameObject:
   - component: {fileID: 323506579}
   - component: {fileID: 323506578}
   - component: {fileID: 323506577}
+  - component: {fileID: 323506580}
   m_Layer: 5
   m_Name: GameOver
   m_TagString: Untagged
@@ -5065,6 +5066,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000091553, y: -0.022476}
   m_SizeDelta: {x: 1920, y: 1079.6}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &323506580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323506576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e92a653185e72c049952a18e6ce911ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverEvent:
+    Guid:
+      Data1: -615751728
+      Data2: 1290566021
+      Data3: -827122548
+      Data4: -856028031
+    Path: event:/GameOver
 --- !u!1 &326906324
 GameObject:
   m_ObjectHideFlags: 0
@@ -8637,8 +8657,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 435.02338, y: -69.511696}
-  m_SizeDelta: {x: 290.0156, y: 139.02339}
+  m_AnchoredPosition: {x: 504.28015, y: -80.578125}
+  m_SizeDelta: {x: 336.18677, y: 161.15625}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &570189359
 MonoBehaviour:
@@ -9748,7 +9768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverEvent: event:/MouseUIHover
+  hoverEvent: event:/MouseUI
 --- !u!114 &632643937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14832,8 +14852,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 145.0078, y: -69.511696}
-  m_SizeDelta: {x: 290.0156, y: 139.02339}
+  m_AnchoredPosition: {x: 168.09338, y: -80.578125}
+  m_SizeDelta: {x: 336.18677, y: 161.15625}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &928427743
 MonoBehaviour:
@@ -22155,6 +22175,8 @@ GameObject:
   - component: {fileID: 1352459763}
   - component: {fileID: 1352459762}
   - component: {fileID: 1352459764}
+  - component: {fileID: 1352459766}
+  - component: {fileID: 1352459765}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -22290,6 +22312,32 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &1352459765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352459759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
+--- !u!114 &1352459766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352459759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/ChestLobby
 --- !u!1 &1355974105
 GameObject:
   m_ObjectHideFlags: 0
@@ -31539,6 +31587,8 @@ GameObject:
   - component: {fileID: 1854775975}
   - component: {fileID: 1854775974}
   - component: {fileID: 1854775973}
+  - component: {fileID: 1854775978}
+  - component: {fileID: 1854775977}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -31674,6 +31724,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 3
   m_AspectRatio: 1
+--- !u!114 &1854775977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854775971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/LetterLobby
+--- !u!114 &1854775978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854775971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
 --- !u!1 &1862528658
 GameObject:
   m_ObjectHideFlags: 0
@@ -32124,7 +32200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickEvent: event:/MouseUIClick
+  clickEvent: event:/CoinsUI
 --- !u!114 &1883803655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32747,7 +32823,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.8
+  m_fontSize: 48.45
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
