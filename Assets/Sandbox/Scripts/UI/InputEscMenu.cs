@@ -10,6 +10,7 @@ public class InputEscMenu : MonoBehaviour
     public bool isScene3D;
     public Canvas canvas;
     public MenuTextButtonHover[] buttons;
+    private bool forceMouse = false;
 
     private void AssignButtonSelectors()
     {
@@ -22,6 +23,14 @@ public class InputEscMenu : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if (forceMouse)
+        {
+            LockMouse(false);
+        }
+    }
+
     private void OnEnable()
     {
         canvas = this.transform.parent.GetComponent<Canvas>();
@@ -29,10 +38,12 @@ public class InputEscMenu : MonoBehaviour
         escAction.Enable();
         escAction.performed += ToggleEsc;
         AssignButtonSelectors();
+        forceMouse = true;
     }
 
     private void OnDisable()
     {
+        forceMouse = false;
         escAction.performed -= ToggleEsc;
         escAction.Disable();
     }
