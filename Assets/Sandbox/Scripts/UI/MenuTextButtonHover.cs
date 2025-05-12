@@ -10,15 +10,21 @@ public class MenuTextButtonHover : MonoBehaviour, IPointerEnterHandler, IPointer
     public Canvas canvas;                // Assign the Canvas to ensure proper coordinate conversion
 
     private RectTransform textRect;
+    private Button button;
 
     void Start()
     {
         textRect = targetText.rectTransform;
         spriteImage.gameObject.SetActive(false);
+        button = GetComponent<Button>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!button.interactable)
+        {
+            return;
+        }
         spriteImage.gameObject.SetActive(true);
         UpdateSpritePosition();
     }
