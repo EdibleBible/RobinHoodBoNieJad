@@ -10479,6 +10479,81 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prefab_Player 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: runStepSound.Path
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: walkStepSound.Path
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: crouchStepSound.Path
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: runStepSound.Guid.Data1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: runStepSound.Guid.Data2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: runStepSound.Guid.Data3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: runStepSound.Guid.Data4
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: walkStepSound.Guid.Data1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: walkStepSound.Guid.Data2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: walkStepSound.Guid.Data3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: walkStepSound.Guid.Data4
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: crouchStepSound.Guid.Data1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: crouchStepSound.Guid.Data2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: crouchStepSound.Guid.Data3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236619838201767703, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      propertyPath: crouchStepSound.Guid.Data4
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8075526189559775371, guid: 52b7599b296b24240a035892d3be76f1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10517,7 +10592,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7201175182104095283, guid: 52b7599b296b24240a035892d3be76f1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1150470604}
   m_SourcePrefab: {fileID: 100100000, guid: 52b7599b296b24240a035892d3be76f1, type: 3}
 --- !u!1001 &543827863
 PrefabInstance:
@@ -21057,6 +21136,58 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 299532356535923621}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1150470584 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7201175182104095283, guid: 52b7599b296b24240a035892d3be76f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 533692670}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1150470597 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4155218188726546476, guid: 52b7599b296b24240a035892d3be76f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 533692670}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150470584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b553623e31d34ca48917a4b1c2c63138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1150470604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150470584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70a12b85e9127346abdcd9842ce12d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStateMachine: {fileID: 1150470597}
+  walkLoop:
+    Guid:
+      Data1: -1939391943
+      Data2: 1255220306
+      Data3: 1880998017
+      Data4: 869925656
+    Path: event:/Player/PlayerFootsteps
+  runLoop:
+    Guid:
+      Data1: -316335545
+      Data2: 1182667393
+      Data3: 1555598477
+      Data4: 660492040
+    Path: event:/Player/PlayerRunning
+  crouchLoop:
+    Guid:
+      Data1: 827783310
+      Data2: 1087811839
+      Data3: 1171387533
+      Data4: -1550513607
+    Path: event:/Player/PlayerSneaking
 --- !u!4 &1151922664 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 931899461057243577, guid: baaf8d6b88dc262469939e0cc9b77c91,
