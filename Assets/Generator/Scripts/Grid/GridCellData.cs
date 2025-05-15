@@ -305,7 +305,7 @@ public class GridCellData
 
         // Kierunek wyjścia zależnie od typu obiektu
         Vector3 doorDirection = isBreakingWall
-            ? passObject.transform.right
+            ? -passObject.transform.right
             : -passObject.transform.right;
 
         // Znajdź najlepszy kierunek w odniesieniu do grida

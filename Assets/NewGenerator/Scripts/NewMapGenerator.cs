@@ -95,70 +95,78 @@ public class NewMapGenerator : MonoBehaviour
     public List<Triangle> AllTriangles = new List<Triangle>();
     public bool AvaibleDifferentRoomsOnly;
     private bool playerIsSpawn;
-    
+
     private void Awake()
     {
-        if (GridParameters.IsRandomized)
+        try
         {
-            if (GridParameters.RandomizeSeed)
-                RandimizeSeed();
-
-            GenerateGrid(levelData.LevelSeedUint);
-        }
-        else
-        {
-            GenerateGrid(GridParameters.GridSize.x, GridParameters.GridSize.y);
-        }
-
-        random = new Unity.Mathematics.Random(levelData.LevelSeedUint);
-
-        RoomGeneratorSettings.CreateRoomOnGrid(CreatedGrid, levelData);
-
-        AllTriangles = GenerateTraingulationBeetweenCells();
-
-        GetSelectedEdges();
-
-        CreatePathfindingForSelectedEdges();
-
-        GenerateHallway();
-
-
-        ControllSpawners();
-
-        foreach (var room in RoomGeneratorSettings.AllCreatedRooms)
-        {
-            room.SetInteractableObjectNullParent();
-        }
-
-        SpawnBlockedDoors();
-
-        SpawnTraps();
-
-        SpawnDoorVariableSettings.RandomizeDoors();
-        SpawnDoorVariableSettings.SelectLeverGridCell(MeshGeneratorSettings.GetShuffledHallwayCells());
-        SpawnDoorVariableSettings.AssignLeversToDoors();
-
-        NavMeshSurfaceSettings.BakeNavMes();
-        NavMeshSurfaceSettings.SpawnEnemy(this, CreatedGrid);
-
-
-        if (DebugGridMeshBool)
-            DebugGridMesh();
-
-        if (DebugRemoveMesh)
-        {
-            foreach (Transform child in RoomGeneratorSettings.roomParent)
+            if (GridParameters.IsRandomized)
             {
-                DestroyImmediate(child.gameObject);
+                if (GridParameters.RandomizeSeed)
+                    RandimizeSeed();
+
+                GenerateGrid(levelData.LevelSeedUint);
+            }
+            else
+            {
+                GenerateGrid(GridParameters.GridSize.x, GridParameters.GridSize.y);
             }
 
-            foreach (Transform child in MeshGeneratorSettings.MeshesParent)
+            random = new Unity.Mathematics.Random(levelData.LevelSeedUint);
+
+            RoomGeneratorSettings.CreateRoomOnGrid(CreatedGrid, levelData);
+
+            AllTriangles = GenerateTraingulationBeetweenCells();
+
+            GetSelectedEdges();
+
+            CreatePathfindingForSelectedEdges();
+
+            GenerateHallway();
+
+            ControllSpawners();
+
+            foreach (var room in RoomGeneratorSettings.AllCreatedRooms)
             {
-                DestroyImmediate(child.gameObject);
+                room.SetInteractableObjectNullParent();
+            }
+
+            SpawnBlockedDoors();
+
+            SpawnTraps();
+
+            SpawnDoorVariableSettings.RandomizeDoors();
+            SpawnDoorVariableSettings.SelectLeverGridCell(MeshGeneratorSettings.GetShuffledHallwayCells());
+            SpawnDoorVariableSettings.AssignLeversToDoors();
+
+            NavMeshSurfaceSettings.BakeNavMes();
+            NavMeshSurfaceSettings.SpawnEnemy(this, CreatedGrid);
+
+            SpawnPlayer();
+            
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Awake() failed: {ex.Message}\n{ex.StackTrace}");
+        }
+        finally
+        {
+            if (DebugGridMeshBool)
+                DebugGridMesh();
+            
+            if (DebugRemoveMesh)
+            {
+                foreach (Transform child in RoomGeneratorSettings.roomParent)
+                {
+                    DestroyImmediate(child.gameObject);
+                }
+
+                foreach (Transform child in MeshGeneratorSettings.MeshesParent)
+                {
+                    DestroyImmediate(child.gameObject);
+                }
             }
         }
-
-        SpawnPlayer();
     }
 
     private void Update()
@@ -205,7 +213,7 @@ public class NewMapGenerator : MonoBehaviour
     public void SpawnPlayer()
     {
         Debug.Log("SPAWN");
-        
+
         GameObject spawnRoom = RoomGeneratorSettings.AllCreatedRooms.Where(x => x.IsSpawn)
             .Select(x => x.SpawnedRoomObject).FirstOrDefault();
         GeneratorRoomData roomData = spawnRoom.GetComponent<GeneratorRoomData>();
@@ -227,7 +235,7 @@ public class NewMapGenerator : MonoBehaviour
                 Quaternion.identity);
             playerIsSpawn = true;
         }
-        
+
         var controler = GameController.Instance;
         controler.ToogleCursorOff();
         controler.ToggleFullScreenPass(true);
@@ -273,6 +281,9 @@ public class NewMapGenerator : MonoBehaviour
 
             path = currentPathfinding.FindPath(startCoordinate.x, startCoordinate.y, endCoordinate.x, endCoordinate.y);
 
+            startCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayCorner;
+            endCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayCorner;
+            
             foreach (var node in path)
             {
                 GridCellData toAdd = CreatedGrid.GetValue(node.X, node.Y);
@@ -281,6 +292,9 @@ public class NewMapGenerator : MonoBehaviour
                 if (!MeshGeneratorSettings.HallwayCell.Contains(toAdd))
                     MeshGeneratorSettings.HallwayCell.Add(toAdd);
             }
+
+            startCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayBorder;
+            endCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayBorder;
         }
     }
 
