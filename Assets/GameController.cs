@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -11,10 +10,8 @@ public class GameController : MonoBehaviour
 
     public bool DebugMode;
     public bool DontCleanInventory;
-    
+
     public ScriptableRendererFeature fullScreenPassFeature; // Przypisz w Inspectorze
-
-
 
     private void Awake()
     {
@@ -32,7 +29,7 @@ public class GameController : MonoBehaviour
         }
 
         ToggleFullScreenPass(false);
-        
+
         Instance = this;
         DontDestroyOnLoad(gameObject); // zachowuje między scenami
     }
@@ -59,7 +56,7 @@ public class GameController : MonoBehaviour
         //TODO: metoda tylko do wglądu trzeba ja potem zrobić
         AllPlayerQuest.LoadAllQuest();
     }
-    
+
     public void ToggleFullScreenPass()
     {
         if (fullScreenPassFeature != null)
@@ -68,7 +65,7 @@ public class GameController : MonoBehaviour
             Debug.Log("FullScreenPassRendererFeature: " + fullScreenPassFeature.isActive);
         }
     }
-    
+
     public void ToggleFullScreenPass(bool state)
     {
         if (fullScreenPassFeature != null)
@@ -76,5 +73,22 @@ public class GameController : MonoBehaviour
             fullScreenPassFeature.SetActive(state);
             Debug.Log("FullScreenPassRendererFeature: " + fullScreenPassFeature.isActive);
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        ToggleFullScreenPass(false);
+    }
+
+    public void ToogleCursorOn()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void ToogleCursorOff()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

@@ -94,8 +94,8 @@ public class NewMapGenerator : MonoBehaviour
     public List<Edge> SelectedEdges = new List<Edge>();
     public List<Triangle> AllTriangles = new List<Triangle>();
     public bool AvaibleDifferentRoomsOnly;
-
-
+    private bool playerIsSpawn;
+    
     private void Awake()
     {
         if (GridParameters.IsRandomized)
@@ -157,13 +157,16 @@ public class NewMapGenerator : MonoBehaviour
                 DestroyImmediate(child.gameObject);
             }
         }
-    }
 
+        SpawnPlayer();
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (!playerIsSpawn && Input.GetKeyDown(KeyCode.Space))
+        {
             SpawnPlayer();
+        }
     }
 
     private void SpawnBlockedDoors()
@@ -199,8 +202,10 @@ public class NewMapGenerator : MonoBehaviour
         }
     }
 
-    private void SpawnPlayer()
+    public void SpawnPlayer()
     {
+        Debug.Log("SPAWN");
+        
         GameObject spawnRoom = RoomGeneratorSettings.AllCreatedRooms.Where(x => x.IsSpawn)
             .Select(x => x.SpawnedRoomObject).FirstOrDefault();
         GeneratorRoomData roomData = spawnRoom.GetComponent<GeneratorRoomData>();
@@ -213,15 +218,18 @@ public class NewMapGenerator : MonoBehaviour
             Instantiate(SpawnPlayerSettings.PlayerPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
+            playerIsSpawn = true;
         }
         else
         {
             Instantiate(SpawnPlayerSettings.PlayerPrefab,
                 roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
+            playerIsSpawn = true;
         }
         
         var controler = GameController.Instance;
+        controler.ToogleCursorOff();
         controler.ToggleFullScreenPass(true);
     }
 

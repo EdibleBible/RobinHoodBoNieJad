@@ -10,6 +10,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class MenuButtonLobby : MonoBehaviour
 {
+    public GameObject mainCanvas;
     public GameObject loadingScreen;
     public Image backgroundImage;
     public Slider progressBar;
@@ -25,6 +26,7 @@ public class MenuButtonLobby : MonoBehaviour
     public GameObject dialogGameOver;
     public MenuLobbyTaxes taxScript;
     public string LobbySceneName;
+    public GameEvent StartGameEvent;
     
     public int SceneIndexToLoad;
 
@@ -98,14 +100,15 @@ public class MenuButtonLobby : MonoBehaviour
     {
         GameController.Instance.RandomizeQuest();
         loadingScreen.SetActive(true);
-        
+        mainCanvas.SetActive(false);
+
         yield return StartCoroutine(Fade(1));
-        
+
         foreach (var obj in objToOff)
         {
             obj.SetActive(false);
         }
-        
+
         progressBar.gameObject.SetActive(true);
         continueText.gameObject.SetActive(false);
 
@@ -122,24 +125,28 @@ public class MenuButtonLobby : MonoBehaviour
             float progress = Mathf.Clamp01(gameLoadOperation.progress / 0.9f);
             progressBar.value = progress;
 
-            if (progress >= 1f && elapsedTime >= minLoadTime)
+            if (progress >= 1f && elapsedTime >= minLoadTime && !isReadyToContinue)
             {
+                // Scena załadowana, czekamy na input
                 progressBar.gameObject.SetActive(false);
+                continueText.text = "Press any key to continue...";
+                continueText.gameObject.SetActive(true);
                 isReadyToContinue = true;
-                gameLoadOperation.allowSceneActivation = true;
             }
 
-            
-            if (isReadyToContinue)
+            if (isReadyToContinue && Input.anyKeyDown)
             {
+                gameLoadOperation.allowSceneActivation = true;
                 yield return StartCoroutine(Fade(0));
+                StartGameEvent.Raise(this,this);
                 SceneManager.UnloadSceneAsync(lobbySceneName);
-                yield return null;
+                yield break; // kończymy coroutine po aktywacji sceny
             }
 
             yield return null;
         }
     }
+
 
     private IEnumerator Fade(float targetAlpha)
     {
