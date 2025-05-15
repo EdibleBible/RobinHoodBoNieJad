@@ -4405,6 +4405,8 @@ MonoBehaviour:
       Data3: -827122548
       Data4: -856028031
     Path: event:/GameOver
+  levelExit: {fileID: 0}
+  gameoverController: {fileID: 0}
 --- !u!114 &323506581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4414,37 +4416,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 323506576}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89b288f956189904aa97a5b1f54aae18, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ac3563e999f61f4e9635399f124d1b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameEvent: {fileID: 11400000, guid: 58583c3f9608e3a4494f7e90372e2a62, type: 2}
-  response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 911290326}
-        m_TargetAssemblyTypeName: GameOverUiController, Assembly-CSharp
-        m_MethodName: GameOver
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 323506580}
-        m_TargetAssemblyTypeName: GameOverScreen, Assembly-CSharp
-        m_MethodName: PlayGameOverSound
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  gameOverSound:
+    Guid:
+      Data1: -615751728
+      Data2: 1290566021
+      Data3: -827122548
+      Data4: -856028031
+    Path: event:/GameOver
 --- !u!1 &326906324
 GameObject:
   m_ObjectHideFlags: 0
@@ -12401,6 +12382,8 @@ MonoBehaviour:
   dialogTaxes: {fileID: 1389839426}
   dialogGameOver: {fileID: 323506576}
   taxScript: {fileID: 870835841}
+  LobbySceneName: 
+  SceneIndexToLoad: 0
 --- !u!1 &911519385
 GameObject:
   m_ObjectHideFlags: 0
@@ -20407,14 +20390,6 @@ PrefabInstance:
         type: 3}
       insertIndex: 5
       addedObject: {fileID: 1328756201}
-    - targetCorrespondingSourceObject: {fileID: 1952950359882098213, guid: 6740964685213ff44acbe792664263f1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1402764056}
-    - targetCorrespondingSourceObject: {fileID: 1952950359882098213, guid: 6740964685213ff44acbe792664263f1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1402764055}
     - targetCorrespondingSourceObject: {fileID: 803424503907288421, guid: 6740964685213ff44acbe792664263f1,
         type: 3}
       insertIndex: -1
@@ -20460,12 +20435,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1402764045}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1402764050 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1952950359882098213, guid: 6740964685213ff44acbe792664263f1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1402764045}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1402764051 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3776395061314145529, guid: 6740964685213ff44acbe792664263f1,
@@ -20505,32 +20474,6 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1402764048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clickEvent: event:/MouseUIClick
---- !u!114 &1402764055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402764050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverEvent: event:/MouseUI
---- !u!114 &1402764056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402764050}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
