@@ -987,6 +987,7 @@ GameObject:
   - component: {fileID: 4489070987079571684}
   - component: {fileID: -7925518734325822260}
   - component: {fileID: 7299306427209907359}
+  - component: {fileID: 1810628108408444835}
   m_Layer: 18
   m_Name: Prefab_Player 3
   m_TagString: Player
@@ -1278,25 +1279,25 @@ MonoBehaviour:
     m_Bits: 64
   walkStepSound:
     Guid:
-      Data1: -1939391943
-      Data2: 1255220306
-      Data3: 1880998017
-      Data4: 869925656
-    Path: event:/Player/PlayerFootsteps
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   runStepSound:
     Guid:
-      Data1: -316335545
-      Data2: 1182667393
-      Data3: 1555598477
-      Data4: 660492040
-    Path: event:/Player/PlayerRunning
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   crouchStepSound:
     Guid:
-      Data1: -310207697
-      Data2: 1138274044
-      Data3: 1520931752
-      Data4: 1705262199
-    Path: event:/Player/PlayerCrouch
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   walkStepCooldown: 0.2
   runStepCooldown: 0.2
   crouchStepCooldown: 0.2
@@ -1521,6 +1522,40 @@ MonoBehaviour:
   statsController: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e, type: 2}
   baseMaxLinesPerPulse: 3
   baseSpecialSenseUseCount: 4
+--- !u!114 &1810628108408444835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7201175182104095283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70a12b85e9127346abdcd9842ce12d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStateMachine: {fileID: 4155218188726546476}
+  walkLoop:
+    Guid:
+      Data1: -1939391943
+      Data2: 1255220306
+      Data3: 1880998017
+      Data4: 869925656
+    Path: event:/Player/PlayerFootsteps
+  runLoop:
+    Guid:
+      Data1: -316335545
+      Data2: 1182667393
+      Data3: 1555598477
+      Data4: 660492040
+    Path: event:/Player/PlayerRunning
+  crouchLoop:
+    Guid:
+      Data1: 827783310
+      Data2: 1087811839
+      Data3: 1171387533
+      Data4: -1550513607
+    Path: event:/Player/PlayerSneaking
 --- !u!1 &7249727355722924482
 GameObject:
   m_ObjectHideFlags: 0
