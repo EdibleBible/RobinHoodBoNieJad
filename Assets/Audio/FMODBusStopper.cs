@@ -25,6 +25,11 @@ public class FMODBusStopper : MonoBehaviour
         {
             StopSFXBus();
         }
+
+        if (scene.name == "MainMenu")
+        {
+            StopSFXBus();
+        }
     }
 
     private void StopSFXBus()
