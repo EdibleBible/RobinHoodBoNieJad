@@ -36,26 +36,6 @@ public class UpgradeTest : MonoBehaviour
     {
         UpgradePanel.SetActive(false);
     }
-    
-    public void UpgradeSpeed()
-    {
-        playerStatsController.UpgradePlayerBaseModifiers(speedModifier);
-    }
-
-    public void UpgradeStamina()
-    {
-        playerStatsController.UpgradePlayerBaseModifiers(staminaModifier);
-    }
-
-    public void UpgradeAcceleration()
-    {
-        playerStatsController.UpgradePlayerBaseModifiers(accelerationModifier);
-    }
-
-    public void UpgradeInventorySize()
-    {
-        playerStatsController.UpgradePlayerBaseModifiers(inventorySizeModifier);
-    }
 
     public void ResetPlayerStats()
     {

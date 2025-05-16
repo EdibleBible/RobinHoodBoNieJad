@@ -1,5 +1,7 @@
+using Script.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 
 public class GameController : MonoBehaviour
 {
@@ -7,9 +9,12 @@ public class GameController : MonoBehaviour
 
     public SOAllQuest AllPlayerQuest;
     public SOInventory PlayerInventory;
-
+    public SOPlayerStatsController PlayerStatsController;
+    
     public bool DebugMode;
     public bool DontCleanInventory;
+    public bool ResetAllStatsModifiers;
+    public bool RemoveAllBaseStatModifiers;
 
     public ScriptableRendererFeature fullScreenPassFeature; // Przypisz w Inspectorze
 
@@ -19,6 +24,16 @@ public class GameController : MonoBehaviour
         {
             StartNewGame();
             AllPlayerQuest.CurrentSelectedQuest = AllPlayerQuest.randomizedQuests[0];
+        }
+
+        if (ResetAllStatsModifiers)
+        {
+            PlayerStatsController.ResetAllModifiers();
+        }
+
+        if (RemoveAllBaseStatModifiers)
+        {
+            PlayerStatsController.RemoveAllBaseModier();
         }
 
         // Singleton Init
