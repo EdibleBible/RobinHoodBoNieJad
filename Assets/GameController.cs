@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
     public SOAllQuest AllPlayerQuest;
     public SOInventory PlayerInventory;
     public SOPlayerStatsController PlayerStatsController;
+    public SOStats Stats;
+    public int BaseMoney;
     
     public bool DebugMode;
     public bool DontCleanInventory;
@@ -20,6 +22,11 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
+        if (Stats.lobbyVisit == 0)
+        {
+            Stats.scoreTotal = BaseMoney;
+        }
+        
         if (DebugMode)
         {
             StartNewGame();
@@ -58,6 +65,9 @@ public class GameController : MonoBehaviour
     public void StartNewGame()
     {
         AllPlayerQuest.RandomizeAllQuests();
+        Stats.lobbyVisit = 0;
+        Stats.scoreTotal = BaseMoney;
+        Stats.taxPaid = false;
     }
 
     public void RandomizeQuest()
@@ -97,12 +107,14 @@ public class GameController : MonoBehaviour
 
     public void ToogleCursorOn()
     {
+        Debug.Log("ToogleCursorOn");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
     public void ToogleCursorOff()
     {
+        Debug.Log("ToogleCursorOff");
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }

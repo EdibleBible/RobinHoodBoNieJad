@@ -112,7 +112,7 @@ public class InputPlayerWalk : MonoBehaviour
 
     private void OnApplicationFocus(bool hasFocus)
     {
-        if (hasFocus)
+        /*if (hasFocus)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -121,6 +121,6 @@ public class InputPlayerWalk : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-        }
+        }*/
     }
 }

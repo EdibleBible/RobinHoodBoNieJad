@@ -14,7 +14,10 @@ public class LobbyStoreUiElement : MonoBehaviour
     public Image StatIcon;
     public Button StatButton;
 
-    public void SetUp(StatsModifiers stat, SOPlayerStatsController playerStatsController, int maxLevel)
+    public GameEvent ReloadAllButtons;
+
+    public void SetUp(StatsModifiers stat, SOPlayerStatsController playerStatsController, int maxLevel,
+        SOInventory playerInventory,SOStats stats)
     {
         if (StatName != null)
         {
@@ -55,6 +58,18 @@ public class LobbyStoreUiElement : MonoBehaviour
         {
             StatButton.gameObject.SetActive(true);
             StatButton.onClick.RemoveAllListeners();
+
+            if (stat.GetCurrentCost() > stats.scoreTotal)
+            {
+                StatButton.interactable = false;
+                return;
+            }
+            else
+            {
+                StatButton.interactable = true;
+            }
+
+
             if (stat.CurrLevel < maxLevel)
             {
                 StatParameters parameters = new StatParameters();
@@ -64,29 +79,54 @@ public class LobbyStoreUiElement : MonoBehaviour
 
                 StatButton.onClick.AddListener(() =>
                 {
-                    var newStat = playerStatsController.PlayerBaseModifiers
-                        .Where(x => x.ModifiersType == stat.ModifiersType).FirstOrDefault();
-                    if (newStat == null)
-                    {
-                        playerStatsController.UpgradePlayerBaseModifiers(parameters, stat.Icon, stat.CurrLevel,
-                            stat.UpgradeBaseCost);
-                        newStat = playerStatsController.PlayerBaseModifiers
-                            .Where(x => x.ModifiersType == stat.ModifiersType).FirstOrDefault();
-                    }
-
-                    else
-                    {
-                        playerStatsController.UpgradePlayerBaseModifiers(parameters, newStat.Icon, newStat.CurrLevel,
-                            newStat.UpgradeBaseCost);
-                    }
-
-                    SetUp(newStat, playerStatsController, maxLevel);
+                    ButButtonController(stat, playerStatsController, maxLevel, parameters, playerInventory,stats);
                 });
             }
             else
             {
                 StatButton.gameObject.SetActive(false);
             }
+        }
+    }
+
+    private void ButButtonController(StatsModifiers stat, SOPlayerStatsController playerStatsController, int maxLevel,
+        StatParameters parameters, SOInventory playerInventory,SOStats stats)
+    {
+        if (!CheckMoney(stat.GetCurrentCost(), stats))
+        {
+            return;
+        }
+
+        var newStat = playerStatsController.PlayerBaseModifiers
+            .Where(x => x.ModifiersType == stat.ModifiersType).FirstOrDefault();
+        if (newStat == null)
+        {
+            playerStatsController.UpgradePlayerBaseModifiers(parameters, stat.Icon, stat.CurrLevel,
+                stat.UpgradeBaseCost);
+            newStat = playerStatsController.PlayerBaseModifiers
+                .Where(x => x.ModifiersType == stat.ModifiersType).FirstOrDefault();
+        }
+
+        else
+        {
+            playerStatsController.UpgradePlayerBaseModifiers(parameters, newStat.Icon, newStat.CurrLevel,
+                newStat.UpgradeBaseCost);
+        }
+
+        SetUp(newStat, playerStatsController, maxLevel, playerInventory,stats);
+        ReloadAllButtons.Raise(this,null);
+    }
+
+    public bool CheckMoney(int cost, SOStats stats)
+    {
+        if (cost > stats.scoreTotal)
+        {
+            return false;
+        }
+        else
+        {
+            stats.scoreTotal -= cost;
+            return true;
         }
     }
 }

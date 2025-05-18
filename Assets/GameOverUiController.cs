@@ -29,8 +29,11 @@ public class GameOverUiController : MonoBehaviour
 
     public void GameOver(Component sender, object data)
     {
+        GameController gameController = GameController.Instance;
+        
         if (isUSed == false)
         {
+            gameController.ToggleFullScreenPass(false);
             isUSed = true;
             StartCoroutine(LoadGameWithFade(sceneToLoad, sceneToUnload));
         }

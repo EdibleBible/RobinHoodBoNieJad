@@ -19,7 +19,11 @@ public class GameOverScreen : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            levelExit.Interact(gameoverController.transform);
+            if (levelExit == null)
+                levelExit = FindObjectOfType<LevelExit>();
+
+            if (levelExit != null)
+                levelExit.Interact(gameoverController.transform);
         }
     }
 
@@ -28,4 +32,3 @@ public class GameOverScreen : MonoBehaviour
         RuntimeManager.PlayOneShot(gameOverEvent);
     }
 }
-

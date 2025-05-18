@@ -38,6 +38,7 @@ public class MenuButtonLobby : MonoBehaviour
         }
         inventory.CurrInvenoryScore += inventory.ScoreBackup;
         inventory.ScoreBackup = 0;
+        Debug.Log("TUTAJ");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
