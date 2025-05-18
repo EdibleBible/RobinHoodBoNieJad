@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7276981050872845323}
   - component: {fileID: 6131084285027672779}
   - component: {fileID: 7908745291404912207}
+  - component: {fileID: 1599800691030664753}
+  - component: {fileID: 7805208243481687547}
   m_Layer: 5
   m_Name: Lobby
   m_TagString: Untagged
@@ -209,6 +211,32 @@ MonoBehaviour:
   targetText: {fileID: 7276981050872845323}
   spriteImage: {fileID: 7627610470159792398}
   canvas: {fileID: 0}
+--- !u!114 &1599800691030664753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117099024975562417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
+--- !u!114 &7805208243481687547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117099024975562417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
 --- !u!1 &803424503907288421
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,6 +250,8 @@ GameObject:
   - component: {fileID: 5723148178568075475}
   - component: {fileID: 2120338293344128617}
   - component: {fileID: 2660773172998824459}
+  - component: {fileID: 4808041848617620762}
+  - component: {fileID: 4677857320709207764}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -418,6 +448,32 @@ MonoBehaviour:
   targetText: {fileID: 5723148178568075475}
   spriteImage: {fileID: 7627610470159792398}
   canvas: {fileID: 0}
+--- !u!114 &4808041848617620762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803424503907288421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
+--- !u!114 &4677857320709207764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803424503907288421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
 --- !u!1 &2043502206068126204
 GameObject:
   m_ObjectHideFlags: 0
@@ -661,6 +717,8 @@ GameObject:
   - component: {fileID: 1362668573311495122}
   - component: {fileID: 5360977786805650459}
   - component: {fileID: 7792290346353901541}
+  - component: {fileID: 6011154279480362988}
+  - component: {fileID: 6589987628145235860}
   m_Layer: 5
   m_Name: Resume
   m_TagString: Untagged
@@ -857,6 +915,32 @@ MonoBehaviour:
   targetText: {fileID: 1362668573311495122}
   spriteImage: {fileID: 7627610470159792398}
   canvas: {fileID: 0}
+--- !u!114 &6011154279480362988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3776395061314145529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
+--- !u!114 &6589987628145235860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3776395061314145529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
 --- !u!1 &4362544932703586753
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,6 +1022,8 @@ GameObject:
   - component: {fileID: 8603703340827051573}
   - component: {fileID: 4388377797817904989}
   - component: {fileID: 536943263232705272}
+  - component: {fileID: 2805606691371299233}
+  - component: {fileID: 5282151993951533933}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -1134,6 +1220,32 @@ MonoBehaviour:
   targetText: {fileID: 8603703340827051573}
   spriteImage: {fileID: 7627610470159792398}
   canvas: {fileID: 0}
+--- !u!114 &2805606691371299233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4408527338398215695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
+--- !u!114 &5282151993951533933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4408527338398215695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
 --- !u!1 &4956250394083357318
 GameObject:
   m_ObjectHideFlags: 0
