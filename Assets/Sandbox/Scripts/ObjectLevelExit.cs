@@ -33,6 +33,7 @@ public class ObjectLevelExit : MonoBehaviour, IUseObject
     {
         if (isPlayer &&  player != null)
         {
+            Debug.Log("TUTAJ");
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene(1);

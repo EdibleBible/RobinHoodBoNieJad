@@ -30,6 +30,10 @@ public class LobbyInventoryChoose : MonoBehaviour
         int i = 0;
         foreach (var item in inventory.InventoryLobby)
         {
+            if (item.ItemType == ItemType.CollectibleVase || item.ItemType == ItemType.CollectibleGoblet || item.ItemType == ItemType.CollectibleBook)
+            {
+                continue;
+            }
             GameObject itemFrame = Instantiate(inventoryEntry, inventoryParent.transform);
             inventoryItems.Add(itemFrame);
             var entry = itemFrame.GetComponent<LobbyInventoryChooseEntry>();

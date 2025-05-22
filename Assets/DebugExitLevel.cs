@@ -14,7 +14,7 @@ public class DebugExitLevel : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        /*if (Input.GetKeyDown(KeyCode.P))
         {
             SoundManager.Instance?.StopAllActiveEvents();
             var emitters = FindObjectsByType<FMODUnity.StudioEventEmitter>(FindObjectsSortMode.None);
@@ -85,6 +85,6 @@ public class DebugExitLevel : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene(1);
-        }
+        }*/
     }
 }

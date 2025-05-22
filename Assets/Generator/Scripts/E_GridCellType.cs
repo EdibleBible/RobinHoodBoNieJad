@@ -18,6 +18,7 @@ public enum E_GridCellType
     ExitRoomBoreder,
     ExitRoomCorner,
     ExitRoomInside,
-    ExitPass
-
+    ExitPass,
+    HallwayLever,
+    HallwayTrap
 }

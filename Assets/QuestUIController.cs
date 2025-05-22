@@ -9,9 +9,13 @@ public class QuestUIController : MonoBehaviour
     public QuestUiObject questUIPrefab;
     public GameObject DescriptionPanel;
     public TextMeshProUGUI descriptionText;
-
+    public TextMeshProUGUI nameText;
+    
+    private GameController gameController;
+    
     private void OnEnable()
     {
+        gameController = GameController.Instance;
         ShowAllQuests();
     }
 
@@ -28,15 +32,20 @@ public class QuestUIController : MonoBehaviour
 
     public void ShowAllQuests()
     {
+        foreach (Transform obj in QuestListElementHolder)
+        {
+            Destroy(obj.gameObject);
+        }
         foreach (var quest in GameController.Instance.AllPlayerQuest.randomizedQuests)
         {
             var obj = Instantiate(questUIPrefab, questUIPrefab.transform.position, Quaternion.identity);
             obj.transform.SetParent(QuestListElementHolder);
-            obj.Setup(quest,ShowDescriptionPanel);
+            obj.Setup(quest, ShowDescriptionPanel);
+            obj.transform.localScale = Vector3.one;
+            obj.transform.localPosition = Vector3.zero;
         }
     }
-
-
+    
     public void ShowDescriptionPanel()
     {
         FilLDescriptionPanel();
@@ -47,9 +56,17 @@ public class QuestUIController : MonoBehaviour
     {
         DescriptionPanel.SetActive(false);
     }
-    
+
     public void FilLDescriptionPanel()
     {
-        descriptionText.text = GameController.Instance.AllPlayerQuest.CurrentSelectedQuest.Description;
+        if (descriptionText != null)
+            descriptionText.text = GameController.Instance.AllPlayerQuest.CurrentSelectedQuest.Description;
+        if (nameText != null)
+            nameText.text = GameController.Instance.AllPlayerQuest.CurrentSelectedQuest.name;
+    }
+
+    public void StartGame()
+    {
+        gameController.ToggleFullScreenPass(true);
     }
 }

@@ -32,6 +32,7 @@ public class InputEscMenuInGame : MonoBehaviour
         else
         {
             escapeMenu.SetActive(true);
+            Debug.Log("TUTAJ");
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
         }
@@ -51,6 +52,7 @@ public class InputEscMenuInGame : MonoBehaviour
 
     public void SceneLobby()
     {
+        Debug.Log("TUTAJ");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene(1);
@@ -58,6 +60,7 @@ public class InputEscMenuInGame : MonoBehaviour
 
     public void SceneMenu()
     {
+        Debug.Log("TUTAJ");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene(0);

@@ -80,26 +80,40 @@ namespace Script.ScriptableObjects
             {
                 if (!PlayerStats.Any(x => x.ModifiersType == baseModifier.ModifiersType))
                     continue;
+
                 var selectedMofifier = PlayerStats.Where(x => x.ModifiersType == baseModifier.ModifiersType)
                     .FirstOrDefault();
-                SetModifier(baseModifier.Additive, baseModifier.Multiplicative, baseModifier.ModifiersType);
+
+
+                SetModifier(baseModifier.Additive + selectedMofifier.Additive,
+                    baseModifier.Multiplicative + selectedMofifier.Multiplicative, baseModifier.ModifiersType);
             }
         }
 
-        public void UpgradePlayerBaseModifiers(StatParameters modifier)
+        public void UpgradePlayerBaseModifiers(StatParameters modifier, Sprite sprite, int level, int baseCost)
         {
+            Debug.Log("level: " + level);
             if (PlayerBaseModifiers.Any(x => x.ModifiersType == modifier.ModifierType))
             {
                 var selectedModifier = PlayerBaseModifiers.Where(x => x.ModifiersType == modifier.ModifierType)
                     .FirstOrDefault();
                 selectedModifier.ChangeAdditive(modifier.Additive);
                 selectedModifier.ChangeMultiplicative(modifier.Multiplicative);
+                selectedModifier.CurrLevel = level + 1;
+
             }
             else
             {
-                PlayerBaseModifiers.Add(new StatsModifiers(modifier.ModifierType,modifier.Additive,modifier.Multiplicative));
+                StatsModifiers newBaseMod =
+                    new StatsModifiers(modifier.ModifierType, modifier.Additive, modifier.Multiplicative);
+                newBaseMod.statsToUpgrade.Multiplicative = modifier.Multiplicative;
+                newBaseMod.statsToUpgrade.Additive = modifier.Additive;
+                newBaseMod.CurrLevel = level + 1;
+                newBaseMod.UpgradeBaseCost = baseCost;
+                newBaseMod.Icon = sprite;
+                PlayerBaseModifiers.Add(newBaseMod);
             }
-            
+
             SetPlayerBaseModifiers();
         }
 
@@ -107,6 +121,11 @@ namespace Script.ScriptableObjects
         {
             PlayerBaseModifiers.Clear();
             SetPlayerBaseModifiers();
+        }
+
+        public void RemoveAllBaseModier()
+        {
+            PlayerBaseModifiers.Clear();
         }
     }
 }

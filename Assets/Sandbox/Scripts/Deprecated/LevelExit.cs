@@ -68,6 +68,7 @@ public class LevelExit : MonoBehaviour, IInteractable
             Destroy(player.gameObject);
         }
         
+        Debug.Log("TUTAJ");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene(1);

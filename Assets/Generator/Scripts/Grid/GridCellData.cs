@@ -123,6 +123,24 @@ public class GridCellData
         }
     }
 
+    public List<Transform> FastDetectObjectInCell(LayerMask detectionLayerMask)
+    {
+        List<Transform> returnList = new List<Transform>();
+
+        Vector3 center = Position;
+        Vector3 halfExtents = new Vector3(CellSize.x / 2f, 5f, CellSize.y / 2f); // 5f wysokości, możesz zmienić
+
+        Collider[] colliders = Physics.OverlapBox(center, halfExtents, Quaternion.identity, detectionLayerMask);
+
+        foreach (var collider in colliders)
+        {
+            GameObject obj = collider.gameObject;
+            returnList.Add(obj.transform);
+        }
+
+        return returnList;
+    }
+
     public List<Matrix4x4> FlorMatrix4x4(Vector2 segmentSize)
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
@@ -154,18 +172,22 @@ public class GridCellData
 
         return matrix4X4s;
     }
-    
+
     public List<Matrix4x4> RoomWallMatrix4s4(Vector2 segmentSize)
     {
         List<Matrix4x4> matrix4X4s = new List<Matrix4x4>();
 
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_up, neighbors[E_GridCellReferenceType.E_up], Quaternion.Euler(0, 270f, 0f),
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_up,
+            neighbors[E_GridCellReferenceType.E_up], Quaternion.Euler(0, 270f, 0f),
             segmentSize));
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_down, neighbors[E_GridCellReferenceType.E_down],
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_down,
+            neighbors[E_GridCellReferenceType.E_down],
             Quaternion.Euler(0, 90f, 0f), segmentSize));
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_left, neighbors[E_GridCellReferenceType.E_left], Quaternion.Euler(0, 180, 0),
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_left,
+            neighbors[E_GridCellReferenceType.E_left], Quaternion.Euler(0, 180, 0),
             segmentSize));
-        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_right, neighbors[E_GridCellReferenceType.E_right], Quaternion.Euler(0, 0, 0),
+        matrix4X4s.AddRange(GenerateSelectedRoomSide(E_GridCellReferenceType.E_right,
+            neighbors[E_GridCellReferenceType.E_right], Quaternion.Euler(0, 0, 0),
             segmentSize));
 
 
@@ -195,7 +217,7 @@ public class GridCellData
 
     private bool ShouldGenerateWalls(GridCellData selectedReferenceGrid)
     {
-        if(selectedReferenceGrid.GridCellType == E_GridCellType.Empty)
+        if (selectedReferenceGrid.GridCellType == E_GridCellType.Empty)
             return true;
 
         return false;
@@ -256,6 +278,7 @@ public class GridCellData
     public GridCellData GetDoorExitCell()
     {
         GameObject passObject = null;
+        bool isBreakingWall = false;
 
         // Szukamy drzwi lub przełamywalnej ściany
         foreach (var obj in GetAllObjects())
@@ -269,6 +292,7 @@ public class GridCellData
             if (obj.TryGetComponent(out BreakingWallController breakingWallController))
             {
                 passObject = breakingWallController.gameObject;
+                isBreakingWall = true;
                 break;
             }
         }
@@ -279,8 +303,10 @@ public class GridCellData
             return null;
         }
 
-        // Kierunek wyjścia - zakładamy że 'prawo' drzwi wskazuje wyjście
-        Vector3 doorDirection = -passObject.transform.right;
+        // Kierunek wyjścia zależnie od typu obiektu
+        Vector3 doorDirection = isBreakingWall
+            ? -passObject.transform.right
+            : -passObject.transform.right;
 
         // Znajdź najlepszy kierunek w odniesieniu do grida
         E_GridCellReferenceType bestDirection = GetClosestDirection(doorDirection);

@@ -16,10 +16,12 @@ public struct RoomGeneratorSettings
     public int MaxAttempts;
     public List<NewRoom> AllCreatedRooms;
     public LayerMask WallPassLayer;
+    public LayerMask WallPassSpawnLayer;
     public bool UseAdditionalEdges;
     public float ChanceToSelectEdge;
     public int AdditionSelectedEdges;
     public LayerMask DetectObjectInCellLayerMask;
+
 
 
     public void CreateRoomOnGrid(Grid<GridCellData> createdGrid, SOLevel levelSeed)
@@ -53,18 +55,17 @@ public struct RoomGeneratorSettings
 
         SelectSpawn();
 
-        
+
         for (int i = 0; i < AllCreatedRooms.Count; i++)
         {
-            AllCreatedRooms[i].SpawnPrefabs(LayerMaskToLayer(WallPassLayer));
-            
+            AllCreatedRooms[i].SpawnPrefabs(LayerMaskToLayer(WallPassLayer), LayerMaskToLayer(WallPassSpawnLayer));
+
             AllCreatedRooms[i].RoomID = i;
             foreach (var cell in AllCreatedRooms[i].CellInRoom)
             {
                 cell.SetRoomID(i);
             }
         }
-
     }
 
     private void SelectSpawn()

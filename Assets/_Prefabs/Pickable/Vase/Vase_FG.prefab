@@ -71,5 +71,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: caeac87ffa3ad694eb82b2307067bad5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7524285257235651497}
   m_SourcePrefab: {fileID: 100100000, guid: caeac87ffa3ad694eb82b2307067bad5, type: 3}
+--- !u!1 &1628718126466322494 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: caeac87ffa3ad694eb82b2307067bad5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1899172486001388911}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7524285257235651497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628718126466322494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f693b2442337e2643ab16292e5fe2511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemData:
+    ItemType: 10
+    ItemName: Golden Vase
+    ItemDescription: VaseDescription
+    ItemSize: 2
+    ItemValue: 10
+    ItemIcon: {fileID: 21300000, guid: 14aa97b3a986ce149ab33e23f7e222dd, type: 3}
+    ItemPrefab: {fileID: 1628718126466322494, guid: 94300ca15dd803346b6f2ff88fc0cb81,
+      type: 3}
+    statToChange: []
+    CollectibleId: 11
+    ProceedToDungeon: 0
+  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
+  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
+  interactMessage: Pick up Vase
+  blockedMessage: Item Is Blocked
