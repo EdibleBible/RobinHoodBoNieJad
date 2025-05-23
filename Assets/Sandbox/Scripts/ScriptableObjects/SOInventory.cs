@@ -4,6 +4,7 @@ using AYellowpaper.SerializedCollections;
 using Script.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "SOInventory", menuName = "Scriptable Objects/SOInventory")]
 public class SOInventory : ScriptableObject
@@ -22,6 +23,92 @@ public class SOInventory : ScriptableObject
     public int CollectedGoblets;
     public int CollectedVases;
     public int CollectedBooks;
+    
+    public void LoadInventory(List<ItemDataSave> saveDataItemsInInventory, List<ItemDataSave> saveDataInventoryLobby, float saveDataCurrentInvenoryScore, float saveDataScoreBackpack, int saveDataBaseInventorySize, int saveDataCurrInventorySize, List<int> saveDataCollectedItemsType, int saveDataCollectedGoblets, int saveDataCollectedVases, int saveDataCollectedBooks)
+    {
+        ItemsInInventory.Clear();
+        foreach (var item in saveDataItemsInInventory)
+        {
+            ItemBase selectedItem = FindFirstItem((ItemType)item.ItemType, item.ItemName);
+            
+            if (selectedItem == null)
+            {
+                Debug.LogError("no item found");
+                continue;
+            }
+            
+            ItemsInInventory.Add(selectedItem.ItemData);
+        }
+        
+        InventoryLobby.Clear();
+        foreach (var item in saveDataInventoryLobby)
+        {
+            ItemBase selectedItem = FindFirstItem((ItemType)item.ItemType, item.ItemName);
+            
+            if (selectedItem == null)
+            {
+                Debug.LogError("no item found");
+                continue;
+            }
+            
+            InventoryLobby.Add(selectedItem.ItemData);
+        }
+        
+        CurrInvenoryScore = saveDataCurrentInvenoryScore;
+        ScoreBackup = saveDataScoreBackpack;
+        BaseInventorySize = saveDataBaseInventorySize;
+        CurrInventorySize = saveDataCurrInventorySize;
+
+        CollectedItemTypes.Clear();
+        foreach (var saveItemType in saveDataCollectedItemsType)
+        {
+            CollectedItemTypes.Add((ItemType)saveItemType);
+        }
+        
+        CollectedGoblets = saveDataCollectedGoblets;
+        CollectedVases = saveDataCollectedVases;
+        CollectedBooks = saveDataCollectedBooks;
+    }
+    
+    public ItemBase FindFirstItem(ItemType type, string name)
+    {
+        GameObject[] allPickables = Resources.LoadAll<GameObject>("Pickable");
+
+        foreach (GameObject prefab in allPickables)
+        {
+            ItemBase item = prefab.GetComponent<ItemBase>();
+            if (item != null && item.ItemData.ItemType == type && item.ItemData.ItemName == name)
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
+    public ItemBase FindRandomItem()
+    {
+        GameObject[] allPickables = Resources.LoadAll<GameObject>("Pickable");
+        List<ItemBase> validItems = new List<ItemBase>();
+
+        foreach (GameObject prefab in allPickables)
+        {
+            ItemBase item = prefab.GetComponent<ItemBase>();
+            if (item != null)
+            {
+                validItems.Add(item);
+            }
+        }
+
+        if (validItems.Count > 0)
+        {
+            int randomIndex = Random.Range(0, validItems.Count);
+            return validItems[randomIndex];
+        }
+
+        return null;
+    }
+
+
     
     public void CalculateItemsSlotsCount()
     {
@@ -166,5 +253,4 @@ public class SOInventory : ScriptableObject
         CollectedVases = 0;
         CollectedBooks = 0;
     }
-
 }

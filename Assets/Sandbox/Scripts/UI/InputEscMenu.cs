@@ -88,6 +88,8 @@ public class InputEscMenu : MonoBehaviour
 
     public void SceneMenu()
     {
+        GameController.Instance.SaveGameState();
+        
         LockMouse(false);
         SceneManager.LoadScene(0);
     }

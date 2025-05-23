@@ -9,6 +9,6 @@ public class MainMenuStartController : MonoBehaviour
 
     public void LoadGame()
     {
-        GameController.Instance.LoadGame(new object());
+        GameController.Instance.LoadGame();
     }
 }

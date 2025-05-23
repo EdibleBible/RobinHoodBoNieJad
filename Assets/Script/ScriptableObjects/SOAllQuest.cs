@@ -52,14 +52,22 @@ public class SOAllQuest : ScriptableObject
     }
 
 
-    public void LoadAllQuest()
+    public void LoadAllQuest(int allQuestsCount, int selectedQuestsindex, List<QuestSaveData> randomizedQuest) 
     {
-        
-    }
+        AllQuestsCount = allQuestsCount;
+        randomizedQuests.Clear();
 
-    public void SaveAllQuest()
-    {
+        foreach (var questData in randomizedQuest)
+        {
+            SOPlayerQuest quest = ScriptableObject.CreateInstance<SOPlayerQuest>();
+            quest.QuestName = questData.QuestName;
+            quest.Difficulty = (QuestDifficulty)questData.QuestDifficulty;
+            quest.Description = questData.Description;
+            quest.ShortDescription = questData.ShortDescription;
+            randomizedQuests.Add(quest);
+        }
         
+        CurrentSelectedQuest = randomizedQuests[selectedQuestsindex];
     }
         
     public void SelectQuest(SOPlayerQuest quest)
