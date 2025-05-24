@@ -8,6 +8,7 @@ public class MenuButtonSubmenuExit : MonoBehaviour
     public void OpenMenu()
     {
         menu.SetActive(true);
+        
     }
     public void CloseMenu()
     {

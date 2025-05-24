@@ -14,6 +14,54 @@ namespace Script.ScriptableObjects
         public List<StatsModifiers> PlayerStats = new List<StatsModifiers>();
         public List<StatsModifiers> PlayerBaseModifiers = new List<StatsModifiers>();
 
+        public void LoadStats(string saveDataAllStatsPath, List<StatsModifierSaveData> saveDataPlayerStats,
+            List<StatsModifierSaveData> saveDataPlayerBaseModifiers)
+        {
+            AllStatsPath = saveDataAllStatsPath;
+
+            PlayerStats.Clear();
+            foreach (var saveData in saveDataPlayerStats)
+            {
+                Sprite selectedSprite = LoadSpriteByName(saveData.SpriteName);
+
+                StatsModifiers temp = new StatsModifiers((E_ModifiersType)saveData.ModifierType, saveData.Additive,
+                    saveData.Multiplicative, selectedSprite, saveData.UpgradeBaseCost, saveData.CurrLevel,
+                    saveData.UpgradeCurrCost, saveData.AdditiveToAdd, saveData.MultiplicativeToAdd);
+                
+                PlayerStats.Add(temp);
+            }
+            
+            PlayerBaseModifiers.Clear();
+            foreach (var saveData in saveDataPlayerBaseModifiers)
+            {
+                Sprite selectedSprite = LoadSpriteByName(saveData.SpriteName);
+
+                StatsModifiers temp = new StatsModifiers((E_ModifiersType)saveData.ModifierType, saveData.Additive,
+                    saveData.Multiplicative, selectedSprite, saveData.UpgradeBaseCost, saveData.CurrLevel,
+                    saveData.UpgradeCurrCost, saveData.AdditiveToAdd, saveData.MultiplicativeToAdd);
+                
+                PlayerBaseModifiers.Add(temp);
+            }
+        }
+
+
+        public Sprite LoadSpriteByName(string spriteName)
+        {
+            Sprite[] allSprites = Resources.LoadAll<Sprite>("Sprites");
+
+            foreach (Sprite sprite in allSprites)
+            {
+                if (sprite.name == spriteName)
+                {
+                    return sprite;
+                }
+            }
+
+            Debug.LogWarning($"Sprite '{spriteName}' not found in Resources/Sprites or its subfolders.");
+            return null;
+        }
+
+
         public StatsModifiers GetSOPlayerStats(E_ModifiersType modifiersType)
         {
             if (PlayerStats.Count == 0)
@@ -100,7 +148,6 @@ namespace Script.ScriptableObjects
                 selectedModifier.ChangeAdditive(modifier.Additive);
                 selectedModifier.ChangeMultiplicative(modifier.Multiplicative);
                 selectedModifier.CurrLevel = level + 1;
-
             }
             else
             {

@@ -18,7 +18,8 @@ public class InputEscMenu : MonoBehaviour
         {
             if (button != null)
             {
-                button.canvas = canvas;
+                if (button.canvas = null)
+                    button.canvas = canvas;
             }
         }
     }
@@ -89,7 +90,7 @@ public class InputEscMenu : MonoBehaviour
     public void SceneMenu()
     {
         GameController.Instance.SaveGameState();
-        
+
         LockMouse(false);
         SceneManager.LoadScene(0);
     }
@@ -100,7 +101,8 @@ public class InputEscMenu : MonoBehaviour
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-        } else
+        }
+        else
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;

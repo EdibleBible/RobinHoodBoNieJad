@@ -31,7 +31,23 @@ namespace Script.ScriptableObjects
             Additive = additive;
             Multiplicative = multiplicative;
         }
-        
+
+
+        public StatsModifiers(E_ModifiersType modifiersType, float additive, float multiplicative, Sprite icon, int upgradeBaseCost, int currLevel, int upgradeCurrCost, float upgradeAdditive, float upgradeMultiplicative)
+        {
+            ModifiersType = modifiersType;
+            Additive = additive;
+            Multiplicative = multiplicative;
+            Icon = icon;
+            UpgradeBaseCost = upgradeBaseCost;
+            CurrLevel = currLevel;
+            UpgradeCurrCost = upgradeCurrCost;
+            
+            statsToUpgrade = new StatsToUpgrade();
+            statsToUpgrade.Additive = upgradeAdditive;
+            statsToUpgrade.Multiplicative = upgradeMultiplicative;
+        }
+
         public void Reset()
         {
             Additive = 0;

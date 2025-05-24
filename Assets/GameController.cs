@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Script.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
@@ -27,12 +28,9 @@ public class GameController : MonoBehaviour
 
     public SaveData saveData = new SaveData();
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (Stats.lobbyVisit == 0)
-        {
-            Stats.scoreTotal = BaseMoney;
-        }
+
 
         if (DebugMode)
         {
@@ -72,7 +70,7 @@ public class GameController : MonoBehaviour
                     }
                 }
             }
-            
+
             randomNumber = Random.Range(0, 4);
             PlayerInventory.InventoryLobby.Clear();
             for (int i = 0; i < randomNumber; i++)
@@ -86,7 +84,6 @@ public class GameController : MonoBehaviour
                         PlayerInventory.CollectedItemTypes.Add(randomItem.ItemType);
                     }
                 }
-                
             }
         }
 
@@ -109,12 +106,13 @@ public class GameController : MonoBehaviour
             PlayerInventory.ClearInventory();
     }
 
-    public void StartNewGame()
+    public void StartNewGame(bool Reset = true)
     {
         AllPlayerQuest.RandomizeAllQuests();
         Stats.lobbyVisit = 0;
         Stats.scoreTotal = BaseMoney;
         Stats.taxPaid = false;
+        Stats.scoreTotal = BaseMoney;
     }
 
     public void RandomizeQuest()
@@ -125,7 +123,7 @@ public class GameController : MonoBehaviour
 
     public void SaveGameState()
     {
-        SaveData data = new SaveData(AllPlayerQuest,PlayerInventory);
+        saveData = new SaveData(AllPlayerQuest, PlayerInventory, PlayerStatsController, Stats);
     }
 
     public void LoadGame()
@@ -140,10 +138,15 @@ public class GameController : MonoBehaviour
         {
             Debug.Log(quest.QuestName);
         }
-        
+
         PlayerInventory.LoadInventory(saveData.ItemsInInventory, saveData.InventoryLobby, saveData.CurrentInvenoryScore
-        , saveData.ScoreBackpack,saveData.BaseInventorySize,saveData.CurrInventorySize,saveData.CollectedItemsType
-        ,saveData.CollectedGoblets,saveData.CollectedVases,saveData.CollectedBooks);
+            , saveData.ScoreBackpack, saveData.BaseInventorySize, saveData.CurrInventorySize,
+            saveData.CollectedItemsType
+            , saveData.CollectedGoblets, saveData.CollectedVases, saveData.CollectedBooks);
+
+        PlayerStatsController.LoadStats(saveData.AllStatsPath, saveData.PlayerStats, saveData.PlayerBaseModifiers);
+
+        Stats.LoadStats(saveData);
     }
 
     public void ToggleFullScreenPass()
@@ -184,15 +187,6 @@ public class GameController : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public class CombinedSaveData
-{
-    public SOAllQuest AllPlayerQuest;
-    public SOInventory PlayerInventory;
-    public SOPlayerStatsController PlayerStatsController;
-    public SOStats Stats;
-}
-
 [Serializable]
 public class SaveData
 {
@@ -213,11 +207,27 @@ public class SaveData
     public int CollectedVases;
     public int CollectedBooks;
 
+    //statsController
+    public string AllStatsPath;
+    public List<StatsModifierSaveData> PlayerStats = new List<StatsModifierSaveData>();
+    public List<StatsModifierSaveData> PlayerBaseModifiers = new List<StatsModifierSaveData>();
+
+    //Stats
+    public int InventorySize;
+    public float PlayerSpeed;
+    public float PlayerRotationSpeed;
+    public int ScoreLevel;
+    public bool LevelSuccess;
+    public int ScoreTotal;
+    public int LobbyVisit;
+    public bool TaxPaid;
+
     public SaveData()
     {
     }
 
-    public SaveData(SOAllQuest allQuests, SOInventory playerInventory)
+    public SaveData(SOAllQuest allQuests, SOInventory playerInventory, SOPlayerStatsController statsController,
+        SOStats stats)
     {
         #region Quests
 
@@ -252,12 +262,12 @@ public class SaveData
 
         foreach (var item in playerInventory.ItemsInInventory)
         {
-            ItemsInInventory.Add(new ItemDataSave((int)item.ItemType,item.ItemName));
+            ItemsInInventory.Add(new ItemDataSave((int)item.ItemType, item.ItemName));
         }
-        
+
         foreach (var item in playerInventory.InventoryLobby)
         {
-            InventoryLobby.Add(new ItemDataSave((int)item.ItemType,item.ItemName));
+            InventoryLobby.Add(new ItemDataSave((int)item.ItemType, item.ItemName));
         }
 
         CurrentInvenoryScore = playerInventory.CurrInvenoryScore;
@@ -269,13 +279,51 @@ public class SaveData
         {
             CollectedItemsType.Add((int)item);
         }
-        
+
         CollectedGoblets = playerInventory.CollectedGoblets;
         CollectedVases = playerInventory.CollectedVases;
         CollectedBooks = playerInventory.CollectedBooks;
-        
+
         #endregion
 
+        #region Stats
+
+        AllStatsPath = statsController.AllStatsPath;
+
+        PlayerStats.Clear();
+        foreach (var stat in statsController.PlayerStats)
+        {
+            StatsModifierSaveData temp = new StatsModifierSaveData((int)stat.ModifiersType, stat.Additive,
+                stat.Multiplicative, stat.Icon.name, stat.UpgradeBaseCost, stat.CurrLevel, stat.UpgradeCurrCost,
+                stat.statsToUpgrade.Additive, stat.statsToUpgrade.Multiplicative);
+
+            PlayerStats.Add(temp);
+        }
+
+        PlayerBaseModifiers.Clear();
+        foreach (var stat in statsController.PlayerBaseModifiers)
+        {
+            StatsModifierSaveData temp = new StatsModifierSaveData((int)stat.ModifiersType, stat.Additive,
+                stat.Multiplicative, stat.Icon.name, stat.UpgradeBaseCost, stat.CurrLevel, stat.UpgradeCurrCost,
+                stat.statsToUpgrade.Additive, stat.statsToUpgrade.Multiplicative);
+
+            PlayerBaseModifiers.Add(temp);
+        }
+
+        #endregion
+
+        #region Stats
+
+        InventorySize = stats.inventorySize;
+        PlayerSpeed = stats.playerSpeed;
+        PlayerRotationSpeed = stats.playerRotationSpeed;
+        ScoreLevel = stats.scoreLevel;
+        LevelSuccess = stats.levelSuccess;
+        ScoreTotal = stats.scoreTotal;
+        LobbyVisit = stats.lobbyVisit;
+        TaxPaid = stats.taxPaid;
+
+        #endregion
 
         string json = JsonUtility.ToJson(this);
         File.WriteAllText(Path.Combine(Application.persistentDataPath, "savegame.json"), json);
@@ -332,4 +380,34 @@ public class ItemDataSave
         ItemType = itemType;
         ItemName = itemName;
     }
+}
+
+[Serializable]
+public class StatsModifierSaveData
+{
+    public StatsModifierSaveData(int modifierType, float additive, float multiplicative, string spriteName,
+        int upgradeBaseCost, int currLevel, int upgradeCurrCost, float additiveToAdd, float multiplicativeToAdd)
+    {
+        ModifierType = modifierType;
+        Additive = additive;
+        Multiplicative = multiplicative;
+        SpriteName = spriteName;
+        UpgradeBaseCost = upgradeBaseCost;
+        CurrLevel = currLevel;
+        UpgradeCurrCost = upgradeCurrCost;
+        AdditiveToAdd = additiveToAdd;
+        MultiplicativeToAdd = multiplicativeToAdd;
+    }
+
+    public int ModifierType;
+    public float Additive;
+    public float Multiplicative;
+
+    public string SpriteName;
+    public int UpgradeBaseCost;
+    public int CurrLevel;
+    public int UpgradeCurrCost;
+
+    public float AdditiveToAdd;
+    public float MultiplicativeToAdd;
 }
