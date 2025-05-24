@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4478451830049652919}
   - component: {fileID: 6333453384907131925}
+  - component: {fileID: 3063645047444069958}
   m_Layer: 0
   m_Name: DEBUG_GameController
   m_TagString: Untagged
@@ -50,9 +51,24 @@ MonoBehaviour:
     type: 2}
   Stats: {fileID: 11400000, guid: cfbb569872faaa3449f3d7ca2b8442af, type: 2}
   BaseMoney: 300
-  DebugMode: 0
+  DebugMode: 1
   DontCleanInventory: 0
   ResetAllStatsModifiers: 0
   RemoveAllBaseStatModifiers: 0
   fullScreenPassFeature: {fileID: 1096604502187038684, guid: c40be3174f62c4acf8c1216858c64956,
     type: 2}
+--- !u!114 &3063645047444069958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264925599425649976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8943df85378e49249b20afec6de9fa9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullScreenPassFeature: {fileID: 1096604502187038684, guid: c40be3174f62c4acf8c1216858c64956,
+    type: 2}
+  aaa: 0

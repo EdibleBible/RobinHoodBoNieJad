@@ -17,16 +17,26 @@ public class MenuLobbyTaxes : MonoBehaviour
     private void Awake()
     {
         taxAmount = GetTaxAmount();
-        if (taxAmount > SOStats.scoreTotal)
+        if (SOStats.taxPaid)
         {
             buttonPay.interactable = false;
-            textHad.color = Color.red;
+            textTaxDisplay.color = Color.white;
         }
         else
         {
-            buttonPay.interactable = true;
-            textHad.color = Color.white;
+            if (taxAmount > SOStats.scoreTotal)
+            {
+                buttonPay.interactable = false;
+                textHad.color = Color.red;
+            }
+            else if (taxAmount <= SOStats.scoreTotal)
+            {
+                buttonPay.interactable = true;
+                textHad.color = Color.white;
+            }
         }
+
+
         textVisit.text = "Visit #" + SOStats.lobbyVisit.ToString();
         textNeeded.text = "You need: " + taxAmount;
         textHad.text = "You have: " + SOStats.scoreTotal.ToString();
@@ -38,6 +48,7 @@ public class MenuLobbyTaxes : MonoBehaviour
         {
             return taxPerLevel[SOStats.lobbyVisit - 1];
         }
+
         return 0;
     }
 

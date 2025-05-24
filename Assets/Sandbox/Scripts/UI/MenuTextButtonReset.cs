@@ -10,7 +10,7 @@ public class MenuTextButtonReset : MonoBehaviour
 
     public void Reset()
     {
-        inventory.ItemsInInventory.Clear();
+        /*inventory.ItemsInInventory.Clear();
         inventory.CollectedItemTypes.Clear();
         inventory.CurrInvenoryScore = 0;
         inventory.BaseInventorySize = 3;
@@ -27,6 +27,6 @@ public class MenuTextButtonReset : MonoBehaviour
         stats.inventorySize = 3;
         inventory.CollectedGoblets = 0;
         inventory.CollectedVases = 0;
-        inventory.CollectedBooks = 0;
+        inventory.CollectedBooks = 0;*/
     }
 }

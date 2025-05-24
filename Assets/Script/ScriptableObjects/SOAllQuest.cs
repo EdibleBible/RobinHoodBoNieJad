@@ -5,10 +5,10 @@ using UnityEngine;
 public class SOAllQuest : ScriptableObject
 {
     public int AllQuestsCount;
-    
+
     public SOPlayerQuest CurrentSelectedQuest;
     public List<SOPlayerQuest> randomizedQuests = new List<SOPlayerQuest>();
-    
+
     public void RandomizeAllQuests()
     {
         randomizedQuests.Clear();
@@ -47,21 +47,30 @@ public class SOAllQuest : ScriptableObject
                 newDifficulty = currentQuestDifficulty;
             }
         }
-    
+
         randomizedQuests[randomizedQuests.IndexOf(quest)].RandomizeQuest(newDifficulty);
     }
 
 
-    public void LoadAllQuest()
+    public void LoadAllQuest(int allQuestsCount, int selectedQuestsindex, List<QuestSaveData> randomizedQuest)
     {
-        
+        AllQuestsCount = allQuestsCount;
+        randomizedQuests.Clear();
+
+        foreach (var questData in randomizedQuest)
+        {
+            SOPlayerQuest quest = ScriptableObject.CreateInstance<SOPlayerQuest>();
+            quest.QuestName = questData.QuestName;
+            quest.Difficulty = (QuestDifficulty)questData.QuestDifficulty;
+            quest.Description = questData.Description;
+            quest.ShortDescription = questData.ShortDescription;
+            randomizedQuests.Add(quest);
+        }
+
+        if (selectedQuestsindex > -1)
+            CurrentSelectedQuest = randomizedQuests[selectedQuestsindex];
     }
 
-    public void SaveAllQuest()
-    {
-        
-    }
-        
     public void SelectQuest(SOPlayerQuest quest)
     {
         CurrentSelectedQuest = quest;

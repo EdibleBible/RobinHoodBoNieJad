@@ -18,12 +18,16 @@ public class MenuLobbyStore : MonoBehaviour
         {
             if (PlayerStatsController.PlayerBaseModifiers.Any(x => x.ModifiersType == modifiersTypes[i]))
             {
+                Debug.Log($"playe base modifier: {PlayerStatsController.PlayerBaseModifiers.Where(x => x.ModifiersType == modifiersTypes[i]).FirstOrDefault().CurrLevel}");
+                
                 lobbyStoreUiElements[i].SetUp(PlayerStatsController.PlayerBaseModifiers.Where(x => x.ModifiersType == modifiersTypes[i]).FirstOrDefault(),PlayerStatsController,MaxLevel,Inventory,Stats);
             }
             else
             {
                 if (PlayerStatsController.PlayerStats.Any(x => x.ModifiersType == modifiersTypes[i]))
                 {
+                    Debug.Log($"playe base modifier: {PlayerStatsController.PlayerStats.Where(x => x.ModifiersType == modifiersTypes[i]).FirstOrDefault().CurrLevel}");
+                    
                     lobbyStoreUiElements[i].SetUp(PlayerStatsController.PlayerStats.Where(x => x.ModifiersType == modifiersTypes[i]).FirstOrDefault(),PlayerStatsController,MaxLevel,Inventory,Stats);
                 }
             }
