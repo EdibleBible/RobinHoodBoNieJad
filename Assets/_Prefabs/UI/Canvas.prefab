@@ -292,8 +292,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3990293880140498240}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.1, y: 0}
-  m_AnchorMax: {x: 0.9, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -873,8 +873,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8655584110139941338}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.1, y: 0}
-  m_AnchorMax: {x: 0.9, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1196,8 +1196,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 402290375745848272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.1, y: 0}
-  m_AnchorMax: {x: 0.9, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1459,8 +1459,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 224632698747811023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.1, y: 0}
-  m_AnchorMax: {x: 0.9, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1949,6 +1949,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5552162617075097946}
+  - component: {fileID: 3895662102349782393}
   m_Layer: 5
   m_Name: Tutorial
   m_TagString: Untagged
@@ -1979,6 +1980,29 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &3895662102349782393
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6574344259185107359}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 2
+  m_TargetDisplay: 0
 --- !u!1 &7092971706163123208
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,66 +2368,103 @@ MonoBehaviour:
   tutorialClusters:
   - EventName: MovementTutorial
     TutorialElements:
-    - TutorialElement: {fileID: 8044029631698731080}
+    - TutorialElement: {fileID: 5621201757971912301}
       TutorialText: 'W,A,S,D - Movement
 
-        Mouse - RotateCamera'
+        Mouse (Rotate) - RotateCamera
+
+
+        LeftMouse
+        click - next tutorial'
       TempolaryTutorial: 0
       Time: 100
     - TutorialElement: {fileID: 8044029631698731080}
-      TutorialText: Try to oppen door
+      TutorialText: "W lewym g\xF3rnym rogu masz quest debilu zbierz to i wypierdalaj\n\nLeftMouse
+        click - next tutorial"
       TempolaryTutorial: 1
       Time: 100
     - TutorialElement: {fileID: 8044029631698731080}
-      TutorialText: 'You find a goblet, pick up '
-      TempolaryTutorial: 1
+      TutorialText: "Podejd\u017A do drzwi i otw\xF3rz drzwi za pomoc\u0105 guzika
+        do interakcji "
+      TempolaryTutorial: 0
       Time: 100
     - TutorialElement: {fileID: 8044029631698731080}
-      TutorialText: In left corner you ca see your quests, Go find other items
-      TempolaryTutorial: 1
-      Time: 3
+      TutorialText: "Pod przyciskiem t/l masz pochodnie we\u017A j\u0105 debilu"
+      TempolaryTutorial: 0
+      Time: 100
     isAutoProgress: 0
-  - EventName: EnemyTutorial
+  - EventName: InventoryTutorial
     TutorialElements:
     - TutorialElement: {fileID: 2551214681593235413}
-      TutorialText: Be careful, there may be some enemies here, maybe try to find
-        another way
-      TempolaryTutorial: 1
-      Time: 3
-    isAutoProgress: 1
-  - EventName: InventorySpaceTutorial
+      TutorialText: "OOO goble podnie\u015B go deb ilu bo masz questa"
+      TempolaryTutorial: 0
+      Time: 100
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: "Pod Q mo\u017Cesz wyrzuci\u0107 przedmiot ale nie masz po co
+        debilu"
+      TempolaryTutorial: 0
+      Time: 100
+    isAutoProgress: 0
+  - EventName: PlasurePlateTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 8044029631698731080}
+      TutorialText: "Przed tob\u0105 jest plesure plate idioto we\u017A boxa z pod
+        \u015Bciany"
+      TempolaryTutorial: 0
+      Time: 100
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: "zanie\u015B na p\u0142yte i wyrzu\u0107 za pomoc\u0105 prawego
+        przycisku myszy"
+      TempolaryTutorial: 0
+      Time: 100
+    isAutoProgress: 0
+  - EventName: SpecialSenseTutorial
     TutorialElements:
     - TutorialElement: {fileID: 2551214681593235413}
-      TutorialText: "\rBelow the mission you can see your inventory"
+      TutorialText: "Pod V masz specialny sens kt\xF3ry wskazuje ci na na najbli\u017Csze
+        elementy interaktywne i przeciwnik\xF3w"
       TempolaryTutorial: 0
-      Time: 3
-    - TutorialElement: {fileID: 2551214681593235413}
-      TutorialText: Some items may require more than one slot
-      TempolaryTutorial: 0
-      Time: 3
-    - TutorialElement: {fileID: 2551214681593235413}
-      TutorialText: 'Mouse Scroll - Change select item
-
-        Q - Drop Item'
-      TempolaryTutorial: 0
-      Time: 3
-    isAutoProgress: 1
-  - EventName: LeverTutorial
+      Time: 100
+    isAutoProgress: 0
+  - EventName: LockPickTutorial
     TutorialElements:
     - TutorialElement: {fileID: 2551214681593235413}
-      TutorialText: "\rSome doors are blocked by lever"
+      TutorialText: "Odpali\u0142e\u015B w\u0142a\u015Bnie lock pick. mysz\u0105
+        obracasz a lewym guzikiem myszy obracasz zamek, musisz znale\u015B\u0107
+        odpowiedni\u0105 pozycje do otawrcia powodzenia"
       TempolaryTutorial: 0
-      Time: 3
-    isAutoProgress: 1
-  - EventName: RUNTutorial
+      Time: 100
+    isAutoProgress: 0
+  - EventName: Decale
     TutorialElements:
     - TutorialElement: {fileID: 2551214681593235413}
-      TutorialText: 'Left Shift - Run
-
-        Find exit '
-      TempolaryTutorial: 1
-      Time: 2.5
-    isAutoProgress: 1
+      TutorialText: "Dosta\u0142e\u015B sie do tejemniczego pomieszczenia. znajduj\u0105
+        sie tu obrazy na scianie kt\xF3re odpowiadaj\u0105 odpowiednim d\u017Awigni\u0105
+        do drzwi, w normalnej rozgrywce mog\u0105 by\u0107 one rozmieszczone po wszystklich
+        pomieszczeniach, tutaj s\u0105 tylko w tym pomieszczeniu dkla u\u0142atwienia"
+      TempolaryTutorial: 0
+      Time: 100
+    isAutoProgress: 0
+  - EventName: ExitTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 2551214681593235413}
+      TutorialText: "masz juz dost\u0119pne wszystkie elementy z zadania, teraz cofnij
+        sie do pierwszego pomieszczenia i wyd\u017A z poziomu. w normalnej rozgrywce
+        mo\u017Cesz wyj\u015B\u0107 od razu po rozpocz\u0119\u0107iu ale dla u\u0142atwienia
+        nauki musisz mie\u0107 wszystkie 3 goblety"
+      TempolaryTutorial: 0
+      Time: 100
+    isAutoProgress: 0
+  - EventName: EndingTutorial
+    TutorialElements:
+    - TutorialElement: {fileID: 5621201757971912301}
+      TutorialText: "Przed zako\u0144cczeniem chce cie poinformowa\u0107 \u017Ce
+        to nie wszystkie elementy z gry s\u0105 jeszcze dodatkowe elementy takie
+        jak przedmioty ulepszenia i przeciwnicy, ale to ju\u017C pozwolimy odkry\u0107
+        ci samemu w naszej pe\u0142nej grozy rozgrywce Powodzenia <3 UwU OwO"
+      TempolaryTutorial: 0
+      Time: 100
+    isAutoProgress: 0
 --- !u!114 &8025075767602262229
 MonoBehaviour:
   m_ObjectHideFlags: 0

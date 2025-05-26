@@ -18,7 +18,7 @@ public class DecalsDoorController : DoorController
     private LayerMask wallDecalLayer;
     [SerializeField]
     private LayerMask decalLayer;
-
+    [SerializeField]
     private List<Transform> doorsSideWalls = new List<Transform>();
     [SerializeField]
     private Vector3 detectWallSize = new Vector3(0.5f, 0.5f, 0.5f);
@@ -58,6 +58,7 @@ public class DecalsDoorController : DoorController
     private float randomUpDownSpawnRange;
     [SerializeField]
     private float randomRightLeftSpawnRange;
+    [SerializeField]
     private List<Transform> allWalls = new List<Transform>();
 
     public enum LeverSpawnDirection
