@@ -4,111 +4,91 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Script.ScriptableObjects;
 using UnityEngine;
-using FMODUnity;
-using FMOD.Studio;
 
-/// <summary>
-/// SpecialSenseController — skan otoczenia, highlighty, particles + audio FMOD
-/// Dźwięk startuje przy aktywacji, zapętla się i wycisza dokładnie po zakończeniu efektu.
-/// </summary>
 public class SpecialSenseController : MonoBehaviour
 {
-    /* ───────────────────────────────── Inspector ─────────────────────────────── */
-    [Header("Pulse Settings")]
-    [SerializeField] private float baseMaxRadius = 5f;
+    private float maxRadius;
+    [SerializeField] private float baseMaxRadius = 5;
     [SerializeField] private float expandSpeed = 10f;
     [SerializeField] private LayerMask detectionLayers;
-    [SerializeField] private LayerMask occludedInteractionLayer;
+    [SerializeField] private LayerMask OccludedInteractionLayer;
+
     [SerializeField] private float highlightDuration = 2f;
 
     [Header("Line Renderer Settings")]
     [SerializeField] private LineRenderer lineRendererPrefab;
     [SerializeField] private float lineSpeed = 20f;
 
-    [Header("Particle Settings")]
-    [SerializeField] private ParticleSystem particlePrefab;
+    [Header("Particle Prefabs")]
 
-    [Header("Gameplay Balancing")]
-    [SerializeField] private int baseMaxLinesPerPulse = 3;
-    [SerializeField] private int baseSpecialSenseUseCount = 2;
+    [SerializeField] private List<ParticleSystem> startParticlePrefabs = new();
+    [SerializeField] private GameObject targetForceFieldPrefab; // Force Field jako GameObject
+    [SerializeField] private GameObject cylinderParticlePrefab;
 
-    [Header("Audio (FMOD)")]
-    [SerializeField] private EventReference specialSenseEvent; // event:/Abilities/SpecialSense
+    [Header("Cylinder Settings")]
+    [SerializeField] private float cylinderDuration = 2f;
+    [SerializeField] private float cylinderStartOffset = 0.2f;
 
-    /* ──────────────────────────────── Private state ──────────────────────────── */
-    private readonly Dictionary<GameObject, int> activeHighlights = new();
+    private Dictionary<GameObject, int> activeHighlights = new();
+    private Coroutine pulseCoroutine;
+    private float currentRadius = 0f;
+    private Vector3 pulsePosition;
 
     [SerializeField] private SOPlayerStatsController statsController;
 
-    private Coroutine pulseCoroutine;
-    private EventInstance senseInstance;
-
-    private float maxRadius;
-    private float currentRadius;
+    [SerializeField] private int baseMaxLinesPerPulse = 3;
     private int maxLinesPerPulse;
+
+    [SerializeField] private int baseSpecialSenseUseCount = 2;
     private int specialSenseUseCount;
-    private bool isCooldown;
-    private Vector3 pulsePosition;
 
-    /* ───────────────────────────── Unity lifecycle ───────────────────────────── */
-    private void Start() => SetupSpecialSense();
+    private bool isCooldown = false;
 
-    private void OnDestroy()
+    private void Start()
     {
-        if (senseInstance.isValid()) senseInstance.release();
+        SetupSpecialSense();
     }
 
-    /* ───────────────────────────── Public API ────────────────────────────────── */
     public void SetupSpecialSense()
     {
-        maxLinesPerPulse = Mathf.FloorToInt(baseMaxLinesPerPulse +
-                            statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseGhostAmount).Additive) *
-                           Mathf.FloorToInt(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseGhostAmount).Multiplicative);
+        maxLinesPerPulse = (baseMaxLinesPerPulse +
+                            (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseGhostAmount).Additive)) *
+                           (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseGhostAmount).Multiplicative);
 
         maxRadius = (baseMaxRadius +
-                     statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseRange).Additive) *
-                     statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseRange).Multiplicative;
+                     (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseRange).Additive)) *
+                    (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseRange).Multiplicative);
 
-        specialSenseUseCount = Mathf.FloorToInt(baseSpecialSenseUseCount +
-                               statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Additive) *
-                               Mathf.FloorToInt(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Multiplicative);
+        specialSenseUseCount = (baseSpecialSenseUseCount +
+                                (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Additive)) *
+                               (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Multiplicative);
     }
 
-    /// <summary>
-    /// Wywołaj z inputu, żeby uruchomić skan.
-    /// </summary>
     public void TryUseSpecialSense()
     {
-        if (isCooldown) { Debug.Log("[SpecialSense] Cooldown"); return; }
-        if (specialSenseUseCount <= 0) { Debug.Log("[SpecialSense] No charges"); return; }
+        if (isCooldown)
+        {
+            Debug.Log("Zmysł specjalny jest w trakcie odnowienia.");
+            return;
+        }
+
+        if (specialSenseUseCount <= 0)
+        {
+            Debug.Log("Brak dostępnych użyć specjalnego zmysłu.");
+            return;
+        }
 
         specialSenseUseCount--;
         pulsePosition = transform.position;
-        currentRadius = 0f;
-
-        // Utwórz instancję FMOD, podepnij do obiektu i odpal (intro + loop)
-        senseInstance = RuntimeManager.CreateInstance(specialSenseEvent);
-        RuntimeManager.AttachInstanceToGameObject(senseInstance, transform);
-        senseInstance.start();
-
         if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
         pulseCoroutine = StartCoroutine(PulseDetection());
     }
 
-    /* ───────────────────────────── Audio helpers ─────────────────────────────── */
-    private void StopSpecialSenseAudio()
-    {
-        if (senseInstance.isValid())
-        {
-            senseInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT); // gra release‑tail
-            senseInstance.release();
-        }
-    }
-
-    /* ───────────────────────────── Pulse logic ───────────────────────────────── */
     private IEnumerator PulseDetection()
     {
+        currentRadius = 0f;
         ClearHighlights();
+
         int linesSpawned = 0;
 
         while (currentRadius < maxRadius && linesSpawned < maxLinesPerPulse)
@@ -118,130 +98,229 @@ public class SpecialSenseController : MonoBehaviour
 
             foreach (var hit in hits)
             {
-                if (linesSpawned >= maxLinesPerPulse) break;
+                if (linesSpawned >= maxLinesPerPulse)
+                    break;
 
-                GameObject rootObj = hit.transform.root.gameObject;
-                if (rootObj.TryGetComponent(out DoorController _)) continue; // pomijamy drzwi
-                if (activeHighlights.ContainsKey(rootObj)) continue;
+                GameObject obj = hit.gameObject;
+                Transform root = obj.transform.root;
+                GameObject rootObj = root.gameObject;
 
-                bool childAlready = false;
-                foreach (Transform child in rootObj.transform)
-                    if (activeHighlights.ContainsKey(child.gameObject)) { childAlready = true; break; }
-                if (childAlready) continue;
+                if (rootObj.TryGetComponent(out DoorController _))
+                    continue;
+
+                if (activeHighlights.ContainsKey(rootObj))
+                    continue;
+
+                bool alreadyContained = false;
+                foreach (Transform child in root)
+                {
+                    if (activeHighlights.ContainsKey(child.gameObject))
+                    {
+                        alreadyContained = true;
+                        break;
+                    }
+                }
+
+                if (alreadyContained)
+                    continue;
 
                 activeHighlights.Add(rootObj, rootObj.layer);
                 StartCoroutine(AnimateLineToTarget(rootObj));
                 linesSpawned++;
             }
+
             yield return null;
         }
 
         yield return new WaitForSeconds(highlightDuration);
         yield return StartCoroutine(ClearHighlightsStepByStep());
 
-        StopSpecialSenseAudio();
-        StartCoroutine(CooldownRoutine());
+        StartCoroutine(StartCooldown());
     }
 
     private IEnumerator AnimateLineToTarget(GameObject target)
     {
-        LineRenderer lr = lineRendererPrefab ? Instantiate(lineRendererPrefab) : null;
-        ParticleSystem ps = particlePrefab ? Instantiate(particlePrefab) : null;
+        LineRenderer line = null;
 
-        if (lr)
+        if (lineRendererPrefab != null)
         {
-            lr.positionCount = 2;
-            lr.SetPosition(0, transform.position);
+            line = Instantiate(lineRendererPrefab, transform.position, Quaternion.identity);
+            line.positionCount = 2;
+            line.SetPosition(0, transform.position);
         }
-        if (ps) ps.Play();
+
+        // Start particles
+        foreach (var particle in startParticlePrefabs)
+{
+    if (particle != null)
+    {
+        var instance = Instantiate(particle, transform.position, Quaternion.identity);
+        instance.Play();
+StartCoroutine(FadeOutParticleSize(instance, highlightDuration));
+Destroy(instance.gameObject, highlightDuration + 0.5f);
+    }
+}
 
         float duration = Vector3.Distance(transform.position, target.transform.position) / lineSpeed;
-        float t = 0f;
-        while (t < 1f)
+        float elapsed = 0f;
+
+        while (elapsed < duration)
         {
-            t += Time.deltaTime / duration;
-            Vector3 pos = Vector3.Lerp(transform.position, target.transform.position, t);
-            if (lr) lr.SetPosition(1, pos);
-            if (ps) ps.transform.position = pos;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            Vector3 currentPos = Vector3.Lerp(transform.position, target.transform.position, t);
+
+            if (line != null)
+                line.SetPosition(1, currentPos);
+
             yield return null;
         }
 
-        if (lr) lr.SetPosition(1, target.transform.position);
-        if (ps)
-        {
-            ps.transform.position = target.transform.position;
-            ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-            Destroy(ps.gameObject, 1f);
-        }
+        if (line != null)
+            line.SetPosition(1, target.transform.position);
 
         ToggleHighlight(target, true);
-        if (lr) Destroy(lr.gameObject, 0.5f);
+
+        if (line != null)
+            Destroy(line.gameObject, 0.5f);
+
+        // Target Force Field
+        if (targetForceFieldPrefab != null)
+        {
+            GameObject forceField = Instantiate(targetForceFieldPrefab, target.transform.position, Quaternion.identity);
+            Destroy(forceField, highlightDuration);
+        }
+
+        // Cylinder connection
+        if (cylinderParticlePrefab != null)
+        {
+            Vector3 start = transform.position + (target.transform.position - transform.position).normalized * cylinderStartOffset;
+            Vector3 end = target.transform.position;
+            Vector3 direction = end - start;
+            Vector3 position = start + direction / 2f;
+
+            GameObject cylinder = Instantiate(cylinderParticlePrefab, position, Quaternion.identity);
+            cylinder.transform.localScale = new Vector3(cylinder.transform.localScale.x, direction.magnitude / 2f, cylinder.transform.localScale.z);
+            cylinder.transform.rotation = Quaternion.LookRotation(direction);
+            cylinder.transform.Rotate(90f, 0f, 0f); // Obrót z pionu na poziom
+
+            Destroy(cylinder, cylinderDuration);
+        }
     }
 
-    /* ──────────────────────────── Utilities ─────────────────────────────────── */
     private IEnumerator ClearHighlightsStepByStep()
     {
-        foreach (var kvp in activeHighlights)
+        foreach (var obj in activeHighlights)
         {
-            ToggleHighlight(kvp.Key, false);
+            ToggleHighlight(obj.Key, false);
             yield return new WaitForSeconds(0.05f);
         }
+
         activeHighlights.Clear();
     }
 
-    private IEnumerator CooldownRoutine()
+
+private IEnumerator FadeOutParticleSize(ParticleSystem particleSystem, float duration)
+{
+    float elapsed = 0f;
+
+    var mainModule = particleSystem.main;
+    float originalSize = mainModule.startSize.constant;
+
+    while (elapsed < duration)
+    {
+        elapsed += Time.deltaTime;
+        float t = Mathf.Clamp01(elapsed / duration);
+        float newSize = Mathf.Lerp(originalSize, 0f, t);
+
+        var sizeOverLifetime = particleSystem.sizeOverLifetime;
+        sizeOverLifetime.enabled = false;
+
+        mainModule.startSize = newSize;
+
+        yield return null;
+    }
+
+    mainModule.startSize = 0f;
+}
+
+
+
+
+
+
+
+
+    private IEnumerator StartCooldown()
     {
         isCooldown = true;
         yield return new WaitForSeconds(5f);
         isCooldown = false;
-        Debug.Log("[SpecialSense] Ready");
+        Debug.Log("Zmysł specjalny gotowy do ponownego użycia.");
     }
 
     private void ClearHighlights()
     {
-        foreach (var kvp in activeHighlights)
-            ToggleHighlight(kvp.Key, false);
+        foreach (var obj in activeHighlights)
+            ToggleHighlight(obj.Key, false);
+
         activeHighlights.Clear();
     }
 
-    private void ToggleHighlight(GameObject obj, bool enable)
+    private int LayerMaskToLayer(LayerMask mask)
     {
-        if (enable)
-        {
-            SetLayerRecursively(obj, LayerMaskToLayer(occludedInteractionLayer), detectionLayers);
-        }
-        else if (activeHighlights.TryGetValue(obj, out int originalLayer))
-        {
-            SetLayerRecursively(obj, originalLayer, occludedInteractionLayer);
-        }
-    }
-
-    private void SetLayerRecursively(GameObject obj, int newLayer, LayerMask filter)
-    {
-        if (!obj) return;
-        if (IsInLayerMask(obj, filter)) obj.layer = newLayer;
-        foreach (Transform child in obj.transform)
-            SetLayerRecursively(child.gameObject, newLayer, filter);
-    }
-
-    private static bool IsInLayerMask(GameObject obj, LayerMask mask) => ((1 << obj.layer) & mask) != 0;
-
-    private static int LayerMaskToLayer(LayerMask mask)
-    {
-        int v = mask.value;
+        int value = mask.value;
         for (int i = 0; i < 32; i++)
-            if ((v & (1 << i)) != 0) return i;
-        Debug.LogWarning("[SpecialSense] LayerMask has multiple layers, using first.");
+        {
+            if ((value & (1 << i)) != 0)
+                return i;
+        }
+        Debug.LogWarning("LayerMask contains multiple layers, using the first found.");
         return 0;
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
+    private void ToggleHighlight(GameObject obj, bool on)
+    {
+        if (on)
+        {
+            SetLayerRecursively(obj, LayerMaskToLayer(OccludedInteractionLayer), detectionLayers);
+        }
+        else
+        {
+            if (activeHighlights.TryGetValue(obj, out int originalLayer))
+            {
+                SetLayerRecursively(obj, originalLayer, OccludedInteractionLayer);
+            }
+        }
+    }
+
+    private void SetLayerRecursively(GameObject obj, int newLayer, LayerMask maskToCheck)
+    {
+        if (obj == null) return;
+
+        if (IsInLayerMask(obj, maskToCheck))
+        {
+            obj.layer = newLayer;
+        }
+
+        foreach (Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            SetLayerRecursively(child.gameObject, newLayer, maskToCheck);
+        }
+    }
+
+    private bool IsInLayerMask(GameObject obj, LayerMask mask)
+    {
+        return ((1 << obj.layer) & mask) != 0;
+    }
+
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, maxRadius);
+
         Gizmos.color = new Color(0f, 1f, 1f, 0.2f);
         Gizmos.DrawSphere(transform.position, currentRadius);
     }
-#endif
 }
