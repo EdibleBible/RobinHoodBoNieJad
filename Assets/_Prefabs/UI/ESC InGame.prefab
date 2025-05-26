@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6038566416035900696}
   - component: {fileID: 5723148178568075475}
   - component: {fileID: 2120338293344128617}
+  - component: {fileID: 1554077336752480819}
+  - component: {fileID: 8321902970801566761}
   m_Layer: 5
   m_Name: Controls
   m_TagString: Untagged
@@ -68,9 +70,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Controls
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fdebabcab52b7ff458eb6d0a32d47f37, type: 2}
-  m_sharedMaterial: {fileID: 7803916353681333059, guid: fdebabcab52b7ff458eb6d0a32d47f37,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -182,6 +183,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1554077336752480819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803424503907288421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
+--- !u!114 &8321902970801566761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803424503907288421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
 --- !u!1 &1952950359882098213
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,6 +221,8 @@ GameObject:
   - component: {fileID: 255666995517759197}
   - component: {fileID: 5579862814046379336}
   - component: {fileID: 2285250448065881201}
+  - component: {fileID: 3979519291626599607}
+  - component: {fileID: 7255367488128682481}
   m_Layer: 5
   m_Name: Save
   m_TagString: Untagged
@@ -250,9 +279,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Save Game
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fdebabcab52b7ff458eb6d0a32d47f37, type: 2}
-  m_sharedMaterial: {fileID: 7803916353681333059, guid: fdebabcab52b7ff458eb6d0a32d47f37,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -364,6 +392,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3979519291626599607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952950359882098213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
+--- !u!114 &7255367488128682481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952950359882098213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
 --- !u!1 &2043502206068126204
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,6 +660,8 @@ GameObject:
   - component: {fileID: 6227970158370033288}
   - component: {fileID: 8505130138600417196}
   - component: {fileID: 2375655772177848719}
+  - component: {fileID: 163157226520544582}
+  - component: {fileID: 2063658624397515592}
   m_Layer: 5
   m_Name: Lobby
   m_TagString: Untagged
@@ -662,9 +718,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Return To Lobby
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fdebabcab52b7ff458eb6d0a32d47f37, type: 2}
-  m_sharedMaterial: {fileID: 7803916353681333059, guid: fdebabcab52b7ff458eb6d0a32d47f37,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -803,6 +858,32 @@ MonoBehaviour:
   targetText: {fileID: 6227970158370033288}
   spriteImage: {fileID: 7627610470159792398}
   canvas: {fileID: 0}
+--- !u!114 &163157226520544582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462901919677139936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
+--- !u!114 &2063658624397515592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462901919677139936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
 --- !u!1 &3776395061314145529
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,6 +897,8 @@ GameObject:
   - component: {fileID: 1362668573311495122}
   - component: {fileID: 5360977786805650459}
   - component: {fileID: 7792290346353901541}
+  - component: {fileID: 2884807576393754328}
+  - component: {fileID: 1880008872691367682}
   m_Layer: 5
   m_Name: Resume
   m_TagString: Untagged
@@ -872,9 +955,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Resume
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fdebabcab52b7ff458eb6d0a32d47f37, type: 2}
-  m_sharedMaterial: {fileID: 7803916353681333059, guid: fdebabcab52b7ff458eb6d0a32d47f37,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1013,6 +1095,32 @@ MonoBehaviour:
   targetText: {fileID: 1362668573311495122}
   spriteImage: {fileID: 7627610470159792398}
   canvas: {fileID: 0}
+--- !u!114 &2884807576393754328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3776395061314145529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
+--- !u!114 &1880008872691367682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3776395061314145529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
 --- !u!1 &4362544932703586753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,6 +1195,8 @@ GameObject:
   - component: {fileID: 8603703340827051573}
   - component: {fileID: 4388377797817904989}
   - component: {fileID: 536943263232705272}
+  - component: {fileID: 380693032958724657}
+  - component: {fileID: 2576133303132589613}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -1143,9 +1253,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Main Menu
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fdebabcab52b7ff458eb6d0a32d47f37, type: 2}
-  m_sharedMaterial: {fileID: 7803916353681333059, guid: fdebabcab52b7ff458eb6d0a32d47f37,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1284,6 +1393,32 @@ MonoBehaviour:
   targetText: {fileID: 8603703340827051573}
   spriteImage: {fileID: 7627610470159792398}
   canvas: {fileID: 0}
+--- !u!114 &380693032958724657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4408527338398215695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962d2b0e6c191147b8f4cead0617c01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEvent: event:/MouseUI
+--- !u!114 &2576133303132589613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4408527338398215695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc29900a5f061db4a9b7e523e006db2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEvent: event:/MouseUIClick
 --- !u!1 &4956250394083357318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1418,9 +1553,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: GAME PAUSED
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fdebabcab52b7ff458eb6d0a32d47f37, type: 2}
-  m_sharedMaterial: {fileID: 7803916353681333059, guid: fdebabcab52b7ff458eb6d0a32d47f37,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1444,7 +1578,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.8
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
