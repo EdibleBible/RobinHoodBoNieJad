@@ -90,6 +90,8 @@ public class PickableObject : MonoBehaviour, IInteractable, IInteractableStop, I
         Pickup(player);
         HideUI();
         ShowStopUI();
+        
+        InteractEvent.Raise(this, null);
     }
 
     public void Pickup(Transform player)

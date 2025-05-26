@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Create SOAllQuest", fileName = "SOAllQuest", order = 0)]
@@ -9,6 +10,17 @@ public class SOAllQuest : ScriptableObject
     public SOPlayerQuest CurrentSelectedQuest;
     public List<SOPlayerQuest> randomizedQuests = new List<SOPlayerQuest>();
 
+    public void SetTutorialQuest()
+    {
+        randomizedQuests.Clear();
+        SOPlayerQuest quest = ScriptableObject.CreateInstance<SOPlayerQuest>();
+        quest.name = "TutorialQuest";
+        quest.RequireItems = new SerializedDictionary<ItemType, QuestAmountData>();
+        quest.RequireItems.Add(ItemType.CollectibleGoblet,new QuestAmountData(0,3));
+        randomizedQuests.Add(quest);
+        
+        CurrentSelectedQuest = quest;
+    }
     public void RandomizeAllQuests()
     {
         randomizedQuests.Clear();

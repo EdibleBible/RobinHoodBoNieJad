@@ -18,8 +18,7 @@ public class InputEscMenu : MonoBehaviour
         {
             if (button != null)
             {
-                if (button.canvas = null)
-                    button.canvas = canvas;
+                button.canvas = canvas;
             }
         }
     }
@@ -34,7 +33,7 @@ public class InputEscMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        canvas = this.transform.parent.GetComponent<Canvas>();
+        canvas = this.transform.root.GetComponent<Canvas>();
         escAction = globalInputActions.FindAction("Esc");
         escAction.Enable();
         escAction.performed += ToggleEsc;

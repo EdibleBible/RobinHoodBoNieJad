@@ -19,8 +19,8 @@ public class MenuLobbyTaxes : MonoBehaviour
         taxAmount = GetTaxAmount();
         if (SOStats.taxPaid)
         {
-            buttonPay.interactable = false;
             textTaxDisplay.color = Color.white;
+            buttonPay.interactable = false;
         }
         else
         {
@@ -40,6 +40,8 @@ public class MenuLobbyTaxes : MonoBehaviour
         textVisit.text = "Visit #" + SOStats.lobbyVisit.ToString();
         textNeeded.text = "You need: " + taxAmount;
         textHad.text = "You have: " + SOStats.scoreTotal.ToString();
+        
+        this.gameObject.SetActive(false);
     }
 
     private int GetTaxAmount()
