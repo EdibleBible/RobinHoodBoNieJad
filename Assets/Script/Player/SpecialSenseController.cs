@@ -43,6 +43,11 @@ public class SpecialSenseController : MonoBehaviour
     private int specialSenseUseCount;
 
     private bool isCooldown = false;
+    
+    [Header("GameEvents")]
+    public GameEvent SetSpecialSenseUseCountEvent;
+
+    public GameEvent SetSpecialSenseSliderAmount;
 
     private void Start()
     {
@@ -62,7 +67,12 @@ public class SpecialSenseController : MonoBehaviour
         specialSenseUseCount = (baseSpecialSenseUseCount +
                                 (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Additive)) *
                                (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Multiplicative);
+        
+        SetSpecialSenseUseCountEvent.Raise(this,specialSenseUseCount);
+        
+        
     }
+
 
     public void TryUseSpecialSense()
     {
@@ -79,6 +89,7 @@ public class SpecialSenseController : MonoBehaviour
         }
 
         specialSenseUseCount--;
+        SetSpecialSenseUseCountEvent.Raise(this,specialSenseUseCount);
         pulsePosition = transform.position;
         if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
         pulseCoroutine = StartCoroutine(PulseDetection());
@@ -86,6 +97,7 @@ public class SpecialSenseController : MonoBehaviour
 
     private IEnumerator PulseDetection()
     {
+        SetSpecialSenseSliderAmount.Raise(this, 0f);
         currentRadius = 0f;
         ClearHighlights();
 
@@ -218,9 +230,8 @@ Destroy(instance.gameObject, highlightDuration + 0.5f);
 
         activeHighlights.Clear();
     }
-
-
-private IEnumerator FadeOutParticleSize(ParticleSystem particleSystem, float duration)
+    
+    private IEnumerator FadeOutParticleSize(ParticleSystem particleSystem, float duration)
 {
     float elapsed = 0f;
 
@@ -243,21 +254,28 @@ private IEnumerator FadeOutParticleSize(ParticleSystem particleSystem, float dur
 
     mainModule.startSize = 0f;
 }
-
-
-
-
-
-
-
-
+    
     private IEnumerator StartCooldown()
     {
         isCooldown = true;
-        yield return new WaitForSeconds(5f);
+
+        float cooldownDuration = 10f;
+        float timer = cooldownDuration;
+
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+
+            // Wysyłanie eventu / aktualizacja UI
+            float progress = 1f - (timer / cooldownDuration); // 0..1
+            SetSpecialSenseSliderAmount.Raise(this,progress);
+            yield return null;
+        }
+
         isCooldown = false;
         Debug.Log("Zmysł specjalny gotowy do ponownego użycia.");
     }
+
 
     private void ClearHighlights()
     {

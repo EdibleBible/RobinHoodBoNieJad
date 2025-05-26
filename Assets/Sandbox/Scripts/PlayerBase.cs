@@ -28,6 +28,7 @@ public class PlayerBase : MonoBehaviour
     private PlayerWalk playerWalk;
     private PlayerInteractionController playerInteractionController;
     private SpecialSenseController specialSenseController;
+    private PlayerQuestSystemUI playerQuestSystemUI;
 
     private PlayerControll PlayerInputActions => InputManager.Instance.PlayerInputActions;
 
@@ -43,6 +44,7 @@ public class PlayerBase : MonoBehaviour
         playerWalk = GetComponent<PlayerWalk>();
         playerInteractionController = GetComponent<PlayerInteractionController>();
         specialSenseController = GetComponent<SpecialSenseController>();
+        playerQuestSystemUI = FindAnyObjectByType<PlayerQuestSystemUI>();
 
 
         // Input Hook
@@ -65,6 +67,9 @@ public class PlayerBase : MonoBehaviour
         PlayerInputActions.Player.ChangeItemPositive.performed += OnChangeIntem_Performed;
 
         PlayerInputActions.Player.SpecialSense.performed += OnSpecialSense_Performed;
+
+        PlayerInputActions.Player.ShowQuest.performed += OnShowQuestPanel_Performed;
+        PlayerInputActions.Player.ShowQuest.canceled += OnShowQuestPanel_Canceled;
 
         ResetInventory(true);
         InventoryUpdateSelectedItemEvent?.Raise(this, (0, 0));
@@ -195,7 +200,6 @@ public class PlayerBase : MonoBehaviour
         specialSenseController.TryUseSpecialSense();
     }
 
-
     public void OnCrouch_Canceled(InputAction.CallbackContext context)
     {
         playerWalk.Crouching = false;
@@ -235,6 +239,23 @@ public class PlayerBase : MonoBehaviour
             UpdateSelectedSlot(1); // Scroll w dół
         }
     }
+
+    private void OnShowQuestPanel_Performed(InputAction.CallbackContext context)
+    {
+        if (playerQuestSystemUI == null)
+            playerQuestSystemUI = FindAnyObjectByType<PlayerQuestSystemUI>();
+
+        playerQuestSystemUI.ShowPanel();
+    }
+
+    private void OnShowQuestPanel_Canceled(InputAction.CallbackContext context)
+    {
+        if (playerQuestSystemUI == null)
+            playerQuestSystemUI = FindAnyObjectByType<PlayerQuestSystemUI>();
+
+        playerQuestSystemUI.HidePanel();
+    }
+
 
     private void PlayDropSound(ItemType itemType)
     {

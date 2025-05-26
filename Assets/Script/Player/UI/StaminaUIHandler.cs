@@ -4,14 +4,7 @@ using UnityEngine.UI;
 public class StaminaUIHandler : MonoBehaviour
 {
     [SerializeField] private Slider staminaSlider;
-    [SerializeField] private RectTransform staminaBar;
-    [SerializeField] private float minBarWidth = 180f; // Minimalna szerokość paska staminy
-    private float originalWidth;
-
-    void Start()
-    {
-        originalWidth = staminaBar.sizeDelta.x;
-    }
+    
 
     public void UpdateStaminaBar(Component sender, object data)
     {
@@ -24,12 +17,12 @@ public class StaminaUIHandler : MonoBehaviour
 
     public void ResizeStaminaBar(Component sender, object data)
     {
-        if (data is (float newMaxStamina, float oldMaxStamina) && sender is PlayerStaminaSystem staminaSystem)
+        /*if (data is (float newMaxStamina, float oldMaxStamina) && sender is PlayerStaminaSystem staminaSystem)
         {
             float scaleFactor = newMaxStamina / oldMaxStamina;
             float newWidth = Mathf.Max(originalWidth * scaleFactor, minBarWidth);
             staminaBar.sizeDelta = new Vector2(newWidth, staminaBar.sizeDelta.y);
             originalWidth = newWidth;
-        }
+        }*/
     }
 }

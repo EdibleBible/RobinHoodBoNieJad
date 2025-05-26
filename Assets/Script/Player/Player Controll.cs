@@ -116,6 +116,15 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowQuest"",
+                    ""type"": ""Button"",
+                    ""id"": ""a311d026-0e35-48ed-8a02-53277ed041f2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -316,6 +325,17 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
                     ""action"": ""SpecialSense"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""342db360-063f-4448-9e66-9b8bd46c0dca"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowQuest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -351,6 +371,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         m_Player_UseInventory = m_Player.FindAction("UseInventory", throwIfNotFound: true);
         m_Player_ChangeItemPositive = m_Player.FindAction("ChangeItemPositive", throwIfNotFound: true);
         m_Player_SpecialSense = m_Player.FindAction("SpecialSense", throwIfNotFound: true);
+        m_Player_ShowQuest = m_Player.FindAction("ShowQuest", throwIfNotFound: true);
     }
 
     ~@PlayerControll()
@@ -427,6 +448,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_UseInventory;
     private readonly InputAction m_Player_ChangeItemPositive;
     private readonly InputAction m_Player_SpecialSense;
+    private readonly InputAction m_Player_ShowQuest;
     public struct PlayerActions
     {
         private @PlayerControll m_Wrapper;
@@ -441,6 +463,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         public InputAction @UseInventory => m_Wrapper.m_Player_UseInventory;
         public InputAction @ChangeItemPositive => m_Wrapper.m_Player_ChangeItemPositive;
         public InputAction @SpecialSense => m_Wrapper.m_Player_SpecialSense;
+        public InputAction @ShowQuest => m_Wrapper.m_Player_ShowQuest;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -480,6 +503,9 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
             @SpecialSense.started += instance.OnSpecialSense;
             @SpecialSense.performed += instance.OnSpecialSense;
             @SpecialSense.canceled += instance.OnSpecialSense;
+            @ShowQuest.started += instance.OnShowQuest;
+            @ShowQuest.performed += instance.OnShowQuest;
+            @ShowQuest.canceled += instance.OnShowQuest;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -514,6 +540,9 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
             @SpecialSense.started -= instance.OnSpecialSense;
             @SpecialSense.performed -= instance.OnSpecialSense;
             @SpecialSense.canceled -= instance.OnSpecialSense;
+            @ShowQuest.started -= instance.OnShowQuest;
+            @ShowQuest.performed -= instance.OnShowQuest;
+            @ShowQuest.canceled -= instance.OnShowQuest;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -552,5 +581,6 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         void OnUseInventory(InputAction.CallbackContext context);
         void OnChangeItemPositive(InputAction.CallbackContext context);
         void OnSpecialSense(InputAction.CallbackContext context);
+        void OnShowQuest(InputAction.CallbackContext context);
     }
 }
