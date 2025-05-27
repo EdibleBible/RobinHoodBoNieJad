@@ -227,6 +227,11 @@ public class NewMapGenerator : MonoBehaviour
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             playerIsSpawn = true;
+            
+            Instantiate(SpawnPlayerSettings.ExitPrefab,
+                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity);
+            playerIsSpawn = true;
         }
         else
         {
@@ -234,10 +239,15 @@ public class NewMapGenerator : MonoBehaviour
                 roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             playerIsSpawn = true;
+            
+            Instantiate(SpawnPlayerSettings.ExitPrefab,
+                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity);
+            playerIsSpawn = true;
         }
 
         var controler = GameController.Instance;
-        controler.ToogleCursorOff(false);
+        controler.ToogleCursorOff(true);
         controler.ToggleFullScreenPass(true);
     }
 

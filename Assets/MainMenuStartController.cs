@@ -2,16 +2,15 @@ using System;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 
 public class MainMenuStartController : MonoBehaviour
 {
-    public Button loadButton;
-    public TextMeshProUGUI loadingText;
-
-    public Color disableColor;
-    public Color enableColor;
+    [FormerlySerializedAs("loadButton")] public Button LoadButton;
+    public GameObject StartTutorialPanel;
+    
     void Awake()
     {
         string path = Path.Combine(Application.persistentDataPath, "savegame.json");
@@ -19,16 +18,33 @@ public class MainMenuStartController : MonoBehaviour
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            loadButton.interactable = true;
-            loadingText.color = enableColor;
+            LoadButton.interactable = true;
             Debug.Log("Zapis znaleziony:\n" + json);
         }
         else
         {
-            loadButton.interactable = false;
-            loadingText.color = disableColor;
+            LoadButton.interactable = false;
             Debug.LogWarning("Plik savegame.json nie istnieje.");
         }
+    }
+
+    public void OpenTutorialPanel()
+    {
+        StartTutorialPanel.SetActive(true);
+    }
+
+    public void CloseTutorialPanel()
+    {
+        StartTutorialPanel.SetActive(false);
+    }
+
+    public void StartTutorial()
+    {
+        GameController.Instance.CleanUpInventory();
+        GameController.Instance.PlayerStatsController.ResetAllModifiers();
+        GameController.Instance.PlayerStatsController.RemoveAllBaseModier();
+        
+        GameController.Instance.StartTutorial();
     }
 
     public void StartNewGame()
