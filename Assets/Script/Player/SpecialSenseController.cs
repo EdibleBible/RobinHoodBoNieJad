@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Script.ScriptableObjects;
 using UnityEngine;
+using FMODUnity; // ✅ Dodane dla FMOD
 
 public class SpecialSenseController : MonoBehaviour
 {
@@ -20,9 +21,8 @@ public class SpecialSenseController : MonoBehaviour
     [SerializeField] private float lineSpeed = 20f;
 
     [Header("Particle Prefabs")]
-
     [SerializeField] private List<ParticleSystem> startParticlePrefabs = new();
-    [SerializeField] private GameObject targetForceFieldPrefab; // Force Field jako GameObject
+    [SerializeField] private GameObject targetForceFieldPrefab;
     [SerializeField] private GameObject cylinderParticlePrefab;
 
     [Header("Cylinder Settings")]
@@ -43,11 +43,14 @@ public class SpecialSenseController : MonoBehaviour
     private int specialSenseUseCount;
 
     private bool isCooldown = false;
-    
+
     [Header("GameEvents")]
     public GameEvent SetSpecialSenseUseCountEvent;
-
     public GameEvent SetSpecialSenseSliderAmount;
+
+    [Header("FMOD")]
+    [SerializeField] private EventReference specialSenseEventReference; // ✅ Odniesienie do FMOD Event
+    private FMOD.Studio.EventInstance specialSenseEventInstance; // ✅ Instancja dźwięku
 
     private void Start()
     {
@@ -67,12 +70,9 @@ public class SpecialSenseController : MonoBehaviour
         specialSenseUseCount = (baseSpecialSenseUseCount +
                                 (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Additive)) *
                                (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Multiplicative);
-        
-        SetSpecialSenseUseCountEvent.Raise(this,specialSenseUseCount);
-        
-        
-    }
 
+        SetSpecialSenseUseCountEvent.Raise(this, specialSenseUseCount);
+    }
 
     public void TryUseSpecialSense()
     {
@@ -89,10 +89,12 @@ public class SpecialSenseController : MonoBehaviour
         }
 
         specialSenseUseCount--;
-        SetSpecialSenseUseCountEvent.Raise(this,specialSenseUseCount);
+        SetSpecialSenseUseCountEvent.Raise(this, specialSenseUseCount);
         pulsePosition = transform.position;
         if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
         pulseCoroutine = StartCoroutine(PulseDetection());
+
+        PlaySpecialSenseSound(); // ✅ Odtwarzaj dźwięk
     }
 
     private IEnumerator PulseDetection()
@@ -148,6 +150,27 @@ public class SpecialSenseController : MonoBehaviour
         yield return StartCoroutine(ClearHighlightsStepByStep());
 
         StartCoroutine(StartCooldown());
+
+        StopSpecialSenseSound(); // ✅ Wycisz dźwięk po zakończeniu
+    }
+
+    private void PlaySpecialSenseSound()
+    {
+        if (specialSenseEventInstance.isValid())
+            specialSenseEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
+        specialSenseEventInstance = RuntimeManager.CreateInstance(specialSenseEventReference);
+        RuntimeManager.AttachInstanceToGameObject(specialSenseEventInstance, transform, GetComponent<Rigidbody>());
+        specialSenseEventInstance.start();
+    }
+
+    private void StopSpecialSenseSound()
+    {
+        if (specialSenseEventInstance.isValid())
+        {
+            specialSenseEventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            specialSenseEventInstance.release();
+        }
     }
 
     private IEnumerator AnimateLineToTarget(GameObject target)
@@ -163,15 +186,15 @@ public class SpecialSenseController : MonoBehaviour
 
         // Start particles
         foreach (var particle in startParticlePrefabs)
-{
-    if (particle != null)
-    {
-        var instance = Instantiate(particle, transform.position, Quaternion.identity);
-        instance.Play();
-StartCoroutine(FadeOutParticleSize(instance, highlightDuration));
-Destroy(instance.gameObject, highlightDuration + 0.5f);
-    }
-}
+        {
+            if (particle != null)
+            {
+                var instance = Instantiate(particle, transform.position, Quaternion.identity);
+                instance.Play();
+                StartCoroutine(FadeOutParticleSize(instance, highlightDuration));
+                Destroy(instance.gameObject, highlightDuration + 0.5f);
+            }
+        }
 
         float duration = Vector3.Distance(transform.position, target.transform.position) / lineSpeed;
         float elapsed = 0f;
@@ -230,31 +253,31 @@ Destroy(instance.gameObject, highlightDuration + 0.5f);
 
         activeHighlights.Clear();
     }
-    
+
     private IEnumerator FadeOutParticleSize(ParticleSystem particleSystem, float duration)
-{
-    float elapsed = 0f;
-
-    var mainModule = particleSystem.main;
-    float originalSize = mainModule.startSize.constant;
-
-    while (elapsed < duration)
     {
-        elapsed += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsed / duration);
-        float newSize = Mathf.Lerp(originalSize, 0f, t);
+        float elapsed = 0f;
 
-        var sizeOverLifetime = particleSystem.sizeOverLifetime;
-        sizeOverLifetime.enabled = false;
+        var mainModule = particleSystem.main;
+        float originalSize = mainModule.startSize.constant;
 
-        mainModule.startSize = newSize;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float newSize = Mathf.Lerp(originalSize, 0f, t);
 
-        yield return null;
+            var sizeOverLifetime = particleSystem.sizeOverLifetime;
+            sizeOverLifetime.enabled = false;
+
+            mainModule.startSize = newSize;
+
+            yield return null;
+        }
+
+        mainModule.startSize = 0f;
     }
 
-    mainModule.startSize = 0f;
-}
-    
     private IEnumerator StartCooldown()
     {
         isCooldown = true;
@@ -268,7 +291,7 @@ Destroy(instance.gameObject, highlightDuration + 0.5f);
 
             // Wysyłanie eventu / aktualizacja UI
             float progress = 1f - (timer / cooldownDuration); // 0..1
-            SetSpecialSenseSliderAmount.Raise(this,progress);
+            SetSpecialSenseSliderAmount.Raise(this, progress);
             yield return null;
         }
 

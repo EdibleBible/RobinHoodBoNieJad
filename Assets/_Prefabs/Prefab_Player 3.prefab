@@ -1189,6 +1189,7 @@ MonoBehaviour:
   crouchOffset: {x: 0.3, y: -0.5, z: 0.2}
   crouchTransitionTime: 0.3
   camTransform: {fileID: 8871433830355554072}
+  CanRotation: 1
 --- !u!114 &4155218188726546476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1279,25 +1280,25 @@ MonoBehaviour:
     m_Bits: 64
   walkStepSound:
     Guid:
-      Data1: -1939391943
-      Data2: 1255220306
-      Data3: 1880998017
-      Data4: 869925656
-    Path: event:/Player/PlayerFootsteps
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   runStepSound:
     Guid:
-      Data1: -316335545
-      Data2: 1182667393
-      Data3: 1555598477
-      Data4: 660492040
-    Path: event:/Player/PlayerRunning
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   crouchStepSound:
     Guid:
-      Data1: -310207697
-      Data2: 1138274044
-      Data3: 1520931752
-      Data4: 1705262199
-    Path: event:/Player/PlayerCrouch
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   walkStepCooldown: 0.2
   runStepCooldown: 0.2
   crouchStepCooldown: 0.2
@@ -1529,6 +1530,13 @@ MonoBehaviour:
     type: 2}
   SetSpecialSenseSliderAmount: {fileID: 11400000, guid: e1d22d6eb50a4dc449c717bb95c65edb,
     type: 2}
+  specialSenseEventReference:
+    Guid:
+      Data1: -1595681581
+      Data2: 1339904369
+      Data3: -1139980145
+      Data4: -2042625635
+    Path: event:/SpecialSense
 --- !u!114 &1810628108408444835
 MonoBehaviour:
   m_ObjectHideFlags: 0
