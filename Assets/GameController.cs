@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Script.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -19,6 +20,7 @@ public class GameController : MonoBehaviour
     public int BaseMoney;
 
     public bool DebugMode;
+    public bool DebugTutroial;
     public bool FillRandomItems;
     public bool DontCleanInventory;
     public bool ResetAllStatsModifiers;
@@ -42,6 +44,11 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log(quest.QuestName);
             }
+        }
+
+        if (DebugTutroial)
+        {
+            StartTutorial();
         }
 
         if (ResetAllStatsModifiers)
@@ -106,14 +113,26 @@ public class GameController : MonoBehaviour
             PlayerInventory.ClearInventory();
     }
 
-    public void StartNewGame(bool Reset = true)
+    public void StartNewGame()
     {
+        PlayerInventory.ResetCollections();
         AllPlayerQuest.RandomizeAllQuests();
         Stats.lobbyVisit = 0;
         Stats.scoreTotal = BaseMoney;
         Stats.taxPaid = false;
         Stats.scoreTotal = BaseMoney;
     }
+    
+    public void StartTutorial()
+    {
+        PlayerInventory.ResetCollections();
+        AllPlayerQuest.SetTutorialQuest();
+        Stats.lobbyVisit = 0;
+        Stats.scoreTotal = BaseMoney;
+        Stats.taxPaid = false;
+        Stats.scoreTotal = BaseMoney;
+    }
+
 
     public void RandomizeQuest()
     {
@@ -184,6 +203,11 @@ public class GameController : MonoBehaviour
         Debug.Log("ToogleCursorOff");
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void BackToLobby()
+    {
+        SceneManager.LoadScene(1);
     }
 }
 

@@ -24,7 +24,7 @@ public class TutorialEventManager : MonoBehaviour
         if(currentClaster == null)
             return;
         
-        if (Input.GetKeyDown(KeyCode.L) && !currentClaster.isAutoProgress)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !currentClaster.isAutoProgress)
         {
             NextTutorialElement();
         }
