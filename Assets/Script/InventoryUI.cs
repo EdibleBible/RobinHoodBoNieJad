@@ -13,6 +13,8 @@ public class InventoryUI : MonoBehaviour
 
     public void InitializeInventoryUI(Component sender, object data)
     {
+        Debug.LogError($"{sender.GetType().Name}.SetUpInventory");
+
         if (sender is PlayerBase playerBase && data is SOInventory inventoryData)
         {
             inventoryData.SetUpInventory();
@@ -40,6 +42,7 @@ public class InventoryUI : MonoBehaviour
 
     public void SetUpInventory(Component sender, object data)
     {
+        Debug.LogError($"{sender.GetType().Name}.SetUpInventory");
         if (sender is PlayerBase playerBase && data is SOInventory inventoryData)
         {
             Debug.Log($"inventory size: {inventoryData.CurrInventorySize}");

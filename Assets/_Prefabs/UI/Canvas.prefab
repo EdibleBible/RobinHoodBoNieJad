@@ -2911,7 +2911,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36.2
+  m_fontSize: 54.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3716,7 +3716,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.2
+  m_fontSize: 45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4629,6 +4629,31 @@ PrefabInstance:
       propertyPath: response.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 8247563526026194645}
+    - target: {fileID: 5705055686136478508, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
+        type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5705055686136478508, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
+        type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5705055686136478508, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
+        type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5705055686136478508, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
+        type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5705055686136478508, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
+        type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6482282294593150377, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
         type: 3}
       propertyPath: m_Pivot.x
@@ -4791,6 +4816,11 @@ PrefabInstance:
       propertyPath: response.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6939426348671012697}
+    - target: {fileID: 5470989341333270471, guid: ecf3696ba1b179845846fe457d117d64,
+        type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6054692021276936956, guid: ecf3696ba1b179845846fe457d117d64,
         type: 3}
       propertyPath: m_Name
@@ -4909,7 +4939,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6054692021276936956, guid: ecf3696ba1b179845846fe457d117d64,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5920511884181982297}
   m_SourcePrefab: {fileID: 100100000, guid: ecf3696ba1b179845846fe457d117d64, type: 3}
 --- !u!224 &1910576176640610729 stripped
 RectTransform:
@@ -4923,6 +4957,40 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4542010122987480458}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7714350000997609334 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6054692021276936956, guid: ecf3696ba1b179845846fe457d117d64,
+    type: 3}
+  m_PrefabInstance: {fileID: 4542010122987480458}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5920511884181982297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7714350000997609334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b288f956189904aa97a5b1f54aae18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: e7fad03cb1d018b4fa19fda381d68247, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6939426348671012697}
+        m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
+        m_MethodName: InitializeInventoryUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &7324842272796820395
 PrefabInstance:
   m_ObjectHideFlags: 0

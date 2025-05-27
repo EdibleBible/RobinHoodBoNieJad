@@ -263,7 +263,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 57, y: -499}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &167570344
 MonoBehaviour:
@@ -665,6 +665,10 @@ MonoBehaviour:
   targetText: {fileID: 266901779}
   spriteImage: {fileID: 167570343}
   canvas: {fileID: 945843350}
+  scaleFactor: 1.1
+  scaleDuration: 0.2
+  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &380392274
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,6 +984,10 @@ MonoBehaviour:
   targetText: {fileID: 571959497}
   spriteImage: {fileID: 167570343}
   canvas: {fileID: 945843350}
+  scaleFactor: 1.1
+  scaleDuration: 0.2
+  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &458796574 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7246036529266847424, guid: 888be0367a8107a47b2504bc64a4d194,
@@ -2156,6 +2164,10 @@ MonoBehaviour:
   targetText: {fileID: 1592165528}
   spriteImage: {fileID: 167570343}
   canvas: {fileID: 945843350}
+  scaleFactor: 1.1
+  scaleDuration: 0.2
+  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &681770557 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3301198027221142752, guid: 888be0367a8107a47b2504bc64a4d194,
@@ -2739,6 +2751,11 @@ PrefabInstance:
     - target: {fileID: 4478451830049652919, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: DebugMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3550,6 +3567,10 @@ MonoBehaviour:
   targetText: {fileID: 380392276}
   spriteImage: {fileID: 167570343}
   canvas: {fileID: 945843350}
+  scaleFactor: 1.1
+  scaleDuration: 0.2
+  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1717263273
 GameObject:
   m_ObjectHideFlags: 0
@@ -3966,6 +3987,10 @@ MonoBehaviour:
   targetText: {fileID: 581275485}
   spriteImage: {fileID: 167570343}
   canvas: {fileID: 945843350}
+  scaleFactor: 1.1
+  scaleDuration: 0.2
+  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1990907859
 GameObject:
   m_ObjectHideFlags: 0

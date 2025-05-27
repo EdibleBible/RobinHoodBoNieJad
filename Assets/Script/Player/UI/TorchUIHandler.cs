@@ -9,10 +9,10 @@ public class TorchUIHandler : MonoBehaviour
     [SerializeField] private float minBarWidth = 180f; // Minimalna szerokość paska staminy
     private float originalWidth;
 
-    void Start()
+    /*void Start()
     {
         originalWidth = staminaBar.sizeDelta.x;
-    }
+    }*/
 
     public void UpdateFuelBar(Component sender, object data)
     {

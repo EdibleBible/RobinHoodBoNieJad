@@ -116,6 +116,7 @@ public class SOInventory : ScriptableObject
             (BaseInventorySize +
              (int)Math.Floor(PlayerStatsController.GetSOPlayerStats(E_ModifiersType.Inventory).Additive)) *
              (int)Math.Floor(PlayerStatsController.GetSOPlayerStats(E_ModifiersType.Inventory).Multiplicative);
+
     }
 
     public void ClearInventory()
