@@ -5,6 +5,6 @@ public class ToogleCursorOff : MonoBehaviour
 {
     private void Start()
     {
-        GameController.Instance.ToogleCursorOff();
+        GameController.Instance.ToogleCursorOff(false);
     }
 }

@@ -8,5 +8,7 @@ public struct SpawnPlayerSettings
     public GameObject CanvasPrefab;
     public GameObject ExitPrefab;
     
+    public Transform PlayerTransform;
+    
     public Vector3 SpawnOffset;
 }

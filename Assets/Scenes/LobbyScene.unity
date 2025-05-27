@@ -13492,6 +13492,7 @@ GameObject:
   - component: {fileID: 486346228}
   - component: {fileID: 486346231}
   - component: {fileID: 486346232}
+  - component: {fileID: 486346233}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -13627,6 +13628,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00d91a0ef4d0dba49a3766e3048c0161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &486346233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486346227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a483537364e4014d9f51510e442b06a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &487329237
@@ -41599,6 +41612,11 @@ PrefabInstance:
       objectReference: {fileID: 911290329}
     - target: {fileID: 602370532287939730, guid: 6740964685213ff44acbe792664263f1,
         type: 3}
+      propertyPath: isScene3D
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 602370532287939730, guid: 6740964685213ff44acbe792664263f1,
+        type: 3}
       propertyPath: buttons.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -55666,8 +55684,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 331.0912, y: 0}
-  m_SizeDelta: {x: 509.4282, y: 0}
+  m_AnchoredPosition: {x: 331.0405, y: 0}
+  m_SizeDelta: {x: 509.3501, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1883803654
 MonoBehaviour:

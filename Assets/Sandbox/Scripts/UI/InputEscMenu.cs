@@ -31,7 +31,6 @@ public class InputEscMenu : MonoBehaviour
         escAction.performed += ToggleEsc;
         AssignButtonSelectors();
         forceMouse = true;
-        GameController.Instance.ToogleCursorOn();
     }
 
     private void OnDisable()
@@ -39,7 +38,6 @@ public class InputEscMenu : MonoBehaviour
         forceMouse = false;
         escAction.performed -= ToggleEsc;
         escAction.Disable();
-        GameController.Instance.ToogleCursorOff();
 
     }
 
@@ -50,7 +48,7 @@ public class InputEscMenu : MonoBehaviour
             escapeMenu.SetActive(false);
             if(isScene3D)
             {
-                GameController.Instance.ToogleCursorOff();
+                GameController.Instance.ToogleCursorOff(true);
             }
         }
         else
@@ -58,7 +56,7 @@ public class InputEscMenu : MonoBehaviour
             escapeMenu.SetActive(true);
             if(isScene3D)
             {
-                GameController.Instance.ToogleCursorOn();
+                GameController.Instance.ToogleCursorOn(true);
             }
         }
     }
