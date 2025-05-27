@@ -44,6 +44,8 @@ public class PlayerRotation : MonoBehaviour
     private Vector3 originalCamLocalPos;
     private Tween cameraTween;
 
+    public bool CanRotation = true;
+
     private void Start()
     {
         if (virtualCamera == null)
@@ -62,6 +64,9 @@ public class PlayerRotation : MonoBehaviour
     // Metoda wywoływana z Update() z zewnątrz, która obsługuje obrót kamery i gracza
     public void UpdateRotation()
     {
+        if(!CanRotation)
+            return;
+        
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivityX * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivityY * Time.deltaTime;
 

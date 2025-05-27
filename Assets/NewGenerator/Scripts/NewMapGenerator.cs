@@ -237,7 +237,7 @@ public class NewMapGenerator : MonoBehaviour
         }
 
         var controler = GameController.Instance;
-        controler.ToogleCursorOff();
+        controler.ToogleCursorOff(false);
         controler.ToggleFullScreenPass(true);
     }
 

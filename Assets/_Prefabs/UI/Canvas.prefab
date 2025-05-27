@@ -2911,7 +2911,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36.45
+  m_fontSize: 36.2
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3480,7 +3480,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7502461084273718556}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3490,7 +3490,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.8408696, y: 0.7931123}
   m_AnchorMax: {x: 0.9802412, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: -8}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &4597297464051451935
@@ -3716,7 +3716,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.5
+  m_fontSize: 41.2
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3841,8 +3841,8 @@ RectTransform:
   - {fileID: 5187122274636205639}
   - {fileID: 5552162617075097946}
   - {fileID: 1862292289474608385}
-  - {fileID: 3620432286858538757}
   - {fileID: 1823265541427752384}
+  - {fileID: 3620432286858538757}
   - {fileID: 6110377938788189640}
   - {fileID: 1219223318876542082}
   m_Father: {fileID: 0}
@@ -3960,9 +3960,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiElementPrefab: {fileID: 627771101516644915, guid: e3ac84205d081994eb93149e78d79335,
     type: 3}
-  uiContainer: {fileID: 0}
+  uiContainer: {fileID: 2990408859794138479}
   questPanelRoot: {fileID: 4955505487370838413}
-  panelGraphic: {fileID: 0}
+  panelGraphic: {fileID: 8997421269214877141}
   tweenDuration: 0.4
   tweenEase: 9
 --- !u!114 &8239522792530975354
@@ -4449,7 +4449,7 @@ PrefabInstance:
     - target: {fileID: 2443646520554402128, guid: c9c48db6bcc41d9449219145edf4bc65,
         type: 3}
       propertyPath: m_fontSize
-      value: 51.1
+      value: 50.75
       objectReference: {fileID: 0}
     - target: {fileID: 2443646520554402128, guid: c9c48db6bcc41d9449219145edf4bc65,
         type: 3}
@@ -4729,16 +4729,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6542763389826806371, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6542763389826806371, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -891
-      objectReference: {fileID: 0}
     - target: {fileID: 6826416909439816731, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
         type: 3}
       propertyPath: m_Name
@@ -4754,6 +4744,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9d1976a1f7efc743b7cb1b4b55f0b05, type: 3}
+--- !u!224 &2990408859794138479 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4002007218244793985, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
+    type: 3}
+  m_PrefabInstance: {fileID: 2164522088561529838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4955505487370838413 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6542763389826806371, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
@@ -4763,6 +4759,12 @@ RectTransform:
 --- !u!224 &5187122274636205639 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6482282294593150377, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
+    type: 3}
+  m_PrefabInstance: {fileID: 2164522088561529838}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &8997421269214877141 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7121510039405889083, guid: f9d1976a1f7efc743b7cb1b4b55f0b05,
     type: 3}
   m_PrefabInstance: {fileID: 2164522088561529838}
   m_PrefabAsset: {fileID: 0}
@@ -4934,6 +4936,11 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 3454515881157387865}
+    - target: {fileID: 602370532287939730, guid: 6740964685213ff44acbe792664263f1,
+        type: 3}
+      propertyPath: isScene3D
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4362544932703586753, guid: 6740964685213ff44acbe792664263f1,
         type: 3}
       propertyPath: m_Name

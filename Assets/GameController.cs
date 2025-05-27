@@ -191,18 +191,38 @@ public class GameController : MonoBehaviour
         ToggleFullScreenPass(false);
     }
 
-    public void ToogleCursorOn()
+    public void ToogleCursorOn(bool toogleMove)
     {
         Debug.Log("ToogleCursorOn");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        
+        if(!toogleMove)
+            return;
+
+        PlayerRotation rotation = FindAnyObjectByType<PlayerRotation>();
+
+        if (rotation != null)
+        {
+            rotation.CanRotation = false;
+        }
     }
 
-    public void ToogleCursorOff()
+    public void ToogleCursorOff(bool toogleMove)
     {
         Debug.Log("ToogleCursorOff");
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        
+        if(!toogleMove)
+            return;
+
+        PlayerRotation rotation = FindAnyObjectByType<PlayerRotation>();
+
+        if (rotation != null)
+        {
+            rotation.CanRotation = true;
+        }
     }
 
     public void BackToLobby()
