@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4508676144679486463}
   - component: {fileID: 4765337940768105308}
   - component: {fileID: 6113899827976468255}
+  - component: {fileID: 4879577438011602428}
+  - component: {fileID: -2932453066608635240}
   m_Layer: 23
   m_Name: PickableObject
   m_TagString: Item
@@ -86,6 +88,46 @@ MonoBehaviour:
     Additive: 0
     Multiplicative: -0.4
   statsControll: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e, type: 2}
+--- !u!114 &4879577438011602428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8245901855004692460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6103eeb49ac3b224eb825bf30fe86ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupEvent:
+    Guid:
+      Data1: 2030476855
+      Data2: 1266737211
+      Data3: 1755879343
+      Data4: -388646872
+    Path: event:/ItemPickup
+  materialType: 2
+--- !u!114 &-2932453066608635240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8245901855004692460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14eae99d2f7b6d644af5c67a87017c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropSoundEvent:
+    Guid:
+      Data1: -272142723
+      Data2: 1261083701
+      Data3: 1214003093
+      Data4: 1603500910
+    Path: event:/ItemDrop
+  itemSoundType: 2
 --- !u!1001 &7003503446897560925
 PrefabInstance:
   m_ObjectHideFlags: 0
