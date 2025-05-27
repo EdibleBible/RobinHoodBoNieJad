@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TorchUIHandler : MonoBehaviour
 {
-    [SerializeField] private Slider staminaSlider;
+    [SerializeField] private List<Slider> staminaSliders;
     [SerializeField] private RectTransform staminaBar;
     [SerializeField] private float minBarWidth = 180f; // Minimalna szerokość paska staminy
     private float originalWidth;
@@ -18,16 +19,17 @@ public class TorchUIHandler : MonoBehaviour
         Debug.Log("Updating fuel bar");
         if (data is (float newFuel, float currentFuel) && sender is PlayerTorchSystem staminaSystem)
         {
-            Debug.Log("Updating fuel bar2");
-
-            staminaSlider.maxValue = newFuel;
-            staminaSlider.value = currentFuel;
+            foreach (var staminaSlider in staminaSliders)
+            {
+                staminaSlider.maxValue = newFuel;
+                staminaSlider.value = currentFuel;
+            }
         }
     }
 
     public void ResizeFuelBar(Component sender, object data)
     {
-        Debug.Log("Updating fuel bar3");
+        /*Debug.Log("Updating fuel bar3");
 
         if (data is (float newMaxFuel, float oldMaxFuel) && sender is PlayerTorchSystem staminaSystem)
         {
@@ -37,7 +39,6 @@ public class TorchUIHandler : MonoBehaviour
             float newWidth = Mathf.Max(originalWidth * scaleFactor, minBarWidth); // Zapewnienie minimalnej szerokości
             staminaBar.sizeDelta = new Vector2(newWidth, staminaBar.sizeDelta.y);
             originalWidth = newWidth;
-
-        }
+        }*/
     }
 }

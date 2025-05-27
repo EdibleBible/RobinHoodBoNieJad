@@ -19,8 +19,15 @@ public class SpecialSenseController : MonoBehaviour
     [SerializeField] private LineRenderer lineRendererPrefab;
     [SerializeField] private float lineSpeed = 20f;
 
-    [Header("Particle Settings")]
-    [SerializeField] private ParticleSystem particlePrefab;
+    [Header("Particle Prefabs")]
+
+    [SerializeField] private List<ParticleSystem> startParticlePrefabs = new();
+    [SerializeField] private GameObject targetForceFieldPrefab; // Force Field jako GameObject
+    [SerializeField] private GameObject cylinderParticlePrefab;
+
+    [Header("Cylinder Settings")]
+    [SerializeField] private float cylinderDuration = 2f;
+    [SerializeField] private float cylinderStartOffset = 0.2f;
 
     private Dictionary<GameObject, int> activeHighlights = new();
     private Coroutine pulseCoroutine;
@@ -36,6 +43,11 @@ public class SpecialSenseController : MonoBehaviour
     private int specialSenseUseCount;
 
     private bool isCooldown = false;
+    
+    [Header("GameEvents")]
+    public GameEvent SetSpecialSenseUseCountEvent;
+
+    public GameEvent SetSpecialSenseSliderAmount;
 
     private void Start()
     {
@@ -55,7 +67,12 @@ public class SpecialSenseController : MonoBehaviour
         specialSenseUseCount = (baseSpecialSenseUseCount +
                                 (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Additive)) *
                                (int)Math.Floor(statsController.GetSOPlayerStats(E_ModifiersType.SpecialSenseUseAmount).Multiplicative);
+        
+        SetSpecialSenseUseCountEvent.Raise(this,specialSenseUseCount);
+        
+        
     }
+
 
     public void TryUseSpecialSense()
     {
@@ -72,6 +89,7 @@ public class SpecialSenseController : MonoBehaviour
         }
 
         specialSenseUseCount--;
+        SetSpecialSenseUseCountEvent.Raise(this,specialSenseUseCount);
         pulsePosition = transform.position;
         if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
         pulseCoroutine = StartCoroutine(PulseDetection());
@@ -79,6 +97,7 @@ public class SpecialSenseController : MonoBehaviour
 
     private IEnumerator PulseDetection()
     {
+        SetSpecialSenseSliderAmount.Raise(this, 0f);
         currentRadius = 0f;
         ClearHighlights();
 
@@ -93,13 +112,12 @@ public class SpecialSenseController : MonoBehaviour
             {
                 if (linesSpawned >= maxLinesPerPulse)
                     break;
-                
 
                 GameObject obj = hit.gameObject;
                 Transform root = obj.transform.root;
                 GameObject rootObj = root.gameObject;
-                
-                if(rootObj.TryGetComponent(out DoorController doorController))
+
+                if (rootObj.TryGetComponent(out DoorController _))
                     continue;
 
                 if (activeHighlights.ContainsKey(rootObj))
@@ -118,7 +136,6 @@ public class SpecialSenseController : MonoBehaviour
                 if (alreadyContained)
                     continue;
 
-                Debug.Log(rootObj.name);
                 activeHighlights.Add(rootObj, rootObj.layer);
                 StartCoroutine(AnimateLineToTarget(rootObj));
                 linesSpawned++;
@@ -136,7 +153,6 @@ public class SpecialSenseController : MonoBehaviour
     private IEnumerator AnimateLineToTarget(GameObject target)
     {
         LineRenderer line = null;
-        ParticleSystem particles = null;
 
         if (lineRendererPrefab != null)
         {
@@ -145,11 +161,17 @@ public class SpecialSenseController : MonoBehaviour
             line.SetPosition(0, transform.position);
         }
 
-        if (particlePrefab != null)
-        {
-            particles = Instantiate(particlePrefab, transform.position, Quaternion.identity);
-            particles.Play();
-        }
+        // Start particles
+        foreach (var particle in startParticlePrefabs)
+{
+    if (particle != null)
+    {
+        var instance = Instantiate(particle, transform.position, Quaternion.identity);
+        instance.Play();
+StartCoroutine(FadeOutParticleSize(instance, highlightDuration));
+Destroy(instance.gameObject, highlightDuration + 0.5f);
+    }
+}
 
         float duration = Vector3.Distance(transform.position, target.transform.position) / lineSpeed;
         float elapsed = 0f;
@@ -163,26 +185,39 @@ public class SpecialSenseController : MonoBehaviour
             if (line != null)
                 line.SetPosition(1, currentPos);
 
-            if (particles != null)
-                particles.transform.position = currentPos;
-
             yield return null;
         }
 
         if (line != null)
             line.SetPosition(1, target.transform.position);
 
-        if (particles != null)
-        {
-            particles.transform.position = target.transform.position;
-            particles.Stop();
-            Destroy(particles.gameObject, 1f);
-        }
-
         ToggleHighlight(target, true);
 
         if (line != null)
             Destroy(line.gameObject, 0.5f);
+
+        // Target Force Field
+        if (targetForceFieldPrefab != null)
+        {
+            GameObject forceField = Instantiate(targetForceFieldPrefab, target.transform.position, Quaternion.identity);
+            Destroy(forceField, highlightDuration);
+        }
+
+        // Cylinder connection
+        if (cylinderParticlePrefab != null)
+        {
+            Vector3 start = transform.position + (target.transform.position - transform.position).normalized * cylinderStartOffset;
+            Vector3 end = target.transform.position;
+            Vector3 direction = end - start;
+            Vector3 position = start + direction / 2f;
+
+            GameObject cylinder = Instantiate(cylinderParticlePrefab, position, Quaternion.identity);
+            cylinder.transform.localScale = new Vector3(cylinder.transform.localScale.x, direction.magnitude / 2f, cylinder.transform.localScale.z);
+            cylinder.transform.rotation = Quaternion.LookRotation(direction);
+            cylinder.transform.Rotate(90f, 0f, 0f); // Obrót z pionu na poziom
+
+            Destroy(cylinder, cylinderDuration);
+        }
     }
 
     private IEnumerator ClearHighlightsStepByStep()
@@ -195,14 +230,52 @@ public class SpecialSenseController : MonoBehaviour
 
         activeHighlights.Clear();
     }
+    
+    private IEnumerator FadeOutParticleSize(ParticleSystem particleSystem, float duration)
+{
+    float elapsed = 0f;
 
+    var mainModule = particleSystem.main;
+    float originalSize = mainModule.startSize.constant;
+
+    while (elapsed < duration)
+    {
+        elapsed += Time.deltaTime;
+        float t = Mathf.Clamp01(elapsed / duration);
+        float newSize = Mathf.Lerp(originalSize, 0f, t);
+
+        var sizeOverLifetime = particleSystem.sizeOverLifetime;
+        sizeOverLifetime.enabled = false;
+
+        mainModule.startSize = newSize;
+
+        yield return null;
+    }
+
+    mainModule.startSize = 0f;
+}
+    
     private IEnumerator StartCooldown()
     {
         isCooldown = true;
-        yield return new WaitForSeconds(5f);
+
+        float cooldownDuration = 10f;
+        float timer = cooldownDuration;
+
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+
+            // Wysyłanie eventu / aktualizacja UI
+            float progress = 1f - (timer / cooldownDuration); // 0..1
+            SetSpecialSenseSliderAmount.Raise(this,progress);
+            yield return null;
+        }
+
         isCooldown = false;
         Debug.Log("Zmysł specjalny gotowy do ponownego użycia.");
     }
+
 
     private void ClearHighlights()
     {

@@ -18,28 +18,20 @@ public class InputEscMenu : MonoBehaviour
         {
             if (button != null)
             {
-                if (button.canvas = null)
-                    button.canvas = canvas;
+                button.canvas = canvas;
             }
-        }
-    }
-
-    private void LateUpdate()
-    {
-        if (forceMouse)
-        {
-            LockMouse(false);
         }
     }
 
     private void OnEnable()
     {
-        canvas = this.transform.parent.GetComponent<Canvas>();
+        canvas = this.transform.root.GetComponent<Canvas>();
         escAction = globalInputActions.FindAction("Esc");
         escAction.Enable();
         escAction.performed += ToggleEsc;
         AssignButtonSelectors();
         forceMouse = true;
+        GameController.Instance.ToogleCursorOn();
     }
 
     private void OnDisable()
@@ -47,6 +39,8 @@ public class InputEscMenu : MonoBehaviour
         forceMouse = false;
         escAction.performed -= ToggleEsc;
         escAction.Disable();
+        GameController.Instance.ToogleCursorOff();
+
     }
 
     public void ToggleEsc(InputAction.CallbackContext context)
@@ -54,58 +48,29 @@ public class InputEscMenu : MonoBehaviour
         if (escapeMenu.activeInHierarchy)
         {
             escapeMenu.SetActive(false);
-            if (isScene3D)
+            if(isScene3D)
             {
-                LockMouse(true);
+                GameController.Instance.ToogleCursorOff();
             }
         }
         else
         {
             escapeMenu.SetActive(true);
-            if (isScene3D)
+            if(isScene3D)
             {
-                LockMouse(false);
+                GameController.Instance.ToogleCursorOn();
             }
         }
     }
 
-    /*public void ToggleEsc()
-    {
-        if (escapeMenu.activeInHierarchy)
-        {
-            escapeMenu.SetActive(false);
-        }
-        else
-        {
-            escapeMenu.SetActive(true);
-        }
-    }*/
-
     public void SceneLobby()
     {
-        LockMouse(false);
         SceneManager.LoadScene(1);
     }
 
     public void SceneMenu()
     {
         GameController.Instance.SaveGameState();
-
-        LockMouse(false);
         SceneManager.LoadScene(0);
-    }
-
-    public void LockMouse(bool toLock)
-    {
-        if (toLock)
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        else
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
     }
 }
