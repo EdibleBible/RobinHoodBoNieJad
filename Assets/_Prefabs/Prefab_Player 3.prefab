@@ -1513,18 +1513,25 @@ MonoBehaviour:
   OccludedInteractionLayer:
     serializedVersion: 2
     m_Bits: 1073741824
-  highlightDuration: 1.5
-  lineRendererPrefab: {fileID: 5271449135434754415, guid: d501dae7c77306346abe7eb90ba89cdd,
-    type: 3}
+  highlightDuration: 7
+  lineRendererPrefab: {fileID: 0}
   lineSpeed: 5
-  startParticlePrefabs: []
-  targetForceFieldPrefab: {fileID: 0}
-  cylinderParticlePrefab: {fileID: 0}
+  startParticlePrefabs:
+  - {fileID: 9221270160221825257, guid: 8471f85c5382c1143a9bde75387d46ad, type: 3}
+  - {fileID: 7764285784726890358, guid: 1576ff729deafda469a0c322c503e324, type: 3}
+  targetForceFieldPrefab: {fileID: 1623044687253109921, guid: b55f0c3c7cb301d4ea85caaaa127a536,
+    type: 3}
+  cylinderParticlePrefab: {fileID: 6911774950217565599, guid: bf80d3f6db78fa444bf78f0695964856,
+    type: 3}
   cylinderDuration: 2
-  cylinderStartOffset: 0.2
+  cylinderStartOffset: -2.5
   statsController: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e, type: 2}
   baseMaxLinesPerPulse: 3
   baseSpecialSenseUseCount: 4
+  SetSpecialSenseUseCountEvent: {fileID: 11400000, guid: 3ecb22257e7ee114584877815c217369,
+    type: 2}
+  SetSpecialSenseSliderAmount: {fileID: 11400000, guid: 7c884e06d02a2d7478b0bed50410d74f,
+    type: 2}
 --- !u!114 &1810628108408444835
 MonoBehaviour:
   m_ObjectHideFlags: 0

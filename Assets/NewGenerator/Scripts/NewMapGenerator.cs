@@ -227,11 +227,21 @@ public class NewMapGenerator : MonoBehaviour
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             playerIsSpawn = true;
+            
+            Instantiate(SpawnPlayerSettings.ExitPrefab,
+                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity);
+            playerIsSpawn = true;
         }
         else
         {
             Instantiate(SpawnPlayerSettings.PlayerPrefab,
                 roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity);
+            playerIsSpawn = true;
+            
+            Instantiate(SpawnPlayerSettings.ExitPrefab,
+                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             playerIsSpawn = true;
         }

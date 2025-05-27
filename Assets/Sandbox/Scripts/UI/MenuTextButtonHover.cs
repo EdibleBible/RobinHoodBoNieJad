@@ -2,21 +2,34 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class MenuTextButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public TMP_Text targetText;          // Assign the TMP Text element in the Inspector
-    public RectTransform spriteImage;    // Assign the UI Image for the sprite
-    public Canvas canvas;                // Assign the Canvas to ensure proper coordinate conversion
+    [Header("UI References")]
+    public TMP_Text targetText;
+    public RectTransform spriteImage;
+    public Canvas canvas;
+
+    [Header("Settings")]
+    public float scaleFactor = 1.1f;
+    public float scaleDuration = 0.2f;
+    public Color normalTextColor = Color.white;
+    public Color disabledTextColor = Color.gray;
 
     private RectTransform textRect;
     private Button button;
+    private Vector3 originalScale;
+    private Tween scaleTween;
 
     void Start()
     {
         textRect = targetText.rectTransform;
-        spriteImage.gameObject.SetActive(false);
         button = GetComponent<Button>();
+        originalScale = textRect.localScale;
+
+        spriteImage.gameObject.SetActive(false);
+        UpdateTextColor();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -25,30 +38,37 @@ public class MenuTextButtonHover : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             return;
         }
+
         spriteImage.gameObject.SetActive(true);
         UpdateSpritePosition();
+
+        // Cancel previous tween if any
+        scaleTween?.Kill();
+
+        // Animate text scale using DOTween
+        scaleTween = textRect.DOScale(originalScale * scaleFactor, scaleDuration).SetEase(Ease.OutBack);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         spriteImage.gameObject.SetActive(false);
+
+        // Cancel previous tween if any
+        scaleTween?.Kill();
+
+        // Animate back to original scale
+        scaleTween = textRect.DOScale(originalScale, scaleDuration).SetEase(Ease.InOutQuad);
     }
 
     private void UpdateSpritePosition()
     {
-        // Get the bounds of the rendered text
+        if (!button.interactable)
+            return;
+
         Vector2 textSize = targetText.GetRenderedValues(false);
-
-        // Calculate the left edge in world space
         Vector3 textWorldLeftEdge = textRect.position - textRect.right * (textSize.x * 0.5f);
-
-        // Compute the 1% screen width offset
-        float offset = Screen.width * 0.07f;
-
-        // Convert world position to UI position relative to the canvas, with 1% left offset
+        float offset = Screen.width * 0.1f;
         Vector3 spriteUIPosition = WorldToCanvasPosition(canvas, textWorldLeftEdge - new Vector3(offset, 0f, 0f));
-
-        // Update sprite position
         spriteImage.position = spriteUIPosition;
     }
 
@@ -59,7 +79,6 @@ public class MenuTextButtonHover : MonoBehaviour, IPointerEnterHandler, IPointer
             return worldPosition;
         }
 
-        // Convert world position to viewport point and then to canvas position
         Vector3 viewportPosition = Camera.main.WorldToViewportPoint(worldPosition);
         Vector3 canvasPosition = new Vector3(
             (viewportPosition.x * canvas.pixelRect.width) - (canvas.pixelRect.width * 0.5f),
@@ -69,4 +88,19 @@ public class MenuTextButtonHover : MonoBehaviour, IPointerEnterHandler, IPointer
 
         return canvas.transform.TransformPoint(canvasPosition);
     }
+
+    private void UpdateTextColor()
+    {
+        targetText.color = button.interactable ? normalTextColor : disabledTextColor;
+    }
+
+#if UNITY_EDITOR
+    void OnValidate()
+    {
+        if (targetText != null && button != null)
+        {
+            UpdateTextColor();
+        }
+    }
+#endif
 }

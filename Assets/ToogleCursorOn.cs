@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ToogleCursorOn : MonoBehaviour
 {
-    private void Start()
+    private void OnEnable()
     {
         GameController.Instance.ToogleCursorOn();
     }

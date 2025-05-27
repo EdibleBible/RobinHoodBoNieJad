@@ -24,7 +24,7 @@ public class PlayerQuestSystemUI : MonoBehaviour
     private Vector2 shownPosition;
     private Tween currentTween;
     
-    private void Awake()
+    private void OnEnable()
     {
         float width = panelGraphic.rect.width;
 
@@ -32,7 +32,9 @@ public class PlayerQuestSystemUI : MonoBehaviour
         hiddenPosition = new Vector2(-width, questPanelRoot.anchoredPosition.y);
         shownPosition = new Vector2(0, questPanelRoot.anchoredPosition.y);
 
+        /*
         questPanelRoot.anchoredPosition = hiddenPosition;
+        */
     }
     
     public void SetupQuest(Component sender, object data)
