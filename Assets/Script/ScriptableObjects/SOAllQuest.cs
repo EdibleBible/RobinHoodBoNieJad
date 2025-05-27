@@ -87,16 +87,4 @@ public class SOAllQuest : ScriptableObject
     {
         CurrentSelectedQuest = quest;
     }
-
-    public void SetTutorialQuest()
-    {
-        randomizedQuests.Clear();
-        SOPlayerQuest quest = ScriptableObject.CreateInstance<SOPlayerQuest>();
-        quest.QuestName = "Tutorial";
-        quest.Difficulty = QuestDifficulty.easy;
-        quest.RequireItems = new SerializedDictionary<ItemType, QuestAmountData>()
-            { { ItemType.CollectibleGoblet, new QuestAmountData(0, 3) } };
-        randomizedQuests.Add(quest);
-        CurrentSelectedQuest = quest;
-    }
 }

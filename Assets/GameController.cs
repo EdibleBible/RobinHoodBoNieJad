@@ -229,11 +229,6 @@ public class GameController : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-
-    public void BackToLobby()
-    {
-        SceneManager.LoadScene(1);
-    }
 }
 
 [Serializable]
