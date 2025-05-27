@@ -112,6 +112,8 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
         {
             base.Interact(player);
         }
+        
+        InteractEvent.Raise(this, null);
     }
 
     private void Lockpick(PlayerBase playerBase)

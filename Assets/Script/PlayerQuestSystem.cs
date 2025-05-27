@@ -72,6 +72,9 @@ public class PlayerQuestSystem : MonoBehaviour
             if (allQuest.CurrentSelectedQuest.RequireItems.ContainsKey(itemBase.ItemType))
             {
                 allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType].CurrentAmount--;
+                if (allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType].CurrentAmount < 0)
+                    allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType].CurrentAmount = 0;
+                
                 UpdateQuestValueEvent?.Raise(this,
                     (itemBase.ItemType, allQuest.CurrentSelectedQuest.RequireItems[itemBase.ItemType]));
             }

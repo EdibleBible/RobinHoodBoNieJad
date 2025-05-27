@@ -7,6 +7,7 @@ public class LevelExit : MonoBehaviour, IInteractable
 {
     [Header("Events")] [SerializeField] private GameEvent showUIEvent;
     [SerializeField] private GameEvent interactEvent;
+    public bool isTutorial;
 
     public GameEvent ShowUIEvent
     {
@@ -60,20 +61,24 @@ public class LevelExit : MonoBehaviour, IInteractable
                 emitter.Stop();
             }
         }
-        
-        allQuest.RandomizeSelectedQuest(playerQuest.Difficulty,playerQuest.IsQuestComplete(),playerQuest);
 
-        if (player != null)
+        if (!isTutorial)
         {
-            Destroy(player.gameObject);
+            allQuest.RandomizeSelectedQuest(playerQuest.Difficulty, playerQuest.IsQuestComplete(), playerQuest);
+            if (player != null)
+            {
+                Destroy(player.gameObject);
+            }
+
+            GameController.Instance.BackToLobby();
         }
-        
-        Debug.Log("TUTAJ");
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.LoadScene(1);
-        
-        
+        else
+        {
+            GameController.Instance.StartNewGame();
+            GameController.Instance.BackToLobby();
+        }
+
+
     }
 
     public void ShowUI()

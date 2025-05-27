@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LockPick : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class LockPick : MonoBehaviour
     public Camera cam;
     public Transform innerLock;
     public Transform pickPosition;
+    
+    public Canvas canvas;
 
     public float maxAngle = 90;
     public float lockSpeed = 10;
@@ -28,6 +32,12 @@ public class LockPick : MonoBehaviour
     private PlayerStateMachineController playerStateMachine;
     [SerializeField]
     private KeyCode rotateButton;
+
+    private void OnEnable()
+    {
+        canvas.sortingOrder = 0;
+        canvas.sortingOrder = -1;
+    }
 
     void Start()
     {

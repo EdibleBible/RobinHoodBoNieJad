@@ -22,7 +22,7 @@ public class NextInteractTutorialTrigger : MonoBehaviour
 
     public void CheckInteractEvent(Component sender, object data)
     {
-        if (sender is IInteractable interactable)
+        if (sender is IInteractable interactable && interactable == this.interactable)
         {
             Debug.Log(interactable.ToString());
             Debug.Log(this.interactable.ToString());
