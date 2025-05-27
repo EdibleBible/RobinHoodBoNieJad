@@ -39,6 +39,11 @@ public class CollectionCell : MonoBehaviour
                 }
             }
         }
+        if (GetCollectionState(id))
+        {
+            button.interactable = true;
+            image.color = Color.white;
+        }
     }
 
     public void SelectItem()
