@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 5430005182949848864}
   - component: {fileID: 4080726611147358873}
   - component: {fileID: 2370661895346255237}
+  - component: {fileID: 4299005933355809736}
   m_Layer: 0
   m_Name: chest_down
   m_TagString: Untagged
@@ -364,6 +365,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.7864566, y: 1.8782427, z: 2.2528815}
   m_Center: {x: 0.016007178, y: -0.18246706, z: 0.002522371}
+--- !u!208 &4299005933355809736
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6302215005206175007}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.8930001, y: 0.93900007, z: 1.126}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.016, y: -0.18200001, z: 0.003}
+  m_TimeToStationary: 0.5
 --- !u!1 &9044571333783937699
 GameObject:
   m_ObjectHideFlags: 0
