@@ -5609,10 +5609,7 @@ MonoBehaviour:
   Agent: {fileID: 6257333795837363401}
   AnimationController: {fileID: 8524611368905361129}
   RandomPatroll: 1
-  Waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  Waypoints: []
   CurrentWaypoint: 0
   IntractableLayer:
     serializedVersion: 2
@@ -5658,13 +5655,13 @@ MonoBehaviour:
       Data4: -1044613675
     Path: event:/Enemy/EnemySeePlr
   patrollingMovementStats:
-    MaxSpeed: 1.1
+    MaxSpeed: 1.5
     Acceleration: 10
-    AngularSpeed: 720
+    AngularSpeed: 1000
     StoppingDistance: 0.5
     LookingAroundTime: 5
   patrollingFovStats:
-    ViewRadius: 3
+    ViewRadius: 7
     ViewAngle: 75
     FindingDelay: 0.5
     TargetLayer:
@@ -5672,15 +5669,15 @@ MonoBehaviour:
       m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 2691188160
+      m_Bits: 543704512
   chasingMovementStats:
-    MaxSpeed: 3
-    Acceleration: 1
-    AngularSpeed: 720
+    MaxSpeed: 5
+    Acceleration: 1.5
+    AngularSpeed: 1000
     StoppingDistance: 0.1
     LookingAroundTime: 7
   chasingFovStats:
-    ViewRadius: 3
+    ViewRadius: 10
     ViewAngle: 360
     FindingDelay: 0.1
     TargetLayer:
@@ -5688,7 +5685,7 @@ MonoBehaviour:
       m_Bits: 262144
     ObstacleLayer:
       serializedVersion: 2
-      m_Bits: 2691188160
+      m_Bits: 543704512
   alarmedMovementStats:
     MaxSpeed: 4
     Acceleration: 1
@@ -5732,11 +5729,11 @@ NavMeshAgent:
   m_GameObject: {fileID: 5952023668469632104}
   m_Enabled: 1
   m_AgentTypeID: -334000983
-  m_Radius: 0.3
+  m_Radius: 0.15
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 80
+  m_AngularSpeed: 720
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -5798,7 +5795,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2873014
+  m_Radius: 0.2
   m_Height: 1.0657157
   m_Direction: 1
   m_Center: {x: -0.00784429, y: 0.5274745, z: 0}

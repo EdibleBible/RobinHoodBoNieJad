@@ -148,7 +148,6 @@ public class MenuButtonLobby : MonoBehaviour
 
     private IEnumerator LoadGameWithFade(int gameSceneIndex, string lobbySceneName)
     {
-        GameController.Instance.RandomizeQuest();
         loadingScreen.SetActive(true);
         mainCanvas.SetActive(false);
 

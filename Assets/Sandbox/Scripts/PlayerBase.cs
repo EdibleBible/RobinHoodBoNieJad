@@ -194,10 +194,18 @@ public class PlayerBase : MonoBehaviour
         playerWalk.Crouching = true;
     }
 
+    private float specialSenseCooldown = 1.0f; // czas odnowienia w sekundach
+    private float lastSpecialSenseTime = -Mathf.Infinity;
+
     private void OnSpecialSense_Performed(InputAction.CallbackContext obj)
     {
+        if (Time.time - lastSpecialSenseTime < specialSenseCooldown)
+            return;
+
+        lastSpecialSenseTime = Time.time;
         specialSenseController.TryUseSpecialSense();
     }
+
 
     public void OnCrouch_Canceled(InputAction.CallbackContext context)
     {
@@ -214,10 +222,18 @@ public class PlayerBase : MonoBehaviour
         playerWalk.Sprinting = false;
     }
 
+    private float torchToggleCooldown = 1f; // pół sekundy cooldownu
+    private float lastToggleTime = -Mathf.Infinity;
+
     public void ToogleTorch_Performed(InputAction.CallbackContext context)
     {
+        if (Time.time - lastToggleTime < torchToggleCooldown)
+            return;
+
+        lastToggleTime = Time.time;
         playerTorchSystem.ToogleTorch();
     }
+
 
     public void OnDropItem_Performed(InputAction.CallbackContext context)
     {
