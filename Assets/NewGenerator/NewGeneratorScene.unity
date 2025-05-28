@@ -185,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
         type: 3}
       propertyPath: DebugMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
         type: 3}
@@ -199,6 +199,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1096604502187038684, guid: c40be3174f62c4acf8c1216858c64956,
         type: 2}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: ResetAllStatsModifiers
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: RemoveAllBaseStatModifiers
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -319,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 341d625513922ee4ba6923bff13def88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugGridMeshBool: 0
+  DebugGridMeshBool: 1
   DebugRemoveMesh: 0
   GridParameters:
     IsRandomized: 1
@@ -387,7 +397,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 64
   SpawnPlayerSettings:
-    ExitPrefab: {fileID: 6203086312086010451, guid: 27ea3c75a54089842a9e900caeff1b8e,
+    ExitPrefab: {fileID: 6587360148726146650, guid: 36f13e61db68900429b63f8e2dace848,
       type: 3}
     PlayerPrefab: {fileID: 7201175182104095283, guid: 52b7599b296b24240a035892d3be76f1,
       type: 3}

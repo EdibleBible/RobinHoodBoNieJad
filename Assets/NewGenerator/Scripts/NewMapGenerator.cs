@@ -143,7 +143,6 @@ public class NewMapGenerator : MonoBehaviour
             NavMeshSurfaceSettings.SpawnEnemy(this, CreatedGrid);
 
             SpawnPlayer();
-            
         }
         catch (System.Exception ex)
         {
@@ -153,7 +152,7 @@ public class NewMapGenerator : MonoBehaviour
         {
             if (DebugGridMeshBool)
                 DebugGridMesh();
-            
+
             if (DebugRemoveMesh)
             {
                 foreach (Transform child in RoomGeneratorSettings.roomParent)
@@ -223,25 +222,23 @@ public class NewMapGenerator : MonoBehaviour
 
         if (roomData.SpawnPosition == null)
         {
-            Instantiate(SpawnPlayerSettings.PlayerPrefab,
+            Instantiate(SpawnPlayerSettings.ExitPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
-            playerIsSpawn = true;
-            
-            Instantiate(SpawnPlayerSettings.ExitPrefab,
+
+            Instantiate(SpawnPlayerSettings.PlayerPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             playerIsSpawn = true;
         }
         else
         {
-            Instantiate(SpawnPlayerSettings.PlayerPrefab,
-                roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
-                Quaternion.identity);
-            playerIsSpawn = true;
-            
             Instantiate(SpawnPlayerSettings.ExitPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity);
+            
+            Instantiate(SpawnPlayerSettings.PlayerPrefab,
+                roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             playerIsSpawn = true;
         }
@@ -291,9 +288,10 @@ public class NewMapGenerator : MonoBehaviour
 
             path = currentPathfinding.FindPath(startCoordinate.x, startCoordinate.y, endCoordinate.x, endCoordinate.y);
 
+            Debug.Log("Path found");
             startCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayCorner;
             endCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayCorner;
-            
+
             foreach (var node in path)
             {
                 GridCellData toAdd = CreatedGrid.GetValue(node.X, node.Y);
