@@ -30,6 +30,9 @@ public struct SpawnDoorVariableSettings
         AllDoorsOnScene = new List<DoorController>();
         foreach (var room in data)
         {
+            if(room.IsSpawn)
+                continue;
+            
             AllDoorsOnScene.AddRange(room.AllDoors);
         }
     }

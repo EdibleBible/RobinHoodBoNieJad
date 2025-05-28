@@ -15,13 +15,15 @@ public class LobbyStoreUiElement : MonoBehaviour
     public Button StatButton;
 
     public GameEvent ReloadAllButtons;
+    
+    public UpgradesTranslator upgradesTranslator;
 
     public void SetUp(StatsModifiers stat, SOPlayerStatsController playerStatsController, int maxLevel,
         SOInventory playerInventory,SOStats stats)
     {
         if (StatName != null)
         {
-            StatName.text = stat.ModifiersType.ToString();
+            StatName.text = upgradesTranslator.StatText.Where(x => x.Key == stat.ModifiersType).FirstOrDefault().Value;
         }
 
         if (StatCurrLevel != null)
@@ -56,8 +58,15 @@ public class LobbyStoreUiElement : MonoBehaviour
 
         if (StatButton != null)
         {
-            StatButton.gameObject.SetActive(true);
-            StatButton.onClick.RemoveAllListeners();
+            if (stat.CurrLevel < maxLevel)
+            {
+                StatButton.gameObject.SetActive(true);
+                StatButton.onClick.RemoveAllListeners();
+            }
+            else
+            {
+                StatButton.gameObject.SetActive(false);
+            }
 
             if (stat.GetCurrentCost() > stats.scoreTotal)
             {

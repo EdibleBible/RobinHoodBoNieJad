@@ -29,6 +29,7 @@ public class GameOverUiController : MonoBehaviour
 
     public void GameOver(Component sender, object data)
     {
+        Debug.Log("fhuJ");
         GameController gameController = GameController.Instance;
         
         if (isUSed == false)

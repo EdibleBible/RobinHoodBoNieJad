@@ -23,12 +23,12 @@ public class NavMeshSurfaceSettings
         NavMeshSurfaceWalkable.BuildNavMesh();
     }
 
-    public void SpawnEnemy(MonoBehaviour context, Grid<GridCellData> grid)
+    public void SpawnEnemy(MonoBehaviour context, Grid<GridCellData> grid, Transform spawnedTransform)
     {
-        context.StartCoroutine(SpawnEnemyCoroutine(grid));
+        context.StartCoroutine(SpawnEnemyCoroutine(grid, spawnedTransform));
     }
 
-    private IEnumerator SpawnEnemyCoroutine(Grid<GridCellData> grid)
+    private IEnumerator SpawnEnemyCoroutine(Grid<GridCellData> grid, Transform spawnedTransform)
     {
         Vector3 center = new Vector3((grid.GetCellSize() * grid.GetWidth()) / 2, 0,
             (grid.GetCellSize() * grid.GetHeight()) / 2);
@@ -47,6 +47,10 @@ public class NavMeshSurfaceSettings
 
         int areaMask = 1 << areaIndex;
 
+        float minDistanceToPlayer = 5f;
+
+        Camera playerCamera = Camera.main; // zakładamy, że to kamera gracza
+
         while (!found)
         {
             Vector3 randomPoint = center + Random.insideUnitSphere * mapRadius;
@@ -55,16 +59,29 @@ public class NavMeshSurfaceSettings
             if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 2.0f, areaMask))
             {
                 spawnPoint = hit.position;
-                found = true;
+
+                float distanceToPlayer = Vector3.Distance(spawnPoint, spawnedTransform.position);
+                if (distanceToPlayer >= minDistanceToPlayer)
+                {
+                    Vector3 viewportPoint = playerCamera.WorldToViewportPoint(spawnPoint);
+                    bool isVisible = viewportPoint.z > 0 &&
+                                     viewportPoint.x >= 0 && viewportPoint.x <= 1 &&
+                                     viewportPoint.y >= 0 && viewportPoint.y <= 1;
+
+                    if (!isVisible)
+                    {
+                        found = true;
+                    }
+                }
             }
-            else
-            {
+
+            if (!found)
                 yield return null; // poczekaj 1 frame i próbuj dalej
-            }
         }
 
         GameObject.Instantiate(EnemyPrefab, spawnPoint, Quaternion.identity);
     }
+
 }
 
 public class NewMapGenerator : MonoBehaviour
@@ -140,10 +157,11 @@ public class NewMapGenerator : MonoBehaviour
             SpawnDoorVariableSettings.AssignLeversToDoors();
 
             NavMeshSurfaceSettings.BakeNavMes();
-            NavMeshSurfaceSettings.SpawnEnemy(this, CreatedGrid);
 
             SpawnPlayer();
             
+            StartCoroutine(DelayedSpawn(30));
+
         }
         catch (System.Exception ex)
         {
@@ -153,7 +171,7 @@ public class NewMapGenerator : MonoBehaviour
         {
             if (DebugGridMeshBool)
                 DebugGridMesh();
-            
+
             if (DebugRemoveMesh)
             {
                 foreach (Transform child in RoomGeneratorSettings.roomParent)
@@ -175,6 +193,13 @@ public class NewMapGenerator : MonoBehaviour
         {
             SpawnPlayer();
         }
+    }
+    
+    private IEnumerator DelayedSpawn(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        NavMeshSurfaceSettings.SpawnEnemy(this, CreatedGrid, SpawnPlayerSettings.PlayerTransform);
     }
 
     private void SpawnBlockedDoors()
@@ -223,26 +248,24 @@ public class NewMapGenerator : MonoBehaviour
 
         if (roomData.SpawnPosition == null)
         {
-            Instantiate(SpawnPlayerSettings.PlayerPrefab,
-                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
-                Quaternion.identity);
-            playerIsSpawn = true;
-            
             Instantiate(SpawnPlayerSettings.ExitPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
+
+            SpawnPlayerSettings.PlayerTransform =  Instantiate(SpawnPlayerSettings.PlayerPrefab,
+                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity).transform;
             playerIsSpawn = true;
         }
         else
         {
-            Instantiate(SpawnPlayerSettings.PlayerPrefab,
-                roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
-                Quaternion.identity);
-            playerIsSpawn = true;
-            
             Instantiate(SpawnPlayerSettings.ExitPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
+            
+            SpawnPlayerSettings.PlayerTransform = Instantiate(SpawnPlayerSettings.PlayerPrefab,
+                roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
+                Quaternion.identity).transform;
             playerIsSpawn = true;
         }
 
@@ -291,9 +314,10 @@ public class NewMapGenerator : MonoBehaviour
 
             path = currentPathfinding.FindPath(startCoordinate.x, startCoordinate.y, endCoordinate.x, endCoordinate.y);
 
+            Debug.Log("Path found");
             startCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayCorner;
             endCell.GetDoorExitCell().GridCellType = E_GridCellType.HallwayCorner;
-            
+
             foreach (var node in path)
             {
                 GridCellData toAdd = CreatedGrid.GetValue(node.X, node.Y);

@@ -41,8 +41,6 @@ public class MenuLobbyTaxes : MonoBehaviour
         textVisit.text = "Visit #" + SOStats.lobbyVisit.ToString();
         textNeeded.text = "You need: " + taxAmount;
         textHad.text = "You have: " + SOStats.scoreTotal.ToString();
-        
-        Panel.SetActive(false);
     }
 
     private int GetTaxAmount()

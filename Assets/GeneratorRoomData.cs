@@ -6,9 +6,9 @@ public class GeneratorRoomData : MonoBehaviour
 {
     public List<Transform> AllFloors = new List<Transform>();
     public List<DoorController> AllDoors = new List<DoorController>();
-     public Transform SpawnPosition;
-    
+    public Transform SpawnPosition;
+    public bool IsSpawn = false;
+
     [Tooltip("Warstwy, które mają być traktowane jako podłogi")]
     public LayerMask floorLayers;
 }
-

@@ -63,11 +63,11 @@ public class EnemyStateMachineController : StateManager<E_EnemyState>
 
         _enemyPatrollingState =
             new EnemyPatrollingState(enemyMovement, patrollingMovementStats, fov, patrollingFovStats,
-                alarmedStateStats);
+                alarmedStateStats,enemyAttack);
         _enemyChasingState =
             new EnemyChasingState(enemyMovement, chasingMovementStats, fov, chasingFovStats, alarmedStateStats,enemyAttack);
         _enemyAlarmedState =
-            new EnemyAlarmedState(enemyMovement, alarmedMovementStats, fov, alarmedFovStats, alarmedStateStats);
+            new EnemyAlarmedState(enemyMovement, alarmedMovementStats, fov, alarmedFovStats, alarmedStateStats,enemyAttack);
 
         state.Add(E_EnemyState.Alarmed, _enemyAlarmedState);
         state.Add(E_EnemyState.Patrol, _enemyPatrollingState);

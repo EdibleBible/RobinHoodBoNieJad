@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using UnityEngine;
 
 public class EnemyAlarmedState : BaseState<E_EnemyState>
@@ -13,9 +14,12 @@ public class EnemyAlarmedState : BaseState<E_EnemyState>
 
     private bool isSmallPatrolling;
     private int patrollCounter = 0;
+    
+    private EventReference enemyattack;
+
 
     public EnemyAlarmedState(EnemyMovement _movement, EnemyMovementStats _movementStats, FieldOfView _fov,
-        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats) : base(E_EnemyState.Alarmed)
+        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats, EventReference _enemyattack) : base(E_EnemyState.Alarmed)
     {
         movement = _movement;
         movementStats = _movementStats;
@@ -111,6 +115,11 @@ public class EnemyAlarmedState : BaseState<E_EnemyState>
 
     public override void OnTriggerEnterState(Collider other)
     {
+        if (other.TryGetComponent(out GameoverController gameOver))
+        {
+            RuntimeManager.PlayOneShot(enemyattack, movement.transform.position);
+            gameOver.LoseGame();
+        }
     }
 
     public override void OnTriggerStayState(Collider other)

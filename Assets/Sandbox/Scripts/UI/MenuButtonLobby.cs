@@ -30,6 +30,13 @@ public class MenuButtonLobby : MonoBehaviour
     
     public int SceneIndexToLoad;
 
+    public GameObject witchTalkPanel;
+    public GameObject smithTalkPanel;
+    public GameObject libraryTalkPanel;
+
+    public GameObject taxPanel;
+    
+
     private void Awake()
     {
         foreach (ItemData itemData in inventory.ItemsInInventory)
@@ -41,6 +48,8 @@ public class MenuButtonLobby : MonoBehaviour
         Debug.Log("TUTAJ");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+        
+        taxPanel.SetActive(false);
     }
 
     public void Open(GameObject lobbyObject)
@@ -48,6 +57,46 @@ public class MenuButtonLobby : MonoBehaviour
         // Zatrzymanie d�wi�ku przy zmianie canvasu
         StopAllHoverSounds();
         lobbyObject.SetActive(true);
+    }
+    
+    public void CheckShopTalkPanel(string type)
+    {
+        if (type == "witch")
+        {
+            if (stats.VisitWitch)
+            {
+                witchTalkPanel.SetActive(false);
+            }
+            else
+            {
+                witchTalkPanel.SetActive(true);
+                stats.VisitWitch = true;
+            }
+        }
+        else if(type == "smith")
+        {
+            if (stats.VisitSmith)
+            {
+                smithTalkPanel.SetActive(false);
+            }
+            else
+            {
+                smithTalkPanel.SetActive(true);
+                stats.VisitSmith = true;
+            }
+        }
+        else if(type =="library")
+        {
+            if (stats.VisitLibrary)
+            {
+                libraryTalkPanel.SetActive(false);
+            }
+            else
+            {
+                libraryTalkPanel.SetActive(true);
+                stats.VisitLibrary = true;
+            }
+        }
     }
 
     private void StopAllHoverSounds()

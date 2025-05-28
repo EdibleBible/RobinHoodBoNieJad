@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0.55
+  m_AmbientIntensity: 0.35
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
@@ -185,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
         type: 3}
       propertyPath: DebugMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
         type: 3}
@@ -199,6 +199,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1096604502187038684, guid: c40be3174f62c4acf8c1216858c64956,
         type: 2}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: ResetAllStatsModifiers
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: RemoveAllBaseStatModifiers
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -387,7 +397,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 64
   SpawnPlayerSettings:
-    ExitPrefab: {fileID: 6203086312086010451, guid: 27ea3c75a54089842a9e900caeff1b8e,
+    ExitPrefab: {fileID: 6587360148726146650, guid: 36f13e61db68900429b63f8e2dace848,
       type: 3}
     PlayerPrefab: {fileID: 7201175182104095283, guid: 52b7599b296b24240a035892d3be76f1,
       type: 3}
