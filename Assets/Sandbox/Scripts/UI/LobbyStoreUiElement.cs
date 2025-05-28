@@ -56,8 +56,15 @@ public class LobbyStoreUiElement : MonoBehaviour
 
         if (StatButton != null)
         {
-            StatButton.gameObject.SetActive(true);
-            StatButton.onClick.RemoveAllListeners();
+            if (stat.CurrLevel < maxLevel)
+            {
+                StatButton.gameObject.SetActive(true);
+                StatButton.onClick.RemoveAllListeners();
+            }
+            else
+            {
+                StatButton.gameObject.SetActive(false);
+            }
 
             if (stat.GetCurrentCost() > stats.scoreTotal)
             {
