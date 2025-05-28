@@ -11,6 +11,7 @@ public class InputEscMenu : MonoBehaviour
     public Canvas canvas;
     public MenuTextButtonHover[] buttons;
     private bool forceMouse = false;
+    public GameObject OptionPanel;
 
     private void AssignButtonSelectors()
     {
@@ -38,7 +39,6 @@ public class InputEscMenu : MonoBehaviour
         forceMouse = false;
         escAction.performed -= ToggleEsc;
         escAction.Disable();
-
     }
 
     public void ToggleEsc(InputAction.CallbackContext context)
@@ -46,7 +46,9 @@ public class InputEscMenu : MonoBehaviour
         if (escapeMenu.activeInHierarchy)
         {
             escapeMenu.SetActive(false);
-            if(isScene3D)
+            if (OptionPanel != null)
+                OptionPanel.SetActive(false);
+            if (isScene3D)
             {
                 GameController.Instance.ToogleCursorOff(true);
             }
@@ -54,11 +56,16 @@ public class InputEscMenu : MonoBehaviour
         else
         {
             escapeMenu.SetActive(true);
-            if(isScene3D)
+            if (isScene3D)
             {
                 GameController.Instance.ToogleCursorOn(true);
             }
         }
+    }
+
+    public void ResumeButton()
+    {
+        GameController.Instance.ToogleCursorOff(true);
     }
 
     public void SceneLobby()
