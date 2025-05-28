@@ -12,6 +12,10 @@ public class SOStats : ScriptableObject
     public int lobbyVisit;
     public bool taxPaid;
 
+    public bool VisitSmith;
+    public bool VisitWitch;
+    public bool VisitLibrary;
+
     public void LoadStats(SaveData saveData)
     {
         inventorySize = saveData.InventorySize;
@@ -22,5 +26,9 @@ public class SOStats : ScriptableObject
         scoreTotal = saveData.ScoreTotal;
         lobbyVisit = saveData.LobbyVisit;
         taxPaid = saveData.TaxPaid;
+        
+        VisitSmith = saveData.VisitSmith;
+        VisitWitch = saveData.VisitWitch;
+        VisitLibrary = saveData.VisitLibrary;
     }
 }

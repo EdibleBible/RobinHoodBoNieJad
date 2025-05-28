@@ -120,6 +120,9 @@ public class GameController : MonoBehaviour
         Stats.lobbyVisit = 0;
         Stats.scoreTotal = BaseMoney;
         Stats.taxPaid = false;
+        Stats.VisitLibrary = false;
+        Stats.VisitSmith = false;
+        Stats.VisitWitch = false;
         Stats.scoreTotal = BaseMoney;
     }
     
@@ -130,6 +133,9 @@ public class GameController : MonoBehaviour
         Stats.lobbyVisit = 0;
         Stats.scoreTotal = BaseMoney;
         Stats.taxPaid = false;
+        Stats.VisitLibrary = false;
+        Stats.VisitSmith = false;
+        Stats.VisitWitch = false;
         Stats.scoreTotal = BaseMoney;
     }
 
@@ -265,6 +271,10 @@ public class SaveData
     public int ScoreTotal;
     public int LobbyVisit;
     public bool TaxPaid;
+    
+    public bool VisitSmith;
+    public bool VisitWitch;
+    public bool VisitLibrary;
 
     public SaveData()
     {
@@ -367,6 +377,10 @@ public class SaveData
         LobbyVisit = stats.lobbyVisit;
         TaxPaid = stats.taxPaid;
 
+        VisitSmith = stats.VisitSmith;
+        VisitWitch = stats.VisitWitch;
+        VisitLibrary = stats.VisitLibrary;
+        
         #endregion
 
         string json = JsonUtility.ToJson(this);
