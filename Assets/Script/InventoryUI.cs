@@ -13,8 +13,6 @@ public class InventoryUI : MonoBehaviour
 
     public void InitializeInventoryUI(Component sender, object data)
     {
-        Debug.LogError($"{sender.GetType().Name}.SetUpInventory");
-
         if (sender is PlayerBase playerBase && data is SOInventory inventoryData)
         {
             inventoryData.SetUpInventory();
@@ -93,29 +91,33 @@ public class InventoryUI : MonoBehaviour
                 {
                     firstEmptySlot.AssignItem(itemData, false);
                 }
+
+                if (firstEmptySlot.IsSelected)
+                {
+                    playerBase.CurrSelectedItem = firstEmptySlot.AssignedItem;
+                }
             }
             else
             {
-                for (int i = 0; i < itemData.ItemSize; i++)
+                List<ItemSlot> slots = new List<ItemSlot>();
+                for (int i = 1; i <= itemData.ItemSize; i++)
                 {
-                    if (i == 0)
-                    {
-                        if (firstEmptySlot != null)
-                        {
-                            firstEmptySlot.AssignItem(itemData, false);
-                        }
+                    if (firstEmptySlot == null)
+                        return;
+                    if (i == 1)
+                        firstEmptySlot.AssignItem(itemData, false);
+                    else
+                        firstEmptySlot.AssignItem(itemData, true);
 
-                        continue;
-                    }
-
+                    slots.Add(firstEmptySlot);
                     firstEmptySlot = itemSlots.FirstOrDefault(x => x.AssignedItem == null);
-                    firstEmptySlot.AssignItem(itemData, true);
                 }
-            }
 
-            if (firstEmptySlot.IsSelected)
-            {
-                playerBase.CurrSelectedItem = firstEmptySlot.AssignedItem;
+                if (slots.Where(x => x.AssignedItem != null).FirstOrDefault() != null)
+                {
+                    playerBase.CurrSelectedItem = slots.Where(x => x.AssignedItem != null).FirstOrDefault().AssignedItem;
+                    Debug.Log(playerBase.CurrSelectedItem);
+                }
             }
 
             Debug.Log("AddItemToUI");
@@ -145,6 +147,8 @@ public class InventoryUI : MonoBehaviour
                     slot.RemoveAssignedItem();
                 }
             }
+            playerBase.CurrSelectedItem = null;
+
         }
         else if (data is ItemData itemData && sender is PlayerBase basePlayer)
         {
@@ -162,7 +166,11 @@ public class InventoryUI : MonoBehaviour
                     slot.RemoveAssignedItem();
                 }
             }
+
+            basePlayer.CurrSelectedItem = null;
+
         }
+        
     }
 
     public void UpdateSelectedSlot(Component sender, object data)
@@ -175,7 +183,11 @@ public class InventoryUI : MonoBehaviour
             itemSlots[prevSelected].DeselectSlot();
             itemSlots[currSelected].SelectSlot();
             playerBase.CurrSelectedItem = itemSlots[currSelected].AssignedItem;
-            Debug.Log($"Curr select item: {playerBase.CurrSelectedItem.ReturnData()}");
+
+            if (playerBase.CurrSelectedItem != null)
+                Debug.Log($"Curr select item: {playerBase.CurrSelectedItem.ReturnData()}");
+            else
+                Debug.Log($"Curr select item: null");
         }
     }
 

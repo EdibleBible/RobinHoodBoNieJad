@@ -135,7 +135,6 @@ public class PlayerBase : MonoBehaviour
             {
                 ResetFuel();
             }
-
             DropItemEvent?.Raise(this, currentSelectedItem);
         }
     }
@@ -155,7 +154,6 @@ public class PlayerBase : MonoBehaviour
             InventorySetUpEvent?.Raise(this, PlayerInventory);
         else
         {
-            Debug.LogError("this");
             InventoryInitializeEvent?.Raise(this, PlayerInventory);
         }
     }
