@@ -35,7 +35,7 @@ public class PlayerTorchSystem : MonoBehaviour
         if (isTorchOn && torchObject.activeInHierarchy)
             UseFueal(torchFuelUse);
 
-        if (currentTorchFuel <= 0)
+        if (currentTorchFuel <= 0 && isTorchOn)
             ToogleTorch(false);
     }
 
@@ -101,6 +101,11 @@ public class PlayerTorchSystem : MonoBehaviour
 
     public void ToogleTorch()
     {
+        if (currentTorchFuel <= 0)
+        {
+            return;
+        }
+        
         isTorchOn = !isTorchOn;
 
         if (isTorchOn)

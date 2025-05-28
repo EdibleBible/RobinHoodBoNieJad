@@ -19,28 +19,33 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
     private bool isManipulatingSoundPlaying = false;
     private float mouseMoveThreshold = 0.05f;
     private Camera lockpickCamera;
-    
+
     public bool IsInteracting { get; set; }
+
     public bool IsLocked
     {
         get => isLocked;
         set => isLocked = value;
     }
+
     public GameObject LockPickPrefab
     {
         get => lockPickPrefab;
         set => lockPickPrefab = value;
     }
+
     public Transform LockPickCameraTransform
     {
         get => lockPickCameraTransform;
         set => lockPickCameraTransform = value;
     }
+
     public Vector3 LockPickPositionOffset
     {
         get => lockPickRotationOffset;
         set => lockPickRotationOffset = value;
     }
+
     public Vector3 LockPickScale
     {
         get => lockPickScale;
@@ -61,8 +66,7 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
     public float lockPickSpawnDistance;
 
 
-    [SerializeField]
-    private string ChnagedInteractMessage;
+    [SerializeField] private string ChnagedInteractMessage;
 
     private void Awake()
     {
@@ -112,7 +116,7 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
         {
             base.Interact(player);
         }
-        
+
         InteractEvent.Raise(this, null);
     }
 
@@ -121,10 +125,10 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
         // Pobranie pozycji kamery i kierunku, w którym patrzy gracz
         Transform cameraTransform = playerBase.camera.transform;
         Vector3 spawnPosition = cameraTransform.position + cameraTransform.forward * lockPickSpawnDistance;
-        
+
         lockpickCamera = playerBase.LockpickCamera;
         playerBase.LockpickCamera.gameObject.SetActive(true);
-        
+
         // Instancja lockpicka i poprawne ustawienie transformacji
         SpawnedObject = Instantiate(lockPickPrefab, spawnPosition, cameraTransform.rotation);
         SpawnedObject.transform.localScale = lockPickScale;
@@ -195,7 +199,8 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
 
         // Obsługa dźwięku obracania zamka (PadlockOpening)
         float targetPadlockValue = Input.GetMouseButton(0) ? 1f : 0f;
-        currentPadlockOpeningValue = Mathf.Lerp(currentPadlockOpeningValue, targetPadlockValue, Time.deltaTime * padlockSmoothingSpeed);
+        currentPadlockOpeningValue = Mathf.Lerp(currentPadlockOpeningValue, targetPadlockValue,
+            Time.deltaTime * padlockSmoothingSpeed);
         manipulationSoundInstance.setParameterByName("PadlockOpening", currentPadlockOpeningValue);
 
         // Obsługa osobnego dźwięku obracania zamka (loop, LPM)
@@ -215,10 +220,7 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
                 isRotationSoundPlaying = false;
             }
         }
-
     }
-
-
 
 
     public void StopInteracting()
@@ -230,7 +232,7 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
         StateMachineController.SeePlayerInteracting(false);
         IsLockPicking = false;
         lockpickCamera.gameObject.SetActive(false);
-        
+
         if (manipulationSoundInstance.isValid())
         {
             manipulationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -242,8 +244,6 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
             rotationSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             rotationSoundInstance.release();
         }
-        
-        
     }
 
     public void UnlockLock()
@@ -251,14 +251,19 @@ public class LockPickDoorController : DoorController, ILockPick, IInteractableSt
         RuntimeManager.PlayOneShot(lockpickSuccessSound, transform.position);
         IsLocked = false;
         InteractMessage = ChnagedInteractMessage;
-        HideUI();
-        ShowUI();
+        ResetUI();
     }
 
     public override void ShowUI()
     {
         if (!IsLockPicking)
             base.ShowUI();
+    }
+
+    public void ResetUI()
+    {
+        Debug.Log("Reset UI");
+        base.ShowUI();
     }
 }
 
