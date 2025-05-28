@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AYellowpaper.SerializedCollections;
+using Mono.Cecil;
 using NUnit.Framework;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -17,6 +19,8 @@ public class SOPlayerQuest : ScriptableObject
         new SerializedDictionary<ItemType, QuestAmountData>();
 
     public SerializedDictionary<ItemType, int> SpawnedItems = new SerializedDictionary<ItemType, int>();
+    
+    public ItemsTranslator ItemsTranslator;
 
     public void Reset()
     {
@@ -38,7 +42,7 @@ public class SOPlayerQuest : ScriptableObject
 
         return true;
     }
-    
+
     public string GetDifficultyAsText(QuestDifficulty difficulty)
     {
         switch (difficulty)
@@ -108,18 +112,22 @@ public class SOPlayerQuest : ScriptableObject
                 new QuestAmountData(0, Random.Range(itemRequiredAmountMin, itemRequiredAmountMax)));
         }
 
+        ItemsTranslator = Resources.Load<ItemsTranslator>("Data/ItemsTranslator");
+        
         Description = $"{QuestName} ({Difficulty})";
+        Description += "\n\n" + GenerateRandomDescription() + "\n";
+
         foreach (var item in RequireItems)
         {
-            Description += $"\n{item.Key} Amount: {item.Value.RequiredAmount}\n";
+            Description += $"\n{ItemsTranslator.itemTypeDictionary.Where(x => x.Key == item.Key).FirstOrDefault().Value} Amount: {item.Value.RequiredAmount}\n";
         }
     }
-
+    
     public void ResetSpawnedItem()
     {
         SpawnedItems.Clear();
     }
-    
+
     private static readonly string[] PossibleQuestNames = new[]
     {
         "Whispers of the Forgotten Vault",
@@ -173,12 +181,40 @@ public class SOPlayerQuest : ScriptableObject
         "Legacy of the Graven Flame"
     };
 
+    private static readonly string[] PossibleQuestDescriptions = new[]
+    {
+        "Ancient voices echo from a sealed vault deep beneath the hills—rumors say it holds treasures stolen from forgotten kings.",
+        "Locals speak of footsteps in the tomb at night. Whatever walks there guards something of great worth.",
+        "Lost relics lie buried in the sunken catacombs—symbols of a broken order, ripe for the taking.",
+        "A noble hoarder of rare artifacts was buried with his collection. It’s time someone redistributed his wealth.",
+        "This shrine was meant to stay buried. But where priests see heresy, you see opportunity.",
+        "Flooded and forgotten, the chapel hides secrets beneath the waterline—secrets worth gold to the right buyer.",
+        "A skeletal guardian watches over a tomb untouched by time. Can cunning outmatch duty?",
+        "Pilgrims once vanished on their way to a sacred site. Their trail ends in a crypt no one dares enter—until now.",
+        "In exchange for power, a forgotten sect made offerings to a statue with no name. Its vault still answers to whispers.",
+        "A tyrant king's bones rest uneasy. His heirs would kill for the key you seek, but the dead may claim you first.",
+        "Buried beneath layers of rubble lies a chapel built to silence the dead. Something inside never stopped screaming.",
+        "An ossuary locked behind a puzzle of bone and sigils guards the resting place of a cursed noble’s legacy.",
+        "Chains etched with forbidden runes bind a seal deep underground—what’s locked away may be more valuable than feared.",
+        "A candle left burning in a forgotten library suggests someone—or something—still seeks forbidden truths.",
+        "A pact once made in desperation lies carved into shallow graves. The spirits bound by it demand closure… or revenge.",
+        "The idol’s grin hides a switch. Beneath it, a hidden chamber pulses with arcane light and forgotten wealth.",
+        "At dusk, the crypt bell tolls once for the living and twice for the trespasser. It hasn’t rung in decades… until now.",
+        "A broken vow haunts the grave of a knight who defied the crown. His hidden trove may still aid the people he swore to protect.",
+        "The catacombs breathe in silence, but scattered notes tell of someone who made it far deeper than most.",
+        "Some say the soil remembers blood spilled in betrayal. Dig too deep, and the ground may answer in kind."
+    };
+
 
     private string GenerateRandomQuestName()
     {
         return PossibleQuestNames[Random.Range(0, PossibleQuestNames.Length)];
     }
 
+    private string GenerateRandomDescription()
+    {
+        return PossibleQuestDescriptions[Random.Range(0, PossibleQuestDescriptions.Length)];
+    }
 }
 
 [Serializable]

@@ -60,7 +60,7 @@ public class SOAllQuest : ScriptableObject
             }
         }
 
-        randomizedQuests[randomizedQuests.IndexOf(quest)].RandomizeQuest(newDifficulty);
+        quest.RandomizeQuest(newDifficulty);
     }
 
 
