@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class EnemyPatrollingState : BaseState<E_EnemyState>
@@ -9,15 +10,19 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
     private EnemyFovStats fovStats;
 
     private EnemyAlarmedStats alarmedStats;
+    
+    private EventReference enemyattack;
+
 
     public EnemyPatrollingState(EnemyMovement _movement, EnemyMovementStats _movementStats, FieldOfView _fov,
-        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats) : base(E_EnemyState.Patrol)
+        EnemyFovStats _fovStats, EnemyAlarmedStats _alarmedStats,EventReference _enemyattack) : base(E_EnemyState.Patrol)
     {
         movement = _movement;
         movementStats = _movementStats;
         fov = _fov;
         fovStats = _fovStats;
         alarmedStats = _alarmedStats;
+        enemyattack = _enemyattack;
     }
 
     public override void EnterState()
@@ -76,6 +81,11 @@ public class EnemyPatrollingState : BaseState<E_EnemyState>
 
     public override void OnTriggerEnterState(Collider other)
     {
+        if (other.TryGetComponent(out GameoverController gameOver))
+        {
+            RuntimeManager.PlayOneShot(enemyattack, movement.transform.position);
+            gameOver.LoseGame();
+        }
     }
 
     public override void OnTriggerStayState(Collider other)
