@@ -34,6 +34,9 @@ public class MenuButtonLobby : MonoBehaviour
     public GameObject smithTalkPanel;
     public GameObject libraryTalkPanel;
 
+    public GameObject taxPanel;
+    
+
     private void Awake()
     {
         foreach (ItemData itemData in inventory.ItemsInInventory)
@@ -45,6 +48,8 @@ public class MenuButtonLobby : MonoBehaviour
         Debug.Log("TUTAJ");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+        
+        taxPanel.SetActive(false);
     }
 
     public void Open(GameObject lobbyObject)

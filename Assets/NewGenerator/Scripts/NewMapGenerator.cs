@@ -252,9 +252,9 @@ public class NewMapGenerator : MonoBehaviour
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
 
-            Instantiate(SpawnPlayerSettings.PlayerPrefab,
+            SpawnPlayerSettings.PlayerTransform =  Instantiate(SpawnPlayerSettings.PlayerPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
-                Quaternion.identity);
+                Quaternion.identity).transform;
             playerIsSpawn = true;
         }
         else
@@ -263,9 +263,9 @@ public class NewMapGenerator : MonoBehaviour
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             
-            Instantiate(SpawnPlayerSettings.PlayerPrefab,
+            SpawnPlayerSettings.PlayerTransform = Instantiate(SpawnPlayerSettings.PlayerPrefab,
                 roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
-                Quaternion.identity);
+                Quaternion.identity).transform;
             playerIsSpawn = true;
         }
 
