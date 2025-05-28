@@ -35,6 +35,7 @@ public class MenuButtonLobby : MonoBehaviour
     public GameObject libraryTalkPanel;
 
     public GameObject taxPanel;
+    public GameObject LorePanel;
     
 
     private void Awake()
@@ -50,6 +51,10 @@ public class MenuButtonLobby : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         
         taxPanel.SetActive(false);
+        if (stats.lobbyVisit <= 0)
+        {
+            LorePanel.SetActive(true);
+        }
     }
 
     public void Open(GameObject lobbyObject)
