@@ -141,7 +141,6 @@ public class SOPlayerQuest : ScriptableObject
         "Curses Woven in Dust and Stone",
         "Veins of the Undying Roots",
         "Hymns from the Black Reliquary",
-        "The Ossuary's Final Riddle",
         "Vault of the Broken Sigil",
         "Chains Beneath the Crimson Seal",
         "The Scribe’s Last Candle",
@@ -150,7 +149,6 @@ public class SOPlayerQuest : ScriptableObject
         "The Tombbound Testament",
         "Beneath the Grinning Idol",
         "The Silence Between the Bones",
-        "The Bell Tolls at Duskfall Crypt",
         "Fragments of a Withered Oath",
         "The Ghoul-Warden’s Bounty",
         "The Prayer That Opened the Grave",
@@ -173,34 +171,27 @@ public class SOPlayerQuest : ScriptableObject
         "The Candle Burns Backward",
         "The Debt of the Bonewright",
         "The Whispering Vault Opens",
-        "Shadows Cling to the Gravetender",
-        "The Pale Herald Cometh",
-        "The Door Without a Handle",
-        "Legacy of the Graven Flame"
+        "Shadows Cling to the Gravetender"
     };
 
     private static readonly string[] PossibleQuestDescriptions = new[]
     {
-        "Ancient voices echo from a sealed vault deep beneath the hills—rumors say it holds treasures stolen from forgotten kings.",
+        "Ancient voices echo from a sealed vault deep beneath the hills - Rumors say it holds treasures kept by forgotten kings.",
         "Locals speak of footsteps in the tomb at night. Whatever walks there guards something of great worth.",
-        "Lost relics lie buried in the sunken catacombs—symbols of a broken order, ripe for the taking.",
+        "Lost relics lie buried in the sunken catacombs.",
         "A noble hoarder of rare artifacts was buried with his collection. It’s time someone redistributed his wealth.",
-        "This shrine was meant to stay buried. But where priests see heresy, you see opportunity.",
-        "Flooded and forgotten, the chapel hides secrets beneath the waterline—secrets worth gold to the right buyer.",
-        "A skeletal guardian watches over a tomb untouched by time. Can cunning outmatch duty?",
-        "Pilgrims once vanished on their way to a sacred site. Their trail ends in a crypt no one dares enter—until now.",
-        "In exchange for power, a forgotten sect made offerings to a statue with no name. Its vault still answers to whispers.",
-        "A tyrant king's bones rest uneasy. His heirs would kill for the key you seek, but the dead may claim you first.",
-        "Buried beneath layers of rubble lies a chapel built to silence the dead. Something inside never stopped screaming.",
-        "An ossuary locked behind a puzzle of bone and sigils guards the resting place of a cursed noble’s legacy.",
-        "Chains etched with forbidden runes bind a seal deep underground—what’s locked away may be more valuable than feared.",
-        "A candle left burning in a forgotten library suggests someone—or something—still seeks forbidden truths.",
-        "A pact once made in desperation lies carved into shallow graves. The spirits bound by it demand closure… or revenge.",
-        "The idol’s grin hides a switch. Beneath it, a hidden chamber pulses with arcane light and forgotten wealth.",
+        "This shrine was meant to stay buried. Where priests see heresy, we see opportunity.",
+        "There are secrets worth gold to the right buyer.",
+        "Pilgrims once vanished on their way to a sacred site. It's time you've ended this cycle.",
+        "Here lies a chapel meant to silence the dead. Something inside never stopped screaming.",
+        "Chains etched with forbidden runes bind a seal deep underground.",
+        "A candle left burning in a forgotten library suggests someone - or something — still seeks forbidden truths.",
+        "A pact once made in desperation lies carved into shallow graves. The spirits bound by it demand revenge… or closure.",
+        "Beneath us, a hidden chamber pulses with arcane light and forgotten wealth.",
         "At dusk, the crypt bell tolls once for the living and twice for the trespasser. It hasn’t rung in decades… until now.",
-        "A broken vow haunts the grave of a knight who defied the crown. His hidden trove may still aid the people he swore to protect.",
+        "The hidden trove may still aid the people sworn to protect.",
         "The catacombs breathe in silence, but scattered notes tell of someone who made it far deeper than most.",
-        "Some say the soil remembers blood spilled in betrayal. Dig too deep, and the ground may answer in kind."
+        "Dig too deep, and the ground may answer in kind."
     };
 
 
