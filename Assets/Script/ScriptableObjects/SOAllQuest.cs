@@ -60,6 +60,7 @@ public class SOAllQuest : ScriptableObject
             }
         }
 
+        Debug.Log($"randomize selectedQuest {newDifficulty} {quest.QuestName}");
         quest.RandomizeQuest(newDifficulty);
     }
 

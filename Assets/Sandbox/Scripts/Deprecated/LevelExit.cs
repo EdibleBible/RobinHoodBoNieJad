@@ -52,6 +52,7 @@ public class LevelExit : MonoBehaviour, IInteractable
 
     public void Interact(Transform player)
     {
+        this.player = player.gameObject.GetComponent<PlayerBase>();
         SoundManager.Instance?.StopAllActiveEvents();
         var emitters = FindObjectsByType<FMODUnity.StudioEventEmitter>(FindObjectsSortMode.None);
         foreach (var emitter in emitters)
@@ -64,7 +65,7 @@ public class LevelExit : MonoBehaviour, IInteractable
 
         if (!isTutorial)
         {
-            allQuest.RandomizeSelectedQuest(playerQuest.Difficulty, playerQuest.IsQuestComplete(), playerQuest);
+            allQuest.RandomizeSelectedQuest(playerQuest.Difficulty, playerQuest.IsQuestComplete(), allQuest.CurrentSelectedQuest);
             if (player != null)
             {
                 Destroy(player.gameObject);

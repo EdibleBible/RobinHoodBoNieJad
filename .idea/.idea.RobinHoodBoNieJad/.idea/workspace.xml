@@ -6,21 +6,117 @@
   <component name="ChangeListManager">
     <list default="true" id="4a51f96f-091d-43a5-b6e0-cde1761f74c6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.RobinHoodBoNieJad/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RobinHoodBoNieJad/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/BackgroundLayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BackgroundLayer.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Sprites/New_Lobby_UI/QuestLog.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Sprites/New_Lobby_UI/QuestLog.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Prefabs/UIInventoryEntry.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Prefabs/UIInventoryEntry.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/LobbyStoreUiElement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/LobbyStoreUiElement.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/MenuButtonLobby.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/MenuButtonLobby.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/NewGenerator/NewGeneratorScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NewGenerator/NewGeneratorScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/NewGenerator/Scripts/NewMapGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NewGenerator/Scripts/NewMapGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AA 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AA 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AB 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AB 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AB.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AB.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AD 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AD 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_AD.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BA 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BA 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BB 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BB 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BB.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BB.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BD 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BD 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_BD.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CA 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CA 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CB 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CB 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CB.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CB.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CD 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CD 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_CD.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DA 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DA 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DA.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DA.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DB 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DB 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DB.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DB.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DD 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DD 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DD.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Book/Book_DD.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_CS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_FS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_GS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_MS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Goblet/Goblet_SM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_CS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_FS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_GS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MS 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MS 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MS.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_MS.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SC 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SC 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SG 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SG 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SG.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SG.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SM 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SM 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SM.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Pickable/Vase/Vase_SM.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/Deprecated/LevelExit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/Deprecated/LevelExit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/ScriptableObjects/SOInventory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/ScriptableObjects/SOInventory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/LobbyInventoryChoose.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/LobbyInventoryChoose.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/LobbyInventoryChooseEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/LobbyInventoryChooseEntry.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/MenuLobbyTaxes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sandbox/Scripts/UI/MenuLobbyTaxes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameElementTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameElementTest.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/LobbyScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/LobbyScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TutorialScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TutorialScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SelectTutorialPanel.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SelectTutorialPanel.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/LockPickDoors.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/Interactable/LockPickDoors.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/UI/CreditsMenu.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/UI/CreditsMenu.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/UI/LoadingScreen.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/UI/LoadingScreen.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/UI/OptionsMenu 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/UI/OptionsMenu 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/ScriptableObjects/SOAllQuest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/ScriptableObjects/SOAllQuest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/ScriptableObjects/SOPlayerQuest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/ScriptableObjects/SOPlayerQuest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Prefab_Player 3.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/Prefab_Player 3.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/UI/ESC.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/UI/ESC.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +231,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$PROJECT_DIR$/../../Builds/rg/28.05.2025v6\RobbinGraves.exe" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../../Builds/rg/29.05.2025\RobbinGraves.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="D:\PROJECTS_M2\Collage\Builds\Licencjat" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -262,6 +358,7 @@
       <workItem from="1748391205752" duration="2562000" />
       <workItem from="1748397206113" duration="20946000" />
       <workItem from="1748469933530" duration="2345000" />
+      <workItem from="1748484358042" duration="5049000" />
     </task>
     <servers />
   </component>
@@ -327,13 +424,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Sandbox/Scripts/ScriptableObjects/SOInventory.cs</url>
-          <line>192</line>
+          <line>195</line>
           <properties documentPath="D:\Project\RobinHoodBoNieJad\Assets\Sandbox\Scripts\ScriptableObjects\SOInventory.cs" containingFunctionPresentation="Method 'CalculateInventoryLoad'">
             <startOffsets>
-              <option value="5848" />
+              <option value="5942" />
             </startOffsets>
             <endOffsets>
-              <option value="5886" />
+              <option value="5980" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />

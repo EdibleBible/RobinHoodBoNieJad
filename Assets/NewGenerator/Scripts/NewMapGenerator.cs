@@ -160,9 +160,9 @@ public class NewMapGenerator : MonoBehaviour
 
             SpawnPlayer();
             
-            StartCoroutine(DelayedSpawn(5));
-            StartCoroutine(DelayedSpawn(45));
-            StartCoroutine(DelayedSpawn(120));
+            StartCoroutine(DelayedSpawn(35));
+            StartCoroutine(DelayedSpawn(65));
+            StartCoroutine(DelayedSpawn(170));
 
         }
         catch (System.Exception ex)

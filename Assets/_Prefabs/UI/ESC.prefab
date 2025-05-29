@@ -38,10 +38,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 109428132810831671}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 718.05804, y: -279.38184}
+  m_SizeDelta: {x: 1436.1161, y: 186.25456}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6038566416035900696
 CanvasRenderer:
@@ -424,7 +424,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6950352403185062603
 RectTransform:
   m_ObjectHideFlags: 0
@@ -600,10 +600,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 109428132810831671}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 718.05804, y: -93.12728}
+  m_SizeDelta: {x: 1436.1161, y: 186.25456}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3421874232877592046
 CanvasRenderer:
@@ -893,7 +893,7 @@ MonoBehaviour:
   globalInputActions: {fileID: -944628639613478452, guid: 0ccaf3d76eaa4e64cbafbdd492dfcca0,
     type: 3}
   escapeMenu: {fileID: 2230816945915372340}
-  isScene3D: 0
+  isScene3D: 1
   canvas: {fileID: 0}
   buttons:
   - {fileID: 7792290346353901541}
@@ -938,10 +938,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 109428132810831671}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 718.05804, y: -465.6364}
+  m_SizeDelta: {x: 1436.1161, y: 186.25456}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4961786094534128168
 CanvasRenderer:
@@ -2852,6 +2852,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: OptionsMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246036529266847424, guid: 888be0367a8107a47b2504bc64a4d194,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7251711878541156066, guid: 888be0367a8107a47b2504bc64a4d194,
         type: 3}

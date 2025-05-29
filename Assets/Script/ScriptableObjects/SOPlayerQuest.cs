@@ -74,25 +74,25 @@ public class SOPlayerQuest : ScriptableObject
         switch (Difficulty)
         {
             case QuestDifficulty.easy:
-                itemAmount = Random.Range(1, 3);
+                itemAmount = Random.Range(1, 2);
                 itemRequiredAmountMax = 3;
                 itemRequiredAmountMin = 1;
                 break;
 
             case QuestDifficulty.medium:
-                itemAmount = Random.Range(3, 5);
+                itemAmount = Random.Range(2, 4);
                 itemRequiredAmountMax = 5;
                 itemRequiredAmountMin = 1;
                 break;
 
             case QuestDifficulty.Hard:
-                itemAmount = Random.Range(5, 7);
+                itemAmount = Random.Range(4, 5);
                 itemRequiredAmountMax = 5;
                 itemRequiredAmountMin = 3;
                 break;
 
             case QuestDifficulty.VeryHard:
-                itemAmount = Random.Range(7, 9);
+                itemAmount = Random.Range(6, 9);
                 itemRequiredAmountMax = 7;
                 itemRequiredAmountMin = 3;
                 break;

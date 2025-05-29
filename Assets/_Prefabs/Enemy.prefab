@@ -5656,13 +5656,13 @@ MonoBehaviour:
     Path: event:/Enemy/EnemySeePlr
   patrollingMovementStats:
     MaxSpeed: 1.5
-    Acceleration: 10
+    Acceleration: 3
     AngularSpeed: 1000
     StoppingDistance: 0.5
     LookingAroundTime: 5
   patrollingFovStats:
     ViewRadius: 7
-    ViewAngle: 75
+    ViewAngle: 85
     FindingDelay: 0.5
     TargetLayer:
       serializedVersion: 2
@@ -5671,8 +5671,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 543704512
   chasingMovementStats:
-    MaxSpeed: 5
-    Acceleration: 1.5
+    MaxSpeed: 4
+    Acceleration: 2
     AngularSpeed: 1000
     StoppingDistance: 0.1
     LookingAroundTime: 7
@@ -5741,7 +5741,7 @@ NavMeshAgent:
   m_Height: 1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 2
+  m_ObstacleAvoidanceType: 4
 --- !u!95 &1965976177509380622
 Animator:
   serializedVersion: 7

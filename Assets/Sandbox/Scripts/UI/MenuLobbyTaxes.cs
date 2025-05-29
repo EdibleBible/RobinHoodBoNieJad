@@ -15,7 +15,7 @@ public class MenuLobbyTaxes : MonoBehaviour
     [HideInInspector] public int taxAmount = 0;
 
     public GameObject Panel;
-    private void Awake()
+    private void OnEnable()
     {
         taxAmount = GetTaxAmount();
         if (SOStats.taxPaid)
