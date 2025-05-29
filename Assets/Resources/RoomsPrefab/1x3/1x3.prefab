@@ -373,6 +373,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2672083673158023246}
   - component: {fileID: 7304059936343799649}
+  - component: {fileID: 7849542866639001023}
   m_Layer: 0
   m_Name: 1x3
   m_TagString: Untagged
@@ -452,9 +453,26 @@ MonoBehaviour:
   AllDoors:
   - {fileID: 1808713471911158537}
   SpawnPosition: {fileID: 0}
+  IsSpawn: 0
   floorLayers:
     serializedVersion: 2
     m_Bits: 320
+--- !u!208 &7849542866639001023
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737929531215351135}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &5874044709355187643
 GameObject:
   m_ObjectHideFlags: 0
@@ -2020,7 +2038,7 @@ PrefabInstance:
     - target: {fileID: 1904707450493152977, guid: 25ef4898641d6e24bab59d6ffc89ee73,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.7278143
+      value: -1.699
       objectReference: {fileID: 0}
     - target: {fileID: 1904707450493152977, guid: 25ef4898641d6e24bab59d6ffc89ee73,
         type: 3}
@@ -2030,7 +2048,7 @@ PrefabInstance:
     - target: {fileID: 1904707450493152977, guid: 25ef4898641d6e24bab59d6ffc89ee73,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.35490465
+      value: 0.092
       objectReference: {fileID: 0}
     - target: {fileID: 1904707450493152977, guid: 25ef4898641d6e24bab59d6ffc89ee73,
         type: 3}
@@ -3048,7 +3066,7 @@ PrefabInstance:
     - target: {fileID: 5613842738780705433, guid: 3e7d75b7cb4293b41a4c6ba8832147e1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.972
+      value: 0.905
       objectReference: {fileID: 0}
     - target: {fileID: 5613842738780705433, guid: 3e7d75b7cb4293b41a4c6ba8832147e1,
         type: 3}

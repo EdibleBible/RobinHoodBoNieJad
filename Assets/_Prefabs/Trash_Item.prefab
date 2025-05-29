@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.184238
+      value: -0.14009857
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.0273542
+      value: 0.02300455
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.62745
+      value: -0.48792058
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd,
         type: 3}
@@ -31,7 +31,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd,
         type: 3}
@@ -81,6 +81,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5276860442391632420}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 490162401060954162}
   m_SourcePrefab: {fileID: 100100000, guid: 5a5314f1fa5ff8a41b0d140ace5d80cd, type: 3}
 --- !u!1 &5896327473546731491 stripped
 GameObject:
@@ -109,3 +113,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0.0051492527, y: 0.25, z: -0.0041937307}
+--- !u!208 &490162401060954162
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5896327473546731491}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.25, y: 0.25, z: 0.25}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.0050000004, y: 0.25, z: -0.004}
+  m_TimeToStationary: 0.5
