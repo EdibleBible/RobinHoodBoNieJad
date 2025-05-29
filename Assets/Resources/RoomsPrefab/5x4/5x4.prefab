@@ -9773,8 +9773,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9741814, y: 1.6623182, z: 0.962729}
-  m_Center: {x: 0.00058160693, y: 0.056714505, z: -0.008803323}
+  m_Size: {x: 0.9741814, y: 1.6623182, z: 1.06}
+  m_Center: {x: 0.00058160693, y: 0.056714505, z: 0.07}
 --- !u!208 &4548400335760340611
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -9785,11 +9785,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.48700002, y: 0.83100003, z: 0.48100004}
+  m_Extents: {x: 0.48700002, y: 0.83100003, z: 0.525}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0.001, y: 0.057000004, z: -0.009000001}
+  m_Center: {x: 0.001, y: 0.057000004, z: 0.11}
   m_TimeToStationary: 0.5
 --- !u!4 &5439748350234072279 stripped
 Transform:
@@ -11835,6 +11835,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: crate (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 5163073533135489548, guid: 4a8489c0cea650043992b3fedde8e175,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.09
+      objectReference: {fileID: 0}
     - target: {fileID: 5219188262295315122, guid: 4a8489c0cea650043992b3fedde8e175,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11884,6 +11889,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5751667842086765847, guid: 4a8489c0cea650043992b3fedde8e175,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.09
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
