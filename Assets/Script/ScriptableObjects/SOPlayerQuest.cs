@@ -38,6 +38,8 @@ public class SOPlayerQuest : ScriptableObject
             }
         }
 
+        
+        
         return true;
     }
 

@@ -65,7 +65,28 @@ public class LevelExit : MonoBehaviour, IInteractable
 
         if (!isTutorial)
         {
-            allQuest.RandomizeSelectedQuest(playerQuest.Difficulty, playerQuest.IsQuestComplete(), allQuest.CurrentSelectedQuest);
+            bool isQomplete = playerQuest.IsQuestComplete();
+
+            if (isQomplete)
+            {
+                switch (allQuest.CurrentSelectedQuest.Difficulty)
+                {
+                    case QuestDifficulty.easy:
+                        this.player.PlayerStats.scoreTotal += 25;
+                        break;
+                    case QuestDifficulty.medium:
+                        this.player.PlayerStats.scoreTotal += 50;
+                        break;
+                    case QuestDifficulty.Hard:
+                        this.player.PlayerStats.scoreTotal += 75;
+                        break;
+                    case QuestDifficulty.VeryHard:
+                        this.player.PlayerStats.scoreTotal += 150;
+                        break;
+                }
+            }
+            
+            allQuest.RandomizeSelectedQuest(playerQuest.Difficulty, isQomplete, allQuest.CurrentSelectedQuest);
             if (player != null)
             {
                 Destroy(player.gameObject);

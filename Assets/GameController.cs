@@ -139,8 +139,6 @@ public class GameController : MonoBehaviour
         Stats.VisitWitch = false;
         Stats.scoreTotal = BaseMoney;
     }
-
-
     public void RandomizeQuest()
     {
         AllPlayerQuest.CurrentSelectedQuest = AllPlayerQuest.randomizedQuests[0];
@@ -237,6 +235,12 @@ public class GameController : MonoBehaviour
         PlayerInventory.InventoryLobby.AddRange(PlayerInventory.ItemsInInventory);
         PlayerInventory.ClearInventory();
         SceneManager.LoadScene(1);
+    }
+
+    public void LeaveLobbyGameOver()
+    {
+        SceneManager.LoadScene(0);
+        saveData = null;
     }
 }
 

@@ -13,6 +13,7 @@ public class PlayerBase : MonoBehaviour
 
     [SerializeField] private Transform dropPointTransform;
     public SOInventory PlayerInventory;
+    public SOStats PlayerStats;
     [SerializeField] private GameEvent InventorySetUpEvent;
     [SerializeField] private GameEvent InventoryInitializeEvent;
     [SerializeField] private GameEvent DropItemEvent;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,9 @@ public class MenuLobbyTaxes : MonoBehaviour
     public TMP_Text textNeeded;
     public TMP_Text textHad;
     public Button buttonPay;
+    public GameObject noMoneyPanel;
     public List<int> taxPerLevel = new();
+    public GameObject gameoverPanel;
     [HideInInspector] public int taxAmount = 0;
 
     public GameObject Panel;
@@ -27,12 +30,10 @@ public class MenuLobbyTaxes : MonoBehaviour
         {
             if (taxAmount > SOStats.scoreTotal)
             {
-                buttonPay.interactable = false;
                 textHad.color = Color.red;
             }
             else if (taxAmount <= SOStats.scoreTotal)
             {
-                buttonPay.interactable = true;
                 textHad.color = Color.white;
             }
         }
@@ -41,6 +42,11 @@ public class MenuLobbyTaxes : MonoBehaviour
         textVisit.text = "Visit #" + SOStats.lobbyVisit.ToString();
         textNeeded.text = "You need: " + taxAmount;
         textHad.text = "You have: " + SOStats.scoreTotal.ToString();
+    }
+
+    private void OnDisable()
+    {
+        noMoneyPanel.SetActive(false);
     }
 
     private int GetTaxAmount()
@@ -55,9 +61,26 @@ public class MenuLobbyTaxes : MonoBehaviour
 
     public void PayTax()
     {
-        buttonPay.interactable = false;
-        SOStats.scoreTotal -= taxAmount;
-        SOStats.taxPaid = true;
-        textTaxDisplay.color = Color.white;
+        if (SOStats.scoreTotal >= taxAmount)
+        {
+            buttonPay.interactable = false;
+            SOStats.scoreTotal -= taxAmount;
+            SOStats.taxPaid = true;
+            textTaxDisplay.color = Color.white;
+        }
+        else
+        {
+            noMoneyPanel.SetActive(true);
+        }
+    }
+
+    public void CloseNoMoneyPanel()
+    {
+        noMoneyPanel.SetActive(false);
+    }
+
+    public void StartGameNoMoney()
+    {
+        gameoverPanel.SetActive(true);
     }
 }
