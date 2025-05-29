@@ -14,10 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerStatsController: {fileID: 11400000, guid: 2b78cb1d3b056e44aa2144c6247ea90e,
     type: 2}
-  CurrInventoryLoad: 1
-  ItemsInInventory: []
+  CurrInventoryLoad: 0
+  ItemsInInventory:
+  - ItemType: 102
+    ItemName: Hammer
+    ItemDescription: This sturdy hammer is ready to help you destroy the world
+    ItemSize: 2
+    ItemValue: 400
+    ItemIcon: {fileID: 21300000, guid: a8ffb461f3c2ce34792a71ed9bdbdbbb, type: 3}
+    ItemPrefab: {fileID: 1466800322429633386, guid: d5c3888ea5cedf8419719867b595e7f3,
+      type: 3}
+    statToChange: []
+    CollectibleId: 0
+    ProceedToDungeon: 1
   InventoryLobby: []
-  CurrInvenoryScore: 0
+  CurrInvenoryScore: 325
   ScoreBackup: 0
   BaseInventorySize: 3
   CurrInventorySize: 3
