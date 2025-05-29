@@ -79,7 +79,8 @@ public class NavMeshSurfaceSettings
                 yield return null; // poczekaj 1 frame i próbuj dalej
         }
 
-        GameObject.Instantiate(EnemyPrefab, spawnPoint, Quaternion.identity);
+        var obj = GameObject.Instantiate(EnemyPrefab, spawnPoint, Quaternion.identity);
+        obj.transform.SetParent(null);
     }
 
 }
@@ -231,7 +232,8 @@ public class NewMapGenerator : MonoBehaviour
 
                 trapsCount++;
                 int trapIndex = random.NextInt(SpawnTrapSettings.TrapsPrefabs.Count);
-                Instantiate(SpawnTrapSettings.TrapsPrefabs[trapIndex], cell.Position, quaternion.identity);
+                var trap= Instantiate(SpawnTrapSettings.TrapsPrefabs[trapIndex], cell.Position, quaternion.identity);
+                trap.transform.SetParent(null);
                 cell.GridCellType = E_GridCellType.HallwayTrap;
             }
         }
@@ -250,7 +252,7 @@ public class NewMapGenerator : MonoBehaviour
 
         if (roomData.SpawnPosition == null)
         {
-            Instantiate(SpawnPlayerSettings.ExitPrefab,
+            var exit = Instantiate(SpawnPlayerSettings.ExitPrefab,
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
 
@@ -258,17 +260,21 @@ public class NewMapGenerator : MonoBehaviour
                 spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity).transform;
             playerIsSpawn = true;
+            
+            exit.transform.SetParent(null);
         }
         else
         {
-            Instantiate(SpawnPlayerSettings.ExitPrefab,
-                roomData.transform.position + SpawnPlayerSettings.SpawnOffset,
+            var exit = Instantiate(SpawnPlayerSettings.ExitPrefab,
+                roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             
             SpawnPlayerSettings.PlayerTransform = Instantiate(SpawnPlayerSettings.PlayerPrefab,
                 roomData.SpawnPosition.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity).transform;
             playerIsSpawn = true;
+            
+            exit.transform.SetParent(null);
         }
 
         var controler = GameController.Instance;

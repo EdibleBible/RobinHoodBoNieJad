@@ -32,7 +32,6 @@ public struct SpawnDoorVariableSettings
         {
             if(room.IsSpawn)
                 continue;
-            
             AllDoorsOnScene.AddRange(room.AllDoors);
         }
     }
@@ -86,12 +85,19 @@ public struct SpawnDoorVariableSettings
 
         foreach (var cell in selectedCells)
         {
-            List<Transform> detectedTransformInCells = cell.FastDetectObjectInCell(WallLayerMask);
+            List<Transform> detectedTransformInCells = cell.FastDetectObjectInCell(WallLayerMask)
+                .Where(t => Mathf.Abs(t.position.y) <= 0.1f)
+                .ToList();
+
+            if (detectedTransformInCells.Count == 0)
+                continue;
+
             int index = UnityEngine.Random.Range(0, detectedTransformInCells.Count);
-            Transform SelectedTransform = detectedTransformInCells[index];
-            
-            SpawnLeversOnWalls(cell, new List<Transform>() { SelectedTransform }, LeverSpawnOffset);
+            Transform selectedTransform = detectedTransformInCells[index];
+
+            SpawnLeversOnWalls(cell, new List<Transform> { selectedTransform }, LeverSpawnOffset);
         }
+
     }
 
     public void SpawnLeversOnWalls(GridCellData cell, List<Transform> wallTransforms, Vector3 localOffset)
@@ -114,6 +120,7 @@ public struct SpawnDoorVariableSettings
             lever.transform.localRotation = new Quaternion(0,180,0,0);
             lever.transform.localPosition = localOffset;
             SpawnedLevers.Add(lever.GetComponent<LeverController>());
+            lever.transform.SetParent(null);
         }
     }
 

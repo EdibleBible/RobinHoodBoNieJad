@@ -244,9 +244,10 @@ public class SpecialSenseController : MonoBehaviour
             Vector3 position = start + direction / 2f;
 
             GameObject cylinder = Instantiate(cylinderParticlePrefab, position, Quaternion.identity);
-            cylinder.transform.localScale = new Vector3(cylinder.transform.localScale.x, direction.magnitude / 2f, cylinder.transform.localScale.z);
-            cylinder.transform.rotation = Quaternion.LookRotation(direction);
-            cylinder.transform.Rotate(90f, 0f, 0f); // Obrót z pionu na poziom
+            cylinder.transform.SetParent(target.transform);
+            cylinder.transform.localPosition = Vector3.zero;
+            cylinder.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
+            cylinder.transform.rotation = Quaternion.identity;
 
             Destroy(cylinder, cylinderDuration);
         }
@@ -371,6 +372,6 @@ public class SpecialSenseController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, maxRadius);
 
         Gizmos.color = new Color(0f, 1f, 1f, 0.2f);
-        Gizmos.DrawSphere(transform.position, currentRadius);
+        Gizmos.DrawSphere(pulsePosition, currentRadius);
     }
 }
