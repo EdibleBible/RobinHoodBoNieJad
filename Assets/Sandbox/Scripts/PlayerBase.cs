@@ -113,7 +113,7 @@ public class PlayerBase : MonoBehaviour
         if (CurrSelectedItem != null)
         {
             Debug.Log(this + " " + CurrSelectedItem.ItemName + " dropped");
-            var obj = Instantiate(CurrSelectedItem.ItemPrefab);
+            var obj = Instantiate(CurrSelectedItem.ItemPrefab, new Vector3(0,-100f,0), Quaternion.identity);
 
             DropSound dropSound = obj.GetComponent<DropSound>();
             if (dropSound == null)

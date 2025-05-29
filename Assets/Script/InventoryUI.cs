@@ -35,6 +35,9 @@ public class InventoryUI : MonoBehaviour
             {
                 AddItemToUI(playerBase, item);
             }
+
+            playerBase.CurrSelectedItem = itemSlots[0].AssignedItem;
+            itemSlots[0].SelectSlot();
         }
     }
 
