@@ -76,6 +76,16 @@ public class PlayerBase : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        if (CurrSelectedItem != null)
+            Debug.Log(CurrSelectedItem.ItemName + " CHUUUUUJ");
+        else
+        {
+            Debug.Log("NULL" + " CHUUUUUJ");
+        }
+    }
+
     private void UpdateSelectedSlot(int direction)
     {
         if (currentSelectedItem + direction < 0 ||
@@ -102,6 +112,7 @@ public class PlayerBase : MonoBehaviour
     {
         if (CurrSelectedItem != null)
         {
+            Debug.Log(this + " " + CurrSelectedItem.ItemName + " dropped");
             var obj = Instantiate(CurrSelectedItem.ItemPrefab);
 
             DropSound dropSound = obj.GetComponent<DropSound>();
@@ -135,7 +146,9 @@ public class PlayerBase : MonoBehaviour
             {
                 ResetFuel();
             }
+
             DropItemEvent?.Raise(this, currentSelectedItem);
+            CurrSelectedItem = null;
         }
     }
 

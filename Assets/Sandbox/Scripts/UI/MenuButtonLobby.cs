@@ -145,8 +145,7 @@ public class MenuButtonLobby : MonoBehaviour
     public void StartGame()
     {
         stats.lobbyVisit += 1;
-        inventory.ItemsInInventory.Clear();
-        inventory.ItemsInInventory.AddRange(inventory.InventoryLobby);
+
         inventory.ScoreBackup = inventory.CurrInvenoryScore;
         StartCoroutine(LoadGameWithFade(SceneIndexToLoad, LobbySceneName));
     }
