@@ -211,6 +211,13 @@ public class GridCellData
             Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, new Vector3(1f, 1f, scale));
             result.Add(matrix);
         }
+        
+        for (int i = 0; i < wallCount; i++)
+        {
+            Vector3 position = CalculatePosition(referenceType, i, segmentSize, scale);
+            Matrix4x4 matrix = Matrix4x4.TRS(position + new Vector3(0,2,0), rotation, new Vector3(1f, 1f, scale));
+            result.Add(matrix);
+        }
 
         return result;
     }
