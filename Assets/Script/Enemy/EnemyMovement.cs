@@ -14,6 +14,7 @@ public class EnemyMovement : MonoBehaviour
     public EnemyAnimationController AnimationController;
     [HideInInspector] public Queue<Vector3> destinations = new();
     private Vector3 nextDestination;
+    public ParticleSystem ParticleSystem;
     public event Action OnDestinationReached;
     public event Action OnStopLookingAround;
 
@@ -383,10 +384,12 @@ public class EnemyMovement : MonoBehaviour
         if (IsObjectOnPathAndNearby(2))
         {
             anyDoorRelevant = true;
+            ParticleSystem.Play();
         }
         else
         {
             anyDoorRelevant = false;
+            ParticleSystem.Stop();
         }
 
 

@@ -23,7 +23,6 @@ public struct RoomGeneratorSettings
     public LayerMask DetectObjectInCellLayerMask;
 
 
-
     public void CreateRoomOnGrid(Grid<GridCellData> createdGrid, SOLevel levelSeed)
     {
         Random random = new Random(levelSeed.LevelSeedUint);
@@ -77,13 +76,28 @@ public struct RoomGeneratorSettings
     private NewRoom GenerateRoom(ref Random random, Grid<GridCellData> createdGrid)
     {
         NewRoom room = new NewRoom();
-        int width = (MinRoomSize.x == MaxRoomSize.x) ? MinRoomSize.x : random.NextInt(MinRoomSize.x, MaxRoomSize.x + 1);
-        int height = (MinRoomSize.y == MaxRoomSize.y)
+        int startX, startY;
+        int width, height;
+
+        do
+        {
+            width = (MinRoomSize.x == MaxRoomSize.x)
+                ? MinRoomSize.x
+                : random.NextInt(MinRoomSize.x, MaxRoomSize.x + 1);
+
+            height = (MinRoomSize.y == MaxRoomSize.y)
+                ? MinRoomSize.y
+                : random.NextInt(MinRoomSize.y, MaxRoomSize.y + 1);
+        } while (width == 4 && height == 4);
+
+
+        width = (MinRoomSize.x == MaxRoomSize.x) ? MinRoomSize.x : random.NextInt(MinRoomSize.x, MaxRoomSize.x + 1);
+        height = (MinRoomSize.y == MaxRoomSize.y)
             ? MinRoomSize.y
             : random.NextInt(MinRoomSize.y, MaxRoomSize.y + 1);
 
-        int startX = random.NextInt(0, createdGrid.GeneratedGridSize().x - width);
-        int startY = random.NextInt(0, createdGrid.GeneratedGridSize().y - height);
+         startX = random.NextInt(0, createdGrid.GeneratedGridSize().x - width);
+         startY = random.NextInt(0, createdGrid.GeneratedGridSize().y - height);
 
         if (!CanplaceRoom(startX, startY, width, height, createdGrid))
         {

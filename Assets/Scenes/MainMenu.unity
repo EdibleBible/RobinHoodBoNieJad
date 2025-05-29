@@ -119,6 +119,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &90541587 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5829892334251026872, guid: 5ce93b4e4e466e14faf6d8456d77f88e,
+    type: 3}
+  m_PrefabInstance: {fileID: 527518148}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c040a155443b724d8c67d52b3519cad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &277210938
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,6 +402,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548513591671663503, guid: 5ce93b4e4e466e14faf6d8456d77f88e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Target
+      value: 
+      objectReference: {fileID: 90541587}
+    - target: {fileID: 5548513591671663503, guid: 5ce93b4e4e466e14faf6d8456d77f88e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
+      value: Select
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548513591671663503, guid: 5ce93b4e4e466e14faf6d8456d77f88e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548513591671663503, guid: 5ce93b4e4e466e14faf6d8456d77f88e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_BoolArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5872862457925192855, guid: 5ce93b4e4e466e14faf6d8456d77f88e,
         type: 3}
@@ -1290,6 +1322,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
+        type: 3}
+      propertyPath: BaseMoney
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6333453384907131925, guid: 44fd370ccf3dbb1479fbfc0467560a5f,
         type: 3}
