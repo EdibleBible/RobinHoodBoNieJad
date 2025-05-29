@@ -14935,10 +14935,10 @@ RectTransform:
   - {fileID: 1566731791}
   m_Father: {fileID: 924693227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 504.2917, y: -80.57996}
+  m_SizeDelta: {x: 336.19446, y: 161.15993}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &570189359
 MonoBehaviour:
@@ -25890,10 +25890,10 @@ RectTransform:
   - {fileID: 1352459760}
   m_Father: {fileID: 924693227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 168.09723, y: -80.57996}
+  m_SizeDelta: {x: 336.19446, y: 161.15993}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &928427743
 MonoBehaviour:
@@ -34049,7 +34049,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 296625754}
   - {fileID: 1389839427}
   - {fileID: 684167956}
   - {fileID: 316683020}
@@ -34057,6 +34056,7 @@ RectTransform:
   - {fileID: 3879730223084466156}
   - {fileID: 870835840}
   - {fileID: 911519386}
+  - {fileID: 296625754}
   m_Father: {fileID: 807365456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -40331,8 +40331,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Welcome to the Forbidden Island. Here you can enter the stores available
-    for you. When you're ready, you can jump directly into the dungeons
+  m_text: 'Hello, Robbin! We''ve heard about your great eagerness to explore unknown
+    (and potentially dangerous) areas. You''ll make a great fit in our team! Feel
+    free to check out our stations and get to know us better. Please remember before
+    every journey you''ll be asked to waive a portion of your earnings. Failure to
+    do so may result in your return to the hopeless prison we just rescued you from.
+    Take care and have fun!"
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 29e87b831e8d4c94c86e6bf226cd0f90, type: 2}
   m_sharedMaterial: {fileID: 4563279593700220270, guid: 29e87b831e8d4c94c86e6bf226cd0f90,
@@ -40360,7 +40366,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 53.5
+  m_fontSize: 33.4
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
