@@ -96,10 +96,65 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 356546536318418024, guid: 95518c132782c53469ad522bc045453e, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 525509477390364370, guid: 95518c132782c53469ad522bc045453e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8739063392733529200}
+    - targetCorrespondingSourceObject: {fileID: 525509477390364370, guid: 95518c132782c53469ad522bc045453e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6079700154010035084}
   m_SourcePrefab: {fileID: 100100000, guid: 95518c132782c53469ad522bc045453e, type: 3}
+--- !u!1 &234233574854287062 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 525509477390364370, guid: 95518c132782c53469ad522bc045453e,
+    type: 3}
+  m_PrefabInstance: {fileID: 291280576602501124}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8739063392733529200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234233574854287062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2231cc9d772b85c4ba5df38e10458705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
+  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
+  isTutorial: 1
+  interactMessage: Exit Level
+  blockedMessage: 
+  playerQuest: {fileID: 11400000, guid: c3b16186e7d633e44940c373ed5cd147, type: 2}
+  allQuest: {fileID: 11400000, guid: d45d9832d4f049b45bf33836ca9467b5, type: 2}
+--- !u!65 &6079700154010035084
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234233574854287062}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.3638982, y: 4.2331834, z: 1.4036291}
+  m_Center: {x: 0.028387249, y: 1.6165917, z: -0.007123828}
 --- !u!4 &579832530960155756 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 865021777708086376, guid: 95518c132782c53469ad522bc045453e,
