@@ -241,6 +241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6564212298266545105}
   - component: {fileID: -7864973042216023191}
+  - component: {fileID: 5674483824380027557}
   m_Layer: 0
   m_Name: 1x2 SPAWN
   m_TagString: Untagged
@@ -307,6 +308,22 @@ MonoBehaviour:
   floorLayers:
     serializedVersion: 2
     m_Bits: 320
+--- !u!208 &5674483824380027557
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6020811901801052893}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &6131841460661764366
 GameObject:
   m_ObjectHideFlags: 0
