@@ -74,8 +74,14 @@ public class SpecialSenseController : MonoBehaviour
         SetSpecialSenseUseCountEvent.Raise(this, specialSenseUseCount);
     }
 
+
+    private bool isUse;
     public void TryUseSpecialSense()
     {
+        if (isUse)
+        {
+            return;
+        }
         if (isCooldown)
         {
             Debug.Log("Zmysł specjalny jest w trakcie odnowienia.");
@@ -88,7 +94,9 @@ public class SpecialSenseController : MonoBehaviour
             return;
         }
 
+        
         specialSenseUseCount--;
+        isUse = true;
         SetSpecialSenseUseCountEvent.Raise(this, specialSenseUseCount);
         pulsePosition = transform.position;
         if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
@@ -152,6 +160,7 @@ public class SpecialSenseController : MonoBehaviour
         StartCoroutine(StartCooldown());
 
         StopSpecialSenseSound(); // ✅ Wycisz dźwięk po zakończeniu
+        isUse = false;
     }
 
     private void PlaySpecialSenseSound()

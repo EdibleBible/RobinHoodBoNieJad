@@ -54,6 +54,9 @@ public class SOInventory : ScriptableObject
             InventoryLobby.Add(selectedItem.ItemData);
         }
         
+        InventoryLobby.AddRange(ItemsInInventory);
+        ItemsInInventory.Clear();
+        
         CurrInvenoryScore = saveDataCurrentInvenoryScore;
         ScoreBackup = saveDataScoreBackpack;
         BaseInventorySize = saveDataBaseInventorySize;

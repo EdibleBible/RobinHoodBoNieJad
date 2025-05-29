@@ -160,7 +160,9 @@ public class NewMapGenerator : MonoBehaviour
 
             SpawnPlayer();
             
-            StartCoroutine(DelayedSpawn(30));
+            StartCoroutine(DelayedSpawn(35));
+            StartCoroutine(DelayedSpawn(65));
+            StartCoroutine(DelayedSpawn(170));
 
         }
         catch (System.Exception ex)
@@ -260,7 +262,7 @@ public class NewMapGenerator : MonoBehaviour
         else
         {
             Instantiate(SpawnPlayerSettings.ExitPrefab,
-                spawnRoom.transform.position + SpawnPlayerSettings.SpawnOffset,
+                roomData.transform.position + SpawnPlayerSettings.SpawnOffset,
                 Quaternion.identity);
             
             SpawnPlayerSettings.PlayerTransform = Instantiate(SpawnPlayerSettings.PlayerPrefab,

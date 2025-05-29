@@ -116,6 +116,7 @@ public class GameController : MonoBehaviour
     public void StartNewGame()
     {
         PlayerInventory.ResetCollections();
+        PlayerInventory.InventoryLobby.Clear();
         AllPlayerQuest.RandomizeAllQuests();
         Stats.lobbyVisit = 0;
         Stats.scoreTotal = BaseMoney;
@@ -233,6 +234,8 @@ public class GameController : MonoBehaviour
 
     public void BackToLobby()
     {
+        PlayerInventory.InventoryLobby.AddRange(PlayerInventory.ItemsInInventory);
+        PlayerInventory.ClearInventory();
         SceneManager.LoadScene(1);
     }
 }

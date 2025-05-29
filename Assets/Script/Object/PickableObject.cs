@@ -168,7 +168,7 @@ public class PickableObject : MonoBehaviour, IInteractable, IInteractableStop, I
         if (!CanInteract)
             return;
 
-        var textToShow = InputManager.Instance.CompereTextWithInput("Interaction", "Drop");
+        var textToShow = InputManager.Instance.CompereTextWithInput("CancelInteraction", "Drop");
         ShowUIEvent.Raise(this, (true, textToShow, false));
     }
 

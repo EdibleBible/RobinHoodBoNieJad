@@ -30,7 +30,7 @@ public class LobbyStoreUiElement : MonoBehaviour
         {
             if (stat.CurrLevel < maxLevel)
             {
-                StatCurrLevel.text = "Curr Level: " + stat.CurrLevel.ToString();
+                StatCurrLevel.text = "Level: " + stat.CurrLevel.ToString() + "/" + maxLevel.ToString();
             }
             else
             {

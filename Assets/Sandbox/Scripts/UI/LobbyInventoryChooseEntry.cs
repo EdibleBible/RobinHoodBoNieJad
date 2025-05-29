@@ -5,13 +5,13 @@ public class LobbyInventoryChooseEntry : MonoBehaviour
 {
     public Image itemIcon;
     public Image frame;
-    public int index;
+    public ItemData data;
     public bool isSelected;
     public Button button;
     public LobbyInventoryChoose parent;
 
     public void SelectButton()
     {
-        parent.ItemSelected(isSelected, this, parent.inventory.InventoryLobby[index]);
+        parent.SelectFrame(isSelected, this, data);
     }
 }

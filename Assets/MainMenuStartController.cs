@@ -84,7 +84,6 @@ public class MainMenuStartController : MonoBehaviour
     
     private IEnumerator LoadGameWithFade(int gameSceneIndex, string lobbySceneName)
     {
-        GameController.Instance.RandomizeQuest();
         LoadingScreen.SetActive(true);
 
         yield return StartCoroutine(Fade(1));

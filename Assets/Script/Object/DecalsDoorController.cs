@@ -179,6 +179,7 @@ public class DecalsDoorController : DoorController
             availableIndices.Remove(randomIndex);
             leverDecalObj.GetComponent<DecalProjector>().material = leverDecalSprite[randomIndex];
             spawnedLevers.Add(leverObj.GetComponent<IInteractable>(), (leverDecalSprite[randomIndex], false));
+            leverObj.transform.SetParent(this.transform);
         }
     }
 
@@ -273,8 +274,7 @@ public class DecalsDoorController : DoorController
         // Resetowanie macierzy, żeby inne Gizmo nie były obrócone
         Gizmos.matrix = Matrix4x4.identity;
     }
-
-
+    
     public override void Interact(Transform player)
     {
         if (!CheckIfCorrectLeversUsed())

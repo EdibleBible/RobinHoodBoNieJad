@@ -60,7 +60,8 @@ public class SOAllQuest : ScriptableObject
             }
         }
 
-        randomizedQuests[randomizedQuests.IndexOf(quest)].RandomizeQuest(newDifficulty);
+        Debug.Log($"randomize selectedQuest {newDifficulty} {quest.QuestName}");
+        quest.RandomizeQuest(newDifficulty);
     }
 
 
@@ -85,6 +86,7 @@ public class SOAllQuest : ScriptableObject
 
     public void SelectQuest(SOPlayerQuest quest)
     {
+        Debug.LogError(quest.QuestName);
         CurrentSelectedQuest = quest;
     }
 }
