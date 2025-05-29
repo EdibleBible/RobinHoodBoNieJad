@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7837832141298137616}
   - component: {fileID: 4682806924880142275}
-  - component: {fileID: 8493894080864111287}
   - component: {fileID: 7577896081097222916}
   - component: {fileID: 8994528231259556182}
   - component: {fileID: -7935439859343810075}
@@ -64,37 +63,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8493894080864111287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466800322429633386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f693b2442337e2643ab16292e5fe2511, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemData:
-    ItemType: 106
-    ItemName: Slow Potion
-    ItemDescription: Slow Potion Description
-    ItemSize: 1
-    ItemValue: 0
-    ItemIcon: {fileID: 21300000, guid: 5286dcc84a4b4c543b81b3494321edd2, type: 3}
-    ItemPrefab: {fileID: 1466800322429633386, guid: 286736be73d1cd6478ec7c734c90cd90,
-      type: 3}
-    statToChange:
-    - ModifierType: 1
-      Additive: -0.2
-      Multiplicative: -0.2
-    CollectibleId: 0
-    ProceedToDungeon: 0
-  showUIEvent: {fileID: 11400000, guid: 51c0dce5e34a1ef4ebe02d7019ddbb3f, type: 2}
-  interactEvent: {fileID: 11400000, guid: 831f0f430b98f8b43b262a6f7bb30d2d, type: 2}
-  interactMessage: ' - Pick Up Slow Potion'
-  blockedMessage: Item Is Blocked
 --- !u!65 &7577896081097222916
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -215,7 +183,7 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: 1f3ab9073fa6aed4bbec9d3a54b89a27, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 64ba6c72e3ef1e549a99ffb902487f11, type: 2}
+      objectReference: {fileID: 2100000, guid: 2f12fcec4b3dcc0489472b3a9cfa44c1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
