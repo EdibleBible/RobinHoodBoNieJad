@@ -75,17 +75,7 @@ public class PlayerBase : MonoBehaviour
         ResetInventory(true);
         InventoryUpdateSelectedItemEvent?.Raise(this, (0, 0));
     }
-
-
-    private void Update()
-    {
-        if (CurrSelectedItem != null)
-            Debug.Log(CurrSelectedItem.ItemName + " CHUUUUUJ");
-        else
-        {
-            Debug.Log("NULL" + " CHUUUUUJ");
-        }
-    }
+    
 
     private void UpdateSelectedSlot(int direction)
     {

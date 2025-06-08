@@ -46,6 +46,19 @@ public struct SpawnDoorVariableSettings
 
     public void RandomizeDoors()
     {
+        List<DoorController> doorsToRemove = new List<DoorController>();
+        foreach (var door in AllDoorsOnScene)
+        {
+            if (door is LockPickDoorController)
+                doorsToRemove.Add(door);
+        }
+
+        foreach (var door in doorsToRemove)
+        {
+            AllDoorsOnScene.Remove(door);
+        }
+
+        
         for (int i = 0; i < BlockedByLeverCount; i++)
         {
             int index = UnityEngine.Random.Range(0, AllDoorsOnScene.Count);
